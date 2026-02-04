@@ -1,6 +1,7 @@
 import React, { useState, useMemo, useCallback, useRef, useEffect } from 'react';
 import { TrendingUp, Clock, DollarSign, Target, AlertCircle, CheckCircle, ArrowRight, Info, Download, RefreshCw, Users, Car, Heart, Home, ChevronDown, HelpCircle, Zap, MapPin, Phone, X, Layers, Lightbulb, ArrowLeftRight } from 'lucide-react';
 import { jsPDF } from 'jspdf';
+import html2canvas from 'html2canvas';
 import {
   BENCHMARKS,
   REGIONAL_MULTIPLIERS,
@@ -168,6 +169,9 @@ const SearchComplexityCalculator = () => {
     // Check if category starts with "Family Office -" (C-Suite, Investment, Operations, Support)
     return benchmark?.category?.startsWith('Family Office -');
   }, [formData.positionType]);
+
+  // Ref for the results container (used for PDF export)
+  const resultsRef = useRef(null);
 
   // Clear selections when role category changes (budget ranges, certs, languages differ)
   const prevIsCorporateRole = useRef(isCorporateRole);
@@ -644,241 +648,165 @@ Return this exact JSON structure:
     setCompareMode(true);
   };
 
-  const exportToPDF = () => {
+  const exportToPDF = async () => {
+    if (!resultsRef.current) {
+      alert('Unable to export PDF. Please try again.');
+      return;
+    }
+
     try {
-      const doc = new jsPDF();
+      // Show loading state
+      const exportBtn = document.querySelector('[data-export-btn]');
+      if (exportBtn) {
+        exportBtn.textContent = 'Generating PDF...';
+        exportBtn.disabled = true;
+      }
+
+      // Capture the results container as an image
+      const canvas = await html2canvas(resultsRef.current, {
+        scale: 2, // Higher resolution
+        useCORS: true,
+        logging: false,
+        backgroundColor: '#ffffff',
+        windowWidth: resultsRef.current.scrollWidth,
+        windowHeight: resultsRef.current.scrollHeight
+      });
+
+      const imgData = canvas.toDataURL('image/png');
+      const imgWidth = canvas.width;
+      const imgHeight = canvas.height;
+
+      // Create PDF - A4 dimensions in mm
+      const doc = new jsPDF('p', 'mm', 'a4');
       const pageWidth = doc.internal.pageSize.getWidth();
-      const margin = 20;
+      const pageHeight = doc.internal.pageSize.getHeight();
+      const margin = 10;
+      const headerHeight = 25;
+      const footerHeight = 15;
       const contentWidth = pageWidth - (margin * 2);
-      let y = 20;
+      const contentHeight = pageHeight - headerHeight - footerHeight - margin;
 
-      // Helper function to check and add page break
-      const checkPageBreak = (neededSpace = 20) => {
-        if (y + neededSpace > 265) {
-          doc.addPage();
-          y = 25;
-          return true; // indicates new page was added
-        }
-        return false;
-      };
+      // Calculate image dimensions to fit page width
+      const ratio = contentWidth / (imgWidth / 2); // Divide by scale factor
+      const scaledHeight = (imgHeight / 2) * ratio;
 
-      // Helper function to add wrapped text with proper page handling
-      const addWrappedText = (text, x, maxWidth, lineHeight = 5) => {
-        if (!text) return;
-        // Use a conservative width (150mm) that fits well within A4 margins
-        const safeWidth = 150;
-        const lines = doc.splitTextToSize(String(text), safeWidth);
-        lines.forEach((line) => {
-          if (y > 265) {
-            doc.addPage();
-            y = 25;
-          }
-          doc.text(line, x, y);
-          y += lineHeight;
-        });
-      };
-
-      // Header - Brand Indigo #2814ff = RGB(40, 20, 255)
-      doc.setFillColor(40, 20, 255);
-      doc.rect(0, 0, pageWidth, 35, 'F');
-      doc.setTextColor(255, 255, 255);
-      doc.setFontSize(20);
-      doc.setFont('helvetica', 'bold');
-      doc.text('TALENT GURUS', pageWidth / 2, 15, { align: 'center' });
-      doc.setFontSize(12);
-      doc.setFont('helvetica', 'normal');
-      doc.text('Search Complexity Analysis', pageWidth / 2, 27, { align: 'center' });
-
-      y = 45;
-
-      // Position title and metadata
-      doc.setTextColor(0, 0, 0);
-      doc.setFontSize(16);
-      doc.setFont('helvetica', 'bold');
-      doc.text(results.displayTitle, margin, y);
-      y += 7;
-      doc.setFontSize(10);
-      doc.setFont('helvetica', 'normal');
-      doc.setTextColor(100, 100, 100);
-      doc.text(`Location: ${results.formData.location} | Generated: ${new Date().toLocaleDateString()}`, margin, y);
-      y += 12;
-
-      // Score Box - Brand Pink #de9ea9 = RGB(222, 158, 169)
-      doc.setFillColor(222, 158, 169);
-      doc.roundedRect(margin, y, 45, 22, 2, 2, 'F');
-      doc.setTextColor(40, 20, 255); // Indigo text on pink background
-      doc.setFontSize(16);
-      doc.setFont('helvetica', 'bold');
-      doc.text(`${results.score}/10`, margin + 22.5, y + 10, { align: 'center' });
-      doc.setFontSize(8);
-      doc.text(results.label, margin + 22.5, y + 17, { align: 'center' });
-
-      // Bottom line next to score
-      doc.setTextColor(0, 0, 0);
-      doc.setFontSize(9);
-      doc.setFont('helvetica', 'normal');
-      const bottomLineLines = doc.splitTextToSize(results.bottomLine || '', contentWidth - 55);
-      let blY = y + 3;
-      bottomLineLines.slice(0, 4).forEach((line) => {
-        doc.text(line, margin + 52, blY);
-        blY += 5;
-      });
-      y += 30;
-
-      // Section helper
-      const addSection = (title) => {
-        checkPageBreak(25);
-        doc.setFillColor(240, 240, 250);
-        doc.rect(margin, y, contentWidth, 7, 'F');
+      // Add header to first page
+      const addHeader = () => {
+        doc.setFillColor(40, 20, 255);
+        doc.rect(0, 0, pageWidth, headerHeight, 'F');
+        doc.setTextColor(255, 255, 255);
+        doc.setFontSize(14);
         doc.setFont('helvetica', 'bold');
+        doc.text('TALENT GURUS', pageWidth / 2, 10, { align: 'center' });
         doc.setFontSize(10);
-        doc.setTextColor(40, 20, 255);
-        doc.text(title, margin + 2, y + 5);
-        y += 12;
-        doc.setTextColor(0, 0, 0);
-        doc.setFontSize(9);
+        doc.setFont('helvetica', 'normal');
+        doc.text('Search Complexity Analysis', pageWidth / 2, 18, { align: 'center' });
       };
 
-      // Key Metrics Section
-      addSection('KEY METRICS');
-
-      const metrics = [
-        ['Salary', results.salaryRangeGuidance],
-        ['Timeline', results.estimatedTimeline],
-        ['Market', results.marketCompetitiveness],
-        ['Availability', `${results.candidateAvailability} — ${results.availabilityReason}`]
-      ];
-
-      metrics.forEach(([label, value]) => {
-        checkPageBreak(15);
-        doc.setFont('helvetica', 'bold');
-        doc.text(`${label}:`, margin, y);
-        y += 5;
-        doc.setFont('helvetica', 'normal');
-        addWrappedText(value, margin, contentWidth, 4.5);
-        y += 3;
-      });
-
-      // Benchmarks Section
-      if (results.benchmark) {
-        y += 5;
-        const benchTitle = results.regionalMultiplier && results.regionalMultiplier !== 1
-          ? `SALARY BENCHMARKS (${results.regionalMultiplier}x regional adjustment)`
-          : 'SALARY BENCHMARKS';
-        addSection(benchTitle);
-
-        const p25 = results.adjustedBenchmark?.p25 || results.benchmark.p25;
-        const p50 = results.adjustedBenchmark?.p50 || results.benchmark.p50;
-        const p75 = results.adjustedBenchmark?.p75 || results.benchmark.p75;
-
-        doc.setFont('helvetica', 'bold');
-        doc.text(`25th: $${p25.toLocaleString()}    Median: $${p50.toLocaleString()}    75th: $${p75.toLocaleString()}`, margin, y);
-        y += 7;
-
-        doc.setFont('helvetica', 'normal');
-        doc.text(`Housing: ${results.benchmark.benefits.housing} | Vehicle: ${results.benchmark.benefits.vehicle}`, margin, y);
-        y += 5;
-        doc.text(`Health: ${results.benchmark.benefits.health} | Bonus: ${results.benchmark.benefits.bonus}`, margin, y);
-        y += 8;
-      }
-
-      // Complexity Drivers Section
-      addSection(`COMPLEXITY DRIVERS (${results.points} points)`);
-
-      results.drivers?.forEach(d => {
-        checkPageBreak(7);
-        doc.setFont('helvetica', 'bold');
-        doc.text(`+${d.points}`, margin, y);
-        doc.setFont('helvetica', 'normal');
-        const driverText = `${d.factor}: ${d.rationale}`;
-        const truncated = driverText.length > 80 ? driverText.substring(0, 77) + '...' : driverText;
-        doc.text(truncated, margin + 12, y);
-        y += 6;
-      });
-
-      // Success Factors Section
-      if (results.keySuccessFactors?.length > 0) {
-        y += 3;
-        addSection('KEY SUCCESS FACTORS');
-        doc.setFont('helvetica', 'normal');
-        results.keySuccessFactors.forEach(f => {
-          checkPageBreak(15);
-          const cleanText = String(f).replace(/[^\x20-\x7E]/g, ' ').trim();
-          // Use narrower width (140mm) to account for "- " prefix added later
-          const lines = doc.splitTextToSize(cleanText, 140);
-          lines.forEach((line, idx) => {
-            if (y > 265) {
-              doc.addPage();
-              y = 25;
-            }
-            doc.text(idx === 0 ? `- ${line}` : `  ${line}`, margin, y);
-            y += 4.5;
-          });
-          y += 1;
-        });
-      }
-
-      // Recommendations Section
-      if (results.recommendedAdjustments?.length > 0) {
-        y += 5;
-        checkPageBreak(30);
-        addSection('RECOMMENDATIONS');
-        doc.setFont('helvetica', 'normal');
-        results.recommendedAdjustments.forEach(r => {
-          checkPageBreak(20);
-          // Clean the text - remove non-ASCII chars
-          const cleanText = String(r).replace(/[^\x20-\x7E]/g, ' ').trim();
-          // Use narrower width (140mm) to account for "> " prefix added later
-          const lines = doc.splitTextToSize(cleanText, 140);
-          lines.forEach((line, idx) => {
-            if (y > 265) {
-              doc.addPage();
-              y = 25;
-            }
-            doc.text(idx === 0 ? `> ${line}` : `  ${line}`, margin, y);
-            y += 4.5;
-          });
-          y += 2;
-        });
-      }
-
-      // Sourcing Insight Section
-      if (results.sourcingInsight && results.aiAnalysisSuccess) {
-        y += 5;
-        checkPageBreak(30);
-        addSection('WHERE TO FIND CANDIDATES');
-        checkPageBreak(15);
-        addWrappedText(results.sourcingInsight, margin, contentWidth, 4.5);
-      }
-
-      // CTA Section
-      checkPageBreak(30);
-      y += 8;
-      doc.setFillColor(40, 20, 255);
-      doc.roundedRect(margin, y, contentWidth, 20, 2, 2, 'F');
-      doc.setTextColor(255, 255, 255);
-      doc.setFontSize(11);
-      doc.setFont('helvetica', 'bold');
-      doc.text('Ready for a comprehensive analysis?', pageWidth / 2, y + 8, { align: 'center' });
-      doc.setFontSize(9);
-      doc.setFont('helvetica', 'normal');
-      doc.text('Schedule a consultation: calendly.com/charbel-talentgurus', pageWidth / 2, y + 15, { align: 'center' });
-
-      // Footer on all pages
-      const pageCount = doc.internal.getNumberOfPages();
-      for (let i = 1; i <= pageCount; i++) {
-        doc.setPage(i);
+      // Add footer to current page
+      const addFooter = (pageNum, totalPages) => {
         doc.setFontSize(8);
         doc.setTextColor(130, 130, 130);
-        doc.text('TALENT GURUS | talent-gurus.com | AI-assisted analysis for informational purposes only.', pageWidth / 2, 287, { align: 'center' });
-        doc.text(`Page ${i} of ${pageCount}`, pageWidth - margin, 287, { align: 'right' });
+        doc.text('TALENT GURUS | talent-gurus.com | AI-assisted analysis for informational purposes only.', pageWidth / 2, pageHeight - 8, { align: 'center' });
+        doc.text(`Page ${pageNum} of ${totalPages}`, pageWidth - margin, pageHeight - 8, { align: 'right' });
+      };
+
+      // Calculate total pages needed
+      const totalPages = Math.ceil(scaledHeight / contentHeight);
+
+      // Add image across multiple pages if needed
+      let yOffset = 0;
+      for (let page = 0; page < totalPages; page++) {
+        if (page > 0) {
+          doc.addPage();
+        }
+
+        addHeader();
+
+        // Calculate the portion of image to show on this page
+        const sourceY = (page * contentHeight) / ratio * 2; // Convert back to source pixels
+        const sourceHeight = Math.min(contentHeight / ratio * 2, imgHeight - sourceY);
+        const destHeight = sourceHeight * ratio / 2;
+
+        // Create a temporary canvas for this page's portion
+        const tempCanvas = document.createElement('canvas');
+        tempCanvas.width = imgWidth;
+        tempCanvas.height = sourceHeight;
+        const tempCtx = tempCanvas.getContext('2d');
+
+        // Draw the portion of the original canvas
+        const originalCanvas = canvas;
+        tempCtx.drawImage(originalCanvas, 0, sourceY, imgWidth, sourceHeight, 0, 0, imgWidth, sourceHeight);
+
+        const pageImgData = tempCanvas.toDataURL('image/png');
+        doc.addImage(pageImgData, 'PNG', margin, headerHeight + 2, contentWidth, destHeight);
+
+        yOffset += contentHeight;
+      }
+
+      // Add footers to all pages
+      for (let i = 1; i <= totalPages; i++) {
+        doc.setPage(i);
+        addFooter(i, totalPages);
+      }
+
+      // Add CTA on last page if there's space, otherwise add new page
+      doc.setPage(totalPages);
+      const lastPageContentEnd = headerHeight + 2 + Math.min(scaledHeight - (totalPages - 1) * contentHeight, contentHeight);
+
+      if (lastPageContentEnd + 30 < pageHeight - footerHeight) {
+        // Add CTA on same page
+        const ctaY = lastPageContentEnd + 10;
+        doc.setFillColor(40, 20, 255);
+        doc.roundedRect(margin, ctaY, contentWidth, 20, 2, 2, 'F');
+        doc.setTextColor(255, 255, 255);
+        doc.setFontSize(11);
+        doc.setFont('helvetica', 'bold');
+        doc.text('Ready for a comprehensive analysis?', pageWidth / 2, ctaY + 8, { align: 'center' });
+        doc.setFontSize(9);
+        doc.setFont('helvetica', 'normal');
+        doc.text('Schedule a consultation: calendly.com/charbel-talentgurus', pageWidth / 2, ctaY + 15, { align: 'center' });
+      } else {
+        // Add CTA on new page
+        doc.addPage();
+        addHeader();
+        const ctaY = headerHeight + 10;
+        doc.setFillColor(40, 20, 255);
+        doc.roundedRect(margin, ctaY, contentWidth, 20, 2, 2, 'F');
+        doc.setTextColor(255, 255, 255);
+        doc.setFontSize(11);
+        doc.setFont('helvetica', 'bold');
+        doc.text('Ready for a comprehensive analysis?', pageWidth / 2, ctaY + 8, { align: 'center' });
+        doc.setFontSize(9);
+        doc.setFont('helvetica', 'normal');
+        doc.text('Schedule a consultation: calendly.com/charbel-talentgurus', pageWidth / 2, ctaY + 15, { align: 'center' });
+
+        // Update page count and footers
+        const newTotalPages = doc.internal.getNumberOfPages();
+        for (let i = 1; i <= newTotalPages; i++) {
+          doc.setPage(i);
+          addFooter(i, newTotalPages);
+        }
       }
 
       // Save
       doc.save(`TG-Analysis-${results.displayTitle.replace(/[^a-zA-Z0-9]/g, '-')}-${new Date().toISOString().split('T')[0]}.pdf`);
+
+      // Reset button state
+      if (exportBtn) {
+        exportBtn.innerHTML = '<svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7,10 12,15 17,10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>Export Report';
+        exportBtn.disabled = false;
+      }
     } catch (err) {
       console.error('PDF export error:', err);
       alert('Unable to export PDF. Please try again or contact support.');
+
+      // Reset button state on error
+      const exportBtn = document.querySelector('[data-export-btn]');
+      if (exportBtn) {
+        exportBtn.innerHTML = '<svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7,10 12,15 17,10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>Export Report';
+        exportBtn.disabled = false;
+      }
     }
   };
 
@@ -1261,7 +1189,7 @@ Return this exact JSON structure:
           // RESULTS
           // ============================================
           <div className="space-y-6">
-            <div className="bg-white rounded-2xl shadow-xl p-6 md:p-8 border border-slate-200">
+            <div ref={resultsRef} className="bg-white rounded-2xl shadow-xl p-6 md:p-8 border border-slate-200">
               {/* Score */}
               <div className="text-center mb-8">
                 <div className="w-36 h-36 rounded-full flex items-center justify-center mx-auto mb-4 border-4 shadow-lg"
@@ -1421,7 +1349,7 @@ Return this exact JSON structure:
               )}
 
               <div className="flex flex-wrap gap-3 pt-4 border-t border-slate-200">
-                <button onClick={exportToPDF} className="flex items-center gap-2 px-4 py-2 bg-slate-100 hover:bg-slate-200 rounded-lg text-sm font-medium text-slate-700">
+                <button data-export-btn onClick={exportToPDF} className="flex items-center gap-2 px-4 py-2 bg-slate-100 hover:bg-slate-200 rounded-lg text-sm font-medium text-slate-700">
                   <Download className="w-4 h-4" />Export Report
                 </button>
                 <button onClick={runComparison} className="flex items-center gap-2 px-4 py-2 bg-slate-100 hover:bg-slate-200 rounded-lg text-sm font-medium text-slate-700">
