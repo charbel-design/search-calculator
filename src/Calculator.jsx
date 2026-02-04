@@ -870,7 +870,7 @@ Return this exact JSON structure:
         doc.setPage(i);
         doc.setFontSize(8);
         doc.setTextColor(130, 130, 130);
-        doc.text('TALENT GURUS | talent-gurus.com | This analysis provides general market guidance.', pageWidth / 2, 287, { align: 'center' });
+        doc.text('TALENT GURUS | talent-gurus.com | AI-assisted analysis for informational purposes only.', pageWidth / 2, 287, { align: 'center' });
         doc.text(`Page ${i} of ${pageCount}`, pageWidth - margin, 287, { align: 'right' });
       }
 
@@ -911,16 +911,21 @@ Return this exact JSON structure:
       <div className="max-w-4xl mx-auto" style={{ fontFamily: "'DM Sans', sans-serif" }}>
         {/* Header */}
         <div className="text-center mb-8">
-          <div className="inline-block px-10 py-5 rounded-xl shadow-lg mb-6" style={{ backgroundColor: '#2814ff' }}>
-            <h1 className="text-2xl md:text-3xl font-bold text-white tracking-widest" style={{ fontFamily: "'Playfair Display', serif" }}>TALENT GURUS</h1>
+          <div className="inline-block mb-6">
+            <img src="/logo.svg" alt="Talent Gurus" className="h-16 md:h-20" />
           </div>
           <h2 className="text-2xl md:text-3xl font-bold mb-3" style={{ color: '#2814ff', fontFamily: "'Playfair Display', serif" }}>Search Complexity Calculator</h2>
           <p className="text-base text-slate-600 max-w-2xl mx-auto">Understanding what you're up against matters. Get a clear picture in 90 seconds.</p>
         </div>
 
-        <div className="bg-slate-50 border-l-4 rounded-lg p-4 mb-8 text-sm text-slate-600 flex gap-2" style={{ borderColor: '#2814ff' }}>
-          <Info className="w-5 h-5 flex-shrink-0" style={{ color: '#2814ff' }} />
-          <p><strong>Important:</strong> This analysis provides general market guidance. Every search is unique.</p>
+        <div className="bg-slate-50 border-l-4 rounded-lg p-4 mb-8 text-sm text-slate-600" style={{ borderColor: '#2814ff' }}>
+          <div className="flex gap-2 mb-2">
+            <Info className="w-5 h-5 flex-shrink-0 mt-0.5" style={{ color: '#2814ff' }} />
+            <div>
+              <p className="mb-2"><strong>Disclaimer:</strong> This calculator provides general market guidance based on aggregated industry data and should not be construed as a guarantee of search outcomes, candidate availability, or compensation accuracy. Every search is unique, and actual results may vary based on market conditions, candidate preferences, and specific role requirements.</p>
+              <p className="text-xs text-slate-500"><strong>AI Disclosure:</strong> Portions of this analysis are generated using AI language models. While we strive for accuracy, AI-generated content may contain errors or inaccuracies. This tool is for informational purposes only and does not constitute professional staffing advice. For personalized guidance, please consult directly with Talent Gurus.</p>
+            </div>
+          </div>
         </div>
 
         {!results ? (
@@ -1151,8 +1156,8 @@ Return this exact JSON structure:
                   <div className="bg-indigo-50 rounded-xl p-5 border border-indigo-100 flex gap-3">
                     <Zap className="w-6 h-6 flex-shrink-0" style={{ color: '#2814ff' }} />
                     <div>
-                      <h4 className="font-semibold text-slate-900 mb-1">Results appear immediately</h4>
-                      <p className="text-sm text-slate-600">Get a detailed complexity score, market analysis, and recommendations.</p>
+                      <h4 className="font-semibold text-slate-900 mb-1">Your analysis is almost ready</h4>
+                      <p className="text-sm text-slate-600">In a few seconds, you'll receive a detailed complexity score, market analysis, and recommendations.</p>
                     </div>
                   </div>
 

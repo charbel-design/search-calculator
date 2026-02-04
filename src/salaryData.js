@@ -1431,7 +1431,7 @@ export const BENCHMARKS = {
   // FAMILY OFFICE - C-SUITE
   // Salaries based on $300M-$1B AUM (typical UHNW)
   // ==========================================
-  "CEO (Family Office)": {
+  "Family Office CEO": {
     category: "Family Office - C-Suite",
     p25: 400000, p50: 550000, p75: 700000,
     benefits: {
@@ -1444,7 +1444,7 @@ export const BENCHMARKS = {
     regionalNotes: "NYC/SF +35-40%; Middle East can exceed $1.2M base; total comp median $1.1M",
     trends: "Compensation up 4-10% in 2024-2025; competition from multi-family offices intensifying"
   },
-  "COO (Family Office)": {
+  "Family Office COO": {
     category: "Family Office - C-Suite",
     p25: 300000, p50: 400000, p75: 550000,
     benefits: {
@@ -1457,7 +1457,7 @@ export const BENCHMARKS = {
     regionalNotes: "Only 29% of SFOs have dedicated COO; median $275k in smaller offices; total comp $850k",
     trends: "Role gaining prominence as family offices professionalize operations"
   },
-  "CIO (Family Office)": {
+  "Family Office CIO": {
     category: "Family Office - C-Suite",
     p25: 400000, p50: 550000, p75: 750000,
     benefits: {
@@ -1470,7 +1470,7 @@ export const BENCHMARKS = {
     regionalNotes: "$1B+ AUM: $700k-$1.5M base; median total comp $2.5M with incentives",
     trends: "Highest-paid role in most family offices; co-investment rights increasingly common"
   },
-  "CFO (Family Office)": {
+  "Family Office CFO": {
     category: "Family Office - C-Suite",
     p25: 250000, p50: 330000, p75: 450000,
     benefits: {
@@ -1483,7 +1483,7 @@ export const BENCHMARKS = {
     regionalNotes: "Median $275k SFO; 1.5x higher in $1B+ AUM offices; total comp median $620k",
     trends: "Increasingly responsible for tax strategy and multi-entity consolidation"
   },
-  "General Counsel (Family Office)": {
+  "Family Office General Counsel": {
     category: "Family Office - C-Suite",
     p25: 300000, p50: 400000, p75: 550000,
     benefits: {
@@ -1522,7 +1522,7 @@ export const BENCHMARKS = {
     regionalNotes: "Total comp median $300k; larger family foundations pay at upper range",
     trends: "Growing emphasis on impact measurement and next-gen engagement"
   },
-  "Chief Information Officer (Family Office)": {
+  "Chief Information Officer": {
     category: "Family Office - Operations & Finance",
     p25: 200000, p50: 300000, p75: 450000,
     benefits: {
@@ -1535,7 +1535,7 @@ export const BENCHMARKS = {
     regionalNotes: "Total comp median $360k; cybersecurity expertise commands premium; SF/NYC +25%",
     trends: "Cybersecurity and data privacy increasingly critical; cloud migration driving demand"
   },
-  "Chief Compliance Officer (Family Office)": {
+  "Chief Compliance Officer": {
     category: "Family Office - Operations & Finance",
     p25: 200000, p50: 300000, p75: 450000,
     benefits: {
@@ -1561,7 +1561,7 @@ export const BENCHMARKS = {
     regionalNotes: "Median total comp $785k; $1B+ AUM: $350k-$800k base; co-investment rights common",
     trends: "Direct investment expertise highly valued; competition from PE/hedge funds"
   },
-  "Portfolio Manager (Family Office)": {
+  "Portfolio Manager": {
     category: "Family Office - Investment",
     p25: 200000, p50: 300000, p75: 425000,
     benefits: {
@@ -1587,7 +1587,7 @@ export const BENCHMARKS = {
     regionalNotes: "Median total comp $220k; PE/VC experience valued; $1B+: $150k-$320k base",
     trends: "Direct deal sourcing skills increasingly important"
   },
-  "Investment Analyst (Family Office)": {
+  "Investment Analyst": {
     category: "Family Office - Investment",
     p25: 75000, p50: 95000, p75: 125000,
     benefits: {
@@ -1600,7 +1600,7 @@ export const BENCHMARKS = {
     regionalNotes: "National average $86k; $1B+ AUM: $100k-$190k; total comp median $95k",
     trends: "Entry point to family office investment careers; strong candidate pipeline"
   },
-  "Controller (Family Office)": {
+  "Controller": {
     category: "Family Office - Operations & Finance",
     p25: 200000, p50: 260000, p75: 350000,
     benefits: {
@@ -1613,7 +1613,7 @@ export const BENCHMARKS = {
     regionalNotes: "Median $240k; $1B+: $280k-$520k; total comp median $270k; fund accounting expertise valued",
     trends: "Multi-entity consolidation and alternative investment accounting driving complexity"
   },
-  "Operations Manager (Family Office)": {
+  "Operations Manager": {
     category: "Family Office - Operations & Finance",
     p25: 130000, p50: 180000, p75: 250000,
     benefits: {
@@ -1639,7 +1639,7 @@ export const BENCHMARKS = {
     regionalNotes: "National average $95k; total comp median $110k; regulatory experience premium",
     trends: "Growing role as family offices face increased regulatory scrutiny"
   },
-  "HR Director (Family Office)": {
+  "HR Director": {
     category: "Family Office - Support",
     p25: 130000, p50: 170000, p75: 230000,
     benefits: {
@@ -1652,7 +1652,7 @@ export const BENCHMARKS = {
     regionalNotes: "NYC family office $200k; SF $190k; LA $169k; total comp median $190k",
     trends: "Talent retention and culture building critical as competition for FO talent intensifies"
   },
-  "Executive Assistant to CEO (Family Office)": {
+  "Executive Assistant to Principal": {
     category: "Family Office - Support",
     p25: 110000, p50: 160000, p75: 220000,
     benefits: {
