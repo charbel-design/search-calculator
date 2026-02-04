@@ -634,7 +634,9 @@ Return this exact JSON structure:
       // Helper function to add wrapped text with proper page handling
       const addWrappedText = (text, x, maxWidth, lineHeight = 5) => {
         if (!text) return;
-        const lines = doc.splitTextToSize(String(text), maxWidth);
+        // Ensure maxWidth doesn't exceed page bounds
+        const safeWidth = Math.min(maxWidth, pageWidth - x - margin);
+        const lines = doc.splitTextToSize(String(text), safeWidth);
         lines.forEach((line) => {
           if (y > 265) {
             doc.addPage();
@@ -769,7 +771,8 @@ Return this exact JSON structure:
         addSection('KEY SUCCESS FACTORS');
         results.keySuccessFactors.forEach(f => {
           checkPageBreak(12);
-          addWrappedText(`• ${f}`, margin, contentWidth, 4.5);
+          const cleanText = String(f).replace(/[^\x20-\x7E]/g, ' ').trim();
+          addWrappedText(`- ${cleanText}`, margin, contentWidth - 5, 4.5);
           y += 2;
         });
       }
@@ -781,7 +784,9 @@ Return this exact JSON structure:
         addSection('RECOMMENDATIONS');
         results.recommendedAdjustments.forEach(r => {
           checkPageBreak(20);
-          addWrappedText(`→ ${r}`, margin, contentWidth, 4.5);
+          // Use slightly smaller width and clean the text
+          const cleanText = String(r).replace(/[^\x20-\x7E]/g, ' ').trim();
+          addWrappedText(`> ${cleanText}`, margin, contentWidth - 5, 4.5);
           y += 3;
         });
       }
