@@ -482,7 +482,9 @@ Return this exact JSON structure:
         ...ai,
         displayTitle,
         formData: { ...formData },
-        aiAnalysisSuccess: true
+        aiAnalysisSuccess: true,
+        adjustedBenchmark,
+        regionalMultiplier
       });
 
     } catch (err) {
@@ -526,7 +528,9 @@ Return this exact JSON structure:
         },
         bottomLine: "Analysis based on our scoring algorithm and market benchmarks. For personalized AI insights, please try again or schedule a consultation.",
         formData: { ...formData },
-        aiAnalysisSuccess: false
+        aiAnalysisSuccess: false,
+        adjustedBenchmark,
+        regionalMultiplier
       });
     }
 
@@ -574,12 +578,12 @@ Market Dynamics:      ${results.marketCompetitiveness || 'N/A'}
 
 ${results.benchmark ? `
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-MARKET BENCHMARKS: ${results.displayTitle.toUpperCase()}
+MARKET BENCHMARKS: ${results.displayTitle.toUpperCase()}${results.regionalMultiplier && results.regionalMultiplier !== 1 ? ` (${results.regionalMultiplier}x regional adjustment)` : ''}
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-25th Percentile:  $${results.benchmark.p25.toLocaleString()}
-Market Median:    $${results.benchmark.p50.toLocaleString()}
-75th Percentile:  $${results.benchmark.p75.toLocaleString()}
+25th Percentile:  $${(results.adjustedBenchmark?.p25 || results.benchmark.p25).toLocaleString()}
+Market Median:    $${(results.adjustedBenchmark?.p50 || results.benchmark.p50).toLocaleString()}
+75th Percentile:  $${(results.adjustedBenchmark?.p75 || results.benchmark.p75).toLocaleString()}
 
 Benefits:
 • Housing: ${results.benchmark.benefits.housing}
@@ -1005,14 +1009,35 @@ This analysis provides general market guidance. Every search is unique.
                 </div>
               </div>
 
-              {/* Benchmarks */}
+              {/* Benchmarks - Show adjusted figures if available */}
               {results.benchmark && (
                 <div className="bg-slate-50 rounded-xl p-5 mb-6">
-                  <h4 className="font-semibold mb-3 flex items-center gap-2"><TrendingUp className="w-5 h-5" style={{ color: '#2814ff' }} />Benchmarks: {results.displayTitle}</h4>
+                  <h4 className="font-semibold mb-3 flex items-center gap-2">
+                    <TrendingUp className="w-5 h-5" style={{ color: '#2814ff' }} />
+                    Benchmarks: {results.displayTitle}
+                    {results.regionalMultiplier && results.regionalMultiplier !== 1 && (
+                      <span className="text-xs font-normal text-slate-500 ml-2">({results.regionalMultiplier}x regional adjustment)</span>
+                    )}
+                  </h4>
                   <div className="grid grid-cols-3 gap-4 text-center mb-4">
-                    <div><div className="text-2xl font-bold text-slate-900">${Math.round(results.benchmark.p25/1000)}k</div><div className="text-xs text-slate-500">25th</div></div>
-                    <div className="bg-white rounded-lg py-2"><div className="text-2xl font-bold" style={{ color: '#2814ff' }}>${Math.round(results.benchmark.p50/1000)}k</div><div className="text-xs text-slate-500">Median</div></div>
-                    <div><div className="text-2xl font-bold text-slate-900">${Math.round(results.benchmark.p75/1000)}k</div><div className="text-xs text-slate-500">75th</div></div>
+                    <div>
+                      <div className="text-2xl font-bold text-slate-900">
+                        ${Math.round((results.adjustedBenchmark?.p25 || results.benchmark.p25)/1000)}k
+                      </div>
+                      <div className="text-xs text-slate-500">25th</div>
+                    </div>
+                    <div className="bg-white rounded-lg py-2">
+                      <div className="text-2xl font-bold" style={{ color: '#2814ff' }}>
+                        ${Math.round((results.adjustedBenchmark?.p50 || results.benchmark.p50)/1000)}k
+                      </div>
+                      <div className="text-xs text-slate-500">Median</div>
+                    </div>
+                    <div>
+                      <div className="text-2xl font-bold text-slate-900">
+                        ${Math.round((results.adjustedBenchmark?.p75 || results.benchmark.p75)/1000)}k
+                      </div>
+                      <div className="text-xs text-slate-500">75th</div>
+                    </div>
                   </div>
                   <div className="grid grid-cols-4 gap-2 text-xs">
                     {[['Housing', results.benchmark.benefits.housing, Home], ['Vehicle', results.benchmark.benefits.vehicle, Car], ['Health', results.benchmark.benefits.health, Heart], ['Bonus', results.benchmark.benefits.bonus, DollarSign]].map(([label, val, Icon]) => (
