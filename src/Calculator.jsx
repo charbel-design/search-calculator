@@ -109,13 +109,24 @@ const SearchComplexityCalculator = () => {
     { value: 'building-pipeline', label: 'Building Pipeline (6+ months)', points: 3, description: 'Strategic talent mapping' }
   ];
 
-  const budgetRanges = [
+  // Budget ranges - different for household vs corporate roles
+  const householdBudgetRanges = [
     { value: 'under-80k', label: 'Under $80k', midpoint: 70000 },
     { value: '80k-120k', label: '$80k - $120k', midpoint: 100000 },
     { value: '120k-180k', label: '$120k - $180k', midpoint: 150000 },
     { value: '180k-250k', label: '$180k - $250k', midpoint: 215000 },
     { value: '250k-350k', label: '$250k - $350k', midpoint: 300000 },
     { value: 'over-350k', label: 'Over $350k', midpoint: 400000 },
+    { value: 'not-sure', label: 'Not Sure / Need Guidance', midpoint: null }
+  ];
+
+  const corporateBudgetRanges = [
+    { value: 'under-200k', label: 'Under $200k', midpoint: 175000 },
+    { value: '200k-350k', label: '$200k - $350k', midpoint: 275000 },
+    { value: '350k-500k', label: '$350k - $500k', midpoint: 425000 },
+    { value: '500k-750k', label: '$500k - $750k', midpoint: 625000 },
+    { value: '750k-1m', label: '$750k - $1M', midpoint: 875000 },
+    { value: 'over-1m', label: 'Over $1M', midpoint: 1250000 },
     { value: 'not-sure', label: 'Not Sure / Need Guidance', midpoint: null }
   ];
 
@@ -155,7 +166,7 @@ const SearchComplexityCalculator = () => {
     return benchmark?.category === 'Family Office - Corporate';
   }, [formData.positionType]);
 
-  // Clear language/certification selections when role category changes
+  // Clear selections when role category changes (budget ranges, certs, languages differ)
   const prevIsCorporateRole = useRef(isCorporateRole);
   useEffect(() => {
     if (prevIsCorporateRole.current !== isCorporateRole && formData.positionType) {
@@ -163,11 +174,15 @@ const SearchComplexityCalculator = () => {
       setFormData(prev => ({
         ...prev,
         languageRequirements: [],
-        certifications: []
+        certifications: [],
+        budgetRange: '' // Budget ranges are different for corporate vs household
       }));
     }
     prevIsCorporateRole.current = isCorporateRole;
   }, [isCorporateRole, formData.positionType]);
+
+  // Get the appropriate budget ranges based on role type
+  const budgetRanges = isCorporateRole ? corporateBudgetRanges : householdBudgetRanges;
 
   const handleInputChange = (e) => {
     const { name, value, type, checked } = e.target;
