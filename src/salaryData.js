@@ -96,7 +96,8 @@ export const CATEGORIES = [
   "Grounds & Maintenance",
   "Maritime / Yacht",
   "Healthcare & Wellness",
-  "Hospitality & Events"
+  "Hospitality & Events",
+  "Family Office - Corporate"
 ];
 
 // ============================================
@@ -1393,6 +1394,245 @@ export const BENCHMARKS = {
     scarcity: 6,
     regionalNotes: "Show horse and polo operations pay at upper range; Wellington FL, Kentucky markets strong",
     trends: "Role often includes oversight of trainers, grooms, and facility maintenance"
+  },
+
+  // ==========================================
+  // FAMILY OFFICE - CORPORATE (18 positions)
+  // Salaries based on $300M-$1B AUM (typical UHNW)
+  // ==========================================
+  "CEO (Family Office)": {
+    category: "Family Office - Corporate",
+    p25: 400000, p50: 550000, p75: 700000,
+    benefits: {
+      housing: "Not typically included; relocation assistance common",
+      vehicle: "Executive car lease or allowance",
+      health: "Premium executive coverage with concierge services",
+      bonus: "20-30% discretionary; UK 40-50%; Middle East 50-200%"
+    },
+    scarcity: 9,
+    regionalNotes: "NYC/SF +35-40%; Middle East can exceed $1.2M base; total comp median $1.1M",
+    trends: "Compensation up 4-10% in 2024-2025; competition from multi-family offices intensifying"
+  },
+  "COO (Family Office)": {
+    category: "Family Office - Corporate",
+    p25: 300000, p50: 400000, p75: 550000,
+    benefits: {
+      housing: "Not typically included",
+      vehicle: "Company car or allowance",
+      health: "Premium executive coverage",
+      bonus: "18-25% discretionary"
+    },
+    scarcity: 8,
+    regionalNotes: "Only 29% of SFOs have dedicated COO; median $275k in smaller offices; total comp $850k",
+    trends: "Role gaining prominence as family offices professionalize operations"
+  },
+  "CIO (Family Office)": {
+    category: "Family Office - Corporate",
+    p25: 400000, p50: 550000, p75: 750000,
+    benefits: {
+      housing: "Not typically included",
+      vehicle: "Executive car lease",
+      health: "Premium coverage with executive health screening",
+      bonus: "25-35% base plus carried interest; incentives $850k-$2M+"
+    },
+    scarcity: 9.5,
+    regionalNotes: "$1B+ AUM: $700k-$1.5M base; median total comp $2.5M with incentives",
+    trends: "Highest-paid role in most family offices; co-investment rights increasingly common"
+  },
+  "CFO (Family Office)": {
+    category: "Family Office - Corporate",
+    p25: 250000, p50: 330000, p75: 450000,
+    benefits: {
+      housing: "Not typically included",
+      vehicle: "Company car or allowance",
+      health: "Premium executive coverage",
+      bonus: "18-25% discretionary"
+    },
+    scarcity: 8,
+    regionalNotes: "Median $275k SFO; 1.5x higher in $1B+ AUM offices; total comp median $620k",
+    trends: "Increasingly responsible for tax strategy and multi-entity consolidation"
+  },
+  "General Counsel (Family Office)": {
+    category: "Family Office - Corporate",
+    p25: 300000, p50: 400000, p75: 550000,
+    benefits: {
+      housing: "Not typically included",
+      vehicle: "Not typical",
+      health: "Premium coverage",
+      bonus: "15-25% discretionary"
+    },
+    scarcity: 8.5,
+    regionalNotes: "Total comp median $500k; higher for trust/estate expertise; NYC/SF premium",
+    trends: "Growing demand for in-house counsel as regulatory complexity increases"
+  },
+  "Director of Tax": {
+    category: "Family Office - Corporate",
+    p25: 250000, p50: 350000, p75: 500000,
+    benefits: {
+      housing: "Not typically included",
+      vehicle: "Not typical",
+      health: "Premium coverage",
+      bonus: "15-25% discretionary"
+    },
+    scarcity: 8.5,
+    regionalNotes: "Total comp median $450k; Big 4 experience premium; international tax expertise valued",
+    trends: "Critical role with changing tax landscape; demand exceeds supply"
+  },
+  "Director of Philanthropy": {
+    category: "Family Office - Corporate",
+    p25: 150000, p50: 250000, p75: 400000,
+    benefits: {
+      housing: "Not typically included",
+      vehicle: "Mileage reimbursement",
+      health: "Standard to premium coverage",
+      bonus: "10-20% discretionary"
+    },
+    scarcity: 7.5,
+    regionalNotes: "Total comp median $300k; larger family foundations pay at upper range",
+    trends: "Growing emphasis on impact measurement and next-gen engagement"
+  },
+  "Chief Information Officer (Family Office)": {
+    category: "Family Office - Corporate",
+    p25: 200000, p50: 300000, p75: 450000,
+    benefits: {
+      housing: "Not typically included",
+      vehicle: "Not typical",
+      health: "Premium coverage",
+      bonus: "15-25% discretionary"
+    },
+    scarcity: 7.5,
+    regionalNotes: "Total comp median $360k; cybersecurity expertise commands premium; SF/NYC +25%",
+    trends: "Cybersecurity and data privacy increasingly critical; cloud migration driving demand"
+  },
+  "Chief Compliance Officer (Family Office)": {
+    category: "Family Office - Corporate",
+    p25: 200000, p50: 300000, p75: 450000,
+    benefits: {
+      housing: "Not typically included",
+      vehicle: "Not typical",
+      health: "Premium coverage",
+      bonus: "15-25% discretionary"
+    },
+    scarcity: 7.5,
+    regionalNotes: "Total comp median $360k; SEC/FINRA experience valued; RIA compliance expertise",
+    trends: "Regulatory scrutiny of family offices increasing; demand growing rapidly"
+  },
+  "Senior Portfolio Manager": {
+    category: "Family Office - Corporate",
+    p25: 250000, p50: 375000, p75: 550000,
+    benefits: {
+      housing: "Not typically included",
+      vehicle: "Not typical",
+      health: "Premium coverage",
+      bonus: "30-50% plus carried interest on direct investments"
+    },
+    scarcity: 7.5,
+    regionalNotes: "Median total comp $785k; $1B+ AUM: $350k-$800k base; co-investment rights common",
+    trends: "Direct investment expertise highly valued; competition from PE/hedge funds"
+  },
+  "Portfolio Manager (Family Office)": {
+    category: "Family Office - Corporate",
+    p25: 200000, p50: 300000, p75: 425000,
+    benefits: {
+      housing: "Not typically included",
+      vehicle: "Not typical",
+      health: "Premium coverage",
+      bonus: "25-40% discretionary plus potential carry"
+    },
+    scarcity: 6,
+    regionalNotes: "Median total comp $400k; alternative investment experience premium",
+    trends: "Growing allocation to alternatives increases demand for specialized PMs"
+  },
+  "Senior Investment Analyst": {
+    category: "Family Office - Corporate",
+    p25: 125000, p50: 180000, p75: 250000,
+    benefits: {
+      housing: "Not typically included",
+      vehicle: "Not typical",
+      health: "Standard to premium coverage",
+      bonus: "15-30% discretionary"
+    },
+    scarcity: 5,
+    regionalNotes: "Median total comp $220k; PE/VC experience valued; $1B+: $150k-$320k base",
+    trends: "Direct deal sourcing skills increasingly important"
+  },
+  "Investment Analyst (Family Office)": {
+    category: "Family Office - Corporate",
+    p25: 75000, p50: 95000, p75: 125000,
+    benefits: {
+      housing: "Not typically included",
+      vehicle: "Not typical",
+      health: "Standard coverage",
+      bonus: "5-15% discretionary"
+    },
+    scarcity: 4,
+    regionalNotes: "National average $86k; $1B+ AUM: $100k-$190k; total comp median $95k",
+    trends: "Entry point to family office investment careers; strong candidate pipeline"
+  },
+  "Controller (Family Office)": {
+    category: "Family Office - Corporate",
+    p25: 200000, p50: 260000, p75: 350000,
+    benefits: {
+      housing: "Not typically included",
+      vehicle: "Not typical",
+      health: "Standard to premium coverage",
+      bonus: "12-18% discretionary"
+    },
+    scarcity: 5.5,
+    regionalNotes: "Median $240k; $1B+: $280k-$520k; total comp median $270k; fund accounting expertise valued",
+    trends: "Multi-entity consolidation and alternative investment accounting driving complexity"
+  },
+  "Operations Manager (Family Office)": {
+    category: "Family Office - Corporate",
+    p25: 130000, p50: 180000, p75: 250000,
+    benefits: {
+      housing: "Not typically included",
+      vehicle: "Not typical",
+      health: "Standard to premium coverage",
+      bonus: "10-18% discretionary"
+    },
+    scarcity: 5,
+    regionalNotes: "Miami market $143k median; total comp median $185k; process improvement skills valued",
+    trends: "Technology implementation and vendor management increasingly important"
+  },
+  "Risk & Compliance Manager": {
+    category: "Family Office - Corporate",
+    p25: 70000, p50: 95000, p75: 116500,
+    benefits: {
+      housing: "Not typically included",
+      vehicle: "Not typical",
+      health: "Standard coverage",
+      bonus: "10-15% discretionary"
+    },
+    scarcity: 5.5,
+    regionalNotes: "National average $95k; total comp median $110k; regulatory experience premium",
+    trends: "Growing role as family offices face increased regulatory scrutiny"
+  },
+  "HR Director (Family Office)": {
+    category: "Family Office - Corporate",
+    p25: 130000, p50: 170000, p75: 230000,
+    benefits: {
+      housing: "Not typically included",
+      vehicle: "Not typical",
+      health: "Premium coverage",
+      bonus: "12-20% discretionary"
+    },
+    scarcity: 6.5,
+    regionalNotes: "NYC family office $200k; SF $190k; LA $169k; total comp median $190k",
+    trends: "Talent retention and culture building critical as competition for FO talent intensifies"
+  },
+  "Executive Assistant to CEO (Family Office)": {
+    category: "Family Office - Corporate",
+    p25: 110000, p50: 160000, p75: 220000,
+    benefits: {
+      housing: "Not typically included",
+      vehicle: "Mileage reimbursement",
+      health: "Premium coverage",
+      bonus: "5-12% discretionary"
+    },
+    scarcity: 4.5,
+    regionalNotes: "Total comp median $155k; $1B+: $150k-$290k; family dynamics expertise valued",
+    trends: "High-trust role with significant principal access; discretion paramount"
   }
 };
 
