@@ -623,10 +623,12 @@ Return this exact JSON structure:
 
       // Helper function to check and add page break
       const checkPageBreak = (neededSpace = 20) => {
-        if (y + neededSpace > 270) {
+        if (y + neededSpace > 265) {
           doc.addPage();
-          y = 20;
+          y = 25;
+          return true; // indicates new page was added
         }
+        return false;
       };
 
       // Helper function to add wrapped text with proper page handling
@@ -634,7 +636,10 @@ Return this exact JSON structure:
         if (!text) return;
         const lines = doc.splitTextToSize(String(text), maxWidth);
         lines.forEach((line) => {
-          checkPageBreak(lineHeight);
+          if (y > 265) {
+            doc.addPage();
+            y = 25;
+          }
           doc.text(line, x, y);
           y += lineHeight;
         });
@@ -665,10 +670,10 @@ Return this exact JSON structure:
       doc.text(`Location: ${results.formData.location} | Generated: ${new Date().toLocaleDateString()}`, margin, y);
       y += 12;
 
-      // Score Box - Brand Indigo #2814ff = RGB(40, 20, 255)
-      doc.setFillColor(40, 20, 255);
+      // Score Box - Brand Pink #de9ea9 = RGB(222, 158, 169)
+      doc.setFillColor(222, 158, 169);
       doc.roundedRect(margin, y, 45, 22, 2, 2, 'F');
-      doc.setTextColor(255, 255, 255);
+      doc.setTextColor(40, 20, 255); // Indigo text on pink background
       doc.setFontSize(16);
       doc.setFont('helvetica', 'bold');
       doc.text(`${results.score}/10`, margin + 22.5, y + 10, { align: 'center' });
@@ -771,25 +776,28 @@ Return this exact JSON structure:
 
       // Recommendations Section
       if (results.recommendedAdjustments?.length > 0) {
-        y += 3;
+        y += 5;
+        checkPageBreak(30);
         addSection('RECOMMENDATIONS');
         results.recommendedAdjustments.forEach(r => {
-          checkPageBreak(12);
+          checkPageBreak(20);
           addWrappedText(`→ ${r}`, margin, contentWidth, 4.5);
-          y += 2;
+          y += 3;
         });
       }
 
       // Sourcing Insight Section
       if (results.sourcingInsight && results.aiAnalysisSuccess) {
-        y += 3;
+        y += 5;
+        checkPageBreak(30);
         addSection('WHERE TO FIND CANDIDATES');
+        checkPageBreak(15);
         addWrappedText(results.sourcingInsight, margin, contentWidth, 4.5);
       }
 
       // CTA Section
-      checkPageBreak(25);
-      y += 5;
+      checkPageBreak(30);
+      y += 8;
       doc.setFillColor(40, 20, 255);
       doc.roundedRect(margin, y, contentWidth, 20, 2, 2, 'F');
       doc.setTextColor(255, 255, 255);
