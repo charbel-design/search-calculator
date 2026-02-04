@@ -121,8 +121,8 @@ const SearchComplexityCalculator = () => {
     { value: 'ultra-discrete', label: 'Ultra-Discrete', points: 15, description: 'Maximum confidentiality, blind search' }
   ];
 
-  const languageOptions = ['Mandarin', 'Spanish', 'French', 'Arabic', 'Russian', 'Italian', 'German', 'Japanese', 'Portuguese', 'Korean', 'Hindi'];
-  const certificationOptions = ['STCW (Maritime)', 'CPR/First Aid', 'Firearms License', 'Commercial Driver', 'Culinary Degree', 'Security Clearance', 'Child Development', 'Sommelier', 'ServSafe'];
+  const languageOptions = ['English (Native/Fluent)', 'Mandarin', 'Spanish', 'French', 'Arabic', 'Russian', 'Italian', 'German', 'Japanese', 'Portuguese', 'Korean', 'Hindi', 'Tagalog', 'Polish', 'Vietnamese', 'Greek', 'Hebrew', 'Dutch', 'Swedish', 'Thai'];
+  const certificationOptions = ['STCW (Maritime)', 'CPR/First Aid', 'Firearms License', 'Commercial Driver (CDL)', 'Culinary Degree', 'Security Clearance', 'Child Development (CDA)', 'Sommelier (CMS/WSET)', 'ServSafe', 'ENG1 Medical', 'PEC (Yacht)', 'RYA Yachtmaster', 'Butler Training (Starkey/IICS)', 'Nursing License (RN/LPN)', 'CPA/Accounting', 'Montessori Certification', 'Private Pilot License', 'Close Protection (SIA)', 'AED/BLS Certified', 'Estate Management Certification'];
   
   const travelOptions = [
     { value: 'minimal', label: 'Minimal (Local only)', points: 0 },
