@@ -661,6 +661,19 @@ Return this exact JSON structure:
         buttonsContainer.style.display = 'none';
       }
 
+      // Get section positions BEFORE capturing
+      const containerRect = resultsRef.current.getBoundingClientRect();
+      const sections = resultsRef.current.querySelectorAll('[data-pdf-section]');
+      const sectionBreaks = [];
+      sections.forEach(section => {
+        const rect = section.getBoundingClientRect();
+        sectionBreaks.push({
+          name: section.getAttribute('data-pdf-section'),
+          top: rect.top - containerRect.top,
+          bottom: rect.bottom - containerRect.top
+        });
+      });
+
       // Small delay to ensure DOM updates
       await new Promise(resolve => setTimeout(resolve, 100));
 
@@ -688,13 +701,47 @@ Return this exact JSON structure:
       // Calculate dimensions
       const imgWidth = canvas.width;
       const imgHeight = canvas.height;
+      const scale = 2; // html2canvas scale
       const contentWidth = pageWidth - (margin * 2);
-      const scaledImgHeight = (imgHeight * contentWidth) / imgWidth;
 
-      // First page: header + content
-      const firstPageContentHeight = pageHeight - headerHeight - footerHeight - margin;
-      // Subsequent pages: just content (no header)
-      const otherPageContentHeight = pageHeight - footerHeight - margin - 5;
+      // Pixels per mm conversion
+      const pxPerMm = (imgWidth / scale) / contentWidth;
+
+      // Available content height on each page (in source pixels)
+      const firstPageContentMm = pageHeight - headerHeight - footerHeight - margin;
+      const otherPageContentMm = pageHeight - footerHeight - margin - 5;
+      const firstPageContentPx = firstPageContentMm * pxPerMm * scale;
+      const otherPageContentPx = otherPageContentMm * pxPerMm * scale;
+
+      // Calculate page breaks at section boundaries
+      const pageBreaks = [0]; // Start of first page
+      let currentPageEnd = firstPageContentPx;
+      let isFirstPage = true;
+
+      // Sort sections by position
+      const sortedSections = [...sectionBreaks].sort((a, b) => a.top - b.top);
+
+      for (const section of sortedSections) {
+        const sectionTopPx = section.top * scale;
+        const sectionBottomPx = section.bottom * scale;
+
+        // If section would be cut, add a page break before it
+        if (sectionTopPx < currentPageEnd && sectionBottomPx > currentPageEnd) {
+          // Section is being cut - break before this section
+          pageBreaks.push(sectionTopPx);
+          const pageContentPx = isFirstPage ? firstPageContentPx : otherPageContentPx;
+          currentPageEnd = sectionTopPx + (isFirstPage ? otherPageContentPx : pageContentPx);
+          isFirstPage = false;
+        }
+
+        // Check if we need to advance to next page
+        while (sectionBottomPx > currentPageEnd) {
+          currentPageEnd += otherPageContentPx;
+        }
+      }
+
+      // Add final break at end of image
+      pageBreaks.push(imgHeight);
 
       // Add header (only on first page)
       doc.setFillColor(40, 20, 255);
@@ -707,65 +754,35 @@ Return this exact JSON structure:
       doc.setFont('helvetica', 'normal');
       doc.text('Search Complexity Analysis', pageWidth / 2, 18, { align: 'center' });
 
-      // Calculate how many pages we need
-      let remainingHeight = scaledImgHeight;
-      let currentY = 0;
-      let pageNum = 1;
+      // Render each page
+      for (let i = 0; i < pageBreaks.length - 1; i++) {
+        if (i > 0) {
+          doc.addPage();
+        }
 
-      // First page content
-      const firstPageImgHeight = Math.min(firstPageContentHeight, scaledImgHeight);
-      const firstPageSourceHeight = (firstPageImgHeight / scaledImgHeight) * imgHeight;
+        const startY = pageBreaks[i];
+        const endY = pageBreaks[i + 1];
+        const sliceHeight = endY - startY;
 
-      // Create canvas for first page portion
-      const firstCanvas = document.createElement('canvas');
-      firstCanvas.width = imgWidth;
-      firstCanvas.height = firstPageSourceHeight;
-      const firstCtx = firstCanvas.getContext('2d');
-      firstCtx.drawImage(canvas, 0, 0, imgWidth, firstPageSourceHeight, 0, 0, imgWidth, firstPageSourceHeight);
-
-      doc.addImage(firstCanvas.toDataURL('image/png'), 'PNG', margin, headerHeight + 2, contentWidth, firstPageImgHeight);
-
-      remainingHeight -= firstPageImgHeight;
-      currentY = firstPageSourceHeight;
-
-      // Additional pages if needed
-      while (remainingHeight > 0) {
-        doc.addPage();
-        pageNum++;
-
-        const pageImgHeight = Math.min(otherPageContentHeight, remainingHeight);
-        const sourceHeight = (pageImgHeight / scaledImgHeight) * imgHeight;
-
+        // Create canvas for this page's portion
         const pageCanvas = document.createElement('canvas');
         pageCanvas.width = imgWidth;
-        pageCanvas.height = sourceHeight;
+        pageCanvas.height = sliceHeight;
         const pageCtx = pageCanvas.getContext('2d');
-        pageCtx.drawImage(canvas, 0, currentY, imgWidth, sourceHeight, 0, 0, imgWidth, sourceHeight);
+        pageCtx.drawImage(canvas, 0, startY, imgWidth, sliceHeight, 0, 0, imgWidth, sliceHeight);
 
-        doc.addImage(pageCanvas.toDataURL('image/png'), 'PNG', margin, 5, contentWidth, pageImgHeight);
+        // Calculate destination dimensions
+        const destHeight = (sliceHeight / scale) / pxPerMm;
+        const destY = i === 0 ? headerHeight + 2 : 5;
 
-        remainingHeight -= pageImgHeight;
-        currentY += sourceHeight;
+        doc.addImage(pageCanvas.toDataURL('image/png'), 'PNG', margin, destY, contentWidth, destHeight);
       }
 
-      // Add CTA on last page
-      const lastPageY = pageNum === 1
-        ? headerHeight + 2 + Math.min(firstPageContentHeight, scaledImgHeight)
-        : 5 + Math.min(otherPageContentHeight, scaledImgHeight + (pageNum - 1) * otherPageContentHeight - (pageNum - 2) * otherPageContentHeight);
+      // Add CTA with clickable link
+      const lastPageNum = pageBreaks.length - 1;
+      doc.setPage(lastPageNum);
 
-      // Check if we need a new page for CTA
-      const ctaNeededSpace = 30;
-      const availableSpace = pageHeight - footerHeight - (pageNum === 1 ? (headerHeight + 2 + Math.min(firstPageContentHeight, scaledImgHeight)) : (5 + (scaledImgHeight - firstPageContentHeight - (pageNum - 2) * otherPageContentHeight)));
-
-      let ctaY;
-      if (availableSpace > ctaNeededSpace) {
-        ctaY = pageHeight - footerHeight - 25;
-      } else {
-        doc.addPage();
-        pageNum++;
-        ctaY = 20;
-      }
-
+      const ctaY = pageHeight - footerHeight - 28;
       doc.setFillColor(40, 20, 255);
       doc.roundedRect(margin, ctaY, contentWidth, 20, 2, 2, 'F');
       doc.setTextColor(255, 255, 255);
@@ -775,6 +792,9 @@ Return this exact JSON structure:
       doc.setFontSize(9);
       doc.setFont('helvetica', 'normal');
       doc.text('Schedule a consultation: calendly.com/charbel-talentgurus', pageWidth / 2, ctaY + 15, { align: 'center' });
+
+      // Add clickable link over the CTA
+      doc.link(margin, ctaY, contentWidth, 20, { url: 'https://calendly.com/charbel-talentgurus' });
 
       // Add footers to all pages
       const totalPages = doc.internal.getNumberOfPages();
@@ -802,10 +822,11 @@ Return this exact JSON structure:
   };
 
   const getComplexityColor = (score) => {
-    if (score <= 3) return { bg: '#c8e6c9', text: '#1b5e20' };
-    if (score <= 5) return { bg: '#fff3e0', text: '#e65100' };
-    if (score <= 7) return { bg: '#ffccbc', text: '#bf360c' };
-    return { bg: '#ffcdd2', text: '#b71c1c' };
+    // Using brand colors: Indigo #2814ff, Pink #de9ea9
+    if (score <= 3) return { bg: '#e8e4ff', text: '#2814ff' }; // Light indigo bg, indigo text
+    if (score <= 5) return { bg: '#f5e6e9', text: '#2814ff' }; // Light pink bg, indigo text
+    if (score <= 7) return { bg: '#de9ea9', text: '#2814ff' }; // Brand pink bg, indigo text
+    return { bg: '#c77d8a', text: '#ffffff' }; // Darker pink bg, white text
   };
 
   const resetForm = () => {
@@ -1183,11 +1204,11 @@ Return this exact JSON structure:
             <div ref={resultsRef} className="bg-white rounded-2xl shadow-xl p-6 md:p-8 border border-slate-200">
               {/* Score */}
               <div className="text-center mb-8">
-                <div className="w-36 h-36 rounded-full flex items-center justify-center mx-auto mb-4 border-4 shadow-lg"
+                <div className="w-40 h-40 rounded-full flex items-center justify-center mx-auto mb-4 border-4 shadow-lg"
                   style={{ backgroundColor: getComplexityColor(results.score).bg, borderColor: '#2814ff' }}>
                   <div className="text-center">
-                    <div className="text-5xl font-bold" style={{ color: getComplexityColor(results.score).text }}>{results.score}</div>
-                    <div className="text-sm font-medium" style={{ color: getComplexityColor(results.score).text }}>out of 10</div>
+                    <div className="text-4xl font-bold leading-tight" style={{ color: getComplexityColor(results.score).text }}>{results.score}</div>
+                    <div className="text-xs font-medium mt-1" style={{ color: getComplexityColor(results.score).text }}>out of 10</div>
                   </div>
                 </div>
                 <div className="inline-block px-5 py-2 rounded-full font-semibold mb-2"
@@ -1210,7 +1231,7 @@ Return this exact JSON structure:
               )}
 
               {/* Drivers */}
-              <div className="mb-6">
+              <div data-pdf-section="drivers" className="mb-6">
                 <h4 className="font-semibold text-lg mb-4 flex items-center gap-2" style={{ color: '#2814ff' }}>
                   <Layers className="w-5 h-5" />Complexity Breakdown
                 </h4>
@@ -1228,7 +1249,7 @@ Return this exact JSON structure:
               </div>
 
               {/* Metrics */}
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+              <div data-pdf-section="metrics" className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
                 <div className="bg-emerald-50 rounded-xl p-5 border border-emerald-100">
                   <div className="flex items-center gap-2 mb-2"><DollarSign className="w-5 h-5 text-emerald-600" /><h4 className="font-semibold text-sm text-emerald-800">Salary</h4></div>
                   <p className="text-slate-700">{results.salaryRangeGuidance}</p>
@@ -1249,7 +1270,7 @@ Return this exact JSON structure:
 
               {/* Sourcing Insight */}
               {results.sourcingInsight && (
-                <div className="bg-indigo-50 rounded-xl p-5 mb-6 border border-indigo-100">
+                <div data-pdf-section="sourcing" className="bg-indigo-50 rounded-xl p-5 mb-6 border border-indigo-100">
                   <div className="flex items-center gap-2 mb-2">
                     <Target className="w-5 h-5 text-indigo-600" />
                     <h4 className="font-semibold text-sm text-indigo-800">Where to Find These Candidates</h4>
@@ -1260,7 +1281,7 @@ Return this exact JSON structure:
 
               {/* Benchmarks - Show adjusted figures if available */}
               {results.benchmark && (
-                <div className="bg-slate-50 rounded-xl p-5 mb-6">
+                <div data-pdf-section="benchmarks" className="bg-slate-50 rounded-xl p-5 mb-6">
                   <h4 className="font-semibold mb-3 flex items-center gap-2">
                     <TrendingUp className="w-5 h-5" style={{ color: '#2814ff' }} />
                     Benchmarks: {results.displayTitle}
@@ -1297,7 +1318,7 @@ Return this exact JSON structure:
               )}
 
               {/* Success Factors */}
-              <div className="mb-6">
+              <div data-pdf-section="success-factors" className="mb-6">
                 <h4 className="font-semibold mb-3 flex items-center gap-2" style={{ color: '#2814ff' }}><CheckCircle className="w-5 h-5" />Success Factors</h4>
                 <ul className="space-y-2">
                   {results.keySuccessFactors?.map((f, i) => (
@@ -1310,7 +1331,7 @@ Return this exact JSON structure:
               </div>
 
               {results.recommendedAdjustments?.length > 0 && (
-                <div className="mb-6">
+                <div data-pdf-section="recommendations" className="mb-6">
                   <h4 className="font-semibold mb-3 flex items-center gap-2" style={{ color: '#2814ff' }}><Lightbulb className="w-5 h-5" />Recommendations</h4>
                   <ul className="space-y-2">
                     {results.recommendedAdjustments.map((r, i) => (
@@ -1324,7 +1345,7 @@ Return this exact JSON structure:
               )}
 
               {results.negotiationLeverage && (
-                <div className="mb-6">
+                <div data-pdf-section="negotiation" className="mb-6">
                   <h4 className="font-semibold mb-3 flex items-center gap-2" style={{ color: '#2814ff' }}><ArrowLeftRight className="w-5 h-5" />Negotiation</h4>
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div className="bg-red-50 rounded-xl p-4 border border-red-100">
