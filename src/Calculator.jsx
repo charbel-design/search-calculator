@@ -710,34 +710,30 @@ Return this exact JSON structure:
       const firstPageContentMm = pageHeight - headerHeight - footerHeight - 5;
       const otherPageContentMm = pageHeight - footerHeight - 10;
 
-      // Find success-factors position - this forces page 3 break
+      // Find key section positions for forced page breaks
+      const metricsTop = sectionPositions['metrics']?.top || 0;
+      const metricsTopPx = metricsTop * scale;
       const successFactorsTop = sectionPositions['success-factors']?.top || 0;
       const successFactorsTopPx = successFactorsTop * scale;
 
-      // Build page slices based on content
-      // Page 1: From start, up to firstPageContentMm worth of content
-      // Page 2: Continue until we hit success-factors
-      // Page 3: success-factors and everything after
+      // Build page slices with forced breaks:
+      // Page 1: Score, Complexity Breakdown (everything before Metrics)
+      // Page 2: Metrics, Sourcing, Benchmarks (everything before Success Factors)
+      // Page 3+: Success Factors, Recommendations, Negotiation
 
       const mmToPx = (mm) => mm * scale * (imgWidth / scale) / contentWidth;
-      const firstPageMaxPx = mmToPx(firstPageContentMm);
       const otherPageMaxPx = mmToPx(otherPageContentMm);
 
       const slices = [];
 
-      // Page 1: Score, Complexity Breakdown, start of Metrics
-      const page1End = Math.min(firstPageMaxPx, successFactorsTopPx, imgHeight);
-      slices.push({ start: 0, end: page1End });
+      // Page 1: Everything before Metrics
+      if (metricsTopPx > 0) {
+        slices.push({ start: 0, end: metricsTopPx });
+      }
 
-      // Page 2: Rest until Success Factors
-      if (page1End < successFactorsTopPx) {
-        const page2End = Math.min(page1End + otherPageMaxPx, successFactorsTopPx);
-        slices.push({ start: page1End, end: page2End });
-
-        // If there's still content before success factors
-        if (page2End < successFactorsTopPx) {
-          slices.push({ start: page2End, end: successFactorsTopPx });
-        }
+      // Page 2: Metrics until Success Factors
+      if (metricsTopPx < successFactorsTopPx) {
+        slices.push({ start: metricsTopPx, end: successFactorsTopPx });
       }
 
       // Page 3+: Success Factors and everything after
