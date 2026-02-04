@@ -125,8 +125,13 @@ const SearchComplexityCalculator = () => {
     { value: 'ultra-discrete', label: 'Ultra-Discrete', points: 15, description: 'Maximum confidentiality, blind search' }
   ];
 
-  const languageOptions = ['English (Native/Fluent)', 'Mandarin', 'Spanish', 'French', 'Arabic', 'Russian', 'Italian', 'German', 'Japanese', 'Portuguese', 'Korean', 'Hindi', 'Tagalog', 'Polish', 'Vietnamese', 'Greek', 'Hebrew', 'Dutch', 'Swedish', 'Thai'];
-  const certificationOptions = ['STCW (Maritime)', 'CPR/First Aid', 'Firearms License', 'LEOSA', 'Commercial Driver (CDL)', 'Culinary Degree', 'Security Clearance', 'Child Development (CDA)', 'Sommelier (CMS/WSET)', 'ServSafe', 'ENG1 Medical', 'PEC (Yacht)', 'RYA Yachtmaster', 'Butler Training (Starkey/IICS)', 'Nursing License (RN/LPN)', 'CPA/Accounting', 'Montessori Certification', 'Private Pilot License', 'Close Protection (SIA)', 'AED/BLS Certified', 'Estate Management Certification'];
+  // Language options - slightly different focus for corporate vs household
+  const householdLanguageOptions = ['English (Native/Fluent)', 'Spanish', 'French', 'Mandarin', 'Tagalog', 'Portuguese', 'Russian', 'Italian', 'German', 'Polish', 'Vietnamese', 'Korean', 'Japanese', 'Arabic', 'Hindi', 'Greek', 'Thai', 'Swedish', 'Dutch', 'Hebrew'];
+  const corporateLanguageOptions = ['English (Native/Fluent)', 'Mandarin', 'Spanish', 'French', 'German', 'Japanese', 'Arabic', 'Portuguese', 'Korean', 'Russian', 'Italian', 'Hindi', 'Dutch', 'Swedish', 'Hebrew', 'Cantonese', 'Swiss German', 'Luxembourgish', 'Singaporean English', 'Thai'];
+
+  // Certification options - very different between corporate and household roles
+  const householdCertificationOptions = ['STCW (Maritime)', 'CPR/First Aid', 'Firearms License', 'LEOSA', 'Commercial Driver (CDL)', 'Culinary Degree', 'Security Clearance', 'Child Development (CDA)', 'Sommelier (CMS/WSET)', 'ServSafe', 'ENG1 Medical', 'PEC (Yacht)', 'RYA Yachtmaster', 'Butler Training (Starkey/IICS)', 'Nursing License (RN/LPN)', 'Montessori Certification', 'Private Pilot License', 'Close Protection (SIA)', 'AED/BLS Certified', 'Estate Management Certification'];
+  const corporateCertificationOptions = ['CFA (Chartered Financial Analyst)', 'Series 7 (General Securities)', 'Series 65/66 (Investment Adviser)', 'CPA (Certified Public Accountant)', 'CFP (Certified Financial Planner)', 'CAIA (Alternative Investments)', 'CTFA (Trust & Fiduciary)', 'CIMA (Investment Management)', 'MBA', 'JD (Law Degree)', 'PMP (Project Management)', 'CISSP (Cybersecurity)', 'FRM (Financial Risk Manager)', 'CMA (Management Accounting)', 'EA (Enrolled Agent)', 'CEBS (Employee Benefits)', 'ChFC (Chartered Financial Consultant)', 'CLU (Chartered Life Underwriter)', 'AAMS (Asset Management)', 'CPWA (Private Wealth Advisor)'];
   
   const travelOptions = [
     { value: 'minimal', label: 'Minimal (Local only)', points: 0 },
@@ -145,6 +150,20 @@ const SearchComplexityCalculator = () => {
     const benchmark = getBenchmark(formData.positionType);
     return benchmark?.category === 'Family Office - Corporate';
   }, [formData.positionType]);
+
+  // Clear language/certification selections when role category changes
+  const prevIsCorporateRole = useRef(isCorporateRole);
+  useEffect(() => {
+    if (prevIsCorporateRole.current !== isCorporateRole && formData.positionType) {
+      // Role category changed - clear selections that may not exist in new options
+      setFormData(prev => ({
+        ...prev,
+        languageRequirements: [],
+        certifications: []
+      }));
+    }
+    prevIsCorporateRole.current = isCorporateRole;
+  }, [isCorporateRole, formData.positionType]);
 
   const handleInputChange = (e) => {
     const { name, value, type, checked } = e.target;
@@ -933,9 +952,12 @@ Return this exact JSON structure:
                   <h3 className="text-xl font-semibold" style={{ color: '#2814ff' }}>Key Requirements</h3>
 
                   <div>
-                    <label className="block text-sm font-medium text-slate-700 mb-2">Language Requirements</label>
+                    <label className="block text-sm font-medium text-slate-700 mb-2">
+                      Language Requirements
+                      {isCorporateRole && <span className="text-xs text-slate-500 ml-2">(Corporate focus)</span>}
+                    </label>
                     <div className="flex flex-wrap gap-2">
-                      {languageOptions.map(lang => (
+                      {(isCorporateRole ? corporateLanguageOptions : householdLanguageOptions).map(lang => (
                         <button key={lang} type="button" onClick={() => handleMultiSelect('languageRequirements', lang)}
                           className={`px-3 py-1.5 rounded-full text-sm ${formData.languageRequirements.includes(lang) ? 'bg-indigo-600 text-white' : 'bg-slate-100 text-slate-700 hover:bg-slate-200'}`}>
                           {lang}
@@ -945,9 +967,12 @@ Return this exact JSON structure:
                   </div>
 
                   <div>
-                    <label className="block text-sm font-medium text-slate-700 mb-2">Certifications</label>
+                    <label className="block text-sm font-medium text-slate-700 mb-2">
+                      {isCorporateRole ? 'Professional Certifications' : 'Certifications'}
+                      {isCorporateRole && <span className="text-xs text-slate-500 ml-2">(Finance/Investment)</span>}
+                    </label>
                     <div className="flex flex-wrap gap-2">
-                      {certificationOptions.map(cert => (
+                      {(isCorporateRole ? corporateCertificationOptions : householdCertificationOptions).map(cert => (
                         <button key={cert} type="button" onClick={() => handleMultiSelect('certifications', cert)}
                           className={`px-3 py-1.5 rounded-full text-sm ${formData.certifications.includes(cert) ? 'bg-indigo-600 text-white' : 'bg-slate-100 text-slate-700 hover:bg-slate-200'}`}>
                           {cert}
