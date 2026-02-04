@@ -1,7 +1,21 @@
-import React, { useState, useMemo, useRef, useEffect } from 'react';
+import React, { useState, useMemo, useCallback, useRef, useEffect } from 'react';
 import { TrendingUp, Clock, DollarSign, Target, AlertCircle, CheckCircle, ArrowRight, Info, Download, RefreshCw, Users, Car, Heart, Home, ChevronDown, HelpCircle, Zap, MapPin, Phone, X, Scale } from 'lucide-react';
 
-// jsPDF will be loaded via CDN in useEffect
+// ============================================
+// CUSTOM HOOKS
+// ============================================
+
+// Debounce hook to limit re-renders during rapid input
+function useDebounce(value, delay = 150) {
+  const [debouncedValue, setDebouncedValue] = useState(value);
+
+  useEffect(() => {
+    const timer = setTimeout(() => setDebouncedValue(value), delay);
+    return () => clearTimeout(timer);
+  }, [value, delay]);
+
+  return debouncedValue;
+}
 
 // ============================================
 // COMPREHENSIVE BENCHMARKS WITH BENEFITS
@@ -221,10 +235,13 @@ const SearchComplexityCalculator = () => {
     }
   };
 
+  // Debounce location input to reduce autocomplete re-renders
+  const debouncedLocation = useDebounce(formData.location, 150);
+
   const filteredLocationSuggestions = useMemo(() => {
-    if (!formData.location) return [];
-    return LOCATION_SUGGESTIONS.filter(loc => loc.toLowerCase().includes(formData.location.toLowerCase())).slice(0, 5);
-  }, [formData.location]);
+    if (!debouncedLocation) return [];
+    return LOCATION_SUGGESTIONS.filter(loc => loc.toLowerCase().includes(debouncedLocation.toLowerCase())).slice(0, 5);
+  }, [debouncedLocation]);
 
   // ============================================
   // VALIDATION WITH RED FLAGS
@@ -698,8 +715,6 @@ This analysis provides general market guidance. Every search is unique.
   // ============================================
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 via-white to-indigo-50 p-4 md:p-8">
-      <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet" />
-      
       <div className="max-w-4xl mx-auto" style={{ fontFamily: "'DM Sans', sans-serif" }}>
         {/* Header */}
         <div className="text-center mb-8">
