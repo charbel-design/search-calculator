@@ -912,7 +912,7 @@ Return this exact JSON structure:
         {/* Header */}
         <div className="text-center mb-8">
           <div className="inline-block mb-6">
-            <img src="/logo.png" alt="Talent Gurus" className="h-16 md:h-20" />
+            <img src="/logo.svg" alt="Talent Gurus" className="h-16 md:h-20" />
           </div>
           <h2 className="text-2xl md:text-3xl font-bold mb-3" style={{ color: '#2814ff', fontFamily: "'Playfair Display', serif" }}>Search Complexity Calculator</h2>
           <p className="text-base text-slate-600 max-w-2xl mx-auto">Understanding what you're up against matters. Get a clear picture in 90 seconds.</p>
