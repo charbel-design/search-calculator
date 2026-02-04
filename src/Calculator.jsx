@@ -664,14 +664,13 @@ Return this exact JSON structure:
       // Get section positions BEFORE capturing
       const containerRect = resultsRef.current.getBoundingClientRect();
       const sections = resultsRef.current.querySelectorAll('[data-pdf-section]');
-      const sectionBreaks = [];
+      const sectionPositions = {};
       sections.forEach(section => {
         const rect = section.getBoundingClientRect();
-        sectionBreaks.push({
-          name: section.getAttribute('data-pdf-section'),
+        sectionPositions[section.getAttribute('data-pdf-section')] = {
           top: rect.top - containerRect.top,
           bottom: rect.bottom - containerRect.top
-        });
+        };
       });
 
       // Small delay to ensure DOM updates
@@ -696,105 +695,125 @@ Return this exact JSON structure:
       const pageHeight = doc.internal.pageSize.getHeight();
       const margin = 10;
       const headerHeight = 25;
-      const footerHeight = 12;
+      const footerHeight = 15;
 
       // Calculate dimensions
       const imgWidth = canvas.width;
       const imgHeight = canvas.height;
-      const scale = 2; // html2canvas scale
+      const scale = 2;
       const contentWidth = pageWidth - (margin * 2);
 
-      // Pixels per mm conversion
-      const pxPerMm = (imgWidth / scale) / contentWidth;
+      // Convert source pixels to mm
+      const pxToMm = (px) => (px / scale) * (contentWidth / (imgWidth / scale));
 
-      // Available content height on each page (in source pixels)
-      const firstPageContentMm = pageHeight - headerHeight - footerHeight - margin;
-      const otherPageContentMm = pageHeight - footerHeight - margin - 5;
-      const firstPageContentPx = firstPageContentMm * pxPerMm * scale;
-      const otherPageContentPx = otherPageContentMm * pxPerMm * scale;
+      // Page content heights in mm
+      const firstPageContentMm = pageHeight - headerHeight - footerHeight - 5;
+      const otherPageContentMm = pageHeight - footerHeight - 10;
 
-      // Calculate page breaks at section boundaries
-      const pageBreaks = [0]; // Start of first page
-      let currentPageEnd = firstPageContentPx;
-      let isFirstPage = true;
+      // Find success-factors position - this forces page 3 break
+      const successFactorsTop = sectionPositions['success-factors']?.top || 0;
+      const successFactorsTopPx = successFactorsTop * scale;
 
-      // Sort sections by position
-      const sortedSections = [...sectionBreaks].sort((a, b) => a.top - b.top);
+      // Build page slices based on content
+      // Page 1: From start, up to firstPageContentMm worth of content
+      // Page 2: Continue until we hit success-factors
+      // Page 3: success-factors and everything after
 
-      for (const section of sortedSections) {
-        const sectionTopPx = section.top * scale;
-        const sectionBottomPx = section.bottom * scale;
+      const mmToPx = (mm) => mm * scale * (imgWidth / scale) / contentWidth;
+      const firstPageMaxPx = mmToPx(firstPageContentMm);
+      const otherPageMaxPx = mmToPx(otherPageContentMm);
 
-        // If section would be cut, add a page break before it
-        if (sectionTopPx < currentPageEnd && sectionBottomPx > currentPageEnd) {
-          // Section is being cut - break before this section
-          pageBreaks.push(sectionTopPx);
-          const pageContentPx = isFirstPage ? firstPageContentPx : otherPageContentPx;
-          currentPageEnd = sectionTopPx + (isFirstPage ? otherPageContentPx : pageContentPx);
-          isFirstPage = false;
-        }
+      const slices = [];
 
-        // Check if we need to advance to next page
-        while (sectionBottomPx > currentPageEnd) {
-          currentPageEnd += otherPageContentPx;
+      // Page 1: Score, Complexity Breakdown, start of Metrics
+      const page1End = Math.min(firstPageMaxPx, successFactorsTopPx, imgHeight);
+      slices.push({ start: 0, end: page1End });
+
+      // Page 2: Rest until Success Factors
+      if (page1End < successFactorsTopPx) {
+        const page2End = Math.min(page1End + otherPageMaxPx, successFactorsTopPx);
+        slices.push({ start: page1End, end: page2End });
+
+        // If there's still content before success factors
+        if (page2End < successFactorsTopPx) {
+          slices.push({ start: page2End, end: successFactorsTopPx });
         }
       }
 
-      // Add final break at end of image
-      pageBreaks.push(imgHeight);
+      // Page 3+: Success Factors and everything after
+      if (successFactorsTopPx < imgHeight) {
+        let currentPos = successFactorsTopPx;
+        while (currentPos < imgHeight) {
+          const pageEnd = Math.min(currentPos + otherPageMaxPx, imgHeight);
+          slices.push({ start: currentPos, end: pageEnd });
+          currentPos = pageEnd;
+        }
+      }
 
-      // Add header (only on first page)
-      doc.setFillColor(40, 20, 255);
-      doc.rect(0, 0, pageWidth, headerHeight, 'F');
-      doc.setTextColor(255, 255, 255);
-      doc.setFontSize(14);
-      doc.setFont('helvetica', 'bold');
-      doc.text('TALENT GURUS', pageWidth / 2, 10, { align: 'center' });
-      doc.setFontSize(10);
-      doc.setFont('helvetica', 'normal');
-      doc.text('Search Complexity Analysis', pageWidth / 2, 18, { align: 'center' });
+      // Track content end position on each page for CTA placement
+      let lastPageContentEndMm = 0;
 
       // Render each page
-      for (let i = 0; i < pageBreaks.length - 1; i++) {
+      for (let i = 0; i < slices.length; i++) {
         if (i > 0) {
           doc.addPage();
         }
 
-        const startY = pageBreaks[i];
-        const endY = pageBreaks[i + 1];
-        const sliceHeight = endY - startY;
+        const slice = slices[i];
+        const sliceHeightPx = slice.end - slice.start;
+
+        // Add header only on first page
+        if (i === 0) {
+          doc.setFillColor(40, 20, 255);
+          doc.rect(0, 0, pageWidth, headerHeight, 'F');
+          doc.setTextColor(255, 255, 255);
+          doc.setFontSize(14);
+          doc.setFont('helvetica', 'bold');
+          doc.text('TALENT GURUS', pageWidth / 2, 10, { align: 'center' });
+          doc.setFontSize(10);
+          doc.setFont('helvetica', 'normal');
+          doc.text('Search Complexity Analysis', pageWidth / 2, 18, { align: 'center' });
+        }
 
         // Create canvas for this page's portion
         const pageCanvas = document.createElement('canvas');
         pageCanvas.width = imgWidth;
-        pageCanvas.height = sliceHeight;
+        pageCanvas.height = sliceHeightPx;
         const pageCtx = pageCanvas.getContext('2d');
-        pageCtx.drawImage(canvas, 0, startY, imgWidth, sliceHeight, 0, 0, imgWidth, sliceHeight);
+        pageCtx.drawImage(canvas, 0, slice.start, imgWidth, sliceHeightPx, 0, 0, imgWidth, sliceHeightPx);
 
         // Calculate destination dimensions
-        const destHeight = (sliceHeight / scale) / pxPerMm;
-        const destY = i === 0 ? headerHeight + 2 : 5;
+        const destHeight = pxToMm(sliceHeightPx);
+        const destY = i === 0 ? headerHeight + 2 : 8;
 
         doc.addImage(pageCanvas.toDataURL('image/png'), 'PNG', margin, destY, contentWidth, destHeight);
+
+        lastPageContentEndMm = destY + destHeight;
       }
 
-      // Add CTA with clickable link
-      const lastPageNum = pageBreaks.length - 1;
-      doc.setPage(lastPageNum);
+      // Add CTA after all content
+      const ctaHeight = 22;
+      const ctaMargin = 8;
 
-      const ctaY = pageHeight - footerHeight - 28;
+      // Check if CTA fits on current page
+      if (lastPageContentEndMm + ctaHeight + ctaMargin > pageHeight - footerHeight) {
+        doc.addPage();
+        lastPageContentEndMm = 15;
+      }
+
+      const ctaY = lastPageContentEndMm + ctaMargin;
       doc.setFillColor(40, 20, 255);
-      doc.roundedRect(margin, ctaY, contentWidth, 20, 2, 2, 'F');
+      doc.roundedRect(margin, ctaY, contentWidth, ctaHeight, 2, 2, 'F');
       doc.setTextColor(255, 255, 255);
       doc.setFontSize(11);
       doc.setFont('helvetica', 'bold');
-      doc.text('Ready for a comprehensive analysis?', pageWidth / 2, ctaY + 8, { align: 'center' });
+      doc.text('Ready for a comprehensive analysis?', pageWidth / 2, ctaY + 9, { align: 'center' });
       doc.setFontSize(9);
       doc.setFont('helvetica', 'normal');
-      doc.text('Schedule a consultation: calendly.com/charbel-talentgurus', pageWidth / 2, ctaY + 15, { align: 'center' });
+      doc.text('Schedule a consultation: calendly.com/charbel-talentgurus', pageWidth / 2, ctaY + 17, { align: 'center' });
 
-      // Add clickable link over the CTA
-      doc.link(margin, ctaY, contentWidth, 20, { url: 'https://calendly.com/charbel-talentgurus' });
+      // Add clickable link
+      doc.link(margin, ctaY, contentWidth, ctaHeight, { url: 'https://calendly.com/charbel-talentgurus' });
 
       // Add footers to all pages
       const totalPages = doc.internal.getNumberOfPages();
@@ -802,8 +821,8 @@ Return this exact JSON structure:
         doc.setPage(i);
         doc.setFontSize(8);
         doc.setTextColor(130, 130, 130);
-        doc.text('TALENT GURUS | talent-gurus.com | AI-assisted analysis for informational purposes only.', pageWidth / 2, pageHeight - 5, { align: 'center' });
-        doc.text(`Page ${i} of ${totalPages}`, pageWidth - margin, pageHeight - 5, { align: 'right' });
+        doc.text('TALENT GURUS | talent-gurus.com | AI-assisted analysis for informational purposes only.', pageWidth / 2, pageHeight - 6, { align: 'center' });
+        doc.text(`Page ${i} of ${totalPages}`, pageWidth - margin, pageHeight - 6, { align: 'right' });
       }
 
       // Save
