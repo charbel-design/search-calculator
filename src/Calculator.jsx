@@ -86,7 +86,10 @@ const SearchComplexityCalculator = () => {
     phone: '',
     languageRequirements: [],
     certifications: [],
-    travelRequirement: 'minimal'
+    travelRequirement: 'minimal',
+    // Corporate family office fields
+    aumRange: '',
+    teamSize: ''
   });
   
   const [loading, setLoading] = useState(false);
@@ -134,6 +137,13 @@ const SearchComplexityCalculator = () => {
   // Get positions grouped by category for the dropdown
   const positionsByCategory = useMemo(() => getPositionsByCategory(), []);
   const commonRoles = useMemo(() => getAllPositionNames(), []);
+
+  // Check if selected position is a corporate family office role
+  const isCorporateRole = useMemo(() => {
+    if (!formData.positionType) return false;
+    const benchmark = getBenchmark(formData.positionType);
+    return benchmark?.category === 'Family Office - Corporate';
+  }, [formData.positionType]);
 
   const handleInputChange = (e) => {
     const { name, value, type, checked } = e.target;
@@ -772,7 +782,8 @@ Return this exact JSON structure:
     setFormData({
       positionType: '', location: '', timeline: '', budgetRange: '', keyRequirements: '',
       email: '', emailConsent: false, discretionLevel: 'standard', propertiesCount: '', householdSize: '',
-      priorityCallback: false, phone: '', languageRequirements: [], certifications: [], travelRequirement: 'minimal'
+      priorityCallback: false, phone: '', languageRequirements: [], certifications: [], travelRequirement: 'minimal',
+      aumRange: '', teamSize: ''
     });
   };
 
@@ -953,10 +964,12 @@ Return this exact JSON structure:
                   </div>
 
                   <div>
-                    <label className="block text-sm font-medium text-slate-700 mb-2">Additional Requirements * (min 25 chars)</label>
+                    <label className="block text-sm font-medium text-slate-700 mb-2">Additional Requirements *</label>
                     <textarea name="keyRequirements" value={formData.keyRequirements} onChange={handleInputChange} rows={4}
                       className="w-full px-4 py-3 border-2 border-slate-200 rounded-xl" placeholder="Describe specific experience, skills..." />
-                    <p className="text-xs text-slate-500 mt-1">{formData.keyRequirements.length} / 25</p>
+                    <p className={`text-xs mt-1 ${formData.keyRequirements.length >= 25 ? 'text-green-600' : 'text-slate-500'}`}>
+                      {formData.keyRequirements.length} chars {formData.keyRequirements.length < 25 ? `(${25 - formData.keyRequirements.length} more needed)` : '✓'}
+                    </p>
                   </div>
                 </div>
               )}
@@ -974,29 +987,58 @@ Return this exact JSON structure:
                     </div>
                   </div>
 
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <div>
-                      <label className="block text-sm font-medium text-slate-700 mb-2">Properties to Staff</label>
-                      <select name="propertiesCount" value={formData.propertiesCount} onChange={handleInputChange}
-                        className="w-full px-4 py-3 border-2 border-slate-200 rounded-xl">
-                        <option value="">Select...</option>
-                        <option value="1">1</option>
-                        <option value="2-3">2-3</option>
-                        <option value="4-6">4-6</option>
-                        <option value="7+">7+</option>
-                      </select>
+                  {/* Conditional fields based on role type */}
+                  {isCorporateRole ? (
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                      <div>
+                        <label className="block text-sm font-medium text-slate-700 mb-2">Assets Under Management (AUM)</label>
+                        <select name="aumRange" value={formData.aumRange} onChange={handleInputChange}
+                          className="w-full px-4 py-3 border-2 border-slate-200 rounded-xl">
+                          <option value="">Select...</option>
+                          <option value="under-100M">Under $100M</option>
+                          <option value="100M-300M">$100M - $300M</option>
+                          <option value="300M-500M">$300M - $500M</option>
+                          <option value="500M-1B">$500M - $1B</option>
+                          <option value="1B-plus">$1B+</option>
+                        </select>
+                      </div>
+                      <div>
+                        <label className="block text-sm font-medium text-slate-700 mb-2">Team Size (Direct Reports)</label>
+                        <select name="teamSize" value={formData.teamSize} onChange={handleInputChange}
+                          className="w-full px-4 py-3 border-2 border-slate-200 rounded-xl">
+                          <option value="">Select...</option>
+                          <option value="0">Individual contributor</option>
+                          <option value="1-3">1-3 reports</option>
+                          <option value="4-10">4-10 reports</option>
+                          <option value="10-plus">10+ reports</option>
+                        </select>
+                      </div>
                     </div>
-                    <div>
-                      <label className="block text-sm font-medium text-slate-700 mb-2">Household Size</label>
-                      <select name="householdSize" value={formData.householdSize} onChange={handleInputChange}
-                        className="w-full px-4 py-3 border-2 border-slate-200 rounded-xl">
-                        <option value="">Select...</option>
-                        <option value="1-2">1-2</option>
-                        <option value="3-5">3-5 (family)</option>
-                        <option value="6+">6+ (extended)</option>
-                      </select>
+                  ) : (
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                      <div>
+                        <label className="block text-sm font-medium text-slate-700 mb-2">Properties to Staff</label>
+                        <select name="propertiesCount" value={formData.propertiesCount} onChange={handleInputChange}
+                          className="w-full px-4 py-3 border-2 border-slate-200 rounded-xl">
+                          <option value="">Select...</option>
+                          <option value="1">1</option>
+                          <option value="2-3">2-3</option>
+                          <option value="4-6">4-6</option>
+                          <option value="7+">7+</option>
+                        </select>
+                      </div>
+                      <div>
+                        <label className="block text-sm font-medium text-slate-700 mb-2">Household Size</label>
+                        <select name="householdSize" value={formData.householdSize} onChange={handleInputChange}
+                          className="w-full px-4 py-3 border-2 border-slate-200 rounded-xl">
+                          <option value="">Select...</option>
+                          <option value="1-2">1-2</option>
+                          <option value="3-5">3-5 (family)</option>
+                          <option value="6+">6+ (extended)</option>
+                        </select>
+                      </div>
                     </div>
-                  </div>
+                  )}
 
                   <div className="border-t border-slate-200 pt-5">
                     <h4 className="font-medium text-slate-900 mb-3">Optional: Save Results</h4>
