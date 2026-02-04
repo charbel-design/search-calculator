@@ -634,15 +634,17 @@ Return this exact JSON structure:
       // Helper function to add wrapped text with proper page handling
       const addWrappedText = (text, x, maxWidth, lineHeight = 5) => {
         if (!text) return;
-        // Ensure maxWidth doesn't exceed page bounds
-        const safeWidth = Math.min(maxWidth, pageWidth - x - margin);
+        // Use a fixed safe width that definitely fits on the page
+        const safeWidth = 160; // Fixed width that fits within A4 with margins
         const lines = doc.splitTextToSize(String(text), safeWidth);
         lines.forEach((line) => {
           if (y > 265) {
             doc.addPage();
             y = 25;
           }
-          doc.text(line, x, y);
+          // Truncate line if still too long (safety net)
+          const truncatedLine = line.length > 120 ? line.substring(0, 117) + '...' : line;
+          doc.text(truncatedLine, x, y);
           y += lineHeight;
         });
       };
@@ -769,11 +771,20 @@ Return this exact JSON structure:
       if (results.keySuccessFactors?.length > 0) {
         y += 3;
         addSection('KEY SUCCESS FACTORS');
+        doc.setFont('helvetica', 'normal');
         results.keySuccessFactors.forEach(f => {
-          checkPageBreak(12);
+          checkPageBreak(15);
           const cleanText = String(f).replace(/[^\x20-\x7E]/g, ' ').trim();
-          addWrappedText(`- ${cleanText}`, margin, contentWidth - 5, 4.5);
-          y += 2;
+          const lines = doc.splitTextToSize(cleanText, 155);
+          lines.forEach((line, idx) => {
+            if (y > 265) {
+              doc.addPage();
+              y = 25;
+            }
+            doc.text(idx === 0 ? `- ${line}` : `  ${line}`, margin, y);
+            y += 4.5;
+          });
+          y += 1;
         });
       }
 
@@ -782,12 +793,21 @@ Return this exact JSON structure:
         y += 5;
         checkPageBreak(30);
         addSection('RECOMMENDATIONS');
+        doc.setFont('helvetica', 'normal');
         results.recommendedAdjustments.forEach(r => {
           checkPageBreak(20);
-          // Use slightly smaller width and clean the text
+          // Clean the text and wrap it manually
           const cleanText = String(r).replace(/[^\x20-\x7E]/g, ' ').trim();
-          addWrappedText(`> ${cleanText}`, margin, contentWidth - 5, 4.5);
-          y += 3;
+          const lines = doc.splitTextToSize(cleanText, 155);
+          lines.forEach((line, idx) => {
+            if (y > 265) {
+              doc.addPage();
+              y = 25;
+            }
+            doc.text(idx === 0 ? `> ${line}` : `  ${line}`, margin, y);
+            y += 4.5;
+          });
+          y += 2;
         });
       }
 
