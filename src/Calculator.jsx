@@ -1,5 +1,5 @@
 import React, { useState, useMemo, useCallback, useRef, useEffect } from 'react';
-import { TrendingUp, Clock, DollarSign, Target, AlertCircle, CheckCircle, ArrowRight, Info, Download, RefreshCw, Users, Car, Heart, Home, ChevronDown, HelpCircle, Zap, MapPin, Phone, X, Scale } from 'lucide-react';
+import { TrendingUp, Clock, DollarSign, Target, AlertCircle, CheckCircle, ArrowRight, Info, Download, RefreshCw, Users, Car, Heart, Home, ChevronDown, HelpCircle, Zap, MapPin, Phone, X, Layers, Lightbulb, ArrowLeftRight } from 'lucide-react';
 import { jsPDF } from 'jspdf';
 import {
   BENCHMARKS,
@@ -1293,7 +1293,7 @@ Return this exact JSON structure:
               {/* Drivers */}
               <div className="mb-6">
                 <h4 className="font-semibold text-lg mb-4 flex items-center gap-2" style={{ color: '#2814ff' }}>
-                  <Scale className="w-5 h-5" />Complexity Breakdown
+                  <Layers className="w-5 h-5" />Complexity Breakdown
                 </h4>
                 <div className="space-y-2">
                   {results.drivers?.map((d, i) => (
@@ -1392,7 +1392,7 @@ Return this exact JSON structure:
 
               {results.recommendedAdjustments?.length > 0 && (
                 <div className="mb-6">
-                  <h4 className="font-semibold mb-3 flex items-center gap-2" style={{ color: '#2814ff' }}><Target className="w-5 h-5" />Recommendations</h4>
+                  <h4 className="font-semibold mb-3 flex items-center gap-2" style={{ color: '#2814ff' }}><Lightbulb className="w-5 h-5" />Recommendations</h4>
                   <ul className="space-y-2">
                     {results.recommendedAdjustments.map((r, i) => (
                       <li key={i} className="flex items-start gap-3 bg-amber-50 rounded-lg p-3 border border-amber-100">
@@ -1406,7 +1406,7 @@ Return this exact JSON structure:
 
               {results.negotiationLeverage && (
                 <div className="mb-6">
-                  <h4 className="font-semibold mb-3 flex items-center gap-2" style={{ color: '#2814ff' }}><Scale className="w-5 h-5" />Negotiation</h4>
+                  <h4 className="font-semibold mb-3 flex items-center gap-2" style={{ color: '#2814ff' }}><ArrowLeftRight className="w-5 h-5" />Negotiation</h4>
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div className="bg-red-50 rounded-xl p-4 border border-red-100">
                       <h5 className="font-medium text-red-800 mb-2 text-sm">Candidate Advantages</h5>
