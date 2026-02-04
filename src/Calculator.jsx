@@ -640,7 +640,7 @@ Return this exact JSON structure:
         });
       };
 
-      // Header - Brand purple
+      // Header - Brand Indigo #2814ff = RGB(40, 20, 255)
       doc.setFillColor(40, 20, 255);
       doc.rect(0, 0, pageWidth, 35, 'F');
       doc.setTextColor(255, 255, 255);
@@ -665,7 +665,7 @@ Return this exact JSON structure:
       doc.text(`Location: ${results.formData.location} | Generated: ${new Date().toLocaleDateString()}`, margin, y);
       y += 12;
 
-      // Score Box - use brand purple instead of traffic light colors
+      // Score Box - Brand Indigo #2814ff = RGB(40, 20, 255)
       doc.setFillColor(40, 20, 255);
       doc.roundedRect(margin, y, 45, 22, 2, 2, 'F');
       doc.setTextColor(255, 255, 255);
@@ -1385,9 +1385,9 @@ Return this exact JSON structure:
                       <p className="text-xs text-green-600">{comparisonResults.withIncrease.label}</p>
                       {comparisonResults.current.score > comparisonResults.withIncrease.score ? (
                         <p className="text-xs font-medium text-green-800 mt-2">✓ {comparisonResults.current.score - comparisonResults.withIncrease.score} points easier</p>
-                      ) : comparisonResults.current.score === comparisonResults.withIncrease.score && (
-                        <p className="text-xs text-green-700 mt-2">Budget already competitive — other factors drive complexity</p>
-                      )}
+                      ) : comparisonResults.current.score === comparisonResults.withIncrease.score ? (
+                        <p className="text-xs text-amber-700 mt-2 font-medium">≈ No change — see note below</p>
+                      ) : null}
                     </div>
                   ) : (
                     <div className="bg-slate-100 rounded-xl p-4 border border-slate-200">
@@ -1396,11 +1396,17 @@ Return this exact JSON structure:
                     </div>
                   )}
                 </div>
-                <p className="text-xs text-slate-500 mt-4 text-center">
-                  {comparisonResults.withIncrease && comparisonResults.current.score === comparisonResults.withIncrease.score
-                    ? "💡 Once budget is competitive, complexity is driven by timeline, location, role scarcity, and special requirements"
-                    : "See how budget changes affect your search complexity score"}
-                </p>
+                {comparisonResults.withIncrease && comparisonResults.current.score === comparisonResults.withIncrease.score ? (
+                  <div className="bg-amber-50 border border-amber-200 rounded-lg p-3 mt-4">
+                    <p className="text-sm text-amber-800">
+                      <strong>💡 Why no change?</strong> Your budget is already competitive for this role. At this point, complexity is driven by timeline, location, role scarcity, and specialized requirements — not compensation.
+                    </p>
+                  </div>
+                ) : (
+                  <p className="text-xs text-slate-500 mt-4 text-center">
+                    See how budget changes affect your search complexity score
+                  </p>
+                )}
               </div>
             )}
 
