@@ -457,7 +457,8 @@ const SearchComplexityCalculator = () => {
     } : null;
 
     try {
-      const prompt = `Analyze this UHNW household search and return JSON only.
+      const roleContext = isCorporateRole ? 'family office executive/investment' : 'UHNW household staff';
+      const prompt = `You are an expert ${roleContext} recruiter. Analyze this search and return detailed, actionable JSON.
 
 Position: ${displayTitle}
 Location: ${formData.location}${det.regionalData ? ` (${det.regionalData.label}, ${regionalMultiplier}x cost multiplier)` : ''}
@@ -465,8 +466,13 @@ Client Timeline: ${timelineOption?.label || formData.timeline}
 Client Budget: ${budgetOption?.label || formData.budgetRange}
 Requirements: ${formData.keyRequirements}
 Languages: ${formData.languageRequirements.join(', ') || 'None specified'}
+Certifications: ${formData.certifications.join(', ') || 'None specified'}
 Travel: ${formData.travelRequirement}
 Discretion: ${formData.discretionLevel}
+${isCorporateRole && formData.aumRange ? `AUM Range: ${formData.aumRange}` : ''}
+${isCorporateRole && formData.teamSize ? `Team Size: ${formData.teamSize}` : ''}
+${!isCorporateRole && formData.propertiesCount ? `Properties: ${formData.propertiesCount}` : ''}
+${!isCorporateRole && formData.householdSize ? `Household Size: ${formData.householdSize}` : ''}
 
 Computed Score: ${det.score}/10 (${det.label})
 
@@ -479,18 +485,24 @@ ${benchmark?.scarcity ? `Role Scarcity: ${benchmark.scarcity}/10` : ''}
 Your salary recommendation MUST be based on these ADJUSTED figures above, not national averages.
 Your timeline MUST align with the "${timelineOption?.label || formData.timeline}" timeframe the client selected.
 
+Be SPECIFIC and ACTIONABLE. Avoid generic advice. Reference the actual role, location, and requirements in your responses.
+
 Return this exact JSON structure:
 {
-  "salaryRangeGuidance": "salary range based on the ADJUSTED regional figures shown above",
-  "estimatedTimeline": "timeline that fits within ${timelineOption?.label || formData.timeline}",
-  "marketCompetitiveness": "assessment of market conditions",
-  "keySuccessFactors": ["factor 1", "factor 2", "factor 3"],
-  "recommendedAdjustments": ["adjustment 1"] or [],
+  "salaryRangeGuidance": "Specific salary range with reasoning based on ADJUSTED regional figures. Example: '$X-$Y base, targeting the Nth percentile because [specific reason]'",
+  "estimatedTimeline": "Specific timeline with phases. Example: '8-10 weeks: 2 weeks sourcing, 4 weeks interviewing, 2 weeks offer/close'",
+  "marketCompetitiveness": "Detailed market assessment mentioning specific dynamics in ${formData.location || 'this market'} for this role",
+  "keySuccessFactors": ["Be specific - reference actual requirements", "Mention what will differentiate this opportunity", "Include at least one compensation-related factor"],
+  "recommendedAdjustments": ["Specific, actionable changes if budget/timeline/requirements need adjustment"] or [],
   "candidateAvailability": "Abundant|Moderate|Limited|Rare",
-  "availabilityReason": "explanation of availability",
-  "negotiationLeverage": { "candidateAdvantages": ["advantage"], "employerAdvantages": ["advantage"] },
-  "redFlagAnalysis": "any concerns or none",
-  "bottomLine": "2-3 sentence executive summary"
+  "availabilityReason": "Specific explanation referencing the role requirements and market",
+  "sourcingInsight": "Where these candidates typically come from and how to reach them",
+  "negotiationLeverage": {
+    "candidateAdvantages": ["Specific leverage points candidates have"],
+    "employerAdvantages": ["Specific advantages the employer can use"]
+  },
+  "redFlagAnalysis": "Any concerns about the search parameters, or 'None - well-positioned search'",
+  "bottomLine": "3-4 sentence executive summary that's specific to THIS search, not generic advice"
 }`;
 
       const response = await fetchWithRetry("/api/analyze", {
@@ -562,6 +574,7 @@ Return this exact JSON structure:
           : [],
         candidateAvailability: det.score <= 4 ? "Moderate" : det.score <= 7 ? "Limited" : "Rare",
         availabilityReason: `Based on ${det.drivers?.length || 0} complexity factors analyzed`,
+        sourcingInsight: "Schedule a consultation for detailed sourcing strategies tailored to this specific search.",
         negotiationLeverage: {
           candidateAdvantages: det.score >= 6
             ? ["Limited candidate pool", "High market demand"]
@@ -570,7 +583,7 @@ Return this exact JSON structure:
             ? ["Competitive compensation", "Attractive opportunity"]
             : ["Growth opportunity"]
         },
-        bottomLine: "Analysis based on our scoring algorithm and market benchmarks. For personalized AI insights, please try again or schedule a consultation.",
+        bottomLine: "This preliminary analysis is based on our scoring algorithm and market benchmarks. For comprehensive insights including sourcing strategies, compensation structuring, and interview frameworks, schedule a consultation.",
         formData: { ...formData },
         aiAnalysisSuccess: false,
         adjustedBenchmark,
@@ -1229,6 +1242,17 @@ Return this exact JSON structure:
                 </div>
               </div>
 
+              {/* Sourcing Insight */}
+              {results.sourcingInsight && (
+                <div className="bg-indigo-50 rounded-xl p-5 mb-6 border border-indigo-100">
+                  <div className="flex items-center gap-2 mb-2">
+                    <Target className="w-5 h-5 text-indigo-600" />
+                    <h4 className="font-semibold text-sm text-indigo-800">Where to Find These Candidates</h4>
+                  </div>
+                  <p className="text-slate-700">{results.sourcingInsight}</p>
+                </div>
+              )}
+
               {/* Benchmarks - Show adjusted figures if available */}
               {results.benchmark && (
                 <div className="bg-slate-50 rounded-xl p-5 mb-6">
@@ -1346,13 +1370,32 @@ Return this exact JSON structure:
               </div>
             )}
 
-            <div className="bg-gradient-to-r from-indigo-600 via-purple-600 to-indigo-700 rounded-2xl shadow-xl p-8 text-white text-center">
-              <h3 className="text-2xl font-bold mb-3" style={{ fontFamily: "'Playfair Display', serif" }}>Let's Talk About Your Search</h3>
-              <p className="mb-6 text-indigo-100">This analysis gives you the landscape. A conversation gives you a strategy.</p>
-              <a href="https://calendly.com/charbel-talentgurus" target="_blank" rel="noopener noreferrer"
-                className="inline-flex items-center gap-2 bg-white px-8 py-3 rounded-xl font-semibold shadow-lg hover:shadow-xl" style={{ color: '#2814ff' }}>
-                Schedule a Conversation<ArrowRight className="w-5 h-5" />
-              </a>
+            <div className="bg-gradient-to-r from-indigo-600 via-purple-600 to-indigo-700 rounded-2xl shadow-xl p-8 text-white">
+              <div className="text-center mb-6">
+                <p className="text-indigo-200 text-sm uppercase tracking-wider mb-2">This is your initial analysis</p>
+                <h3 className="text-2xl font-bold mb-3" style={{ fontFamily: "'Playfair Display', serif" }}>Get the Complete Picture</h3>
+              </div>
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6 text-sm">
+                <div className="bg-white/10 rounded-lg p-3">
+                  <p className="font-semibold mb-1">Sourcing Strategy</p>
+                  <p className="text-indigo-200 text-xs">Exactly where and how to find qualified candidates</p>
+                </div>
+                <div className="bg-white/10 rounded-lg p-3">
+                  <p className="font-semibold mb-1">Compensation Deep-Dive</p>
+                  <p className="text-indigo-200 text-xs">Benefits, equity, and package structuring</p>
+                </div>
+                <div className="bg-white/10 rounded-lg p-3">
+                  <p className="font-semibold mb-1">Interview Framework</p>
+                  <p className="text-indigo-200 text-xs">Key questions and evaluation criteria</p>
+                </div>
+              </div>
+              <div className="text-center">
+                <a href="https://calendly.com/charbel-talentgurus" target="_blank" rel="noopener noreferrer"
+                  className="inline-flex items-center gap-2 bg-white px-8 py-3 rounded-xl font-semibold shadow-lg hover:shadow-xl" style={{ color: '#2814ff' }}>
+                  Schedule Your Comprehensive Analysis<ArrowRight className="w-5 h-5" />
+                </a>
+                <p className="text-indigo-200 text-xs mt-3">30-minute strategy call • No commitment</p>
+              </div>
             </div>
 
             <button onClick={resetForm} className="w-full text-center text-sm text-slate-500 hover:text-slate-700 py-4">← Start New Analysis</button>
