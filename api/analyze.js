@@ -14,6 +14,7 @@ const ALLOWED_ORIGINS = [
   'https://search-calculator.vercel.app',
   'https://talent-gurus.com',
   'https://www.talent-gurus.com',
+  'https://search-complexity-calculator.vercel.app',
   process.env.ALLOWED_ORIGIN // Custom domain via env var
 ].filter(Boolean);
 
@@ -25,14 +26,14 @@ function validateInput(prompt) {
   if (prompt.length < 50) {
     return { valid: false, error: 'Prompt is too short' };
   }
-  if (prompt.length > 10000) {
+  if (prompt.length > 15000) {
     return { valid: false, error: 'Prompt exceeds maximum length' };
   }
   return { valid: true };
 }
 
 // Fetch with timeout
-async function fetchWithTimeout(url, options, timeout = 30000) {
+async function fetchWithTimeout(url, options, timeout = 45000) {
   const controller = new AbortController();
   const timeoutId = setTimeout(() => controller.abort(), timeout);
 
@@ -45,6 +46,44 @@ async function fetchWithTimeout(url, options, timeout = 30000) {
   } finally {
     clearTimeout(timeoutId);
   }
+}
+
+// Retry with exponential backoff
+async function fetchWithRetry(url, options, maxRetries = 2, timeout = 45000) {
+  let lastError;
+
+  for (let attempt = 0; attempt <= maxRetries; attempt++) {
+    try {
+      const response = await fetchWithTimeout(url, options, timeout);
+
+      // If rate limited, wait and retry
+      if (response.status === 429 && attempt < maxRetries) {
+        const retryAfter = response.headers.get('retry-after') || (2 ** attempt);
+        console.log(`Rate limited, waiting ${retryAfter}s before retry ${attempt + 1}`);
+        await new Promise(resolve => setTimeout(resolve, retryAfter * 1000));
+        continue;
+      }
+
+      // If server error, retry with backoff
+      if (response.status >= 500 && attempt < maxRetries) {
+        const delay = 1000 * (2 ** attempt); // 1s, 2s, 4s
+        console.log(`Server error ${response.status}, retrying in ${delay}ms`);
+        await new Promise(resolve => setTimeout(resolve, delay));
+        continue;
+      }
+
+      return response;
+    } catch (error) {
+      lastError = error;
+      if (error.name === 'AbortError' && attempt < maxRetries) {
+        console.log(`Timeout on attempt ${attempt + 1}, retrying...`);
+        continue;
+      }
+      throw error;
+    }
+  }
+
+  throw lastError;
 }
 
 export default async function handler(req, res) {
@@ -82,7 +121,7 @@ export default async function handler(req, res) {
       return res.status(400).json({ error: validation.error });
     }
 
-    const response = await fetchWithTimeout('https://api.anthropic.com/v1/messages', {
+    const response = await fetchWithRetry('https://api.anthropic.com/v1/messages', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -91,19 +130,20 @@ export default async function handler(req, res) {
       },
       body: JSON.stringify({
         model: 'claude-sonnet-4-20250514',
-        max_tokens: 2000,
-        temperature: 0.3, // Lower for more deterministic JSON output
+        max_tokens: 2500,
+        temperature: 0.3,
         system: SYSTEM_MESSAGE,
         messages: [{ role: 'user', content: prompt }]
       })
-    }, 30000); // 30 second timeout
+    }, 2, 45000); // 2 retries, 45 second timeout
 
     if (!response.ok) {
       const errorText = await response.text();
       console.error('Anthropic API error:', response.status, errorText);
       return res.status(response.status).json({
         error: 'API request failed',
-        status: response.status
+        status: response.status,
+        details: errorText.substring(0, 200) // Include some error details
       });
     }
 
@@ -112,10 +152,10 @@ export default async function handler(req, res) {
 
   } catch (error) {
     if (error.name === 'AbortError') {
-      console.error('Request timeout');
-      return res.status(504).json({ error: 'Request timeout' });
+      console.error('Request timeout after retries');
+      return res.status(504).json({ error: 'Request timeout - please try again' });
     }
-    console.error('Server error:', error);
-    return res.status(500).json({ error: 'Internal server error' });
+    console.error('Server error:', error.message);
+    return res.status(500).json({ error: 'Internal server error', message: error.message });
   }
 }
