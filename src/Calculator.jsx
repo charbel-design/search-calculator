@@ -1,5 +1,6 @@
 import React, { useState, useMemo, useCallback, useRef, useEffect } from 'react';
 import { TrendingUp, Clock, DollarSign, Target, AlertCircle, CheckCircle, ArrowRight, Info, Download, RefreshCw, Users, Car, Heart, Home, ChevronDown, HelpCircle, Zap, MapPin, Phone, X, Scale } from 'lucide-react';
+import { jsPDF } from 'jspdf';
 import {
   BENCHMARKS,
   REGIONAL_MULTIPLIERS,
@@ -72,7 +73,6 @@ const SearchComplexityCalculator = () => {
   const [step, setStep] = useState(1);
   const [formData, setFormData] = useState({
     positionType: '',
-    customPositionTitle: '',
     location: '',
     timeline: '',
     budgetRange: '',
@@ -93,7 +93,6 @@ const SearchComplexityCalculator = () => {
   const [results, setResults] = useState(null);
   const [error, setError] = useState(null);
   const [warnings, setWarnings] = useState([]);
-  const [showCustomTitle, setShowCustomTitle] = useState(false);
   const [showLocationSuggestions, setShowLocationSuggestions] = useState(false);
   const [compareMode, setCompareMode] = useState(false);
   const [comparisonResults, setComparisonResults] = useState(null);
@@ -221,10 +220,6 @@ const SearchComplexityCalculator = () => {
   const validateStep = () => {
     if (step === 1 && (!formData.positionType || !formData.location)) {
       setError('Please complete all required fields');
-      return false;
-    }
-    if (step === 1 && formData.positionType === 'Other' && !formData.customPositionTitle) {
-      setError('Please enter the position title');
       return false;
     }
     if (step === 2 && (!formData.timeline || !formData.budgetRange)) {
@@ -397,7 +392,7 @@ const SearchComplexityCalculator = () => {
     setError(null);
 
     const det = calculateDeterministicScore();
-    const displayTitle = formData.positionType === 'Other' ? formData.customPositionTitle : formData.positionType;
+    const displayTitle = formData.positionType;
     const benchmark = det.benchmark;
 
     // Get the timeline and budget labels for clearer AI context
@@ -549,100 +544,216 @@ Return this exact JSON structure:
     setCompareMode(true);
   };
 
-  const exportToPDF = async () => {
-    // Create a simple text-based download as a reliable fallback
-    const content = `
-TALENT GURUS
-Search Complexity Analysis
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  const exportToPDF = () => {
+    const doc = new jsPDF();
+    const pageWidth = doc.internal.pageSize.getWidth();
+    const margin = 20;
+    const contentWidth = pageWidth - (margin * 2);
+    let y = 20;
 
-Position: ${results.displayTitle}
-Location: ${results.formData.location}
-Score: ${results.score}/10 — ${results.label}
-Generated: ${new Date().toLocaleDateString()}
+    // Helper function to add wrapped text
+    const addWrappedText = (text, x, startY, maxWidth, lineHeight = 6) => {
+      const lines = doc.splitTextToSize(text, maxWidth);
+      lines.forEach((line, i) => {
+        if (startY + (i * lineHeight) > 270) {
+          doc.addPage();
+          startY = 20;
+          y = 20;
+        }
+        doc.text(line, x, startY + (i * lineHeight));
+      });
+      return startY + (lines.length * lineHeight);
+    };
 
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-EXECUTIVE SUMMARY
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+    // Header
+    doc.setFillColor(40, 20, 255); // #2814ff
+    doc.rect(0, 0, pageWidth, 35, 'F');
+    doc.setTextColor(255, 255, 255);
+    doc.setFontSize(20);
+    doc.setFont('helvetica', 'bold');
+    doc.text('TALENT GURUS', pageWidth / 2, 15, { align: 'center' });
+    doc.setFontSize(12);
+    doc.setFont('helvetica', 'normal');
+    doc.text('Search Complexity Analysis', pageWidth / 2, 25, { align: 'center' });
 
-${results.bottomLine || 'N/A'}
+    // Reset text color
+    doc.setTextColor(0, 0, 0);
+    y = 50;
 
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-KEY METRICS
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+    // Position and Score
+    doc.setFontSize(14);
+    doc.setFont('helvetica', 'bold');
+    doc.text(results.displayTitle, margin, y);
+    y += 8;
+    doc.setFontSize(10);
+    doc.setFont('helvetica', 'normal');
+    doc.setTextColor(100, 100, 100);
+    doc.text(`Location: ${results.formData.location} | Generated: ${new Date().toLocaleDateString()}`, margin, y);
+    y += 12;
 
-Salary Guidance:      ${results.salaryRangeGuidance || 'N/A'}
-Expected Timeline:    ${results.estimatedTimeline || 'N/A'}
-Candidate Availability: ${results.candidateAvailability || 'N/A'} — ${results.availabilityReason || ''}
-Market Dynamics:      ${results.marketCompetitiveness || 'N/A'}
+    // Score Box
+    const scoreColor = results.score <= 3 ? [27, 94, 32] : results.score <= 5 ? [230, 81, 0] : results.score <= 7 ? [191, 54, 12] : [183, 28, 28];
+    doc.setFillColor(...scoreColor);
+    doc.roundedRect(margin, y, 50, 25, 3, 3, 'F');
+    doc.setTextColor(255, 255, 255);
+    doc.setFontSize(18);
+    doc.setFont('helvetica', 'bold');
+    doc.text(`${results.score}/10`, margin + 25, y + 12, { align: 'center' });
+    doc.setFontSize(9);
+    doc.text(results.label, margin + 25, y + 20, { align: 'center' });
 
-${results.benchmark ? `
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-MARKET BENCHMARKS: ${results.displayTitle.toUpperCase()}${results.regionalMultiplier && results.regionalMultiplier !== 1 ? ` (${results.regionalMultiplier}x regional adjustment)` : ''}
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+    doc.setTextColor(0, 0, 0);
+    doc.setFontSize(10);
+    doc.setFont('helvetica', 'normal');
+    y = addWrappedText(results.bottomLine || '', margin + 58, y + 5, contentWidth - 60);
+    y += 10;
 
-25th Percentile:  $${(results.adjustedBenchmark?.p25 || results.benchmark.p25).toLocaleString()}
-Market Median:    $${(results.adjustedBenchmark?.p50 || results.benchmark.p50).toLocaleString()}
-75th Percentile:  $${(results.adjustedBenchmark?.p75 || results.benchmark.p75).toLocaleString()}
+    // Section: Key Metrics
+    doc.setFillColor(240, 240, 250);
+    doc.rect(margin, y, contentWidth, 8, 'F');
+    doc.setFont('helvetica', 'bold');
+    doc.setFontSize(11);
+    doc.setTextColor(40, 20, 255);
+    doc.text('KEY METRICS', margin + 3, y + 6);
+    y += 14;
 
-Benefits:
-• Housing: ${results.benchmark.benefits.housing}
-• Vehicle: ${results.benchmark.benefits.vehicle}
-• Health: ${results.benchmark.benefits.health}
-• Bonus: ${results.benchmark.benefits.bonus}
-` : ''}
+    doc.setTextColor(0, 0, 0);
+    doc.setFontSize(9);
+    doc.setFont('helvetica', 'bold');
+    doc.text('Salary:', margin, y);
+    doc.setFont('helvetica', 'normal');
+    y = addWrappedText(results.salaryRangeGuidance || 'N/A', margin + 25, y, contentWidth - 25, 5);
+    y += 3;
 
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-COMPLEXITY DRIVERS (Total: ${results.points} points)
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+    doc.setFont('helvetica', 'bold');
+    doc.text('Timeline:', margin, y);
+    doc.setFont('helvetica', 'normal');
+    y = addWrappedText(results.estimatedTimeline || 'N/A', margin + 25, y, contentWidth - 25, 5);
+    y += 3;
 
-${results.drivers?.map(d => `[+${d.points}] ${d.factor}: ${d.rationale}`).join('\n') || 'N/A'}
+    doc.setFont('helvetica', 'bold');
+    doc.text('Market:', margin, y);
+    doc.setFont('helvetica', 'normal');
+    y = addWrappedText(results.marketCompetitiveness || 'N/A', margin + 25, y, contentWidth - 25, 5);
+    y += 3;
 
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-KEY SUCCESS FACTORS
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+    doc.setFont('helvetica', 'bold');
+    doc.text('Availability:', margin, y);
+    doc.setFont('helvetica', 'normal');
+    y = addWrappedText(`${results.candidateAvailability || 'N/A'} - ${results.availabilityReason || ''}`, margin + 25, y, contentWidth - 25, 5);
+    y += 10;
 
-${results.keySuccessFactors?.map(f => `✓ ${f}`).join('\n') || 'N/A'}
+    // Section: Benchmarks
+    if (results.benchmark) {
+      doc.setFillColor(240, 240, 250);
+      doc.rect(margin, y, contentWidth, 8, 'F');
+      doc.setFont('helvetica', 'bold');
+      doc.setFontSize(11);
+      doc.setTextColor(40, 20, 255);
+      const benchTitle = results.regionalMultiplier && results.regionalMultiplier !== 1
+        ? `SALARY BENCHMARKS (${results.regionalMultiplier}x regional adjustment)`
+        : 'SALARY BENCHMARKS';
+      doc.text(benchTitle, margin + 3, y + 6);
+      y += 14;
 
-${results.recommendedAdjustments?.length > 0 ? `
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-RECOMMENDATIONS
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+      doc.setTextColor(0, 0, 0);
+      doc.setFontSize(9);
+      const p25 = results.adjustedBenchmark?.p25 || results.benchmark.p25;
+      const p50 = results.adjustedBenchmark?.p50 || results.benchmark.p50;
+      const p75 = results.adjustedBenchmark?.p75 || results.benchmark.p75;
 
-${results.recommendedAdjustments.map(r => `→ ${r}`).join('\n')}
-` : ''}
+      doc.text(`25th Percentile: $${p25.toLocaleString()}   |   Median: $${p50.toLocaleString()}   |   75th Percentile: $${p75.toLocaleString()}`, margin, y);
+      y += 8;
 
-${results.negotiationLeverage ? `
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-NEGOTIATION DYNAMICS
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+      doc.setFont('helvetica', 'normal');
+      doc.text(`Housing: ${results.benchmark.benefits.housing}`, margin, y);
+      y += 5;
+      doc.text(`Vehicle: ${results.benchmark.benefits.vehicle}`, margin, y);
+      y += 5;
+      doc.text(`Health: ${results.benchmark.benefits.health}`, margin, y);
+      y += 5;
+      doc.text(`Bonus: ${results.benchmark.benefits.bonus}`, margin, y);
+      y += 10;
+    }
 
-Candidate Advantages:
-${results.negotiationLeverage.candidateAdvantages?.map(a => `• ${a}`).join('\n') || '• Standard market position'}
+    // Section: Complexity Drivers
+    if (y > 200) { doc.addPage(); y = 20; }
+    doc.setFillColor(240, 240, 250);
+    doc.rect(margin, y, contentWidth, 8, 'F');
+    doc.setFont('helvetica', 'bold');
+    doc.setFontSize(11);
+    doc.setTextColor(40, 20, 255);
+    doc.text(`COMPLEXITY DRIVERS (${results.points} points)`, margin + 3, y + 6);
+    y += 14;
 
-Your Advantages:
-${results.negotiationLeverage.employerAdvantages?.map(a => `• ${a}`).join('\n') || '• Standard market position'}
-` : ''}
+    doc.setTextColor(0, 0, 0);
+    doc.setFontSize(9);
+    results.drivers?.forEach(d => {
+      if (y > 270) { doc.addPage(); y = 20; }
+      doc.setFont('helvetica', 'bold');
+      doc.text(`+${d.points}`, margin, y);
+      doc.setFont('helvetica', 'normal');
+      doc.text(`${d.factor}: ${d.rationale}`, margin + 12, y);
+      y += 6;
+    });
+    y += 5;
 
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+    // Section: Success Factors
+    if (results.keySuccessFactors?.length > 0) {
+      if (y > 230) { doc.addPage(); y = 20; }
+      doc.setFillColor(240, 240, 250);
+      doc.rect(margin, y, contentWidth, 8, 'F');
+      doc.setFont('helvetica', 'bold');
+      doc.setFontSize(11);
+      doc.setTextColor(40, 20, 255);
+      doc.text('KEY SUCCESS FACTORS', margin + 3, y + 6);
+      y += 14;
 
-TALENT GURUS
-Finding Exceptional Talent for Family Offices
-talent-gurus.com
+      doc.setTextColor(0, 0, 0);
+      doc.setFontSize(9);
+      doc.setFont('helvetica', 'normal');
+      results.keySuccessFactors.forEach(f => {
+        if (y > 270) { doc.addPage(); y = 20; }
+        y = addWrappedText(`• ${f}`, margin, y, contentWidth, 5);
+        y += 2;
+      });
+      y += 5;
+    }
 
-This analysis provides general market guidance. Every search is unique.
-    `.trim();
+    // Section: Recommendations
+    if (results.recommendedAdjustments?.length > 0) {
+      if (y > 230) { doc.addPage(); y = 20; }
+      doc.setFillColor(240, 240, 250);
+      doc.rect(margin, y, contentWidth, 8, 'F');
+      doc.setFont('helvetica', 'bold');
+      doc.setFontSize(11);
+      doc.setTextColor(40, 20, 255);
+      doc.text('RECOMMENDATIONS', margin + 3, y + 6);
+      y += 14;
 
-    // Create blob and download
-    const blob = new Blob([content], { type: 'text/plain;charset=utf-8' });
-    const url = URL.createObjectURL(blob);
-    const link = document.createElement('a');
-    link.href = url;
-    link.download = `Search-Analysis-${results.displayTitle.replace(/\s+/g, '-')}-${new Date().toISOString().split('T')[0]}.txt`;
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
-    URL.revokeObjectURL(url);
+      doc.setTextColor(0, 0, 0);
+      doc.setFontSize(9);
+      doc.setFont('helvetica', 'normal');
+      results.recommendedAdjustments.forEach(r => {
+        if (y > 270) { doc.addPage(); y = 20; }
+        y = addWrappedText(`→ ${r}`, margin, y, contentWidth, 5);
+        y += 2;
+      });
+      y += 5;
+    }
+
+    // Footer
+    const pageCount = doc.internal.getNumberOfPages();
+    for (let i = 1; i <= pageCount; i++) {
+      doc.setPage(i);
+      doc.setFontSize(8);
+      doc.setTextColor(150, 150, 150);
+      doc.text('TALENT GURUS | talent-gurus.com | This analysis provides general market guidance.', pageWidth / 2, 285, { align: 'center' });
+      doc.text(`Page ${i} of ${pageCount}`, pageWidth - margin, 285, { align: 'right' });
+    }
+
+    // Save
+    doc.save(`Search-Analysis-${results.displayTitle.replace(/\s+/g, '-')}-${new Date().toISOString().split('T')[0]}.pdf`);
   };
 
   const getComplexityColor = (score) => {
@@ -655,12 +766,11 @@ This analysis provides general market guidance. Every search is unique.
   const resetForm = () => {
     setResults(null);
     setStep(1);
-    setShowCustomTitle(false);
     setCompareMode(false);
     setComparisonResults(null);
     setWarnings([]);
     setFormData({
-      positionType: '', customPositionTitle: '', location: '', timeline: '', budgetRange: '', keyRequirements: '',
+      positionType: '', location: '', timeline: '', budgetRange: '', keyRequirements: '',
       email: '', emailConsent: false, discretionLevel: 'standard', propertiesCount: '', householdSize: '',
       priorityCallback: false, phone: '', languageRequirements: [], certifications: [], travelRequirement: 'minimal'
     });
@@ -708,7 +818,7 @@ This analysis provides general market guidance. Every search is unique.
                   
                   <div>
                     <label className="block text-sm font-medium text-slate-700 mb-2">Position Type *</label>
-                    <select name="positionType" value={formData.positionType} onChange={(e) => { handleInputChange(e); setShowCustomTitle(e.target.value === 'Other'); }}
+                    <select name="positionType" value={formData.positionType} onChange={handleInputChange}
                       className="w-full px-4 py-3 border-2 border-slate-200 rounded-xl focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200">
                       <option value="">Select a position ({commonRoles.length} roles available)</option>
                       {CATEGORIES.map(category => (
@@ -718,7 +828,6 @@ This analysis provides general market guidance. Every search is unique.
                           ))}
                         </optgroup>
                       ))}
-                      <option value="Other">Other / Not Listed</option>
                     </select>
                     {formData.positionType && BENCHMARKS[formData.positionType] && (
                       <div className="mt-2 text-xs text-slate-500 space-y-1">
@@ -729,14 +838,6 @@ This analysis provides general market guidance. Every search is unique.
                       </div>
                     )}
                   </div>
-
-                  {showCustomTitle && (
-                    <div>
-                      <label className="block text-sm font-medium text-slate-700 mb-2">Position Title *</label>
-                      <input type="text" name="customPositionTitle" value={formData.customPositionTitle} onChange={handleInputChange}
-                        className="w-full px-4 py-3 border-2 border-slate-200 rounded-xl" placeholder="e.g., Lifestyle Manager" />
-                    </div>
-                  )}
 
                   <div className="relative">
                     <label className="block text-sm font-medium text-slate-700 mb-2">Primary Location *</label>
