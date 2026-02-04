@@ -100,6 +100,7 @@ const SearchComplexityCalculator = () => {
   const [showLocationSuggestions, setShowLocationSuggestions] = useState(false);
   const [compareMode, setCompareMode] = useState(false);
   const [comparisonResults, setComparisonResults] = useState(null);
+  const [showLanguages, setShowLanguages] = useState(false);
 
   const timelineOptions = [
     { value: 'immediate', label: 'Immediate (1-2 months)', points: 22, description: 'Rush search - premium sourcing required' },
@@ -130,8 +131,11 @@ const SearchComplexityCalculator = () => {
   const corporateLanguageOptions = ['English (Native/Fluent)', 'Mandarin', 'Spanish', 'French', 'German', 'Japanese', 'Arabic', 'Portuguese', 'Korean', 'Russian', 'Italian', 'Hindi', 'Dutch', 'Swedish', 'Hebrew', 'Cantonese', 'Swiss German', 'Luxembourgish', 'Singaporean English', 'Thai'];
 
   // Certification options - very different between corporate and household roles
-  const householdCertificationOptions = ['STCW (Maritime)', 'CPR/First Aid', 'Firearms License', 'LEOSA', 'Commercial Driver (CDL)', 'Culinary Degree', 'Security Clearance', 'Child Development (CDA)', 'Sommelier (CMS/WSET)', 'ServSafe', 'ENG1 Medical', 'PEC (Yacht)', 'RYA Yachtmaster', 'Butler Training (Starkey/IICS)', 'Nursing License (RN/LPN)', 'Montessori Certification', 'Private Pilot License', 'Close Protection (SIA)', 'AED/BLS Certified', 'Estate Management Certification'];
+  const householdCertificationOptions = ['STCW (Maritime)', 'CPR/First Aid', 'Firearms License', 'LEOSA', 'Commercial Driver (CDL)', 'Culinary Degree', 'Security Clearance', 'Child Development (CDA)', 'Sommelier (CMS)', 'WSET Level 3/4', 'Certified Wine Educator', 'Cicerone (Beer)', 'ServSafe', 'ENG1 Medical', 'PEC (Yacht)', 'RYA Yachtmaster', 'Butler Training (Starkey/IICS)', 'Nursing License (RN/LPN)', 'Montessori Certification', 'Private Pilot License', 'Close Protection (SIA)', 'AED/BLS Certified', 'Estate Management Certification'];
   const corporateCertificationOptions = ['CFA (Chartered Financial Analyst)', 'Series 7 (General Securities)', 'Series 65/66 (Investment Adviser)', 'CPA (Certified Public Accountant)', 'CFP (Certified Financial Planner)', 'CAIA (Alternative Investments)', 'CTFA (Trust & Fiduciary)', 'CIMA (Investment Management)', 'MBA', 'JD (Law Degree)', 'PMP (Project Management)', 'CISSP (Cybersecurity)', 'FRM (Financial Risk Manager)', 'CMA (Management Accounting)', 'EA (Enrolled Agent)', 'CEBS (Employee Benefits)', 'ChFC (Chartered Financial Consultant)', 'CLU (Chartered Life Underwriter)', 'AAMS (Asset Management)', 'CPWA (Private Wealth Advisor)'];
+
+  // Short language list for corporate roles (optional, collapsed)
+  const corporateLanguageShortList = ['Mandarin', 'Spanish', 'German', 'Japanese', 'Arabic', 'French'];
   
   const travelOptions = [
     { value: 'minimal', label: 'Minimal (Local only)', points: 0 },
@@ -951,21 +955,7 @@ Return this exact JSON structure:
                 <div className="space-y-6">
                   <h3 className="text-xl font-semibold" style={{ color: '#2814ff' }}>Key Requirements</h3>
 
-                  <div>
-                    <label className="block text-sm font-medium text-slate-700 mb-2">
-                      Language Requirements
-                      {isCorporateRole && <span className="text-xs text-slate-500 ml-2">(Corporate focus)</span>}
-                    </label>
-                    <div className="flex flex-wrap gap-2">
-                      {(isCorporateRole ? corporateLanguageOptions : householdLanguageOptions).map(lang => (
-                        <button key={lang} type="button" onClick={() => handleMultiSelect('languageRequirements', lang)}
-                          className={`px-3 py-1.5 rounded-full text-sm ${formData.languageRequirements.includes(lang) ? 'bg-indigo-600 text-white' : 'bg-slate-100 text-slate-700 hover:bg-slate-200'}`}>
-                          {lang}
-                        </button>
-                      ))}
-                    </div>
-                  </div>
-
+                  {/* Certifications - shown first for both corporate and household */}
                   <div>
                     <label className="block text-sm font-medium text-slate-700 mb-2">
                       {isCorporateRole ? 'Professional Certifications' : 'Certifications'}
@@ -980,6 +970,52 @@ Return this exact JSON structure:
                       ))}
                     </div>
                   </div>
+
+                  {/* Languages - different display for corporate vs household */}
+                  {isCorporateRole ? (
+                    <div className="border border-slate-200 rounded-xl p-4 bg-slate-50">
+                      <button
+                        type="button"
+                        onClick={() => setShowLanguages(!showLanguages)}
+                        className="flex items-center justify-between w-full text-left"
+                      >
+                        <div>
+                          <span className="text-sm font-medium text-slate-700">Language Requirements</span>
+                          <span className="text-xs text-slate-500 ml-2">(Optional - for international operations)</span>
+                        </div>
+                        <ChevronDown className={`w-5 h-5 text-slate-400 transition-transform ${showLanguages ? 'rotate-180' : ''}`} />
+                      </button>
+                      {showLanguages && (
+                        <div className="mt-3 pt-3 border-t border-slate-200">
+                          <div className="flex flex-wrap gap-2">
+                            {corporateLanguageShortList.map(lang => (
+                              <button key={lang} type="button" onClick={() => handleMultiSelect('languageRequirements', lang)}
+                                className={`px-3 py-1.5 rounded-full text-sm ${formData.languageRequirements.includes(lang) ? 'bg-indigo-600 text-white' : 'bg-slate-100 text-slate-700 hover:bg-slate-200'}`}>
+                                {lang}
+                              </button>
+                            ))}
+                          </div>
+                        </div>
+                      )}
+                      {formData.languageRequirements.length > 0 && !showLanguages && (
+                        <p className="text-xs text-indigo-600 mt-2">
+                          Selected: {formData.languageRequirements.join(', ')}
+                        </p>
+                      )}
+                    </div>
+                  ) : (
+                    <div>
+                      <label className="block text-sm font-medium text-slate-700 mb-2">Language Requirements</label>
+                      <div className="flex flex-wrap gap-2">
+                        {householdLanguageOptions.map(lang => (
+                          <button key={lang} type="button" onClick={() => handleMultiSelect('languageRequirements', lang)}
+                            className={`px-3 py-1.5 rounded-full text-sm ${formData.languageRequirements.includes(lang) ? 'bg-indigo-600 text-white' : 'bg-slate-100 text-slate-700 hover:bg-slate-200'}`}>
+                            {lang}
+                          </button>
+                        ))}
+                      </div>
+                    </div>
+                  )}
 
                   <div>
                     <label className="block text-sm font-medium text-slate-700 mb-2">Travel Requirements</label>
