@@ -634,17 +634,15 @@ Return this exact JSON structure:
       // Helper function to add wrapped text with proper page handling
       const addWrappedText = (text, x, maxWidth, lineHeight = 5) => {
         if (!text) return;
-        // Use a fixed safe width that definitely fits on the page
-        const safeWidth = 160; // Fixed width that fits within A4 with margins
+        // Use a conservative width (150mm) that fits well within A4 margins
+        const safeWidth = 150;
         const lines = doc.splitTextToSize(String(text), safeWidth);
         lines.forEach((line) => {
           if (y > 265) {
             doc.addPage();
             y = 25;
           }
-          // Truncate line if still too long (safety net)
-          const truncatedLine = line.length > 120 ? line.substring(0, 117) + '...' : line;
-          doc.text(truncatedLine, x, y);
+          doc.text(line, x, y);
           y += lineHeight;
         });
       };
@@ -775,7 +773,8 @@ Return this exact JSON structure:
         results.keySuccessFactors.forEach(f => {
           checkPageBreak(15);
           const cleanText = String(f).replace(/[^\x20-\x7E]/g, ' ').trim();
-          const lines = doc.splitTextToSize(cleanText, 155);
+          // Use narrower width (140mm) to account for "- " prefix added later
+          const lines = doc.splitTextToSize(cleanText, 140);
           lines.forEach((line, idx) => {
             if (y > 265) {
               doc.addPage();
@@ -796,9 +795,10 @@ Return this exact JSON structure:
         doc.setFont('helvetica', 'normal');
         results.recommendedAdjustments.forEach(r => {
           checkPageBreak(20);
-          // Clean the text and wrap it manually
+          // Clean the text - remove non-ASCII chars
           const cleanText = String(r).replace(/[^\x20-\x7E]/g, ' ').trim();
-          const lines = doc.splitTextToSize(cleanText, 155);
+          // Use narrower width (140mm) to account for "> " prefix added later
+          const lines = doc.splitTextToSize(cleanText, 140);
           lines.forEach((line, idx) => {
             if (y > 265) {
               doc.addPage();
