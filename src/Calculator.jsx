@@ -1,5 +1,14 @@
 import React, { useState, useMemo, useCallback, useRef, useEffect } from 'react';
 import { TrendingUp, Clock, DollarSign, Target, AlertCircle, CheckCircle, ArrowRight, Info, Download, RefreshCw, Users, Car, Heart, Home, ChevronDown, HelpCircle, Zap, MapPin, Phone, X, Scale } from 'lucide-react';
+import {
+  BENCHMARKS,
+  REGIONAL_MULTIPLIERS,
+  CATEGORIES,
+  SALARY_DATA_META,
+  getPositionsByCategory,
+  getAllPositionNames,
+  detectRegion
+} from './salaryData';
 
 // ============================================
 // CUSTOM HOOKS
@@ -17,108 +26,13 @@ function useDebounce(value, delay = 150) {
   return debouncedValue;
 }
 
-// ============================================
-// COMPREHENSIVE BENCHMARKS WITH BENEFITS
-// ============================================
-const BENCHMARKS = {
-  "Chief of Staff": { 
-    p25: 220000, p50: 275000, p75: 350000,
-    benefits: { housing: "Often included", vehicle: "Company car common", health: "Premium coverage", bonus: "15-25% target" }
-  },
-  "Estate Manager": { 
-    p25: 160000, p50: 200000, p75: 260000,
-    benefits: { housing: "On-site housing typical", vehicle: "Estate vehicle provided", health: "Full coverage", bonus: "10-15% target" }
-  },
-  "Executive Housekeeper": { 
-    p25: 110000, p50: 135000, p75: 165000,
-    benefits: { housing: "Sometimes included", vehicle: "Rarely", health: "Standard coverage", bonus: "5-10% target" }
-  },
-  "Personal Assistant": { 
-    p25: 90000, p50: 120000, p75: 160000,
-    benefits: { housing: "Rarely", vehicle: "Rarely", health: "Standard coverage", bonus: "10-15% target" }
-  },
-  "Private Chef": { 
-    p25: 140000, p50: 185000, p75: 240000,
-    benefits: { housing: "Sometimes for live-in", vehicle: "Rarely", health: "Full coverage", bonus: "Holiday bonus typical" }
-  },
-  "Security Director": { 
-    p25: 200000, p50: 250000, p75: 320000,
-    benefits: { housing: "On-site often required", vehicle: "Security vehicle provided", health: "Premium coverage", bonus: "15-20% target" }
-  },
-  "Household Manager": { 
-    p25: 130000, p50: 165000, p75: 210000,
-    benefits: { housing: "Often included", vehicle: "Sometimes", health: "Full coverage", bonus: "10-15% target" }
-  },
-  "Family Office Analyst": { 
-    p25: 95000, p50: 130000, p75: 175000,
-    benefits: { housing: "Rarely", vehicle: "Rarely", health: "Premium coverage", bonus: "20-40% target" }
-  },
-  "Nanny/Governess": { 
-    p25: 85000, p50: 115000, p75: 165000,
-    benefits: { housing: "Live-in common", vehicle: "Family vehicle access", health: "Full coverage", bonus: "Holiday bonus + education stipend" }
-  },
-  "Butler": { 
-    p25: 120000, p50: 150000, p75: 200000,
-    benefits: { housing: "Live-in typical", vehicle: "Sometimes", health: "Full coverage", bonus: "10-15% target" }
-  },
-  "Driver/Security Driver": { 
-    p25: 75000, p50: 95000, p75: 130000,
-    benefits: { housing: "Rarely unless live-in", vehicle: "N/A - work vehicle", health: "Standard coverage", bonus: "5-10% target" }
-  },
-  "Property Manager": { 
-    p25: 100000, p50: 140000, p75: 185000,
-    benefits: { housing: "On-site common", vehicle: "Property vehicle", health: "Full coverage", bonus: "10-15% target" }
-  },
-  "Guest Services Manager": { 
-    p25: 95000, p50: 125000, p75: 160000,
-    benefits: { housing: "Often included", vehicle: "Sometimes", health: "Full coverage", bonus: "10-15% target" }
-  },
-  "Chief Stewardess": { 
-    p25: 85000, p50: 110000, p75: 145000,
-    benefits: { housing: "On-vessel", vehicle: "N/A", health: "Maritime coverage", bonus: "Charter tips + 1-2 months" }
-  },
-  "Yacht Captain": { 
-    p25: 150000, p50: 200000, p75: 280000,
-    benefits: { housing: "On-vessel", vehicle: "N/A", health: "Maritime coverage", bonus: "Charter tips + 2-3 months" }
-  },
-  "Yacht Engineer": { 
-    p25: 110000, p50: 145000, p75: 190000,
-    benefits: { housing: "On-vessel", vehicle: "N/A", health: "Maritime coverage", bonus: "Charter tips + 1-2 months" }
-  }
-};
+// Use the new regional multipliers as REGIONAL_ADJUSTMENTS for backwards compatibility
+const REGIONAL_ADJUSTMENTS = REGIONAL_MULTIPLIERS;
 
-// ============================================
-// REGIONAL COST OF LIVING MULTIPLIERS
-// ============================================
-const REGIONAL_ADJUSTMENTS = {
-  "New York City": { multiplier: 1.35, label: "NYC Premium", tier: "ultra-high" },
-  "Manhattan": { multiplier: 1.40, label: "Manhattan Premium", tier: "ultra-high" },
-  "San Francisco": { multiplier: 1.30, label: "SF Bay Premium", tier: "ultra-high" },
-  "Los Angeles": { multiplier: 1.20, label: "LA Premium", tier: "high" },
-  "Aspen": { multiplier: 1.25, label: "Resort Premium", tier: "high" },
-  "Palm Beach": { multiplier: 1.20, label: "Palm Beach Premium", tier: "high" },
-  "The Hamptons": { multiplier: 1.30, label: "Hamptons Premium", tier: "high" },
-  "Monaco": { multiplier: 1.45, label: "Monaco Premium", tier: "ultra-high" },
-  "London": { multiplier: 1.30, label: "London Premium", tier: "ultra-high" },
-  "Miami": { multiplier: 1.10, label: "Miami Premium", tier: "moderate" },
-  "Greenwich": { multiplier: 1.25, label: "Greenwich Premium", tier: "high" },
-  "Nantucket": { multiplier: 1.20, label: "Island Premium", tier: "high" },
-  "Martha's Vineyard": { multiplier: 1.20, label: "Island Premium", tier: "high" },
-  "Jackson Hole": { multiplier: 1.20, label: "Resort Premium", tier: "high" },
-  "Vail": { multiplier: 1.15, label: "Resort Premium", tier: "high" },
-  "Dallas": { multiplier: 1.00, label: "Market Rate", tier: "standard" },
-  "Houston": { multiplier: 0.95, label: "Below Coastal Average", tier: "standard" },
-  "Chicago": { multiplier: 1.05, label: "Slight Premium", tier: "moderate" },
-  "Seattle": { multiplier: 1.15, label: "Pacific NW Premium", tier: "moderate" },
-  "Remote/Multiple": { multiplier: 1.10, label: "Flexibility Premium", tier: "variable" }
-};
-
-const LOCATION_SUGGESTIONS = [
-  "New York City", "Manhattan", "San Francisco", "Los Angeles", "Aspen",
-  "Palm Beach", "The Hamptons", "Monaco", "London", "Miami", "Greenwich",
-  "Nantucket", "Martha's Vineyard", "Jackson Hole", "Vail", "Dallas",
-  "Houston", "Chicago", "Seattle", "Remote/Multiple Locations"
-];
+// Generate location suggestions from the regional multipliers
+const LOCATION_SUGGESTIONS = Object.keys(REGIONAL_MULTIPLIERS).filter(
+  loc => !['National_US', 'Midwest_US', 'South_US'].includes(loc)
+).map(loc => loc.replace(/_/g, ' '));
 
 // ============================================
 // SEASONALITY FACTORS
@@ -218,7 +132,9 @@ const SearchComplexityCalculator = () => {
     { value: 'heavy-rotation', label: 'Heavy/Rotation (Following principal)', points: 15 }
   ];
 
-  const commonRoles = Object.keys(BENCHMARKS);
+  // Get positions grouped by category for the dropdown
+  const positionsByCategory = useMemo(() => getPositionsByCategory(), []);
+  const commonRoles = useMemo(() => getAllPositionNames(), []);
 
   const handleInputChange = (e) => {
     const { name, value, type, checked } = e.target;
@@ -754,12 +670,23 @@ This analysis provides general market guidance. Every search is unique.
                     <label className="block text-sm font-medium text-slate-700 mb-2">Position Type *</label>
                     <select name="positionType" value={formData.positionType} onChange={(e) => { handleInputChange(e); setShowCustomTitle(e.target.value === 'Other'); }}
                       className="w-full px-4 py-3 border-2 border-slate-200 rounded-xl focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200">
-                      <option value="">Select a position</option>
-                      {commonRoles.map(role => <option key={role} value={role}>{role}</option>)}
+                      <option value="">Select a position ({commonRoles.length} roles available)</option>
+                      {CATEGORIES.map(category => (
+                        <optgroup key={category} label={category}>
+                          {positionsByCategory[category]?.map(pos => (
+                            <option key={pos.name} value={pos.name}>{pos.name}</option>
+                          ))}
+                        </optgroup>
+                      ))}
                       <option value="Other">Other / Not Listed</option>
                     </select>
                     {formData.positionType && BENCHMARKS[formData.positionType] && (
-                      <p className="mt-2 text-xs text-slate-500">💡 Market: ${BENCHMARKS[formData.positionType].p25.toLocaleString()} - ${BENCHMARKS[formData.positionType].p75.toLocaleString()}</p>
+                      <div className="mt-2 text-xs text-slate-500 space-y-1">
+                        <p>Market: ${BENCHMARKS[formData.positionType].p25.toLocaleString()} - ${BENCHMARKS[formData.positionType].p75.toLocaleString()}</p>
+                        {BENCHMARKS[formData.positionType].scarcity && (
+                          <p>Talent Scarcity: {BENCHMARKS[formData.positionType].scarcity}/10 {BENCHMARKS[formData.positionType].scarcity >= 7 ? '(Hard to find)' : BENCHMARKS[formData.positionType].scarcity >= 5 ? '(Moderate)' : '(Accessible)'}</p>
+                        )}
+                      </div>
                     )}
                   </div>
 
@@ -1152,9 +1079,10 @@ This analysis provides general market guidance. Every search is unique.
         )}
 
         <div className="mt-12 text-center space-y-2">
-          <p className="font-semibold" style={{ color: '#2814ff' }}>Talent Gurus • Finding Exceptional Talent for Family Offices</p>
+          <p className="font-semibold" style={{ color: '#2814ff' }}>Talent Gurus - Finding Exceptional Talent for Family Offices</p>
           <p className="text-slate-500">We find the people you'll rely on for years.</p>
           <a href="https://talent-gurus.com" target="_blank" rel="noopener noreferrer" className="text-xs hover:underline" style={{ color: '#2814ff' }}>talent-gurus.com</a>
+          <p className="text-xs text-slate-400 mt-4">Salary data: {SALARY_DATA_META.lastUpdated} | {commonRoles.length} positions tracked</p>
         </div>
       </div>
     </div>
