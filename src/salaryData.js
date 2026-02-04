@@ -1029,6 +1029,370 @@ export const BENCHMARKS = {
     scarcity: 7.5,
     regionalNotes: "Large private collections ($5M+ in wine value) sit at top of band",
     trends: "More UHNW collectors treat cellars as alternative assets requiring professional management"
+  },
+
+  // ==========================================
+  // ADDITIONAL POSITIONS (93 total)
+  // ==========================================
+
+  // CHILDCARE & EDUCATION (Additional)
+  "Au Pair Coordinator": {
+    category: "Childcare & Education",
+    p25: 55000, p50: 80000, p75: 120000,
+    benefits: {
+      housing: "Sometimes included",
+      vehicle: "Mileage reimbursement",
+      health: "Standard coverage",
+      bonus: "5-10%"
+    },
+    scarcity: 4,
+    regionalNotes: "Higher in markets with large au pair populations (NYC, LA, DC)",
+    trends: "Growing role as UHNW families manage multiple au pairs across properties"
+  },
+  "Night Nanny": {
+    category: "Childcare & Education",
+    p25: 70000, p50: 110000, p75: 165000,
+    benefits: {
+      housing: "Often included for live-in roles",
+      vehicle: "Not typical",
+      health: "Standard to premium",
+      bonus: "8-12%"
+    },
+    scarcity: 6.5,
+    regionalNotes: "Daily rates $300-$600/night in premium markets; annualized can exceed $150k",
+    trends: "High demand among new parents; often overlaps with newborn care specialist roles"
+  },
+
+  // EXECUTIVE & MANAGEMENT (Additional)
+  "Family Office Analyst": {
+    category: "Executive & Management",
+    p25: 85000, p50: 130000, p75: 190000,
+    benefits: {
+      housing: "Not included",
+      vehicle: "Not typical",
+      health: "Premium coverage",
+      bonus: "15-25% based on portfolio performance"
+    },
+    scarcity: 6,
+    regionalNotes: "NYC and SF pay at top of range; competition from institutional finance",
+    trends: "Increasing demand as family offices professionalize investment operations"
+  },
+  "Villa Manager": {
+    category: "Executive & Management",
+    p25: 70000, p50: 105000, p75: 155000,
+    benefits: {
+      housing: "Usually included on property",
+      vehicle: "Property vehicle provided",
+      health: "Standard to premium",
+      bonus: "8-12%"
+    },
+    scarcity: 5.5,
+    regionalNotes: "Mediterranean and Caribbean villa positions often higher; seasonal markets vary",
+    trends: "Growing with expansion of UHNW vacation property portfolios"
+  },
+  "Caretaker": {
+    category: "Executive & Management",
+    p25: 50000, p50: 75000, p75: 115000,
+    benefits: {
+      housing: "Almost always included on property",
+      vehicle: "Property vehicle or allowance",
+      health: "Standard coverage",
+      bonus: "5-8%"
+    },
+    scarcity: 3.5,
+    regionalNotes: "Remote and seasonal properties pay at higher end of range",
+    trends: "Essential for properties with limited family use; often combined with security duties"
+  },
+
+  // PERSONAL & ADMINISTRATIVE (Additional)
+  "Concierge Manager": {
+    category: "Personal & Administrative",
+    p25: 75000, p50: 115000, p75: 170000,
+    benefits: {
+      housing: "Rarely included",
+      vehicle: "Mileage reimbursement or car for errands",
+      health: "Premium coverage",
+      bonus: "10-15%"
+    },
+    scarcity: 6,
+    regionalNotes: "Luxury hospitality backgrounds command premium; NYC/LA/Miami markets strongest",
+    trends: "Role expanding beyond traditional concierge to lifestyle management"
+  },
+  "Scheduler / Calendar Manager": {
+    category: "Personal & Administrative",
+    p25: 55000, p50: 85000, p75: 125000,
+    benefits: {
+      housing: "Not included",
+      vehicle: "Mileage reimbursement",
+      health: "Standard coverage",
+      bonus: "5-10%"
+    },
+    scarcity: 4,
+    regionalNotes: "Higher pay for managing complex multi-principal calendars",
+    trends: "Increasing tech sophistication required; often part of larger EA role"
+  },
+
+  // DOMESTIC STAFF - SPECIALIZED (Additional)
+  "Housekeeper": {
+    category: "Domestic Staff - Specialized",
+    p25: 45000, p50: 65000, p75: 95000,
+    benefits: {
+      housing: "Often included for live-in",
+      vehicle: "Not typical",
+      health: "Standard coverage",
+      bonus: "5-8%"
+    },
+    scarcity: 3,
+    regionalNotes: "UHNW households pay 25-50% above market rates; coastal metros at top",
+    trends: "Increasing demand for specialized skills (fine fabrics, art-safe cleaning)"
+  },
+  "Florist (Private)": {
+    category: "Domestic Staff - Specialized",
+    p25: 55000, p50: 85000, p75: 130000,
+    benefits: {
+      housing: "Sometimes included",
+      vehicle: "Vehicle or allowance for sourcing",
+      health: "Standard coverage",
+      bonus: "5-10%"
+    },
+    scarcity: 5,
+    regionalNotes: "Event-heavy households and large estates pay at upper range",
+    trends: "Growing role in estates with extensive gardens and frequent entertaining"
+  },
+  "Valet": {
+    category: "Domestic Staff - Specialized",
+    p25: 55000, p50: 85000, p75: 130000,
+    benefits: {
+      housing: "Usually included",
+      vehicle: "Not typical",
+      health: "Standard to premium",
+      bonus: "8-12%; significant tips possible"
+    },
+    scarcity: 5.5,
+    regionalNotes: "Traditional gentleman's valet roles in high demand; UK training premium",
+    trends: "Revival of traditional valet service among UHNW principals"
+  },
+  "Cook": {
+    category: "Domestic Staff - Specialized",
+    p25: 55000, p50: 80000, p75: 120000,
+    benefits: {
+      housing: "Often included for live-in",
+      vehicle: "Sometimes for shopping",
+      health: "Standard coverage",
+      bonus: "5-10%"
+    },
+    scarcity: 3.5,
+    regionalNotes: "Distinct from private chef; more family-style cooking, less formal",
+    trends: "Strong demand for health-conscious and family-friendly meal preparation"
+  },
+
+  // GROUNDS & MAINTENANCE (Additional)
+  "Landscaper": {
+    category: "Grounds & Maintenance",
+    p25: 45000, p50: 70000, p75: 105000,
+    benefits: {
+      housing: "Sometimes included on large estates",
+      vehicle: "Work vehicle provided",
+      health: "Standard coverage",
+      bonus: "5-8%"
+    },
+    scarcity: 3,
+    regionalNotes: "Specialized skills (Japanese gardens, tropical) command premium",
+    trends: "Sustainability and native plantings increasing in importance"
+  },
+  "Dock Master": {
+    category: "Grounds & Maintenance",
+    p25: 55000, p50: 85000, p75: 130000,
+    benefits: {
+      housing: "Often included near waterfront",
+      vehicle: "Marine and land vehicles",
+      health: "Standard coverage",
+      bonus: "5-10%"
+    },
+    scarcity: 4.5,
+    regionalNotes: "Waterfront estates in FL, Northeast, and Pacific NW pay at upper range",
+    trends: "Role often includes tender and small craft maintenance"
+  },
+
+  // MARITIME / YACHT (Additional)
+  "Second Engineer (Yacht)": {
+    category: "Maritime / Yacht",
+    p25: 50000, p50: 85000, p75: 140000,
+    benefits: {
+      housing: "Onboard",
+      vehicle: "N/A",
+      health: "Maritime coverage",
+      bonus: "10-12%; charter tips"
+    },
+    scarcity: 5,
+    regionalNotes: "Typical €3k-€6k/month in superyacht segment",
+    trends: "Technical certifications increasingly required; hybrid systems knowledge valued"
+  },
+  "Interior Manager (Yacht)": {
+    category: "Maritime / Yacht",
+    p25: 55000, p50: 95000, p75: 155000,
+    benefits: {
+      housing: "Onboard private or shared cabin",
+      vehicle: "N/A",
+      health: "Maritime coverage",
+      bonus: "12-18%; significant charter tips"
+    },
+    scarcity: 6,
+    regionalNotes: "Typical €3.5k-€7k/month on large yachts; luxury hotel experience premium",
+    trends: "Role gaining prominence on larger vessels with complex interior operations"
+  },
+  "Yacht Steward/Stewardess": {
+    category: "Maritime / Yacht",
+    p25: 42000, p50: 70000, p75: 115000,
+    benefits: {
+      housing: "Onboard shared cabin",
+      vehicle: "N/A",
+      health: "Maritime coverage",
+      bonus: "8-15%; significant charter tips"
+    },
+    scarcity: 4,
+    regionalNotes: "Typical €2.5k-€4.5k/month base; tips can double effective compensation",
+    trends: "Entry point to yachting career; strong demand in charter seasons"
+  },
+
+  // SECURITY (Additional)
+  "Technical Director": {
+    category: "Security",
+    p25: 120000, p50: 180000, p75: 270000,
+    benefits: {
+      housing: "Rarely included",
+      vehicle: "Company vehicle or allowance",
+      health: "Premium coverage",
+      bonus: "15-25%"
+    },
+    scarcity: 8,
+    regionalNotes: "SF Bay and NYC tech hubs pay at top; competition from corporate sector",
+    trends: "Role encompasses IT, AV, smart home, and security systems integration"
+  },
+  "IT Manager (Private)": {
+    category: "Security",
+    p25: 95000, p50: 145000, p75: 215000,
+    benefits: {
+      housing: "Rarely included",
+      vehicle: "Mileage reimbursement",
+      health: "Premium coverage",
+      bonus: "12-20%"
+    },
+    scarcity: 6.5,
+    regionalNotes: "Multi-property portfolios with complex networks at upper range",
+    trends: "Increasingly critical role as homes become more connected and security-conscious"
+  },
+
+  // DRIVERS & TRANSPORTATION (Additional)
+  "Pilot (Private)": {
+    category: "Drivers & Transportation",
+    p25: 120000, p50: 185000, p75: 280000,
+    benefits: {
+      housing: "Per diem during travel; sometimes housing near home base",
+      vehicle: "Mileage reimbursement",
+      health: "Premium coverage including flight medical",
+      bonus: "12-18%"
+    },
+    scarcity: 7,
+    regionalNotes: "Jet types and flight hours significantly impact pay; international operations premium",
+    trends: "Private aviation boom since 2020 has increased competition for experienced pilots"
+  },
+
+  // HEALTHCARE & WELLNESS (Additional)
+  "Spa Manager": {
+    category: "Healthcare & Wellness",
+    p25: 70000, p50: 110000, p75: 165000,
+    benefits: {
+      housing: "Sometimes included on resort estates",
+      vehicle: "Not typical",
+      health: "Premium wellness coverage",
+      bonus: "10-15%"
+    },
+    scarcity: 5.5,
+    regionalNotes: "Large estates with dedicated spa facilities; resort and yacht markets strongest",
+    trends: "Growing demand as UHNW families invest in home wellness facilities"
+  },
+  "Companion": {
+    category: "Healthcare & Wellness",
+    p25: 50000, p50: 75000, p75: 115000,
+    benefits: {
+      housing: "Often included for live-in",
+      vehicle: "Mileage reimbursement or car for outings",
+      health: "Standard coverage",
+      bonus: "5-10%"
+    },
+    scarcity: 4,
+    regionalNotes: "Higher pay for medical background or specialized skills (languages, travel)",
+    trends: "Increasing demand for elderly companionship with aging UHNW population"
+  },
+  "Pet Care Specialist": {
+    category: "Healthcare & Wellness",
+    p25: 45000, p50: 70000, p75: 110000,
+    benefits: {
+      housing: "Sometimes included",
+      vehicle: "Vehicle or allowance for pet transport",
+      health: "Standard coverage",
+      bonus: "5-10%"
+    },
+    scarcity: 4,
+    regionalNotes: "Show dogs, exotic pets, and multiple animals command premium",
+    trends: "Role professionalizing with more UHNW families seeking dedicated pet staff"
+  },
+
+  // HOSPITALITY & EVENTS (Additional)
+  "Collections Manager": {
+    category: "Hospitality & Events",
+    p25: 85000, p50: 135000, p75: 205000,
+    benefits: {
+      housing: "Rarely included",
+      vehicle: "Vehicle for transporting/sourcing items",
+      health: "Premium coverage",
+      bonus: "10-15%"
+    },
+    scarcity: 7,
+    regionalNotes: "Art, cars, wine, watches—specialized knowledge commands premium",
+    trends: "Growing as UHNW families professionalize management of diverse collections"
+  },
+  "Art Collection Manager": {
+    category: "Hospitality & Events",
+    p25: 95000, p50: 155000, p75: 240000,
+    benefits: {
+      housing: "Rarely included",
+      vehicle: "Vehicle for gallery visits and acquisitions",
+      health: "Premium coverage",
+      bonus: "12-18%; may include acquisition bonuses"
+    },
+    scarcity: 8,
+    regionalNotes: "Major art markets (NYC, LA, London) pay at top; gallery/auction house experience valued",
+    trends: "More collectors seeking in-house expertise for portfolio management and acquisitions"
+  },
+  "Gallery Manager (Private)": {
+    category: "Hospitality & Events",
+    p25: 75000, p50: 120000, p75: 180000,
+    benefits: {
+      housing: "Rarely included",
+      vehicle: "Mileage reimbursement",
+      health: "Standard to premium",
+      bonus: "10-15%"
+    },
+    scarcity: 6,
+    regionalNotes: "Private gallery spaces in homes requiring curatorial and operational management",
+    trends: "Growing with expansion of private exhibition spaces in UHNW homes"
+  },
+
+  // GROUNDS & MAINTENANCE (Additional)
+  "Equestrian Manager": {
+    category: "Grounds & Maintenance",
+    p25: 65000, p50: 100000, p75: 155000,
+    benefits: {
+      housing: "Usually included on property",
+      vehicle: "Farm/estate vehicle",
+      health: "Standard to premium",
+      bonus: "8-12%"
+    },
+    scarcity: 6,
+    regionalNotes: "Show horse and polo operations pay at upper range; Wellington FL, Kentucky markets strong",
+    trends: "Role often includes oversight of trainers, grooms, and facility maintenance"
   }
 };
 
