@@ -655,26 +655,27 @@ Return this exact JSON structure:
     }
 
     try {
-      // Show loading state
-      const exportBtn = document.querySelector('[data-export-btn]');
-      if (exportBtn) {
-        exportBtn.textContent = 'Generating PDF...';
-        exportBtn.disabled = true;
+      // Hide the buttons before capturing
+      const buttonsContainer = resultsRef.current.querySelector('.flex.flex-wrap.gap-3.pt-4');
+      if (buttonsContainer) {
+        buttonsContainer.style.display = 'none';
       }
+
+      // Small delay to ensure DOM updates
+      await new Promise(resolve => setTimeout(resolve, 100));
 
       // Capture the results container as an image
       const canvas = await html2canvas(resultsRef.current, {
-        scale: 2, // Higher resolution
+        scale: 2,
         useCORS: true,
         logging: false,
-        backgroundColor: '#ffffff',
-        windowWidth: resultsRef.current.scrollWidth,
-        windowHeight: resultsRef.current.scrollHeight
+        backgroundColor: '#ffffff'
       });
 
-      const imgData = canvas.toDataURL('image/png');
-      const imgWidth = canvas.width;
-      const imgHeight = canvas.height;
+      // Show buttons again
+      if (buttonsContainer) {
+        buttonsContainer.style.display = '';
+      }
 
       // Create PDF - A4 dimensions in mm
       const doc = new jsPDF('p', 'mm', 'a4');
@@ -682,130 +683,120 @@ Return this exact JSON structure:
       const pageHeight = doc.internal.pageSize.getHeight();
       const margin = 10;
       const headerHeight = 25;
-      const footerHeight = 15;
+      const footerHeight = 12;
+
+      // Calculate dimensions
+      const imgWidth = canvas.width;
+      const imgHeight = canvas.height;
       const contentWidth = pageWidth - (margin * 2);
-      const contentHeight = pageHeight - headerHeight - footerHeight - margin;
+      const scaledImgHeight = (imgHeight * contentWidth) / imgWidth;
 
-      // Calculate image dimensions to fit page width
-      const ratio = contentWidth / (imgWidth / 2); // Divide by scale factor
-      const scaledHeight = (imgHeight / 2) * ratio;
+      // First page: header + content
+      const firstPageContentHeight = pageHeight - headerHeight - footerHeight - margin;
+      // Subsequent pages: just content (no header)
+      const otherPageContentHeight = pageHeight - footerHeight - margin - 5;
 
-      // Add header to first page
-      const addHeader = () => {
-        doc.setFillColor(40, 20, 255);
-        doc.rect(0, 0, pageWidth, headerHeight, 'F');
-        doc.setTextColor(255, 255, 255);
-        doc.setFontSize(14);
-        doc.setFont('helvetica', 'bold');
-        doc.text('TALENT GURUS', pageWidth / 2, 10, { align: 'center' });
-        doc.setFontSize(10);
-        doc.setFont('helvetica', 'normal');
-        doc.text('Search Complexity Analysis', pageWidth / 2, 18, { align: 'center' });
-      };
+      // Add header (only on first page)
+      doc.setFillColor(40, 20, 255);
+      doc.rect(0, 0, pageWidth, headerHeight, 'F');
+      doc.setTextColor(255, 255, 255);
+      doc.setFontSize(14);
+      doc.setFont('helvetica', 'bold');
+      doc.text('TALENT GURUS', pageWidth / 2, 10, { align: 'center' });
+      doc.setFontSize(10);
+      doc.setFont('helvetica', 'normal');
+      doc.text('Search Complexity Analysis', pageWidth / 2, 18, { align: 'center' });
 
-      // Add footer to current page
-      const addFooter = (pageNum, totalPages) => {
-        doc.setFontSize(8);
-        doc.setTextColor(130, 130, 130);
-        doc.text('TALENT GURUS | talent-gurus.com | AI-assisted analysis for informational purposes only.', pageWidth / 2, pageHeight - 8, { align: 'center' });
-        doc.text(`Page ${pageNum} of ${totalPages}`, pageWidth - margin, pageHeight - 8, { align: 'right' });
-      };
+      // Calculate how many pages we need
+      let remainingHeight = scaledImgHeight;
+      let currentY = 0;
+      let pageNum = 1;
 
-      // Calculate total pages needed
-      const totalPages = Math.ceil(scaledHeight / contentHeight);
+      // First page content
+      const firstPageImgHeight = Math.min(firstPageContentHeight, scaledImgHeight);
+      const firstPageSourceHeight = (firstPageImgHeight / scaledImgHeight) * imgHeight;
 
-      // Add image across multiple pages if needed
-      let yOffset = 0;
-      for (let page = 0; page < totalPages; page++) {
-        if (page > 0) {
-          doc.addPage();
-        }
+      // Create canvas for first page portion
+      const firstCanvas = document.createElement('canvas');
+      firstCanvas.width = imgWidth;
+      firstCanvas.height = firstPageSourceHeight;
+      const firstCtx = firstCanvas.getContext('2d');
+      firstCtx.drawImage(canvas, 0, 0, imgWidth, firstPageSourceHeight, 0, 0, imgWidth, firstPageSourceHeight);
 
-        addHeader();
+      doc.addImage(firstCanvas.toDataURL('image/png'), 'PNG', margin, headerHeight + 2, contentWidth, firstPageImgHeight);
 
-        // Calculate the portion of image to show on this page
-        const sourceY = (page * contentHeight) / ratio * 2; // Convert back to source pixels
-        const sourceHeight = Math.min(contentHeight / ratio * 2, imgHeight - sourceY);
-        const destHeight = sourceHeight * ratio / 2;
+      remainingHeight -= firstPageImgHeight;
+      currentY = firstPageSourceHeight;
 
-        // Create a temporary canvas for this page's portion
-        const tempCanvas = document.createElement('canvas');
-        tempCanvas.width = imgWidth;
-        tempCanvas.height = sourceHeight;
-        const tempCtx = tempCanvas.getContext('2d');
+      // Additional pages if needed
+      while (remainingHeight > 0) {
+        doc.addPage();
+        pageNum++;
 
-        // Draw the portion of the original canvas
-        const originalCanvas = canvas;
-        tempCtx.drawImage(originalCanvas, 0, sourceY, imgWidth, sourceHeight, 0, 0, imgWidth, sourceHeight);
+        const pageImgHeight = Math.min(otherPageContentHeight, remainingHeight);
+        const sourceHeight = (pageImgHeight / scaledImgHeight) * imgHeight;
 
-        const pageImgData = tempCanvas.toDataURL('image/png');
-        doc.addImage(pageImgData, 'PNG', margin, headerHeight + 2, contentWidth, destHeight);
+        const pageCanvas = document.createElement('canvas');
+        pageCanvas.width = imgWidth;
+        pageCanvas.height = sourceHeight;
+        const pageCtx = pageCanvas.getContext('2d');
+        pageCtx.drawImage(canvas, 0, currentY, imgWidth, sourceHeight, 0, 0, imgWidth, sourceHeight);
 
-        yOffset += contentHeight;
+        doc.addImage(pageCanvas.toDataURL('image/png'), 'PNG', margin, 5, contentWidth, pageImgHeight);
+
+        remainingHeight -= pageImgHeight;
+        currentY += sourceHeight;
       }
+
+      // Add CTA on last page
+      const lastPageY = pageNum === 1
+        ? headerHeight + 2 + Math.min(firstPageContentHeight, scaledImgHeight)
+        : 5 + Math.min(otherPageContentHeight, scaledImgHeight + (pageNum - 1) * otherPageContentHeight - (pageNum - 2) * otherPageContentHeight);
+
+      // Check if we need a new page for CTA
+      const ctaNeededSpace = 30;
+      const availableSpace = pageHeight - footerHeight - (pageNum === 1 ? (headerHeight + 2 + Math.min(firstPageContentHeight, scaledImgHeight)) : (5 + (scaledImgHeight - firstPageContentHeight - (pageNum - 2) * otherPageContentHeight)));
+
+      let ctaY;
+      if (availableSpace > ctaNeededSpace) {
+        ctaY = pageHeight - footerHeight - 25;
+      } else {
+        doc.addPage();
+        pageNum++;
+        ctaY = 20;
+      }
+
+      doc.setFillColor(40, 20, 255);
+      doc.roundedRect(margin, ctaY, contentWidth, 20, 2, 2, 'F');
+      doc.setTextColor(255, 255, 255);
+      doc.setFontSize(11);
+      doc.setFont('helvetica', 'bold');
+      doc.text('Ready for a comprehensive analysis?', pageWidth / 2, ctaY + 8, { align: 'center' });
+      doc.setFontSize(9);
+      doc.setFont('helvetica', 'normal');
+      doc.text('Schedule a consultation: calendly.com/charbel-talentgurus', pageWidth / 2, ctaY + 15, { align: 'center' });
 
       // Add footers to all pages
+      const totalPages = doc.internal.getNumberOfPages();
       for (let i = 1; i <= totalPages; i++) {
         doc.setPage(i);
-        addFooter(i, totalPages);
-      }
-
-      // Add CTA on last page if there's space, otherwise add new page
-      doc.setPage(totalPages);
-      const lastPageContentEnd = headerHeight + 2 + Math.min(scaledHeight - (totalPages - 1) * contentHeight, contentHeight);
-
-      if (lastPageContentEnd + 30 < pageHeight - footerHeight) {
-        // Add CTA on same page
-        const ctaY = lastPageContentEnd + 10;
-        doc.setFillColor(40, 20, 255);
-        doc.roundedRect(margin, ctaY, contentWidth, 20, 2, 2, 'F');
-        doc.setTextColor(255, 255, 255);
-        doc.setFontSize(11);
-        doc.setFont('helvetica', 'bold');
-        doc.text('Ready for a comprehensive analysis?', pageWidth / 2, ctaY + 8, { align: 'center' });
-        doc.setFontSize(9);
-        doc.setFont('helvetica', 'normal');
-        doc.text('Schedule a consultation: calendly.com/charbel-talentgurus', pageWidth / 2, ctaY + 15, { align: 'center' });
-      } else {
-        // Add CTA on new page
-        doc.addPage();
-        addHeader();
-        const ctaY = headerHeight + 10;
-        doc.setFillColor(40, 20, 255);
-        doc.roundedRect(margin, ctaY, contentWidth, 20, 2, 2, 'F');
-        doc.setTextColor(255, 255, 255);
-        doc.setFontSize(11);
-        doc.setFont('helvetica', 'bold');
-        doc.text('Ready for a comprehensive analysis?', pageWidth / 2, ctaY + 8, { align: 'center' });
-        doc.setFontSize(9);
-        doc.setFont('helvetica', 'normal');
-        doc.text('Schedule a consultation: calendly.com/charbel-talentgurus', pageWidth / 2, ctaY + 15, { align: 'center' });
-
-        // Update page count and footers
-        const newTotalPages = doc.internal.getNumberOfPages();
-        for (let i = 1; i <= newTotalPages; i++) {
-          doc.setPage(i);
-          addFooter(i, newTotalPages);
-        }
+        doc.setFontSize(8);
+        doc.setTextColor(130, 130, 130);
+        doc.text('TALENT GURUS | talent-gurus.com | AI-assisted analysis for informational purposes only.', pageWidth / 2, pageHeight - 5, { align: 'center' });
+        doc.text(`Page ${i} of ${totalPages}`, pageWidth - margin, pageHeight - 5, { align: 'right' });
       }
 
       // Save
       doc.save(`TG-Analysis-${results.displayTitle.replace(/[^a-zA-Z0-9]/g, '-')}-${new Date().toISOString().split('T')[0]}.pdf`);
 
-      // Reset button state
-      if (exportBtn) {
-        exportBtn.innerHTML = '<svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7,10 12,15 17,10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>Export Report';
-        exportBtn.disabled = false;
-      }
     } catch (err) {
       console.error('PDF export error:', err);
       alert('Unable to export PDF. Please try again or contact support.');
 
-      // Reset button state on error
-      const exportBtn = document.querySelector('[data-export-btn]');
-      if (exportBtn) {
-        exportBtn.innerHTML = '<svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7,10 12,15 17,10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>Export Report';
-        exportBtn.disabled = false;
+      // Make sure buttons are visible on error
+      const buttonsContainer = resultsRef.current?.querySelector('.flex.flex-wrap.gap-3.pt-4');
+      if (buttonsContainer) {
+        buttonsContainer.style.display = '';
       }
     }
   };
