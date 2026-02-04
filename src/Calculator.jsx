@@ -5,6 +5,7 @@ import {
   BENCHMARKS,
   REGIONAL_MULTIPLIERS,
   CATEGORIES,
+  CATEGORY_GROUPS,
   SALARY_DATA_META,
   getPositionsByCategory,
   getAllPositionNames,
@@ -98,6 +99,7 @@ const SearchComplexityCalculator = () => {
   const [error, setError] = useState(null);
   const [warnings, setWarnings] = useState([]);
   const [showLocationSuggestions, setShowLocationSuggestions] = useState(false);
+  const [highlightedLocationIndex, setHighlightedLocationIndex] = useState(-1);
   const [compareMode, setCompareMode] = useState(false);
   const [comparisonResults, setComparisonResults] = useState(null);
   const [showLanguages, setShowLanguages] = useState(false);
@@ -163,7 +165,8 @@ const SearchComplexityCalculator = () => {
   const isCorporateRole = useMemo(() => {
     if (!formData.positionType) return false;
     const benchmark = getBenchmark(formData.positionType);
-    return benchmark?.category === 'Family Office - Corporate';
+    // Check if category starts with "Family Office -" (C-Suite, Investment, Operations, Support)
+    return benchmark?.category?.startsWith('Family Office -');
   }, [formData.positionType]);
 
   // Clear selections when role category changes (budget ranges, certs, languages differ)
@@ -206,6 +209,34 @@ const SearchComplexityCalculator = () => {
     if (!debouncedLocation) return [];
     return LOCATION_SUGGESTIONS.filter(loc => loc.toLowerCase().includes(debouncedLocation.toLowerCase())).slice(0, 5);
   }, [debouncedLocation]);
+
+  // Reset highlighted index when suggestions change
+  useEffect(() => {
+    setHighlightedLocationIndex(-1);
+  }, [filteredLocationSuggestions]);
+
+  // Handle keyboard navigation for location dropdown
+  const handleLocationKeyDown = (e) => {
+    if (!showLocationSuggestions || filteredLocationSuggestions.length === 0) return;
+
+    if (e.key === 'ArrowDown') {
+      e.preventDefault();
+      setHighlightedLocationIndex(prev =>
+        prev < filteredLocationSuggestions.length - 1 ? prev + 1 : prev
+      );
+    } else if (e.key === 'ArrowUp') {
+      e.preventDefault();
+      setHighlightedLocationIndex(prev => prev > 0 ? prev - 1 : prev);
+    } else if (e.key === 'Enter' && highlightedLocationIndex >= 0) {
+      e.preventDefault();
+      setFormData({ ...formData, location: filteredLocationSuggestions[highlightedLocationIndex] });
+      setShowLocationSuggestions(false);
+      setHighlightedLocationIndex(-1);
+    } else if (e.key === 'Escape') {
+      setShowLocationSuggestions(false);
+      setHighlightedLocationIndex(-1);
+    }
+  };
 
   // ============================================
   // VALIDATION WITH RED FLAGS
@@ -917,7 +948,18 @@ Return this exact JSON structure:
                     <select name="positionType" value={formData.positionType} onChange={handleInputChange}
                       className="w-full px-4 py-3 border-2 border-slate-200 rounded-xl focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200">
                       <option value="">Select a position ({commonRoles.length} roles available)</option>
-                      {CATEGORIES.map(category => (
+                      {/* Family Office - Corporate */}
+                      <option disabled className="font-bold bg-slate-100">── FAMILY OFFICE CORPORATE ──</option>
+                      {CATEGORY_GROUPS["Family Office - Corporate"].map(category => (
+                        <optgroup key={category} label={category.replace('Family Office - ', '')}>
+                          {positionsByCategory[category]?.map(pos => (
+                            <option key={pos.name} value={pos.name}>{pos.name}</option>
+                          ))}
+                        </optgroup>
+                      ))}
+                      {/* Private Service */}
+                      <option disabled className="font-bold bg-slate-100">── PRIVATE SERVICE ──</option>
+                      {CATEGORY_GROUPS["Private Service"].map(category => (
                         <optgroup key={category} label={category}>
                           {positionsByCategory[category]?.map(pos => (
                             <option key={pos.name} value={pos.name}>{pos.name}</option>
@@ -940,14 +982,18 @@ Return this exact JSON structure:
                     <div className="relative">
                       <MapPin className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400" />
                       <input type="text" name="location" value={formData.location} onChange={handleInputChange}
-                        onFocus={() => setShowLocationSuggestions(true)} onBlur={() => setTimeout(() => setShowLocationSuggestions(false), 200)}
+                        onFocus={() => setShowLocationSuggestions(true)}
+                        onBlur={() => setTimeout(() => { setShowLocationSuggestions(false); setHighlightedLocationIndex(-1); }, 200)}
+                        onKeyDown={handleLocationKeyDown}
                         className="w-full pl-10 pr-4 py-3 border-2 border-slate-200 rounded-xl" placeholder="e.g., Palm Beach, Monaco" />
                     </div>
                     {showLocationSuggestions && filteredLocationSuggestions.length > 0 && (
                       <div className="absolute z-10 w-full mt-1 bg-white border border-slate-200 rounded-xl shadow-lg overflow-hidden">
                         {filteredLocationSuggestions.map((loc, idx) => (
-                          <button key={idx} type="button" onClick={() => { setFormData({ ...formData, location: loc }); setShowLocationSuggestions(false); }}
-                            className="w-full text-left px-4 py-2 hover:bg-indigo-50 text-sm">
+                          <button key={idx} type="button"
+                            onClick={() => { setFormData({ ...formData, location: loc }); setShowLocationSuggestions(false); setHighlightedLocationIndex(-1); }}
+                            onMouseEnter={() => setHighlightedLocationIndex(idx)}
+                            className={`w-full text-left px-4 py-2 text-sm ${idx === highlightedLocationIndex ? 'bg-indigo-100 text-indigo-900' : 'hover:bg-indigo-50'}`}>
                             {loc} {REGIONAL_ADJUSTMENTS[loc] && <span className="text-slate-500 ml-2">({REGIONAL_ADJUSTMENTS[loc].label})</span>}
                           </button>
                         ))}

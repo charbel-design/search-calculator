@@ -85,19 +85,50 @@ export const PREMIUMS = {
 // ============================================
 // POSITION CATEGORIES
 // ============================================
+// Two main groups: Family Office Corporate and Private Service
+// Each has sub-categories for easier navigation
+
+export const CATEGORY_GROUPS = {
+  "Family Office - Corporate": [
+    "Family Office - C-Suite",
+    "Family Office - Investment",
+    "Family Office - Operations & Finance",
+    "Family Office - Support"
+  ],
+  "Private Service": [
+    "Estate Leadership",
+    "Personal & Administrative",
+    "Formal Service",
+    "Culinary",
+    "Childcare & Education",
+    "Security",
+    "Transportation",
+    "Maritime / Yacht",
+    "Grounds & Outdoor",
+    "Healthcare & Wellness",
+    "Hospitality & Collections"
+  ]
+};
+
+// Flat list for backwards compatibility
 export const CATEGORIES = [
-  "Executive & Management",
+  // Family Office - Corporate
+  "Family Office - C-Suite",
+  "Family Office - Investment",
+  "Family Office - Operations & Finance",
+  "Family Office - Support",
+  // Private Service
+  "Estate Leadership",
   "Personal & Administrative",
-  "Domestic Staff - Senior",
-  "Domestic Staff - Specialized",
+  "Formal Service",
+  "Culinary",
   "Childcare & Education",
   "Security",
-  "Drivers & Transportation",
-  "Grounds & Maintenance",
+  "Transportation",
   "Maritime / Yacht",
+  "Grounds & Outdoor",
   "Healthcare & Wellness",
-  "Hospitality & Events",
-  "Family Office - Corporate"
+  "Hospitality & Collections"
 ];
 
 // ============================================
@@ -105,10 +136,10 @@ export const CATEGORIES = [
 // ============================================
 export const BENCHMARKS = {
   // ==========================================
-  // EXECUTIVE & MANAGEMENT
+  // ESTATE LEADERSHIP (Private Service)
   // ==========================================
   "Chief of Staff": {
-    category: "Executive & Management",
+    category: "Estate Leadership",
     p25: 200000, p50: 237640, p75: 300000,
     benefits: {
       housing: "Rarely included; occasional housing near principal residence",
@@ -121,7 +152,7 @@ export const BENCHMARKS = {
     trends: "Salaries up roughly 15-20% since 2022 with strong demand in family offices above $500M AUM"
   },
   "Family Office Director": {
-    category: "Executive & Management",
+    category: "Family Office - C-Suite",
     p25: 300000, p50: 450000, p75: 650000,
     benefits: {
       housing: "Rarely included; sometimes for international postings",
@@ -134,7 +165,7 @@ export const BENCHMARKS = {
     trends: "Compensation up ~20-25% since 2022 driven by competition with PE and multi-family offices"
   },
   "Family Office Manager": {
-    category: "Executive & Management",
+    category: "Family Office - Operations & Finance",
     p25: 180000, p50: 260000, p75: 380000,
     benefits: {
       housing: "Sometimes included for cross-border or relocation roles",
@@ -147,7 +178,7 @@ export const BENCHMARKS = {
     trends: "Role professionalized post-2020; more formal bonuses and carried interest structures"
   },
   "Estate Manager": {
-    category: "Executive & Management",
+    category: "Estate Leadership",
     p25: 120000, p50: 160000, p75: 220000,
     benefits: {
       housing: "Usually included on or near estate; often $25k-$40k in value",
@@ -160,7 +191,7 @@ export const BENCHMARKS = {
     trends: "Single-property roles pay ~15-25% less than multi-estate positions"
   },
   "Estate Manager (Multi-Property)": {
-    category: "Executive & Management",
+    category: "Estate Leadership",
     p25: 200000, p50: 280000, p75: 400000,
     benefits: {
       housing: "Often included; sometimes in multiple locations, value $30k-$50k+",
@@ -173,7 +204,7 @@ export const BENCHMARKS = {
     trends: "Salaries up ~20-30% since 2022 as portfolios become more global and complex"
   },
   "Household Manager": {
-    category: "Executive & Management",
+    category: "Estate Leadership",
     p25: 85000, p50: 130000, p75: 170000,
     benefits: {
       housing: "Often included; typical value $20k-$35k",
@@ -186,7 +217,7 @@ export const BENCHMARKS = {
     trends: "Role increasingly incorporates HR and vendor management"
   },
   "Property Manager": {
-    category: "Executive & Management",
+    category: "Estate Leadership",
     p25: 65000, p50: 90000, p75: 130000,
     benefits: {
       housing: "Sometimes included, especially on large estates",
@@ -199,7 +230,7 @@ export const BENCHMARKS = {
     trends: "Growing integration with facilities tech and smart-home systems"
   },
   "Director of Residences": {
-    category: "Executive & Management",
+    category: "Estate Leadership",
     p25: 160000, p50: 220000, p75: 310000,
     benefits: {
       housing: "Frequently provided, especially when overseeing multiple high-end homes",
@@ -295,10 +326,10 @@ export const BENCHMARKS = {
   },
 
   // ==========================================
-  // DOMESTIC STAFF - SENIOR
+  // FORMAL SERVICE (Private Service)
   // ==========================================
   "House Manager": {
-    category: "Domestic Staff - Senior",
+    category: "Formal Service",
     p25: 85000, p50: 130000, p75: 170000,
     benefits: {
       housing: "Usually included; often separate apartment, ~$20k-$35k value",
@@ -311,7 +342,7 @@ export const BENCHMARKS = {
     trends: "Role increasingly spans HR, vendor negotiation, and project management"
   },
   "Butler (Formal)": {
-    category: "Domestic Staff - Senior",
+    category: "Formal Service",
     p25: 120000, p50: 160000, p75: 220000,
     benefits: {
       housing: "Typically provided on estate, value $30k-$45k",
@@ -324,7 +355,7 @@ export const BENCHMARKS = {
     trends: "Formal butlers in notably short supply; salaries up about 20-25% since 2022"
   },
   "Butler (American Style)": {
-    category: "Domestic Staff - Senior",
+    category: "Formal Service",
     p25: 85000, p50: 125000, p75: 170000,
     benefits: {
       housing: "Usually provided at estate or nearby",
@@ -337,7 +368,7 @@ export const BENCHMARKS = {
     trends: "Service expectations high but protocol less formal than traditional European butlers"
   },
   "Executive Housekeeper": {
-    category: "Domestic Staff - Senior",
+    category: "Formal Service",
     p25: 75000, p50: 115000, p75: 160000,
     benefits: {
       housing: "Often included for large estates, about $20k-$30k in value",
@@ -350,7 +381,7 @@ export const BENCHMARKS = {
     trends: "Tech (inventory systems, scheduling) increasingly part of job"
   },
   "Head Housekeeper": {
-    category: "Domestic Staff - Senior",
+    category: "Formal Service",
     p25: 65000, p50: 100000, p75: 145000,
     benefits: {
       housing: "Often included for live-in roles",
@@ -363,7 +394,7 @@ export const BENCHMARKS = {
     trends: "Role sometimes merges with Executive Housekeeper for smaller households"
   },
   "Majordomo": {
-    category: "Domestic Staff - Senior",
+    category: "Formal Service",
     p25: 110000, p50: 160000, p75: 230000,
     benefits: {
       housing: "Typically included on estate, often high-end",
@@ -377,10 +408,10 @@ export const BENCHMARKS = {
   },
 
   // ==========================================
-  // DOMESTIC STAFF - SPECIALIZED
+  // CULINARY (Private Service)
   // ==========================================
   "Private Chef": {
-    category: "Domestic Staff - Specialized",
+    category: "Culinary",
     p25: 100000, p50: 150000, p75: 220000,
     benefits: {
       housing: "Often included for live-in; value $25k-$40k",
@@ -393,7 +424,7 @@ export const BENCHMARKS = {
     trends: "Demand and comp up ~15-20% since 2022; specialized diets command premium"
   },
   "Private Chef (Traveling)": {
-    category: "Domestic Staff - Specialized",
+    category: "Culinary",
     p25: 140000, p50: 200000, p75: 310000,
     benefits: {
       housing: "Included across locations, often high-end",
@@ -406,7 +437,7 @@ export const BENCHMARKS = {
     trends: "Travel flexibility is a major bottleneck; few chefs willing to travel constantly"
   },
   "Sous Chef (Private)": {
-    category: "Domestic Staff - Specialized",
+    category: "Culinary",
     p25: 75000, p50: 110000, p75: 155000,
     benefits: {
       housing: "Often included in estate housing",
@@ -419,7 +450,7 @@ export const BENCHMARKS = {
     trends: "Fine-dining backgrounds favored; competition from high-end restaurants"
   },
   "Personal Chef (Part-time)": {
-    category: "Domestic Staff - Specialized",
+    category: "Culinary",
     p25: 50000, p50: 75000, p75: 110000,
     benefits: {
       housing: "Not included",
@@ -432,7 +463,7 @@ export const BENCHMARKS = {
     trends: "Growing with work-from-home and health-conscious UHNW clients"
   },
   "Sommelier (Private)": {
-    category: "Domestic Staff - Specialized",
+    category: "Culinary",
     p25: 85000, p50: 135000, p75: 200000,
     benefits: {
       housing: "Rarely included",
@@ -445,7 +476,7 @@ export const BENCHMARKS = {
     trends: "Increasing interest among collectors with multi-million-dollar cellars"
   },
   "Pastry Chef (Private)": {
-    category: "Domestic Staff - Specialized",
+    category: "Culinary",
     p25: 70000, p50: 105000, p75: 155000,
     benefits: {
       housing: "Often included for live-in roles",
@@ -458,7 +489,7 @@ export const BENCHMARKS = {
     trends: "Demand tied to event-heavy households and high-end entertaining"
   },
   "Laundress / Wardrobe Manager": {
-    category: "Domestic Staff - Specialized",
+    category: "Formal Service",
     p25: 55000, p50: 85000, p75: 130000,
     benefits: {
       housing: "Often provided on or near estate",
@@ -471,7 +502,7 @@ export const BENCHMARKS = {
     trends: "Growing emphasis on archival-quality care for wardrobes"
   },
   "Household Couple": {
-    category: "Domestic Staff - Specialized",
+    category: "Formal Service",
     p25: 130000, p50: 210000, p75: 300000,
     benefits: {
       housing: "Included; typically a cottage or apartment worth $30k-$50k+",
@@ -665,7 +696,7 @@ export const BENCHMARKS = {
   // DRIVERS & TRANSPORTATION
   // ==========================================
   "Personal Driver / Chauffeur": {
-    category: "Drivers & Transportation",
+    category: "Transportation",
     p25: 75000, p50: 110000, p75: 160000,
     benefits: {
       housing: "Not included",
@@ -678,7 +709,7 @@ export const BENCHMARKS = {
     trends: "App-based transport hasn't reduced demand among UHNW; trust and discretion crucial"
   },
   "Long-haul Driver": {
-    category: "Drivers & Transportation",
+    category: "Transportation",
     p25: 70000, p50: 105000, p75: 160000,
     benefits: {
       housing: "Hotels and per diem during trips",
@@ -691,7 +722,7 @@ export const BENCHMARKS = {
     trends: "Used for cross-country re-positioning of vehicles and family logistics"
   },
   "Driver (Car Collector)": {
-    category: "Drivers & Transportation",
+    category: "Transportation",
     p25: 95000, p50: 145000, p75: 210000,
     benefits: {
       housing: "Not typically provided",
@@ -704,7 +735,7 @@ export const BENCHMARKS = {
     trends: "Growth tied to expansion of UHNW car collecting and motorsport hobbies"
   },
   "Aviation Coordinator": {
-    category: "Drivers & Transportation",
+    category: "Transportation",
     p25: 85000, p50: 130000, p75: 190000,
     benefits: {
       housing: "Rare",
@@ -717,7 +748,7 @@ export const BENCHMARKS = {
     trends: "Emerging as dedicated role in households with private jets and frequent travel"
   },
   "Flight Attendant (Private)": {
-    category: "Drivers & Transportation",
+    category: "Transportation",
     p25: 75000, p50: 115000, p75: 170000,
     benefits: {
       housing: "Accommodations and per diem provided on trips",
@@ -734,7 +765,7 @@ export const BENCHMARKS = {
   // GROUNDS & MAINTENANCE
   // ==========================================
   "Grounds Manager": {
-    category: "Grounds & Maintenance",
+    category: "Grounds & Outdoor",
     p25: 70000, p50: 105000, p75: 155000,
     benefits: {
       housing: "Often provided on large estates (~$20k-$30k value)",
@@ -747,7 +778,7 @@ export const BENCHMARKS = {
     trends: "Sustainability and irrigation tech skills becoming more valuable"
   },
   "Head Gardener": {
-    category: "Grounds & Maintenance",
+    category: "Grounds & Outdoor",
     p25: 65000, p50: 100000, p75: 145000,
     benefits: {
       housing: "Often included, especially on rural or resort estates",
@@ -760,7 +791,7 @@ export const BENCHMARKS = {
     trends: "Organic and regenerative landscaping driving new skill requirements"
   },
   "Maintenance Manager": {
-    category: "Grounds & Maintenance",
+    category: "Grounds & Outdoor",
     p25: 60000, p50: 90000, p75: 135000,
     benefits: {
       housing: "Sometimes included on-site",
@@ -773,7 +804,7 @@ export const BENCHMARKS = {
     trends: "Smart-home and building management tech increasingly required"
   },
   "Pool Manager": {
-    category: "Grounds & Maintenance",
+    category: "Grounds & Outdoor",
     p25: 55000, p50: 85000, p75: 130000,
     benefits: {
       housing: "Sometimes included",
@@ -786,7 +817,7 @@ export const BENCHMARKS = {
     trends: "Saltwater, ozone, and wellness-related installations increasing complexity"
   },
   "Facilities Director": {
-    category: "Grounds & Maintenance",
+    category: "Grounds & Outdoor",
     p25: 95000, p50: 140000, p75: 200000,
     benefits: {
       housing: "Rarely provided",
@@ -980,7 +1011,7 @@ export const BENCHMARKS = {
   // HOSPITALITY & EVENTS
   // ==========================================
   "Guest Services Manager": {
-    category: "Hospitality & Events",
+    category: "Hospitality & Collections",
     p25: 70000, p50: 105000, p75: 155000,
     benefits: {
       housing: "Sometimes included in resort estates or guest compounds",
@@ -993,7 +1024,7 @@ export const BENCHMARKS = {
     trends: "Guest services roles increasingly incorporate concierge and event functions"
   },
   "Event Manager (Private)": {
-    category: "Hospitality & Events",
+    category: "Hospitality & Collections",
     p25: 80000, p50: 125000, p75: 185000,
     benefits: {
       housing: "Rare; may have short-term housing for destination events",
@@ -1006,7 +1037,7 @@ export const BENCHMARKS = {
     trends: "High-end private events increasingly complex, with large budgets and global vendors"
   },
   "Catering Manager": {
-    category: "Hospitality & Events",
+    category: "Hospitality & Collections",
     p25: 75000, p50: 115000, p75: 170000,
     benefits: {
       housing: "Not typical",
@@ -1019,7 +1050,7 @@ export const BENCHMARKS = {
     trends: "Sustainability and special-diet awareness increasingly important"
   },
   "Wine Cellar Manager": {
-    category: "Hospitality & Events",
+    category: "Hospitality & Collections",
     p25: 90000, p50: 150000, p75: 230000,
     benefits: {
       housing: "Rarely included",
@@ -1064,9 +1095,9 @@ export const BENCHMARKS = {
     trends: "High demand among new parents; often overlaps with newborn care specialist roles"
   },
 
-  // EXECUTIVE & MANAGEMENT (Additional)
+  // FAMILY OFFICE - INVESTMENT (Additional)
   "Family Office Analyst": {
-    category: "Executive & Management",
+    category: "Family Office - Investment",
     p25: 85000, p50: 130000, p75: 190000,
     benefits: {
       housing: "Not included",
@@ -1079,7 +1110,7 @@ export const BENCHMARKS = {
     trends: "Increasing demand as family offices professionalize investment operations"
   },
   "Villa Manager": {
-    category: "Executive & Management",
+    category: "Estate Leadership",
     p25: 70000, p50: 105000, p75: 155000,
     benefits: {
       housing: "Usually included on property",
@@ -1092,7 +1123,7 @@ export const BENCHMARKS = {
     trends: "Growing with expansion of UHNW vacation property portfolios"
   },
   "Caretaker": {
-    category: "Executive & Management",
+    category: "Estate Leadership",
     p25: 50000, p50: 75000, p75: 115000,
     benefits: {
       housing: "Almost always included on property",
@@ -1133,9 +1164,9 @@ export const BENCHMARKS = {
     trends: "Increasing tech sophistication required; often part of larger EA role"
   },
 
-  // DOMESTIC STAFF - SPECIALIZED (Additional)
+  // FORMAL SERVICE (Additional)
   "Housekeeper": {
-    category: "Domestic Staff - Specialized",
+    category: "Formal Service",
     p25: 45000, p50: 65000, p75: 95000,
     benefits: {
       housing: "Often included for live-in",
@@ -1148,7 +1179,7 @@ export const BENCHMARKS = {
     trends: "Increasing demand for specialized skills (fine fabrics, art-safe cleaning)"
   },
   "Florist (Private)": {
-    category: "Domestic Staff - Specialized",
+    category: "Formal Service",
     p25: 55000, p50: 85000, p75: 130000,
     benefits: {
       housing: "Sometimes included",
@@ -1161,7 +1192,7 @@ export const BENCHMARKS = {
     trends: "Growing role in estates with extensive gardens and frequent entertaining"
   },
   "Valet": {
-    category: "Domestic Staff - Specialized",
+    category: "Formal Service",
     p25: 55000, p50: 85000, p75: 130000,
     benefits: {
       housing: "Usually included",
@@ -1174,7 +1205,7 @@ export const BENCHMARKS = {
     trends: "Revival of traditional valet service among UHNW principals"
   },
   "Cook": {
-    category: "Domestic Staff - Specialized",
+    category: "Culinary",
     p25: 55000, p50: 80000, p75: 120000,
     benefits: {
       housing: "Often included for live-in",
@@ -1189,7 +1220,7 @@ export const BENCHMARKS = {
 
   // GROUNDS & MAINTENANCE (Additional)
   "Landscaper": {
-    category: "Grounds & Maintenance",
+    category: "Grounds & Outdoor",
     p25: 45000, p50: 70000, p75: 105000,
     benefits: {
       housing: "Sometimes included on large estates",
@@ -1202,7 +1233,7 @@ export const BENCHMARKS = {
     trends: "Sustainability and native plantings increasing in importance"
   },
   "Dock Master": {
-    category: "Grounds & Maintenance",
+    category: "Grounds & Outdoor",
     p25: 55000, p50: 85000, p75: 130000,
     benefits: {
       housing: "Often included near waterfront",
@@ -1286,7 +1317,7 @@ export const BENCHMARKS = {
 
   // DRIVERS & TRANSPORTATION (Additional)
   "Pilot (Private)": {
-    category: "Drivers & Transportation",
+    category: "Transportation",
     p25: 120000, p50: 185000, p75: 280000,
     benefits: {
       housing: "Per diem during travel; sometimes housing near home base",
@@ -1342,7 +1373,7 @@ export const BENCHMARKS = {
 
   // HOSPITALITY & EVENTS (Additional)
   "Collections Manager": {
-    category: "Hospitality & Events",
+    category: "Hospitality & Collections",
     p25: 85000, p50: 135000, p75: 205000,
     benefits: {
       housing: "Rarely included",
@@ -1355,7 +1386,7 @@ export const BENCHMARKS = {
     trends: "Growing as UHNW families professionalize management of diverse collections"
   },
   "Art Collection Manager": {
-    category: "Hospitality & Events",
+    category: "Hospitality & Collections",
     p25: 95000, p50: 155000, p75: 240000,
     benefits: {
       housing: "Rarely included",
@@ -1368,7 +1399,7 @@ export const BENCHMARKS = {
     trends: "More collectors seeking in-house expertise for portfolio management and acquisitions"
   },
   "Gallery Manager (Private)": {
-    category: "Hospitality & Events",
+    category: "Hospitality & Collections",
     p25: 75000, p50: 120000, p75: 180000,
     benefits: {
       housing: "Rarely included",
@@ -1383,7 +1414,7 @@ export const BENCHMARKS = {
 
   // GROUNDS & MAINTENANCE (Additional)
   "Equestrian Manager": {
-    category: "Grounds & Maintenance",
+    category: "Grounds & Outdoor",
     p25: 65000, p50: 100000, p75: 155000,
     benefits: {
       housing: "Usually included on property",
@@ -1397,11 +1428,11 @@ export const BENCHMARKS = {
   },
 
   // ==========================================
-  // FAMILY OFFICE - CORPORATE (18 positions)
+  // FAMILY OFFICE - C-SUITE
   // Salaries based on $300M-$1B AUM (typical UHNW)
   // ==========================================
   "CEO (Family Office)": {
-    category: "Family Office - Corporate",
+    category: "Family Office - C-Suite",
     p25: 400000, p50: 550000, p75: 700000,
     benefits: {
       housing: "Not typically included; relocation assistance common",
@@ -1414,7 +1445,7 @@ export const BENCHMARKS = {
     trends: "Compensation up 4-10% in 2024-2025; competition from multi-family offices intensifying"
   },
   "COO (Family Office)": {
-    category: "Family Office - Corporate",
+    category: "Family Office - C-Suite",
     p25: 300000, p50: 400000, p75: 550000,
     benefits: {
       housing: "Not typically included",
@@ -1427,7 +1458,7 @@ export const BENCHMARKS = {
     trends: "Role gaining prominence as family offices professionalize operations"
   },
   "CIO (Family Office)": {
-    category: "Family Office - Corporate",
+    category: "Family Office - C-Suite",
     p25: 400000, p50: 550000, p75: 750000,
     benefits: {
       housing: "Not typically included",
@@ -1440,7 +1471,7 @@ export const BENCHMARKS = {
     trends: "Highest-paid role in most family offices; co-investment rights increasingly common"
   },
   "CFO (Family Office)": {
-    category: "Family Office - Corporate",
+    category: "Family Office - C-Suite",
     p25: 250000, p50: 330000, p75: 450000,
     benefits: {
       housing: "Not typically included",
@@ -1453,7 +1484,7 @@ export const BENCHMARKS = {
     trends: "Increasingly responsible for tax strategy and multi-entity consolidation"
   },
   "General Counsel (Family Office)": {
-    category: "Family Office - Corporate",
+    category: "Family Office - C-Suite",
     p25: 300000, p50: 400000, p75: 550000,
     benefits: {
       housing: "Not typically included",
@@ -1466,7 +1497,7 @@ export const BENCHMARKS = {
     trends: "Growing demand for in-house counsel as regulatory complexity increases"
   },
   "Director of Tax": {
-    category: "Family Office - Corporate",
+    category: "Family Office - Operations & Finance",
     p25: 250000, p50: 350000, p75: 500000,
     benefits: {
       housing: "Not typically included",
@@ -1479,7 +1510,7 @@ export const BENCHMARKS = {
     trends: "Critical role with changing tax landscape; demand exceeds supply"
   },
   "Director of Philanthropy": {
-    category: "Family Office - Corporate",
+    category: "Family Office - Support",
     p25: 150000, p50: 250000, p75: 400000,
     benefits: {
       housing: "Not typically included",
@@ -1492,7 +1523,7 @@ export const BENCHMARKS = {
     trends: "Growing emphasis on impact measurement and next-gen engagement"
   },
   "Chief Information Officer (Family Office)": {
-    category: "Family Office - Corporate",
+    category: "Family Office - Operations & Finance",
     p25: 200000, p50: 300000, p75: 450000,
     benefits: {
       housing: "Not typically included",
@@ -1505,7 +1536,7 @@ export const BENCHMARKS = {
     trends: "Cybersecurity and data privacy increasingly critical; cloud migration driving demand"
   },
   "Chief Compliance Officer (Family Office)": {
-    category: "Family Office - Corporate",
+    category: "Family Office - Operations & Finance",
     p25: 200000, p50: 300000, p75: 450000,
     benefits: {
       housing: "Not typically included",
@@ -1518,7 +1549,7 @@ export const BENCHMARKS = {
     trends: "Regulatory scrutiny of family offices increasing; demand growing rapidly"
   },
   "Senior Portfolio Manager": {
-    category: "Family Office - Corporate",
+    category: "Family Office - Investment",
     p25: 250000, p50: 375000, p75: 550000,
     benefits: {
       housing: "Not typically included",
@@ -1531,7 +1562,7 @@ export const BENCHMARKS = {
     trends: "Direct investment expertise highly valued; competition from PE/hedge funds"
   },
   "Portfolio Manager (Family Office)": {
-    category: "Family Office - Corporate",
+    category: "Family Office - Investment",
     p25: 200000, p50: 300000, p75: 425000,
     benefits: {
       housing: "Not typically included",
@@ -1544,7 +1575,7 @@ export const BENCHMARKS = {
     trends: "Growing allocation to alternatives increases demand for specialized PMs"
   },
   "Senior Investment Analyst": {
-    category: "Family Office - Corporate",
+    category: "Family Office - Investment",
     p25: 125000, p50: 180000, p75: 250000,
     benefits: {
       housing: "Not typically included",
@@ -1557,7 +1588,7 @@ export const BENCHMARKS = {
     trends: "Direct deal sourcing skills increasingly important"
   },
   "Investment Analyst (Family Office)": {
-    category: "Family Office - Corporate",
+    category: "Family Office - Investment",
     p25: 75000, p50: 95000, p75: 125000,
     benefits: {
       housing: "Not typically included",
@@ -1570,7 +1601,7 @@ export const BENCHMARKS = {
     trends: "Entry point to family office investment careers; strong candidate pipeline"
   },
   "Controller (Family Office)": {
-    category: "Family Office - Corporate",
+    category: "Family Office - Operations & Finance",
     p25: 200000, p50: 260000, p75: 350000,
     benefits: {
       housing: "Not typically included",
@@ -1583,7 +1614,7 @@ export const BENCHMARKS = {
     trends: "Multi-entity consolidation and alternative investment accounting driving complexity"
   },
   "Operations Manager (Family Office)": {
-    category: "Family Office - Corporate",
+    category: "Family Office - Operations & Finance",
     p25: 130000, p50: 180000, p75: 250000,
     benefits: {
       housing: "Not typically included",
@@ -1596,7 +1627,7 @@ export const BENCHMARKS = {
     trends: "Technology implementation and vendor management increasingly important"
   },
   "Risk & Compliance Manager": {
-    category: "Family Office - Corporate",
+    category: "Family Office - Operations & Finance",
     p25: 70000, p50: 95000, p75: 116500,
     benefits: {
       housing: "Not typically included",
@@ -1609,7 +1640,7 @@ export const BENCHMARKS = {
     trends: "Growing role as family offices face increased regulatory scrutiny"
   },
   "HR Director (Family Office)": {
-    category: "Family Office - Corporate",
+    category: "Family Office - Support",
     p25: 130000, p50: 170000, p75: 230000,
     benefits: {
       housing: "Not typically included",
@@ -1622,7 +1653,7 @@ export const BENCHMARKS = {
     trends: "Talent retention and culture building critical as competition for FO talent intensifies"
   },
   "Executive Assistant to CEO (Family Office)": {
-    category: "Family Office - Corporate",
+    category: "Family Office - Support",
     p25: 110000, p50: 160000, p75: 220000,
     benefits: {
       housing: "Not typically included",
