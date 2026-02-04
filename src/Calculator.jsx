@@ -616,214 +616,202 @@ Return this exact JSON structure:
   const exportToPDF = () => {
     try {
       const doc = new jsPDF();
-    const pageWidth = doc.internal.pageSize.getWidth();
-    const margin = 20;
-    const contentWidth = pageWidth - (margin * 2);
-    let y = 20;
+      const pageWidth = doc.internal.pageSize.getWidth();
+      const margin = 20;
+      const contentWidth = pageWidth - (margin * 2);
+      let y = 20;
 
-    // Helper function to add wrapped text
-    const addWrappedText = (text, x, startY, maxWidth, lineHeight = 6) => {
-      const lines = doc.splitTextToSize(text, maxWidth);
-      lines.forEach((line, i) => {
-        if (startY + (i * lineHeight) > 270) {
+      // Helper function to check and add page break
+      const checkPageBreak = (neededSpace = 20) => {
+        if (y + neededSpace > 270) {
           doc.addPage();
-          startY = 20;
           y = 20;
         }
-        doc.text(line, x, startY + (i * lineHeight));
-      });
-      return startY + (lines.length * lineHeight);
-    };
+      };
 
-    // Header
-    doc.setFillColor(40, 20, 255); // #2814ff
-    doc.rect(0, 0, pageWidth, 35, 'F');
-    doc.setTextColor(255, 255, 255);
-    doc.setFontSize(20);
-    doc.setFont('helvetica', 'bold');
-    doc.text('TALENT GURUS', pageWidth / 2, 15, { align: 'center' });
-    doc.setFontSize(12);
-    doc.setFont('helvetica', 'normal');
-    doc.text('Search Complexity Analysis', pageWidth / 2, 25, { align: 'center' });
+      // Helper function to add wrapped text with proper page handling
+      const addWrappedText = (text, x, maxWidth, lineHeight = 5) => {
+        if (!text) return;
+        const lines = doc.splitTextToSize(String(text), maxWidth);
+        lines.forEach((line) => {
+          checkPageBreak(lineHeight);
+          doc.text(line, x, y);
+          y += lineHeight;
+        });
+      };
 
-    // Reset text color
-    doc.setTextColor(0, 0, 0);
-    y = 50;
-
-    // Position and Score
-    doc.setFontSize(14);
-    doc.setFont('helvetica', 'bold');
-    doc.text(results.displayTitle, margin, y);
-    y += 8;
-    doc.setFontSize(10);
-    doc.setFont('helvetica', 'normal');
-    doc.setTextColor(100, 100, 100);
-    doc.text(`Location: ${results.formData.location} | Generated: ${new Date().toLocaleDateString()}`, margin, y);
-    y += 12;
-
-    // Score Box
-    const scoreColor = results.score <= 3 ? [27, 94, 32] : results.score <= 5 ? [230, 81, 0] : results.score <= 7 ? [191, 54, 12] : [183, 28, 28];
-    doc.setFillColor(...scoreColor);
-    doc.roundedRect(margin, y, 50, 25, 3, 3, 'F');
-    doc.setTextColor(255, 255, 255);
-    doc.setFontSize(18);
-    doc.setFont('helvetica', 'bold');
-    doc.text(`${results.score}/10`, margin + 25, y + 12, { align: 'center' });
-    doc.setFontSize(9);
-    doc.text(results.label, margin + 25, y + 20, { align: 'center' });
-
-    doc.setTextColor(0, 0, 0);
-    doc.setFontSize(10);
-    doc.setFont('helvetica', 'normal');
-    y = addWrappedText(results.bottomLine || '', margin + 58, y + 5, contentWidth - 60);
-    y += 10;
-
-    // Section: Key Metrics
-    doc.setFillColor(240, 240, 250);
-    doc.rect(margin, y, contentWidth, 8, 'F');
-    doc.setFont('helvetica', 'bold');
-    doc.setFontSize(11);
-    doc.setTextColor(40, 20, 255);
-    doc.text('KEY METRICS', margin + 3, y + 6);
-    y += 14;
-
-    doc.setTextColor(0, 0, 0);
-    doc.setFontSize(9);
-    doc.setFont('helvetica', 'bold');
-    doc.text('Salary:', margin, y);
-    doc.setFont('helvetica', 'normal');
-    y = addWrappedText(results.salaryRangeGuidance || 'N/A', margin + 25, y, contentWidth - 25, 5);
-    y += 3;
-
-    doc.setFont('helvetica', 'bold');
-    doc.text('Timeline:', margin, y);
-    doc.setFont('helvetica', 'normal');
-    y = addWrappedText(results.estimatedTimeline || 'N/A', margin + 25, y, contentWidth - 25, 5);
-    y += 3;
-
-    doc.setFont('helvetica', 'bold');
-    doc.text('Market:', margin, y);
-    doc.setFont('helvetica', 'normal');
-    y = addWrappedText(results.marketCompetitiveness || 'N/A', margin + 25, y, contentWidth - 25, 5);
-    y += 3;
-
-    doc.setFont('helvetica', 'bold');
-    doc.text('Availability:', margin, y);
-    doc.setFont('helvetica', 'normal');
-    y = addWrappedText(`${results.candidateAvailability || 'N/A'} - ${results.availabilityReason || ''}`, margin + 25, y, contentWidth - 25, 5);
-    y += 10;
-
-    // Section: Benchmarks
-    if (results.benchmark) {
-      doc.setFillColor(240, 240, 250);
-      doc.rect(margin, y, contentWidth, 8, 'F');
+      // Header - Brand purple
+      doc.setFillColor(40, 20, 255);
+      doc.rect(0, 0, pageWidth, 35, 'F');
+      doc.setTextColor(255, 255, 255);
+      doc.setFontSize(20);
       doc.setFont('helvetica', 'bold');
-      doc.setFontSize(11);
-      doc.setTextColor(40, 20, 255);
-      const benchTitle = results.regionalMultiplier && results.regionalMultiplier !== 1
-        ? `SALARY BENCHMARKS (${results.regionalMultiplier}x regional adjustment)`
-        : 'SALARY BENCHMARKS';
-      doc.text(benchTitle, margin + 3, y + 6);
-      y += 14;
+      doc.text('TALENT GURUS', pageWidth / 2, 15, { align: 'center' });
+      doc.setFontSize(12);
+      doc.setFont('helvetica', 'normal');
+      doc.text('Search Complexity Analysis', pageWidth / 2, 27, { align: 'center' });
 
+      y = 45;
+
+      // Position title and metadata
       doc.setTextColor(0, 0, 0);
-      doc.setFontSize(9);
-      const p25 = results.adjustedBenchmark?.p25 || results.benchmark.p25;
-      const p50 = results.adjustedBenchmark?.p50 || results.benchmark.p50;
-      const p75 = results.adjustedBenchmark?.p75 || results.benchmark.p75;
-
-      doc.text(`25th Percentile: $${p25.toLocaleString()}   |   Median: $${p50.toLocaleString()}   |   75th Percentile: $${p75.toLocaleString()}`, margin, y);
-      y += 8;
-
-      doc.setFont('helvetica', 'normal');
-      doc.text(`Housing: ${results.benchmark.benefits.housing}`, margin, y);
-      y += 5;
-      doc.text(`Vehicle: ${results.benchmark.benefits.vehicle}`, margin, y);
-      y += 5;
-      doc.text(`Health: ${results.benchmark.benefits.health}`, margin, y);
-      y += 5;
-      doc.text(`Bonus: ${results.benchmark.benefits.bonus}`, margin, y);
-      y += 10;
-    }
-
-    // Section: Complexity Drivers
-    if (y > 200) { doc.addPage(); y = 20; }
-    doc.setFillColor(240, 240, 250);
-    doc.rect(margin, y, contentWidth, 8, 'F');
-    doc.setFont('helvetica', 'bold');
-    doc.setFontSize(11);
-    doc.setTextColor(40, 20, 255);
-    doc.text(`COMPLEXITY DRIVERS (${results.points} points)`, margin + 3, y + 6);
-    y += 14;
-
-    doc.setTextColor(0, 0, 0);
-    doc.setFontSize(9);
-    results.drivers?.forEach(d => {
-      if (y > 270) { doc.addPage(); y = 20; }
+      doc.setFontSize(16);
       doc.setFont('helvetica', 'bold');
-      doc.text(`+${d.points}`, margin, y);
+      doc.text(results.displayTitle, margin, y);
+      y += 7;
+      doc.setFontSize(10);
       doc.setFont('helvetica', 'normal');
-      doc.text(`${d.factor}: ${d.rationale}`, margin + 12, y);
-      y += 6;
-    });
-    y += 5;
+      doc.setTextColor(100, 100, 100);
+      doc.text(`Location: ${results.formData.location} | Generated: ${new Date().toLocaleDateString()}`, margin, y);
+      y += 12;
 
-    // Section: Success Factors
-    if (results.keySuccessFactors?.length > 0) {
-      if (y > 230) { doc.addPage(); y = 20; }
-      doc.setFillColor(240, 240, 250);
-      doc.rect(margin, y, contentWidth, 8, 'F');
+      // Score Box - use brand purple instead of traffic light colors
+      doc.setFillColor(40, 20, 255);
+      doc.roundedRect(margin, y, 45, 22, 2, 2, 'F');
+      doc.setTextColor(255, 255, 255);
+      doc.setFontSize(16);
       doc.setFont('helvetica', 'bold');
-      doc.setFontSize(11);
-      doc.setTextColor(40, 20, 255);
-      doc.text('KEY SUCCESS FACTORS', margin + 3, y + 6);
-      y += 14;
-
-      doc.setTextColor(0, 0, 0);
-      doc.setFontSize(9);
-      doc.setFont('helvetica', 'normal');
-      results.keySuccessFactors.forEach(f => {
-        if (y > 270) { doc.addPage(); y = 20; }
-        y = addWrappedText(`• ${f}`, margin, y, contentWidth, 5);
-        y += 2;
-      });
-      y += 5;
-    }
-
-    // Section: Recommendations
-    if (results.recommendedAdjustments?.length > 0) {
-      if (y > 230) { doc.addPage(); y = 20; }
-      doc.setFillColor(240, 240, 250);
-      doc.rect(margin, y, contentWidth, 8, 'F');
-      doc.setFont('helvetica', 'bold');
-      doc.setFontSize(11);
-      doc.setTextColor(40, 20, 255);
-      doc.text('RECOMMENDATIONS', margin + 3, y + 6);
-      y += 14;
-
-      doc.setTextColor(0, 0, 0);
-      doc.setFontSize(9);
-      doc.setFont('helvetica', 'normal');
-      results.recommendedAdjustments.forEach(r => {
-        if (y > 270) { doc.addPage(); y = 20; }
-        y = addWrappedText(`→ ${r}`, margin, y, contentWidth, 5);
-        y += 2;
-      });
-      y += 5;
-    }
-
-    // Footer
-    const pageCount = doc.internal.getNumberOfPages();
-    for (let i = 1; i <= pageCount; i++) {
-      doc.setPage(i);
+      doc.text(`${results.score}/10`, margin + 22.5, y + 10, { align: 'center' });
       doc.setFontSize(8);
-      doc.setTextColor(150, 150, 150);
-      doc.text('TALENT GURUS | talent-gurus.com | This analysis provides general market guidance.', pageWidth / 2, 285, { align: 'center' });
-      doc.text(`Page ${i} of ${pageCount}`, pageWidth - margin, 285, { align: 'right' });
-    }
+      doc.text(results.label, margin + 22.5, y + 17, { align: 'center' });
 
-    // Save
-    doc.save(`Search-Analysis-${results.displayTitle.replace(/\s+/g, '-')}-${new Date().toISOString().split('T')[0]}.pdf`);
+      // Bottom line next to score
+      doc.setTextColor(0, 0, 0);
+      doc.setFontSize(9);
+      doc.setFont('helvetica', 'normal');
+      const bottomLineLines = doc.splitTextToSize(results.bottomLine || '', contentWidth - 55);
+      let blY = y + 3;
+      bottomLineLines.slice(0, 4).forEach((line) => {
+        doc.text(line, margin + 52, blY);
+        blY += 5;
+      });
+      y += 30;
+
+      // Section helper
+      const addSection = (title) => {
+        checkPageBreak(25);
+        doc.setFillColor(240, 240, 250);
+        doc.rect(margin, y, contentWidth, 7, 'F');
+        doc.setFont('helvetica', 'bold');
+        doc.setFontSize(10);
+        doc.setTextColor(40, 20, 255);
+        doc.text(title, margin + 2, y + 5);
+        y += 12;
+        doc.setTextColor(0, 0, 0);
+        doc.setFontSize(9);
+      };
+
+      // Key Metrics Section
+      addSection('KEY METRICS');
+
+      const metrics = [
+        ['Salary', results.salaryRangeGuidance],
+        ['Timeline', results.estimatedTimeline],
+        ['Market', results.marketCompetitiveness],
+        ['Availability', `${results.candidateAvailability} — ${results.availabilityReason}`]
+      ];
+
+      metrics.forEach(([label, value]) => {
+        checkPageBreak(15);
+        doc.setFont('helvetica', 'bold');
+        doc.text(`${label}:`, margin, y);
+        y += 5;
+        doc.setFont('helvetica', 'normal');
+        addWrappedText(value, margin, contentWidth, 4.5);
+        y += 3;
+      });
+
+      // Benchmarks Section
+      if (results.benchmark) {
+        y += 5;
+        const benchTitle = results.regionalMultiplier && results.regionalMultiplier !== 1
+          ? `SALARY BENCHMARKS (${results.regionalMultiplier}x regional adjustment)`
+          : 'SALARY BENCHMARKS';
+        addSection(benchTitle);
+
+        const p25 = results.adjustedBenchmark?.p25 || results.benchmark.p25;
+        const p50 = results.adjustedBenchmark?.p50 || results.benchmark.p50;
+        const p75 = results.adjustedBenchmark?.p75 || results.benchmark.p75;
+
+        doc.setFont('helvetica', 'bold');
+        doc.text(`25th: $${p25.toLocaleString()}    Median: $${p50.toLocaleString()}    75th: $${p75.toLocaleString()}`, margin, y);
+        y += 7;
+
+        doc.setFont('helvetica', 'normal');
+        doc.text(`Housing: ${results.benchmark.benefits.housing} | Vehicle: ${results.benchmark.benefits.vehicle}`, margin, y);
+        y += 5;
+        doc.text(`Health: ${results.benchmark.benefits.health} | Bonus: ${results.benchmark.benefits.bonus}`, margin, y);
+        y += 8;
+      }
+
+      // Complexity Drivers Section
+      addSection(`COMPLEXITY DRIVERS (${results.points} points)`);
+
+      results.drivers?.forEach(d => {
+        checkPageBreak(7);
+        doc.setFont('helvetica', 'bold');
+        doc.text(`+${d.points}`, margin, y);
+        doc.setFont('helvetica', 'normal');
+        const driverText = `${d.factor}: ${d.rationale}`;
+        const truncated = driverText.length > 80 ? driverText.substring(0, 77) + '...' : driverText;
+        doc.text(truncated, margin + 12, y);
+        y += 6;
+      });
+
+      // Success Factors Section
+      if (results.keySuccessFactors?.length > 0) {
+        y += 3;
+        addSection('KEY SUCCESS FACTORS');
+        results.keySuccessFactors.forEach(f => {
+          checkPageBreak(12);
+          addWrappedText(`• ${f}`, margin, contentWidth, 4.5);
+          y += 2;
+        });
+      }
+
+      // Recommendations Section
+      if (results.recommendedAdjustments?.length > 0) {
+        y += 3;
+        addSection('RECOMMENDATIONS');
+        results.recommendedAdjustments.forEach(r => {
+          checkPageBreak(12);
+          addWrappedText(`→ ${r}`, margin, contentWidth, 4.5);
+          y += 2;
+        });
+      }
+
+      // Sourcing Insight Section
+      if (results.sourcingInsight && results.aiAnalysisSuccess) {
+        y += 3;
+        addSection('WHERE TO FIND CANDIDATES');
+        addWrappedText(results.sourcingInsight, margin, contentWidth, 4.5);
+      }
+
+      // CTA Section
+      checkPageBreak(25);
+      y += 5;
+      doc.setFillColor(40, 20, 255);
+      doc.roundedRect(margin, y, contentWidth, 20, 2, 2, 'F');
+      doc.setTextColor(255, 255, 255);
+      doc.setFontSize(11);
+      doc.setFont('helvetica', 'bold');
+      doc.text('Ready for a comprehensive analysis?', pageWidth / 2, y + 8, { align: 'center' });
+      doc.setFontSize(9);
+      doc.setFont('helvetica', 'normal');
+      doc.text('Schedule a consultation: calendly.com/charbel-talentgurus', pageWidth / 2, y + 15, { align: 'center' });
+
+      // Footer on all pages
+      const pageCount = doc.internal.getNumberOfPages();
+      for (let i = 1; i <= pageCount; i++) {
+        doc.setPage(i);
+        doc.setFontSize(8);
+        doc.setTextColor(130, 130, 130);
+        doc.text('TALENT GURUS | talent-gurus.com | This analysis provides general market guidance.', pageWidth / 2, 287, { align: 'center' });
+        doc.text(`Page ${i} of ${pageCount}`, pageWidth - margin, 287, { align: 'right' });
+      }
+
+      // Save
+      doc.save(`TG-Analysis-${results.displayTitle.replace(/[^a-zA-Z0-9]/g, '-')}-${new Date().toISOString().split('T')[0]}.pdf`);
     } catch (err) {
       console.error('PDF export error:', err);
       alert('Unable to export PDF. Please try again or contact support.');
@@ -1369,8 +1357,10 @@ Return this exact JSON structure:
                       <h5 className="font-medium mb-2 text-red-800 text-sm">If Budget: {comparisonResults.prevLabel}</h5>
                       <div className="text-2xl font-bold text-red-700">{comparisonResults.withDecrease.score}/10</div>
                       <p className="text-xs text-red-600">{comparisonResults.withDecrease.label}</p>
-                      {comparisonResults.withDecrease.score > comparisonResults.current.score && (
+                      {comparisonResults.withDecrease.score > comparisonResults.current.score ? (
                         <p className="text-xs font-medium text-red-800 mt-2">+{comparisonResults.withDecrease.score - comparisonResults.current.score} points harder</p>
+                      ) : comparisonResults.withDecrease.score === comparisonResults.current.score && (
+                        <p className="text-xs text-red-700 mt-2">Already below market — timeline and location drive score</p>
                       )}
                     </div>
                   ) : (
@@ -1393,8 +1383,10 @@ Return this exact JSON structure:
                       <h5 className="font-medium mb-2 text-green-800 text-sm">If Budget: {comparisonResults.nextLabel}</h5>
                       <div className="text-2xl font-bold text-green-700">{comparisonResults.withIncrease.score}/10</div>
                       <p className="text-xs text-green-600">{comparisonResults.withIncrease.label}</p>
-                      {comparisonResults.current.score > comparisonResults.withIncrease.score && (
+                      {comparisonResults.current.score > comparisonResults.withIncrease.score ? (
                         <p className="text-xs font-medium text-green-800 mt-2">✓ {comparisonResults.current.score - comparisonResults.withIncrease.score} points easier</p>
+                      ) : comparisonResults.current.score === comparisonResults.withIncrease.score && (
+                        <p className="text-xs text-green-700 mt-2">Budget already competitive — other factors drive complexity</p>
                       )}
                     </div>
                   ) : (
@@ -1404,7 +1396,11 @@ Return this exact JSON structure:
                     </div>
                   )}
                 </div>
-                <p className="text-xs text-slate-500 mt-4 text-center">See how budget changes affect your search complexity score</p>
+                <p className="text-xs text-slate-500 mt-4 text-center">
+                  {comparisonResults.withIncrease && comparisonResults.current.score === comparisonResults.withIncrease.score
+                    ? "💡 Once budget is competitive, complexity is driven by timeline, location, role scarcity, and special requirements"
+                    : "See how budget changes affect your search complexity score"}
+                </p>
               </div>
             )}
 
