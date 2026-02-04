@@ -281,21 +281,34 @@ const SearchComplexityCalculator = () => {
     const benchmark = BENCHMARKS[formData.positionType];
     let budgetPoints = 14;
 
+    let budgetRationale = "Unknown";
     if (benchmark && budgetOption?.midpoint) {
       const multiplier = regionalData?.multiplier || 1;
       const adjP25 = benchmark.p25 * multiplier;
       const adjP50 = benchmark.p50 * multiplier;
       const adjP75 = benchmark.p75 * multiplier;
 
-      if (budgetOption.midpoint >= adjP75) budgetPoints = 4;
-      else if (budgetOption.midpoint >= adjP50) budgetPoints = 10;
-      else if (budgetOption.midpoint >= adjP25) budgetPoints = 18;
-      else { budgetPoints = 25; redFlags.push("Budget below market"); }
-      
-      assumptions.push(`Regional adjustment: ${regionalData?.label || 'Standard'}`);
+      if (budgetOption.midpoint >= adjP75) {
+        budgetPoints = 4;
+        budgetRationale = "Above 75th percentile - highly competitive";
+      } else if (budgetOption.midpoint >= adjP50) {
+        budgetPoints = 10;
+        budgetRationale = "At or above median - competitive";
+      } else if (budgetOption.midpoint >= adjP25) {
+        budgetPoints = 18;
+        budgetRationale = "Below median (25th-50th percentile)";
+      } else {
+        budgetPoints = 25;
+        budgetRationale = "Below 25th percentile - limits candidate pool";
+        redFlags.push("Budget below market");
+      }
+
+      assumptions.push(`Regional adjustment: ${regionalData?.label || 'Standard'} (${multiplier}x)`);
+    } else if (formData.budgetRange === 'not-sure') {
+      budgetRationale = "Budget TBD - needs guidance";
     }
     points += budgetPoints;
-    drivers.push({ factor: "Budget", points: budgetPoints, rationale: budgetPoints <= 10 ? "Competitive" : budgetPoints <= 18 ? "At market" : "Below market" });
+    drivers.push({ factor: "Budget", points: budgetPoints, rationale: budgetRationale });
 
     // Languages (compound)
     const langCount = formData.languageRequirements.length;
@@ -387,25 +400,45 @@ const SearchComplexityCalculator = () => {
     const displayTitle = formData.positionType === 'Other' ? formData.customPositionTitle : formData.positionType;
     const benchmark = det.benchmark;
 
+    // Get the timeline and budget labels for clearer AI context
+    const timelineOption = timelineOptions.find(t => t.value === formData.timeline);
+    const budgetOption = budgetRanges.find(b => b.value === formData.budgetRange);
+
+    // Calculate regionally-adjusted salary figures
+    const regionalMultiplier = det.regionalData?.multiplier || 1;
+    const adjustedBenchmark = benchmark ? {
+      p25: Math.round(benchmark.p25 * regionalMultiplier),
+      p50: Math.round(benchmark.p50 * regionalMultiplier),
+      p75: Math.round(benchmark.p75 * regionalMultiplier)
+    } : null;
+
     try {
       const prompt = `Analyze this UHNW household search and return JSON only.
 
 Position: ${displayTitle}
-Location: ${formData.location}${det.regionalData ? ` (${det.regionalData.label})` : ''}
-Timeline: ${formData.timeline}
-Budget: ${formData.budgetRange}
+Location: ${formData.location}${det.regionalData ? ` (${det.regionalData.label}, ${regionalMultiplier}x cost multiplier)` : ''}
+Client Timeline: ${timelineOption?.label || formData.timeline}
+Client Budget: ${budgetOption?.label || formData.budgetRange}
 Requirements: ${formData.keyRequirements}
 Languages: ${formData.languageRequirements.join(', ') || 'None specified'}
 Travel: ${formData.travelRequirement}
 Discretion: ${formData.discretionLevel}
 
 Computed Score: ${det.score}/10 (${det.label})
-Market Benchmark: ${benchmark ? `P25: $${benchmark.p25.toLocaleString()}, P50: $${benchmark.p50.toLocaleString()}, P75: $${benchmark.p75.toLocaleString()}` : 'No benchmark available'}
+
+CRITICAL - Use these REGIONALLY-ADJUSTED salary figures for ${formData.location || 'this market'}:
+${adjustedBenchmark ? `- 25th Percentile: $${adjustedBenchmark.p25.toLocaleString()}
+- Median (50th): $${adjustedBenchmark.p50.toLocaleString()}
+- 75th Percentile: $${adjustedBenchmark.p75.toLocaleString()}` : 'No benchmark available - provide general guidance'}
+${benchmark?.scarcity ? `Role Scarcity: ${benchmark.scarcity}/10` : ''}
+
+Your salary recommendation MUST be based on these ADJUSTED figures above, not national averages.
+Your timeline MUST align with the "${timelineOption?.label || formData.timeline}" timeframe the client selected.
 
 Return this exact JSON structure:
 {
-  "salaryRangeGuidance": "specific salary range recommendation",
-  "estimatedTimeline": "realistic timeline estimate",
+  "salaryRangeGuidance": "salary range based on the ADJUSTED regional figures shown above",
+  "estimatedTimeline": "timeline that fits within ${timelineOption?.label || formData.timeline}",
   "marketCompetitiveness": "assessment of market conditions",
   "keySuccessFactors": ["factor 1", "factor 2", "factor 3"],
   "recommendedAdjustments": ["adjustment 1"] or [],
@@ -456,15 +489,18 @@ Return this exact JSON structure:
       console.error('AI analysis error:', err.message);
 
       // Fallback to deterministic results with clear indication
+      // Use regionally-adjusted figures for fallback too
+      const fallbackSalary = adjustedBenchmark
+        ? `$${Math.round(adjustedBenchmark.p25/1000)}k - $${Math.round(adjustedBenchmark.p75/1000)}k for ${formData.location || 'this market'}`
+        : "Contact us for guidance";
+
       setResults({
         ...det,
         displayTitle,
-        salaryRangeGuidance: benchmark
-          ? `$${Math.round(benchmark.p25/1000)}k - $${Math.round(benchmark.p75/1000)}k (based on market data)`
-          : "Contact us for guidance",
-        estimatedTimeline: formData.timeline === 'immediate' ? "6-10 weeks"
+        salaryRangeGuidance: fallbackSalary,
+        estimatedTimeline: timelineOption?.label || (formData.timeline === 'immediate' ? "6-10 weeks"
           : formData.timeline === 'standard' ? "8-12 weeks"
-          : "10-16 weeks",
+          : "10-16 weeks"),
         marketCompetitiveness: det.score <= 4
           ? "Favorable conditions for this search"
           : det.score <= 7
