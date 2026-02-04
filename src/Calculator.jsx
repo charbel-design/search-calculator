@@ -416,75 +416,151 @@ const SearchComplexityCalculator = () => {
   };
 
   // ============================================
-  // AI ANALYSIS
+  // AI ANALYSIS WITH RETRY LOGIC
   // ============================================
+
+  // Retry helper with exponential backoff
+  const fetchWithRetry = async (url, options, maxRetries = 2) => {
+    let lastError;
+
+    for (let attempt = 0; attempt <= maxRetries; attempt++) {
+      try {
+        const response = await fetch(url, options);
+
+        // Don't retry client errors (4xx), only server errors (5xx)
+        if (response.ok || (response.status >= 400 && response.status < 500)) {
+          return response;
+        }
+
+        lastError = new Error(`Server error: ${response.status}`);
+      } catch (err) {
+        lastError = err;
+      }
+
+      // Wait before retrying (exponential backoff: 1s, 2s)
+      if (attempt < maxRetries) {
+        await new Promise(resolve => setTimeout(resolve, 1000 * Math.pow(2, attempt)));
+      }
+    }
+
+    throw lastError;
+  };
+
   const calculateComplexity = async () => {
     setLoading(true);
     setError(null);
 
-    try {
-      const det = calculateDeterministicScore();
-      const displayTitle = formData.positionType === 'Other' ? formData.customPositionTitle : formData.positionType;
-      const benchmark = det.benchmark;
+    const det = calculateDeterministicScore();
+    const displayTitle = formData.positionType === 'Other' ? formData.customPositionTitle : formData.positionType;
+    const benchmark = det.benchmark;
 
-      const prompt = `You are advising a UHNW principal. Be warm, direct. Use "you/your". Never use "staffing".
+    try {
+      const prompt = `Analyze this UHNW household search and return JSON only.
 
 Position: ${displayTitle}
 Location: ${formData.location}${det.regionalData ? ` (${det.regionalData.label})` : ''}
 Timeline: ${formData.timeline}
 Budget: ${formData.budgetRange}
 Requirements: ${formData.keyRequirements}
-Languages: ${formData.languageRequirements.join(', ') || 'None'}
+Languages: ${formData.languageRequirements.join(', ') || 'None specified'}
 Travel: ${formData.travelRequirement}
 Discretion: ${formData.discretionLevel}
 
-SCORE: ${det.score}/10 (${det.label})
-BENCHMARK: ${benchmark ? `P25: $${benchmark.p25.toLocaleString()}, P50: $${benchmark.p50.toLocaleString()}, P75: $${benchmark.p75.toLocaleString()}` : 'None'}
+Computed Score: ${det.score}/10 (${det.label})
+Market Benchmark: ${benchmark ? `P25: $${benchmark.p25.toLocaleString()}, P50: $${benchmark.p50.toLocaleString()}, P75: $${benchmark.p75.toLocaleString()}` : 'No benchmark available'}
 
-Return JSON only:
+Return this exact JSON structure:
 {
-  "salaryRangeGuidance": "string",
-  "estimatedTimeline": "string",
-  "marketCompetitiveness": "string",
-  "keySuccessFactors": ["string", "string", "string"],
-  "recommendedAdjustments": ["string"] or [],
+  "salaryRangeGuidance": "specific salary range recommendation",
+  "estimatedTimeline": "realistic timeline estimate",
+  "marketCompetitiveness": "assessment of market conditions",
+  "keySuccessFactors": ["factor 1", "factor 2", "factor 3"],
+  "recommendedAdjustments": ["adjustment 1"] or [],
   "candidateAvailability": "Abundant|Moderate|Limited|Rare",
-  "availabilityReason": "string",
-  "negotiationLeverage": { "candidateAdvantages": ["string"], "employerAdvantages": ["string"] },
-  "redFlagAnalysis": "string",
-  "bottomLine": "2-3 sentences"
+  "availabilityReason": "explanation of availability",
+  "negotiationLeverage": { "candidateAdvantages": ["advantage"], "employerAdvantages": ["advantage"] },
+  "redFlagAnalysis": "any concerns or none",
+  "bottomLine": "2-3 sentence executive summary"
 }`;
 
-      const response = await fetch("/api/analyze", {
+      const response = await fetchWithRetry("/api/analyze", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ prompt })
-      });
+      }, 2);
 
-      if (!response.ok) throw new Error('Analysis failed');
+      if (!response.ok) {
+        const errorData = await response.json().catch(() => ({}));
+        throw new Error(errorData.error || `Analysis failed (${response.status})`);
+      }
 
       const data = await response.json();
-      let text = data.content[0]?.text || '';
-      text = text.trim().replace(/^```(?:json)?\n?/g, '').replace(/\n?```$/g, '');
+      let text = data.content?.[0]?.text || '';
+
+      // Clean up response - remove any markdown formatting
+      text = text.trim()
+        .replace(/^```(?:json)?\s*/gi, '')
+        .replace(/\s*```$/gi, '')
+        .trim();
+
+      // Parse and validate JSON
       const ai = JSON.parse(text);
-      
-      setResults({ ...det, ...ai, displayTitle, formData: { ...formData } });
-    } catch (err) {
-      const det = calculateDeterministicScore();
+
+      // Validate required fields exist
+      if (!ai.salaryRangeGuidance || !ai.bottomLine) {
+        throw new Error('Incomplete response from AI');
+      }
+
       setResults({
         ...det,
-        displayTitle: formData.positionType === 'Other' ? formData.customPositionTitle : formData.positionType,
-        salaryRangeGuidance: det.benchmark ? `$${Math.round(det.benchmark.p25/1000)}k - $${Math.round(det.benchmark.p75/1000)}k` : "N/A",
-        estimatedTimeline: formData.timeline === 'immediate' ? "6-10 weeks" : "8-14 weeks",
-        marketCompetitiveness: "Analysis based on scoring factors",
-        keySuccessFactors: ["Competitive compensation", "Clear expectations", "Efficient process"],
-        recommendedAdjustments: [],
+        ...ai,
+        displayTitle,
+        formData: { ...formData },
+        aiAnalysisSuccess: true
+      });
+
+    } catch (err) {
+      console.error('AI analysis error:', err.message);
+
+      // Fallback to deterministic results with clear indication
+      setResults({
+        ...det,
+        displayTitle,
+        salaryRangeGuidance: benchmark
+          ? `$${Math.round(benchmark.p25/1000)}k - $${Math.round(benchmark.p75/1000)}k (based on market data)`
+          : "Contact us for guidance",
+        estimatedTimeline: formData.timeline === 'immediate' ? "6-10 weeks"
+          : formData.timeline === 'standard' ? "8-12 weeks"
+          : "10-16 weeks",
+        marketCompetitiveness: det.score <= 4
+          ? "Favorable conditions for this search"
+          : det.score <= 7
+          ? "Competitive market - strategic approach recommended"
+          : "Challenging search - expect extended timeline",
+        keySuccessFactors: [
+          "Competitive total compensation package",
+          "Clear role definition and expectations",
+          "Efficient interview and decision process"
+        ],
+        recommendedAdjustments: det.redFlags?.length > 0
+          ? det.redFlags.map(flag => `Address: ${flag}`)
+          : [],
         candidateAvailability: det.score <= 4 ? "Moderate" : det.score <= 7 ? "Limited" : "Rare",
-        availabilityReason: "Based on complexity factors",
-        bottomLine: "Detailed AI analysis unavailable. Results based on scoring algorithm.",
-        formData: { ...formData }
+        availabilityReason: `Based on ${det.drivers?.length || 0} complexity factors analyzed`,
+        negotiationLeverage: {
+          candidateAdvantages: det.score >= 6
+            ? ["Limited candidate pool", "High market demand"]
+            : ["Standard market conditions"],
+          employerAdvantages: formData.budgetRange?.includes('350') || formData.budgetRange?.includes('250')
+            ? ["Competitive compensation", "Attractive opportunity"]
+            : ["Growth opportunity"]
+        },
+        bottomLine: "Analysis based on our scoring algorithm and market benchmarks. For personalized AI insights, please try again or schedule a consultation.",
+        formData: { ...formData },
+        aiAnalysisSuccess: false
       });
     }
+
     setLoading(false);
   };
 
@@ -904,6 +980,12 @@ This analysis provides general market guidance. Every search is unique.
               {results.bottomLine && (
                 <div className="bg-slate-50 rounded-xl p-5 mb-6 border-l-4" style={{ borderColor: '#2814ff' }}>
                   <p className="text-slate-800">{results.bottomLine}</p>
+                  {results.aiAnalysisSuccess === false && (
+                    <p className="text-xs text-slate-500 mt-2 flex items-center gap-1">
+                      <Info className="w-3 h-3" />
+                      Results based on market data. AI insights temporarily unavailable.
+                    </p>
+                  )}
                 </div>
               )}
 
