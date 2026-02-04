@@ -597,17 +597,25 @@ Return this exact JSON structure:
   const runComparison = () => {
     const current = calculateDeterministicScore();
     const currentIdx = budgetRanges.findIndex(b => b.value === formData.budgetRange);
+
+    // Get next budget (higher) if available
     const nextBudget = currentIdx < budgetRanges.length - 2 ? budgetRanges[currentIdx + 1] : null;
+    // Get previous budget (lower) if available
+    const prevBudget = currentIdx > 0 ? budgetRanges[currentIdx - 1] : null;
+
     setComparisonResults({
       current,
       withIncrease: nextBudget ? calculateDeterministicScore(nextBudget.value) : null,
-      nextLabel: nextBudget?.label
+      nextLabel: nextBudget?.label,
+      withDecrease: prevBudget && prevBudget.midpoint ? calculateDeterministicScore(prevBudget.value) : null,
+      prevLabel: prevBudget?.label
     });
     setCompareMode(true);
   };
 
   const exportToPDF = () => {
-    const doc = new jsPDF();
+    try {
+      const doc = new jsPDF();
     const pageWidth = doc.internal.pageSize.getWidth();
     const margin = 20;
     const contentWidth = pageWidth - (margin * 2);
@@ -816,6 +824,10 @@ Return this exact JSON structure:
 
     // Save
     doc.save(`Search-Analysis-${results.displayTitle.replace(/\s+/g, '-')}-${new Date().toISOString().split('T')[0]}.pdf`);
+    } catch (err) {
+      console.error('PDF export error:', err);
+      alert('Unable to export PDF. Please try again or contact support.');
+    }
   };
 
   const getComplexityColor = (score) => {
@@ -1347,26 +1359,52 @@ Return this exact JSON structure:
             {compareMode && comparisonResults && (
               <div className="bg-white rounded-2xl shadow-xl p-6 border border-slate-200">
                 <div className="flex justify-between mb-4">
-                  <h4 className="font-semibold text-lg" style={{ color: '#2814ff' }}>Scenario Comparison</h4>
+                  <h4 className="font-semibold text-lg" style={{ color: '#2814ff' }}>Budget Impact Analysis</h4>
                   <button onClick={() => setCompareMode(false)} className="text-slate-400 hover:text-slate-600"><X className="w-5 h-5" /></button>
                 </div>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  <div className="bg-slate-50 rounded-xl p-4">
-                    <h5 className="font-medium mb-2">Current</h5>
-                    <div className="text-3xl font-bold" style={{ color: '#2814ff' }}>{comparisonResults.current.score}/10</div>
-                    <p className="text-sm text-slate-600">{comparisonResults.current.label}</p>
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                  {/* Lower budget scenario */}
+                  {comparisonResults.withDecrease ? (
+                    <div className="bg-red-50 rounded-xl p-4 border border-red-200">
+                      <h5 className="font-medium mb-2 text-red-800 text-sm">If Budget: {comparisonResults.prevLabel}</h5>
+                      <div className="text-2xl font-bold text-red-700">{comparisonResults.withDecrease.score}/10</div>
+                      <p className="text-xs text-red-600">{comparisonResults.withDecrease.label}</p>
+                      {comparisonResults.withDecrease.score > comparisonResults.current.score && (
+                        <p className="text-xs font-medium text-red-800 mt-2">+{comparisonResults.withDecrease.score - comparisonResults.current.score} points harder</p>
+                      )}
+                    </div>
+                  ) : (
+                    <div className="bg-slate-100 rounded-xl p-4 border border-slate-200">
+                      <h5 className="font-medium mb-2 text-slate-500 text-sm">Lower Budget</h5>
+                      <p className="text-xs text-slate-500">Already at minimum range</p>
+                    </div>
+                  )}
+
+                  {/* Current scenario */}
+                  <div className="bg-indigo-50 rounded-xl p-4 border-2 border-indigo-300">
+                    <h5 className="font-medium mb-2 text-indigo-800 text-sm">Your Budget (Current)</h5>
+                    <div className="text-2xl font-bold" style={{ color: '#2814ff' }}>{comparisonResults.current.score}/10</div>
+                    <p className="text-xs text-indigo-600">{comparisonResults.current.label}</p>
                   </div>
-                  {comparisonResults.withIncrease && (
-                    <div className="bg-green-50 rounded-xl p-4 border-2 border-green-200">
-                      <h5 className="font-medium mb-2 text-green-800">With Budget: {comparisonResults.nextLabel}</h5>
-                      <div className="text-3xl font-bold text-green-700">{comparisonResults.withIncrease.score}/10</div>
-                      <p className="text-sm text-green-600">{comparisonResults.withIncrease.label}</p>
+
+                  {/* Higher budget scenario */}
+                  {comparisonResults.withIncrease ? (
+                    <div className="bg-green-50 rounded-xl p-4 border border-green-200">
+                      <h5 className="font-medium mb-2 text-green-800 text-sm">If Budget: {comparisonResults.nextLabel}</h5>
+                      <div className="text-2xl font-bold text-green-700">{comparisonResults.withIncrease.score}/10</div>
+                      <p className="text-xs text-green-600">{comparisonResults.withIncrease.label}</p>
                       {comparisonResults.current.score > comparisonResults.withIncrease.score && (
                         <p className="text-xs font-medium text-green-800 mt-2">✓ {comparisonResults.current.score - comparisonResults.withIncrease.score} points easier</p>
                       )}
                     </div>
+                  ) : (
+                    <div className="bg-slate-100 rounded-xl p-4 border border-slate-200">
+                      <h5 className="font-medium mb-2 text-slate-500 text-sm">Higher Budget</h5>
+                      <p className="text-xs text-slate-500">Already at maximum range</p>
+                    </div>
                   )}
                 </div>
+                <p className="text-xs text-slate-500 mt-4 text-center">See how budget changes affect your search complexity score</p>
               </div>
             )}
 
