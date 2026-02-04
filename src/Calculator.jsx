@@ -8,7 +8,8 @@ import {
   SALARY_DATA_META,
   getPositionsByCategory,
   getAllPositionNames,
-  detectRegion
+  detectRegion,
+  getBenchmark
 } from './salaryData';
 
 // ============================================
