@@ -1,6 +1,10 @@
 import React, { useState, useMemo, useRef, useEffect } from 'react';
 import { TrendingUp, Clock, DollarSign, Target, AlertCircle, CheckCircle, ArrowRight, Info, Download, RefreshCw, Users, Car, Heart, Home, ChevronDown, HelpCircle, Zap, MapPin, Phone, X, Scale } from 'lucide-react';
 
+// Version indicator - check console to verify deployment version
+const APP_VERSION = "2.0.0-enhanced";
+console.log(`Search Calculator v${APP_VERSION} - Enhanced with PDF export, trust signals, and improved UX`);
+
 // jsPDF will be loaded via CDN
 const loadJsPDF = () => {
   return new Promise((resolve, reject) => {
@@ -1264,6 +1268,7 @@ This analysis provides general market guidance. Every search is unique.
           <p className="font-semibold" style={{ color: '#2814ff' }}>Talent Gurus • Finding Exceptional Talent for Family Offices</p>
           <p className="text-slate-500">We find the people you'll rely on for years.</p>
           <a href="https://talent-gurus.com" target="_blank" rel="noopener noreferrer" className="text-xs hover:underline" style={{ color: '#2814ff' }}>talent-gurus.com</a>
+          <p className="text-xs text-slate-400 mt-4">v{APP_VERSION}</p>
         </div>
       </div>
     </div>
