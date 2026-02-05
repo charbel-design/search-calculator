@@ -430,8 +430,9 @@ const SearchComplexityCalculator = () => {
     // Role scarcity
     const roleMap = { "Chief of Staff": 10, "Security Director": 9, "Yacht Captain": 8, "Private Chef": 7, "Butler": 7, "Estate Manager": 6 };
     const rolePoints = roleMap[formData.positionType] || 5;
+    const scarcityDesc = rolePoints >= 9 ? "Exceptionally rare talent pool" : rolePoints >= 7 ? "Limited qualified candidates" : rolePoints >= 5 ? "Moderate candidate availability" : "Accessible talent pool";
     points += rolePoints;
-    drivers.push({ factor: "Role Scarcity", points: rolePoints, rationale: formData.positionType });
+    drivers.push({ factor: "Role Scarcity", points: rolePoints, rationale: scarcityDesc });
 
     const score = Math.min(10, Math.max(1, Math.round(1 + (points / 120) * 9)));
     const label = score <= 3 ? "Straightforward" : score <= 5 ? "Moderate" : score <= 7 ? "Challenging" : score <= 9 ? "Highly Complex" : "Exceptional";
@@ -656,7 +657,7 @@ Return this exact JSON structure:
 
     try {
       // Hide the buttons before capturing
-      const buttonsContainer = resultsRef.current.querySelector('.flex.flex-wrap.gap-3.pt-4');
+      const buttonsContainer = resultsRef.current.querySelector('[data-pdf-hide]');
       if (buttonsContainer) {
         buttonsContainer.style.display = 'none';
       }
@@ -1387,7 +1388,7 @@ Return this exact JSON structure:
                 </div>
               )}
 
-              <div className="flex flex-wrap gap-3 pt-4 border-t border-slate-200">
+              <div data-pdf-hide className="flex flex-wrap gap-3 pt-4 border-t border-slate-200">
                 <button data-export-btn onClick={exportToPDF} className="flex items-center gap-2 px-4 py-2 bg-slate-100 hover:bg-slate-200 rounded-lg text-sm font-medium text-slate-700">
                   <Download className="w-4 h-4" />Export Report
                 </button>
@@ -1518,7 +1519,7 @@ Return this exact JSON structure:
                 <CheckCircle className="w-5 h-5" style={{ color: '#2814ff' }} />
               </div>
               <h5 className="font-medium text-slate-800 mb-1">Updated Regularly</h5>
-              <p className="text-slate-600 text-xs">Compensation and availability data refreshed monthly to reflect current market conditions across major metro areas and international markets.</p>
+              <p className="text-slate-600 text-xs">Compensation and availability data refreshed quarterly to reflect current market conditions across major metro areas and international markets.</p>
             </div>
           </div>
         </div>
