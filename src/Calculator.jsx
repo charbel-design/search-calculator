@@ -1853,6 +1853,31 @@ This analysis provides general market guidance. Every search is unique.
                 </div>
               )}
 
+              {/* Red Flag Analysis */}
+              {results.redFlagAnalysis && results.redFlagAnalysis !== "None - well-positioned search" && (
+                <div data-pdf-section="red-flags" className="mb-6">
+                  <h4 className="font-semibold mb-3 flex items-center gap-2" style={{ color: '#dc2626' }}><AlertCircle className="w-5 h-5" />Red Flag Analysis</h4>
+                  <div className="bg-red-50 rounded-xl p-4 border border-red-200">
+                    <p className="text-slate-700">{results.redFlagAnalysis}</p>
+                  </div>
+                </div>
+              )}
+
+              {/* Market Intelligence */}
+              {results.benchmark?.trends && (
+                <div data-pdf-section="market-intelligence" className="mb-6">
+                  <h4 className="font-semibold mb-3 flex items-center gap-2" style={{ color: '#2814ff' }}><TrendingUp className="w-5 h-5" />Market Intelligence</h4>
+                  <div className="bg-gradient-to-br from-slate-50 to-indigo-50 rounded-xl p-5 border border-slate-200">
+                    <p className="text-slate-700 mb-3">{results.benchmark.trends}</p>
+                    {results.benchmark.regionalNotes && (
+                      <div className="mt-3 pt-3 border-t border-slate-200">
+                        <p className="text-sm text-slate-600"><strong>Regional Notes:</strong> {results.benchmark.regionalNotes}</p>
+                      </div>
+                    )}
+                  </div>
+                </div>
+              )}
+
               {results.negotiationLeverage && (
                 <div data-pdf-section="negotiation" className="mb-6">
                   <h4 className="font-semibold mb-3 flex items-center gap-2" style={{ color: '#2814ff' }}><ArrowLeftRight className="w-5 h-5" />Negotiation</h4>
@@ -1983,30 +2008,26 @@ This analysis provides general market guidance. Every search is unique.
               </div>
             </div>
 
-            {/* Trust Signals & Methodology */}
+            {/* Methodology */}
             <div className="bg-slate-50 rounded-xl p-6 border border-slate-200">
               <h4 className="font-semibold text-slate-900 mb-4 flex items-center gap-2">
                 <Info className="w-5 h-5" style={{ color: '#2814ff' }} />
                 About This Analysis
               </h4>
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
-                <div className="text-center p-3 bg-white rounded-lg border border-slate-100">
-                  <div className="text-2xl font-bold" style={{ color: '#2814ff' }}>500+</div>
-                  <div className="text-xs text-slate-600">UHNW Placements</div>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+                <div className="p-3 bg-white rounded-lg border border-slate-100">
+                  <div className="text-sm font-semibold text-slate-800 mb-1">{commonRoles.length} Roles Tracked</div>
+                  <div className="text-xs text-slate-500">Across family office, household, estate, and maritime positions</div>
                 </div>
-                <div className="text-center p-3 bg-white rounded-lg border border-slate-100">
-                  <div className="text-2xl font-bold" style={{ color: '#2814ff' }}>16</div>
-                  <div className="text-xs text-slate-600">Role Categories</div>
-                </div>
-                <div className="text-center p-3 bg-white rounded-lg border border-slate-100">
-                  <div className="text-2xl font-bold" style={{ color: '#2814ff' }}>Feb 2026</div>
-                  <div className="text-xs text-slate-600">Data Updated</div>
+                <div className="p-3 bg-white rounded-lg border border-slate-100">
+                  <div className="text-sm font-semibold text-slate-800 mb-1">Data Updated {SALARY_DATA_META.lastUpdated}</div>
+                  <div className="text-xs text-slate-500">Compiled from industry sources, placement data, and market surveys</div>
                 </div>
               </div>
               <div className="space-y-2 text-sm text-slate-600">
-                <p><strong>Our Methodology:</strong> Salary benchmarks are derived from our proprietary database of completed placements across family offices, private estates, and UHNW households in North America and Europe.</p>
+                <p><strong>Our Methodology:</strong> Salary benchmarks are aggregated from industry databases, completed placements, and compensation surveys across family offices, private estates, and UHNW households.</p>
                 <p><strong>Complexity Scoring:</strong> Our algorithm weighs 9 key factors including timeline urgency, location tier, language requirements, and market scarcity to provide an accurate difficulty assessment.</p>
-                <p className="text-xs text-slate-500 mt-3 pt-3 border-t border-slate-200">Analysis combines human expertise with AI-assisted market insights. Results are guidance only—every search is unique. Talent Gurus advisors bring 15+ years of executive household placement experience.</p>
+                <p className="text-xs text-slate-500 mt-3 pt-3 border-t border-slate-200">Analysis combines market data with AI-assisted insights. Results are guidance only — every search is unique. For personalized advice, schedule a consultation with Talent Gurus.</p>
               </div>
             </div>
 
