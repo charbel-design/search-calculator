@@ -776,6 +776,13 @@ Return this exact JSON structure:
         pageCanvas.width = imgWidth;
         pageCanvas.height = sliceHeightPx;
         const pageCtx = pageCanvas.getContext('2d');
+        
+        // Check if context was created successfully
+        if (!pageCtx) {
+          console.error('Failed to create 2D canvas context for PDF page', i);
+          throw new Error('Failed to create canvas context for PDF generation');
+        }
+        
         pageCtx.drawImage(canvas, 0, slice.start, imgWidth, sliceHeightPx, 0, 0, imgWidth, sliceHeightPx);
 
         // Calculate destination dimensions
