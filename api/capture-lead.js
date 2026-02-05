@@ -8,6 +8,52 @@ const ALLOWED_ORIGINS = [
   process.env.ALLOWED_ORIGIN
 ].filter(Boolean);
 
+// Simple rate limiting (in-memory, resets on cold start)
+const rateLimitMap = new Map();
+const RATE_LIMIT_WINDOW = 60000; // 1 minute
+const RATE_LIMIT_MAX = 5; // 5 requests per minute per IP
+
+function isRateLimited(ip) {
+  const now = Date.now();
+  const entry = rateLimitMap.get(ip);
+
+  if (!entry || now - entry.start > RATE_LIMIT_WINDOW) {
+    rateLimitMap.set(ip, { start: now, count: 1 });
+    return false;
+  }
+
+  entry.count++;
+  if (entry.count > RATE_LIMIT_MAX) {
+    return true;
+  }
+  return false;
+}
+
+// Sanitize user input for HTML email
+function sanitizeHtml(str) {
+  if (!str) return '';
+  return String(str)
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#x27;');
+}
+
+// Validate email format
+function isValidEmail(email) {
+  if (!email || typeof email !== 'string') return false;
+  if (email.length > 254) return false;
+  return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+}
+
+// Truncate string to max length
+function truncate(str, max) {
+  if (!str) return '';
+  const s = String(str);
+  return s.length > max ? s.substring(0, max) + '...' : s;
+}
+
 export default async function handler(req, res) {
   // CORS handling
   const origin = req.headers.origin;
@@ -25,6 +71,12 @@ export default async function handler(req, res) {
     return res.status(405).json({ error: 'Method not allowed' });
   }
 
+  // Rate limit check
+  const clientIp = req.headers['x-forwarded-for']?.split(',')[0]?.trim() || req.socket?.remoteAddress || 'unknown';
+  if (isRateLimited(clientIp)) {
+    return res.status(429).json({ error: 'Too many requests. Please try again later.' });
+  }
+
   const apiKey = process.env.RESEND_API_KEY;
   const notifyEmail = process.env.LEAD_NOTIFY_EMAIL || 'charbel@talent-gurus.com';
 
@@ -34,30 +86,35 @@ export default async function handler(req, res) {
   }
 
   try {
-    const {
-      email,
-      phone,
-      positionType,
-      location,
-      timeline,
-      budgetRange,
-      discretionLevel,
-      keyRequirements,
-      languageRequirements,
-      certifications,
-      travelRequirement,
-      propertiesCount,
-      householdSize,
-      aumRange,
-      teamSize,
-      priorityCallback,
-      complexityScore,
-      complexityLabel
-    } = req.body;
+    const body = req.body || {};
 
-    // Validate required fields
-    if (!email) {
-      return res.status(400).json({ error: 'Email is required' });
+    // Extract and sanitize all inputs
+    const email = sanitizeHtml(truncate(body.email, 254));
+    const phone = sanitizeHtml(truncate(body.phone, 30));
+    const positionType = sanitizeHtml(truncate(body.positionType, 100));
+    const location = sanitizeHtml(truncate(body.location, 100));
+    const timeline = sanitizeHtml(truncate(body.timeline, 50));
+    const budgetRange = sanitizeHtml(truncate(body.budgetRange, 50));
+    const discretionLevel = sanitizeHtml(truncate(body.discretionLevel, 50));
+    const keyRequirements = sanitizeHtml(truncate(body.keyRequirements, 2000));
+    const travelRequirement = sanitizeHtml(truncate(body.travelRequirement, 50));
+    const propertiesCount = sanitizeHtml(truncate(body.propertiesCount, 20));
+    const householdSize = sanitizeHtml(truncate(body.householdSize, 20));
+    const aumRange = sanitizeHtml(truncate(body.aumRange, 50));
+    const teamSize = sanitizeHtml(truncate(body.teamSize, 20));
+    const priorityCallback = !!body.priorityCallback;
+    const complexityScore = Number(body.complexityScore) || null;
+    const complexityLabel = sanitizeHtml(truncate(body.complexityLabel, 50));
+    const languageRequirements = Array.isArray(body.languageRequirements)
+      ? body.languageRequirements.slice(0, 10).map(l => sanitizeHtml(truncate(l, 50)))
+      : [];
+    const certifications = Array.isArray(body.certifications)
+      ? body.certifications.slice(0, 10).map(c => sanitizeHtml(truncate(c, 100)))
+      : [];
+
+    // Validate email format
+    if (!isValidEmail(body.email)) {
+      return res.status(400).json({ error: 'Valid email is required' });
     }
 
     // Build the email content
