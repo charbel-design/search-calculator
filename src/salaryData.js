@@ -158,7 +158,11 @@ export const BENCHMARKS = {
     counterOfferRate: 0.4,
     sourcingChannels: { referral: 0.36, agency: 0.23, direct: 0.19, internal: 0.22 },
     salaryGrowthRate: 0.06,
-    typicalExperience: { min: 12, typical: 14 }
+    typicalExperience: { min: 12, typical: 14 },
+    retentionRisk: { firstYearAttrition: 0.18, topReasons: ['scope mismatch', 'principal personality', 'governance unclear'] },
+    compensationStructure: { basePercent: 0.75, bonusPercent: 0.15, benefitsPercent: 0.1, signingBonusFrequency: 0.4, signingBonusRange: "15k-40k" },
+    relocationWillingness: 0.35,
+    backgroundCheckTimeline: 3
   },
   "Family Office Director": {
     category: "Family Office - C-Suite",
@@ -180,7 +184,11 @@ export const BENCHMARKS = {
     counterOfferRate: 0.45,
     sourcingChannels: { referral: 0.41, agency: 0.27, direct: 0.12, internal: 0.2 },
     salaryGrowthRate: 0.07,
-    typicalExperience: { min: 16, typical: 21 }
+    typicalExperience: { min: 16, typical: 21 },
+    retentionRisk: { firstYearAttrition: 0.12, topReasons: ['family politics', 'mandate scope changes', 'comp structure disputes'] },
+    compensationStructure: { basePercent: 0.62, bonusPercent: 0.23, benefitsPercent: 0.15, signingBonusFrequency: 0.65, signingBonusRange: "75k-150k" },
+    relocationWillingness: 0.5,
+    backgroundCheckTimeline: 5
   },
   "Family Office Manager": {
     category: "Family Office - Operations & Finance",
@@ -202,7 +210,11 @@ export const BENCHMARKS = {
     counterOfferRate: 0.44,
     sourcingChannels: { referral: 0.38, agency: 0.27, direct: 0.13, internal: 0.22 },
     salaryGrowthRate: 0.06,
-    typicalExperience: { min: 9, typical: 17 }
+    typicalExperience: { min: 9, typical: 17 },
+    retentionRisk: { firstYearAttrition: 0.16, topReasons: ['role ambiguity', 'family interference', 'career ceiling'] },
+    compensationStructure: { basePercent: 0.72, bonusPercent: 0.16, benefitsPercent: 0.12, signingBonusFrequency: 0.35, signingBonusRange: "20k-50k" },
+    relocationWillingness: 0.38,
+    backgroundCheckTimeline: 3
   },
   "Estate Manager": {
     category: "Estate Leadership",
@@ -224,7 +236,11 @@ export const BENCHMARKS = {
     counterOfferRate: 0.26,
     sourcingChannels: { referral: 0.34, agency: 0.31, direct: 0.11, internal: 0.24 },
     salaryGrowthRate: 0.05,
-    typicalExperience: { min: 8, typical: 12 }
+    typicalExperience: { min: 8, typical: 12 },
+    retentionRisk: { firstYearAttrition: 0.22, topReasons: ['scope creep', 'principal expectations', 'staff management burnout'] },
+    compensationStructure: { basePercent: 0.78, bonusPercent: 0.12, benefitsPercent: 0.1, signingBonusFrequency: 0.4, signingBonusRange: "15k-35k" },
+    relocationWillingness: 0.35,
+    backgroundCheckTimeline: 3
   },
   "Estate Manager (Multi-Property)": {
     category: "Estate Leadership",
@@ -246,7 +262,11 @@ export const BENCHMARKS = {
     counterOfferRate: 0.52,
     sourcingChannels: { referral: 0.45, agency: 0.28, direct: 0.22, internal: 0.05 },
     salaryGrowthRate: 0.08,
-    typicalExperience: { min: 11, typical: 13 }
+    typicalExperience: { min: 11, typical: 13 },
+    retentionRisk: { firstYearAttrition: 0.28, topReasons: ['travel fatigue', 'property isolation', 'scope mismatch'] },
+    compensationStructure: { basePercent: 0.75, bonusPercent: 0.15, benefitsPercent: 0.1, signingBonusFrequency: 0.45, signingBonusRange: "20k-45k" },
+    relocationWillingness: 0.32,
+    backgroundCheckTimeline: 3
   },
   "Household Manager": {
     category: "Estate Leadership",
@@ -268,7 +288,11 @@ export const BENCHMARKS = {
     counterOfferRate: 0.33,
     sourcingChannels: { referral: 0.42, agency: 0.33, direct: 0.17, internal: 0.08 },
     salaryGrowthRate: 0.08,
-    typicalExperience: { min: 4, typical: 12 }
+    typicalExperience: { min: 4, typical: 12 },
+    retentionRisk: { firstYearAttrition: 0.3, topReasons: ['boundary erosion', 'schedule creep', 'role ambiguity'] },
+    compensationStructure: { basePercent: 0.82, bonusPercent: 0.1, benefitsPercent: 0.08, signingBonusFrequency: 0.3, signingBonusRange: "10k-25k" },
+    relocationWillingness: 0.38,
+    backgroundCheckTimeline: 3
   },
   "Property Manager": {
     category: "Estate Leadership",
@@ -290,7 +314,11 @@ export const BENCHMARKS = {
     counterOfferRate: 0.13,
     sourcingChannels: { referral: 0.32, agency: 0.23, direct: 0.11, internal: 0.34 },
     salaryGrowthRate: 0.06,
-    typicalExperience: { min: 6, typical: 9 }
+    typicalExperience: { min: 6, typical: 9 },
+    retentionRisk: { firstYearAttrition: 0.2, topReasons: ['seasonal isolation', 'scope expansion', 'principal access issues'] },
+    compensationStructure: { basePercent: 0.8, bonusPercent: 0.12, benefitsPercent: 0.08, signingBonusFrequency: 0.3, signingBonusRange: "10k-25k" },
+    relocationWillingness: 0.3,
+    backgroundCheckTimeline: 2
   },
   "Director of Residences": {
     category: "Estate Leadership",
@@ -312,7 +340,11 @@ export const BENCHMARKS = {
     counterOfferRate: 0.4,
     sourcingChannels: { referral: 0.43, agency: 0.31, direct: 0.18, internal: 0.08 },
     salaryGrowthRate: 0.03,
-    typicalExperience: { min: 9, typical: 16 }
+    typicalExperience: { min: 9, typical: 16 },
+    retentionRisk: { firstYearAttrition: 0.25, topReasons: ['travel demands', 'multi-stakeholder conflict', 'comp misalignment'] },
+    compensationStructure: { basePercent: 0.75, bonusPercent: 0.15, benefitsPercent: 0.1, signingBonusFrequency: 0.42, signingBonusRange: "20k-40k" },
+    relocationWillingness: 0.33,
+    backgroundCheckTimeline: 3
   },
 
   // ==========================================
@@ -338,7 +370,11 @@ export const BENCHMARKS = {
     counterOfferRate: 0.32,
     sourcingChannels: { referral: 0.38, agency: 0.35, direct: 0.18, internal: 0.09 },
     salaryGrowthRate: 0.09,
-    typicalExperience: { min: 10, typical: 12 }
+    typicalExperience: { min: 10, typical: 12 },
+    retentionRisk: { firstYearAttrition: 0.25, topReasons: ['boundary erosion', 'after-hours demands', 'burnout'] },
+    compensationStructure: { basePercent: 0.84, bonusPercent: 0.09, benefitsPercent: 0.07, signingBonusFrequency: 0.3, signingBonusRange: "8k-20k" },
+    relocationWillingness: 0.4,
+    backgroundCheckTimeline: 3
   },
   "Personal Assistant": {
     category: "Personal & Administrative",
@@ -360,7 +396,11 @@ export const BENCHMARKS = {
     counterOfferRate: 0.26,
     sourcingChannels: { referral: 0.46, agency: 0.23, direct: 0.1, internal: 0.21 },
     salaryGrowthRate: 0.06,
-    typicalExperience: { min: 5, typical: 7 }
+    typicalExperience: { min: 5, typical: 7 },
+    retentionRisk: { firstYearAttrition: 0.3, topReasons: ['scope creep', 'lack of boundaries', 'compensation ceiling'] },
+    compensationStructure: { basePercent: 0.86, bonusPercent: 0.08, benefitsPercent: 0.06, signingBonusFrequency: 0.22, signingBonusRange: "5k-15k" },
+    relocationWillingness: 0.42,
+    backgroundCheckTimeline: 2
   },
   "Family Assistant": {
     category: "Personal & Administrative",
@@ -382,7 +422,11 @@ export const BENCHMARKS = {
     counterOfferRate: 0.27,
     sourcingChannels: { referral: 0.48, agency: 0.25, direct: 0.18, internal: 0.09 },
     salaryGrowthRate: 0.06,
-    typicalExperience: { min: 6, typical: 10 }
+    typicalExperience: { min: 6, typical: 10 },
+    retentionRisk: { firstYearAttrition: 0.28, topReasons: ['role ambiguity', 'family dynamics', 'schedule unpredictability'] },
+    compensationStructure: { basePercent: 0.85, bonusPercent: 0.08, benefitsPercent: 0.07, signingBonusFrequency: 0.22, signingBonusRange: "5k-12k" },
+    relocationWillingness: 0.4,
+    backgroundCheckTimeline: 2
   },
   "Lifestyle Manager": {
     category: "Personal & Administrative",
@@ -404,7 +448,11 @@ export const BENCHMARKS = {
     counterOfferRate: 0.32,
     sourcingChannels: { referral: 0.45, agency: 0.28, direct: 0.19, internal: 0.08 },
     salaryGrowthRate: 0.05,
-    typicalExperience: { min: 10, typical: 13 }
+    typicalExperience: { min: 10, typical: 13 },
+    retentionRisk: { firstYearAttrition: 0.32, topReasons: ['task overload', 'unrealistic expectations', 'principal personality'] },
+    compensationStructure: { basePercent: 0.82, bonusPercent: 0.1, benefitsPercent: 0.08, signingBonusFrequency: 0.28, signingBonusRange: "8k-20k" },
+    relocationWillingness: 0.38,
+    backgroundCheckTimeline: 2
   },
   "Travel Coordinator": {
     category: "Personal & Administrative",
@@ -426,7 +474,11 @@ export const BENCHMARKS = {
     counterOfferRate: 0.28,
     sourcingChannels: { referral: 0.33, agency: 0.27, direct: 0.19, internal: 0.21 },
     salaryGrowthRate: 0.06,
-    typicalExperience: { min: 2, typical: 6 }
+    typicalExperience: { min: 2, typical: 6 },
+    retentionRisk: { firstYearAttrition: 0.24, topReasons: ['last-minute changes', 'travel fatigue', 'schedule chaos'] },
+    compensationStructure: { basePercent: 0.84, bonusPercent: 0.09, benefitsPercent: 0.07, signingBonusFrequency: 0.25, signingBonusRange: "5k-15k" },
+    relocationWillingness: 0.45,
+    backgroundCheckTimeline: 2
   },
   "Social Secretary": {
     category: "Personal & Administrative",
@@ -448,7 +500,11 @@ export const BENCHMARKS = {
     counterOfferRate: 0.2,
     sourcingChannels: { referral: 0.31, agency: 0.26, direct: 0.22, internal: 0.21 },
     salaryGrowthRate: 0.05,
-    typicalExperience: { min: 6, typical: 8 }
+    typicalExperience: { min: 6, typical: 8 },
+    retentionRisk: { firstYearAttrition: 0.2, topReasons: ['event pressure', 'social politics', 'seasonal burnout'] },
+    compensationStructure: { basePercent: 0.85, bonusPercent: 0.08, benefitsPercent: 0.07, signingBonusFrequency: 0.22, signingBonusRange: "5k-15k" },
+    relocationWillingness: 0.35,
+    backgroundCheckTimeline: 2
   },
 
   // ==========================================
@@ -474,7 +530,11 @@ export const BENCHMARKS = {
     counterOfferRate: 0.23,
     sourcingChannels: { referral: 0.48, agency: 0.31, direct: 0.19, internal: 0.02 },
     salaryGrowthRate: 0.06,
-    typicalExperience: { min: 5, typical: 10 }
+    typicalExperience: { min: 5, typical: 10 },
+    retentionRisk: { firstYearAttrition: 0.28, topReasons: ['staff conflicts', 'principal expectations', 'role overlap with estate manager'] },
+    compensationStructure: { basePercent: 0.82, bonusPercent: 0.1, benefitsPercent: 0.08, signingBonusFrequency: 0.28, signingBonusRange: "8k-20k" },
+    relocationWillingness: 0.42,
+    backgroundCheckTimeline: 2
   },
   "Butler (Formal)": {
     category: "Formal Service",
@@ -496,7 +556,11 @@ export const BENCHMARKS = {
     counterOfferRate: 0.3,
     sourcingChannels: { referral: 0.44, agency: 0.31, direct: 0.22, internal: 0.03 },
     salaryGrowthRate: 0.07,
-    typicalExperience: { min: 7, typical: 14 }
+    typicalExperience: { min: 7, typical: 14 },
+    retentionRisk: { firstYearAttrition: 0.22, topReasons: ['cultural adjustment', 'formality fatigue', 'isolation'] },
+    compensationStructure: { basePercent: 0.85, bonusPercent: 0.08, benefitsPercent: 0.07, signingBonusFrequency: 0.3, signingBonusRange: "10k-25k" },
+    relocationWillingness: 0.55,
+    backgroundCheckTimeline: 3
   },
   "Butler (American Style)": {
     category: "Formal Service",
@@ -518,7 +582,11 @@ export const BENCHMARKS = {
     counterOfferRate: 0.26,
     sourcingChannels: { referral: 0.36, agency: 0.3, direct: 0.17, internal: 0.17 },
     salaryGrowthRate: 0.04,
-    typicalExperience: { min: 4, typical: 11 }
+    typicalExperience: { min: 4, typical: 11 },
+    retentionRisk: { firstYearAttrition: 0.25, topReasons: ['scope ambiguity', 'casual boundary erosion', 'comp ceiling'] },
+    compensationStructure: { basePercent: 0.85, bonusPercent: 0.08, benefitsPercent: 0.07, signingBonusFrequency: 0.25, signingBonusRange: "8k-20k" },
+    relocationWillingness: 0.48,
+    backgroundCheckTimeline: 2
   },
   "Executive Housekeeper": {
     category: "Formal Service",
@@ -540,7 +608,11 @@ export const BENCHMARKS = {
     counterOfferRate: 0.27,
     sourcingChannels: { referral: 0.48, agency: 0.29, direct: 0.16, internal: 0.07 },
     salaryGrowthRate: 0.05,
-    typicalExperience: { min: 5, typical: 9 }
+    typicalExperience: { min: 5, typical: 9 },
+    retentionRisk: { firstYearAttrition: 0.2, topReasons: ['physical demands', 'team turnover', 'standards pressure'] },
+    compensationStructure: { basePercent: 0.88, bonusPercent: 0.06, benefitsPercent: 0.06, signingBonusFrequency: 0.2, signingBonusRange: "5k-12k" },
+    relocationWillingness: 0.4,
+    backgroundCheckTimeline: 2
   },
   "Head Housekeeper": {
     category: "Formal Service",
@@ -562,7 +634,11 @@ export const BENCHMARKS = {
     counterOfferRate: 0.18,
     sourcingChannels: { referral: 0.41, agency: 0.21, direct: 0.19, internal: 0.19 },
     salaryGrowthRate: 0.06,
-    typicalExperience: { min: 6, typical: 8 }
+    typicalExperience: { min: 6, typical: 8 },
+    retentionRisk: { firstYearAttrition: 0.3, topReasons: ['physical demands', 'staff management', 'comp stagnation'] },
+    compensationStructure: { basePercent: 0.9, bonusPercent: 0.05, benefitsPercent: 0.05, signingBonusFrequency: 0.15, signingBonusRange: "3k-10k" },
+    relocationWillingness: 0.38,
+    backgroundCheckTimeline: 2
   },
   "Majordomo": {
     category: "Formal Service",
@@ -584,7 +660,11 @@ export const BENCHMARKS = {
     counterOfferRate: 0.41,
     sourcingChannels: { referral: 0.41, agency: 0.24, direct: 0.2, internal: 0.15 },
     salaryGrowthRate: 0.05,
-    typicalExperience: { min: 7, typical: 14 }
+    typicalExperience: { min: 7, typical: 14 },
+    retentionRisk: { firstYearAttrition: 0.18, topReasons: ['cultural fit', 'family politics', 'scope evolution'] },
+    compensationStructure: { basePercent: 0.82, bonusPercent: 0.1, benefitsPercent: 0.08, signingBonusFrequency: 0.32, signingBonusRange: "10k-25k" },
+    relocationWillingness: 0.52,
+    backgroundCheckTimeline: 3
   },
 
   // ==========================================
@@ -610,7 +690,11 @@ export const BENCHMARKS = {
     counterOfferRate: 0.31,
     sourcingChannels: { referral: 0.44, agency: 0.26, direct: 0.18, internal: 0.12 },
     salaryGrowthRate: 0.06,
-    typicalExperience: { min: 8, typical: 13 }
+    typicalExperience: { min: 8, typical: 13 },
+    retentionRisk: { firstYearAttrition: 0.25, topReasons: ['dietary restriction fatigue', 'schedule demands', 'creative constraints'] },
+    compensationStructure: { basePercent: 0.8, bonusPercent: 0.12, benefitsPercent: 0.08, signingBonusFrequency: 0.4, signingBonusRange: "10k-30k" },
+    relocationWillingness: 0.5,
+    backgroundCheckTimeline: 2
   },
   "Private Chef (Traveling)": {
     category: "Culinary",
@@ -632,7 +716,11 @@ export const BENCHMARKS = {
     counterOfferRate: 0.41,
     sourcingChannels: { referral: 0.35, agency: 0.21, direct: 0.1, internal: 0.34 },
     salaryGrowthRate: 0.05,
-    typicalExperience: { min: 10, typical: 12 }
+    typicalExperience: { min: 10, typical: 12 },
+    retentionRisk: { firstYearAttrition: 0.32, topReasons: ['travel fatigue', 'kitchen limitations', 'lifestyle disruption'] },
+    compensationStructure: { basePercent: 0.78, bonusPercent: 0.14, benefitsPercent: 0.08, signingBonusFrequency: 0.45, signingBonusRange: "15k-35k" },
+    relocationWillingness: 0.6,
+    backgroundCheckTimeline: 2
   },
   "Sous Chef (Private)": {
     category: "Culinary",
@@ -654,7 +742,11 @@ export const BENCHMARKS = {
     counterOfferRate: 0.24,
     sourcingChannels: { referral: 0.31, agency: 0.21, direct: 0.1, internal: 0.38 },
     salaryGrowthRate: 0.04,
-    typicalExperience: { min: 6, typical: 8 }
+    typicalExperience: { min: 6, typical: 8 },
+    retentionRisk: { firstYearAttrition: 0.3, topReasons: ['career progression limits', 'comp vs restaurant', 'recognition gap'] },
+    compensationStructure: { basePercent: 0.85, bonusPercent: 0.08, benefitsPercent: 0.07, signingBonusFrequency: 0.25, signingBonusRange: "5k-15k" },
+    relocationWillingness: 0.45,
+    backgroundCheckTimeline: 2
   },
   "Personal Chef (Part-time)": {
     category: "Culinary",
@@ -676,7 +768,11 @@ export const BENCHMARKS = {
     counterOfferRate: 0.15,
     sourcingChannels: { referral: 0.41, agency: 0.31, direct: 0.21, internal: 0.07 },
     salaryGrowthRate: 0.07,
-    typicalExperience: { min: 2, typical: 8 }
+    typicalExperience: { min: 2, typical: 8 },
+    retentionRisk: { firstYearAttrition: 0.22, topReasons: ['scheduling conflicts', 'scope creep to full-time', 'comp instability'] },
+    compensationStructure: { basePercent: 0.88, bonusPercent: 0.06, benefitsPercent: 0.06, signingBonusFrequency: 0.15, signingBonusRange: "3k-10k" },
+    relocationWillingness: 0.35,
+    backgroundCheckTimeline: 2
   },
   "Sommelier (Private)": {
     category: "Culinary",
@@ -698,7 +794,11 @@ export const BENCHMARKS = {
     counterOfferRate: 0.32,
     sourcingChannels: { referral: 0.32, agency: 0.26, direct: 0.15, internal: 0.27 },
     salaryGrowthRate: 0.07,
-    typicalExperience: { min: 6, typical: 15 }
+    typicalExperience: { min: 6, typical: 15 },
+    retentionRisk: { firstYearAttrition: 0.28, topReasons: ['role underutilization', 'budget constraints', 'career stagnation'] },
+    compensationStructure: { basePercent: 0.82, bonusPercent: 0.1, benefitsPercent: 0.08, signingBonusFrequency: 0.25, signingBonusRange: "5k-15k" },
+    relocationWillingness: 0.42,
+    backgroundCheckTimeline: 2
   },
   "Pastry Chef (Private)": {
     category: "Culinary",
@@ -720,7 +820,11 @@ export const BENCHMARKS = {
     counterOfferRate: 0.23,
     sourcingChannels: { referral: 0.31, agency: 0.31, direct: 0.2, internal: 0.18 },
     salaryGrowthRate: 0.03,
-    typicalExperience: { min: 4, typical: 8 }
+    typicalExperience: { min: 4, typical: 8 },
+    retentionRisk: { firstYearAttrition: 0.3, topReasons: ['role narrowness', 'demand inconsistency', 'career growth limits'] },
+    compensationStructure: { basePercent: 0.85, bonusPercent: 0.08, benefitsPercent: 0.07, signingBonusFrequency: 0.2, signingBonusRange: "5k-12k" },
+    relocationWillingness: 0.4,
+    backgroundCheckTimeline: 2
   },
   "Laundress / Wardrobe Manager": {
     category: "Formal Service",
@@ -742,7 +846,11 @@ export const BENCHMARKS = {
     counterOfferRate: 0.17,
     sourcingChannels: { referral: 0.34, agency: 0.27, direct: 0.2, internal: 0.19 },
     salaryGrowthRate: 0.04,
-    typicalExperience: { min: 6, typical: 8 }
+    typicalExperience: { min: 6, typical: 8 },
+    retentionRisk: { firstYearAttrition: 0.35, topReasons: ['repetitiveness', 'physical strain', 'comp ceiling'] },
+    compensationStructure: { basePercent: 0.92, bonusPercent: 0.04, benefitsPercent: 0.04, signingBonusFrequency: 0.1, signingBonusRange: "2k-8k" },
+    relocationWillingness: 0.35,
+    backgroundCheckTimeline: 2
   },
   "Household Couple": {
     category: "Formal Service",
@@ -764,7 +872,11 @@ export const BENCHMARKS = {
     counterOfferRate: 0.42,
     sourcingChannels: { referral: 0.43999999999999995, agency: 0.35, direct: 0.21, internal: 0.0 },
     salaryGrowthRate: 0.09,
-    typicalExperience: { min: 9, typical: 15 }
+    typicalExperience: { min: 9, typical: 15 },
+    retentionRisk: { firstYearAttrition: 0.22, topReasons: ['relationship strain', 'boundary erosion', 'isolation'] },
+    compensationStructure: { basePercent: 0.85, bonusPercent: 0.08, benefitsPercent: 0.07, signingBonusFrequency: 0.3, signingBonusRange: "8k-20k" },
+    relocationWillingness: 0.55,
+    backgroundCheckTimeline: 3
   },
 
   // ==========================================
@@ -790,7 +902,11 @@ export const BENCHMARKS = {
     counterOfferRate: 0.12,
     sourcingChannels: { referral: 0.69, agency: 0.2, direct: 0.07, internal: 0.04 },
     salaryGrowthRate: 0.1,
-    typicalExperience: { min: 5, typical: 10 }
+    typicalExperience: { min: 5, typical: 10 },
+    retentionRisk: { firstYearAttrition: 0.28, topReasons: ['boundary erosion', 'child aging out', 'family dynamics'] },
+    compensationStructure: { basePercent: 0.82, bonusPercent: 0.1, benefitsPercent: 0.08, signingBonusFrequency: 0.3, signingBonusRange: "5k-15k" },
+    relocationWillingness: 0.55,
+    backgroundCheckTimeline: 3
   },
   "Nanny (Multiple Children)": {
     category: "Childcare & Education",
@@ -812,7 +928,11 @@ export const BENCHMARKS = {
     counterOfferRate: 0.24,
     sourcingChannels: { referral: 0.69, agency: 0.2, direct: 0.07, internal: 0.04 },
     salaryGrowthRate: 0.05,
-    typicalExperience: { min: 4, typical: 9 }
+    typicalExperience: { min: 4, typical: 9 },
+    retentionRisk: { firstYearAttrition: 0.25, topReasons: ['burnout from multiple children', 'schedule demands', 'family expectations'] },
+    compensationStructure: { basePercent: 0.84, bonusPercent: 0.09, benefitsPercent: 0.07, signingBonusFrequency: 0.28, signingBonusRange: "5k-12k" },
+    relocationWillingness: 0.48,
+    backgroundCheckTimeline: 3
   },
   "Nanny (Live-out)": {
     category: "Childcare & Education",
@@ -834,7 +954,11 @@ export const BENCHMARKS = {
     counterOfferRate: 0.11,
     sourcingChannels: { referral: 0.69, agency: 0.2, direct: 0.07, internal: 0.04 },
     salaryGrowthRate: 0.03,
-    typicalExperience: { min: 5, typical: 11 }
+    typicalExperience: { min: 5, typical: 11 },
+    retentionRisk: { firstYearAttrition: 0.22, topReasons: ['commute fatigue', 'schedule changes', 'family boundary issues'] },
+    compensationStructure: { basePercent: 0.85, bonusPercent: 0.08, benefitsPercent: 0.07, signingBonusFrequency: 0.25, signingBonusRange: "3k-10k" },
+    relocationWillingness: 0.4,
+    backgroundCheckTimeline: 3
   },
   "Newborn Care Specialist": {
     category: "Childcare & Education",
@@ -856,7 +980,11 @@ export const BENCHMARKS = {
     counterOfferRate: 0.36,
     sourcingChannels: { referral: 0.69, agency: 0.2, direct: 0.07, internal: 0.04 },
     salaryGrowthRate: 0.04,
-    typicalExperience: { min: 4, typical: 12 }
+    typicalExperience: { min: 4, typical: 12 },
+    retentionRisk: { firstYearAttrition: 0.3, topReasons: ['role expiration as infant ages', 'sleep deprivation', 'family attachment conflicts'] },
+    compensationStructure: { basePercent: 0.88, bonusPercent: 0.06, benefitsPercent: 0.06, signingBonusFrequency: 0.2, signingBonusRange: "3k-10k" },
+    relocationWillingness: 0.52,
+    backgroundCheckTimeline: 3
   },
   "Governess": {
     category: "Childcare & Education",
@@ -878,7 +1006,11 @@ export const BENCHMARKS = {
     counterOfferRate: 0.4,
     sourcingChannels: { referral: 0.65, agency: 0.22, direct: 0.09, internal: 0.04 },
     salaryGrowthRate: 0.03,
-    typicalExperience: { min: 6, typical: 13 }
+    typicalExperience: { min: 6, typical: 13 },
+    retentionRisk: { firstYearAttrition: 0.2, topReasons: ['educational philosophy conflicts', 'isolation', 'family expectations'] },
+    compensationStructure: { basePercent: 0.83, bonusPercent: 0.1, benefitsPercent: 0.07, signingBonusFrequency: 0.28, signingBonusRange: "5k-15k" },
+    relocationWillingness: 0.5,
+    backgroundCheckTimeline: 3
   },
   "Tutor Coordinator": {
     category: "Childcare & Education",
@@ -900,7 +1032,11 @@ export const BENCHMARKS = {
     counterOfferRate: 0.22,
     sourcingChannels: { referral: 0.6, agency: 0.26, direct: 0.1, internal: 0.04 },
     salaryGrowthRate: 0.04,
-    typicalExperience: { min: 5, typical: 10 }
+    typicalExperience: { min: 5, typical: 10 },
+    retentionRisk: { firstYearAttrition: 0.18, topReasons: ['academic pressure', 'parent interference', 'scheduling complexity'] },
+    compensationStructure: { basePercent: 0.85, bonusPercent: 0.08, benefitsPercent: 0.07, signingBonusFrequency: 0.2, signingBonusRange: "3k-10k" },
+    relocationWillingness: 0.35,
+    backgroundCheckTimeline: 3
   },
   "Family Educator": {
     category: "Childcare & Education",
@@ -922,7 +1058,11 @@ export const BENCHMARKS = {
     counterOfferRate: 0.3,
     sourcingChannels: { referral: 0.58, agency: 0.27, direct: 0.1, internal: 0.05 },
     salaryGrowthRate: 0.03,
-    typicalExperience: { min: 10, typical: 14 }
+    typicalExperience: { min: 10, typical: 14 },
+    retentionRisk: { firstYearAttrition: 0.22, topReasons: ['curriculum disagreements', 'family philosophy conflicts', 'scope creep'] },
+    compensationStructure: { basePercent: 0.84, bonusPercent: 0.09, benefitsPercent: 0.07, signingBonusFrequency: 0.22, signingBonusRange: "5k-12k" },
+    relocationWillingness: 0.38,
+    backgroundCheckTimeline: 3
   },
 
   // ==========================================
@@ -948,7 +1088,11 @@ export const BENCHMARKS = {
     counterOfferRate: 0.31,
     sourcingChannels: { referral: 0.38, agency: 0.24, direct: 0.24, internal: 0.14 },
     salaryGrowthRate: 0.08,
-    typicalExperience: { min: 6, typical: 11 }
+    typicalExperience: { min: 6, typical: 11 },
+    retentionRisk: { firstYearAttrition: 0.14, topReasons: ['liability concerns', 'threat level changes', 'budget disputes'] },
+    compensationStructure: { basePercent: 0.72, bonusPercent: 0.16, benefitsPercent: 0.12, signingBonusFrequency: 0.45, signingBonusRange: "20k-50k" },
+    relocationWillingness: 0.55,
+    backgroundCheckTimeline: 6
   },
   "Executive Protection Agent": {
     category: "Security",
@@ -970,7 +1114,11 @@ export const BENCHMARKS = {
     counterOfferRate: 0.24,
     sourcingChannels: { referral: 0.48, agency: 0.31, direct: 0.21, internal: 0.0 },
     salaryGrowthRate: 0.07,
-    typicalExperience: { min: 6, typical: 11 }
+    typicalExperience: { min: 6, typical: 11 },
+    retentionRisk: { firstYearAttrition: 0.18, topReasons: ['travel fatigue', 'relationship strain', 'better government offer'] },
+    compensationStructure: { basePercent: 0.75, bonusPercent: 0.15, benefitsPercent: 0.1, signingBonusFrequency: 0.38, signingBonusRange: "10k-30k" },
+    relocationWillingness: 0.6,
+    backgroundCheckTimeline: 6
   },
   "Residential Security Officer": {
     category: "Security",
@@ -992,7 +1140,11 @@ export const BENCHMARKS = {
     counterOfferRate: 0.18,
     sourcingChannels: { referral: 0.39, agency: 0.3, direct: 0.24, internal: 0.07 },
     salaryGrowthRate: 0.04,
-    typicalExperience: { min: 4, typical: 7 }
+    typicalExperience: { min: 4, typical: 7 },
+    retentionRisk: { firstYearAttrition: 0.18, topReasons: ['travel fatigue', 'relationship strain', 'better government offer'] },
+    compensationStructure: { basePercent: 0.75, bonusPercent: 0.15, benefitsPercent: 0.1, signingBonusFrequency: 0.38, signingBonusRange: "10k-30k" },
+    relocationWillingness: 0.6,
+    backgroundCheckTimeline: 6
   },
   "Security Driver": {
     category: "Security",
@@ -1014,7 +1166,11 @@ export const BENCHMARKS = {
     counterOfferRate: 0.17,
     sourcingChannels: { referral: 0.39, agency: 0.23, direct: 0.18, internal: 0.2 },
     salaryGrowthRate: 0.08,
-    typicalExperience: { min: 5, typical: 11 }
+    typicalExperience: { min: 5, typical: 11 },
+    retentionRisk: { firstYearAttrition: 0.18, topReasons: ['travel fatigue', 'relationship strain', 'better government offer'] },
+    compensationStructure: { basePercent: 0.75, bonusPercent: 0.15, benefitsPercent: 0.1, signingBonusFrequency: 0.38, signingBonusRange: "10k-30k" },
+    relocationWillingness: 0.6,
+    backgroundCheckTimeline: 6
   },
   "Travel Security Specialist": {
     category: "Security",
@@ -1036,7 +1192,11 @@ export const BENCHMARKS = {
     counterOfferRate: 0.41,
     sourcingChannels: { referral: 0.48, agency: 0.21, direct: 0.19, internal: 0.12 },
     salaryGrowthRate: 0.04,
-    typicalExperience: { min: 6, typical: 12 }
+    typicalExperience: { min: 6, typical: 12 },
+    retentionRisk: { firstYearAttrition: 0.18, topReasons: ['travel fatigue', 'relationship strain', 'better government offer'] },
+    compensationStructure: { basePercent: 0.75, bonusPercent: 0.15, benefitsPercent: 0.1, signingBonusFrequency: 0.38, signingBonusRange: "10k-30k" },
+    relocationWillingness: 0.6,
+    backgroundCheckTimeline: 6
   },
   "Cybersecurity Manager": {
     category: "Security",
@@ -1058,7 +1218,11 @@ export const BENCHMARKS = {
     counterOfferRate: 0.43,
     sourcingChannels: { referral: 0.39, agency: 0.31, direct: 0.21, internal: 0.09 },
     salaryGrowthRate: 0.12,
-    typicalExperience: { min: 8, typical: 12 }
+    typicalExperience: { min: 8, typical: 12 },
+    retentionRisk: { firstYearAttrition: 0.15, topReasons: ['better corporate offers', 'scope creep', 'regulatory pressure'] },
+    compensationStructure: { basePercent: 0.72, bonusPercent: 0.16, benefitsPercent: 0.12, signingBonusFrequency: 0.45, signingBonusRange: "20k-50k" },
+    relocationWillingness: 0.45,
+    backgroundCheckTimeline: 5
   },
 
   // ==========================================
@@ -1084,7 +1248,11 @@ export const BENCHMARKS = {
     counterOfferRate: 0.19,
     sourcingChannels: { referral: 0.48, agency: 0.28, direct: 0.2, internal: 0.04 },
     salaryGrowthRate: 0.05,
-    typicalExperience: { min: 4, typical: 10 }
+    typicalExperience: { min: 4, typical: 10 },
+    retentionRisk: { firstYearAttrition: 0.15, topReasons: ['better corporate offers', 'scope creep', 'regulatory pressure'] },
+    compensationStructure: { basePercent: 0.72, bonusPercent: 0.16, benefitsPercent: 0.12, signingBonusFrequency: 0.45, signingBonusRange: "20k-50k" },
+    relocationWillingness: 0.45,
+    backgroundCheckTimeline: 5
   },
   "Long-haul Driver": {
     category: "Transportation",
@@ -1106,7 +1274,11 @@ export const BENCHMARKS = {
     counterOfferRate: 0.13,
     sourcingChannels: { referral: 0.48, agency: 0.32, direct: 0.2, internal: 0.0 },
     salaryGrowthRate: 0.07,
-    typicalExperience: { min: 4, typical: 12 }
+    typicalExperience: { min: 4, typical: 12 },
+    retentionRisk: { firstYearAttrition: 0.15, topReasons: ['better corporate offers', 'scope creep', 'regulatory pressure'] },
+    compensationStructure: { basePercent: 0.72, bonusPercent: 0.16, benefitsPercent: 0.12, signingBonusFrequency: 0.45, signingBonusRange: "20k-50k" },
+    relocationWillingness: 0.45,
+    backgroundCheckTimeline: 5
   },
   "Driver (Car Collector)": {
     category: "Transportation",
@@ -1128,7 +1300,11 @@ export const BENCHMARKS = {
     counterOfferRate: 0.31,
     sourcingChannels: { referral: 0.46, agency: 0.33, direct: 0.15, internal: 0.06 },
     salaryGrowthRate: 0.05,
-    typicalExperience: { min: 7, typical: 11 }
+    typicalExperience: { min: 7, typical: 11 },
+    retentionRisk: { firstYearAttrition: 0.15, topReasons: ['better corporate offers', 'scope creep', 'regulatory pressure'] },
+    compensationStructure: { basePercent: 0.72, bonusPercent: 0.16, benefitsPercent: 0.12, signingBonusFrequency: 0.45, signingBonusRange: "20k-50k" },
+    relocationWillingness: 0.45,
+    backgroundCheckTimeline: 5
   },
   "Aviation Coordinator": {
     category: "Transportation",
@@ -1150,7 +1326,11 @@ export const BENCHMARKS = {
     counterOfferRate: 0.35,
     sourcingChannels: { referral: 0.46, agency: 0.33, direct: 0.1, internal: 0.11 },
     salaryGrowthRate: 0.1,
-    typicalExperience: { min: 5, typical: 10 }
+    typicalExperience: { min: 5, typical: 10 },
+    retentionRisk: { firstYearAttrition: 0.18, topReasons: ['regulatory complexity', 'scheduling chaos', 'vendor management'] },
+    compensationStructure: { basePercent: 0.8, bonusPercent: 0.12, benefitsPercent: 0.08, signingBonusFrequency: 0.3, signingBonusRange: "10k-25k" },
+    relocationWillingness: 0.4,
+    backgroundCheckTimeline: 3
   },
   "Flight Attendant (Private)": {
     category: "Transportation",
@@ -1172,7 +1352,11 @@ export const BENCHMARKS = {
     counterOfferRate: 0.33,
     sourcingChannels: { referral: 0.46, agency: 0.24, direct: 0.19, internal: 0.11 },
     salaryGrowthRate: 0.08,
-    typicalExperience: { min: 4, typical: 10 }
+    typicalExperience: { min: 4, typical: 10 },
+    retentionRisk: { firstYearAttrition: 0.28, topReasons: ['schedule unpredictability', 'lifestyle impact', 'comp vs commercial'] },
+    compensationStructure: { basePercent: 0.82, bonusPercent: 0.1, benefitsPercent: 0.08, signingBonusFrequency: 0.25, signingBonusRange: "5k-15k" },
+    relocationWillingness: 0.55,
+    backgroundCheckTimeline: 3
   },
 
   // ==========================================
@@ -1198,7 +1382,11 @@ export const BENCHMARKS = {
     counterOfferRate: 0.26,
     sourcingChannels: { referral: 0.39, agency: 0.25, direct: 0.2, internal: 0.16 },
     salaryGrowthRate: 0.04,
-    typicalExperience: { min: 4, typical: 12 }
+    typicalExperience: { min: 4, typical: 12 },
+    retentionRisk: { firstYearAttrition: 0.28, topReasons: ['schedule unpredictability', 'lifestyle impact', 'comp vs commercial'] },
+    compensationStructure: { basePercent: 0.82, bonusPercent: 0.1, benefitsPercent: 0.08, signingBonusFrequency: 0.25, signingBonusRange: "5k-15k" },
+    relocationWillingness: 0.55,
+    backgroundCheckTimeline: 3
   },
   "Head Gardener": {
     category: "Grounds & Outdoor",
@@ -1220,7 +1408,11 @@ export const BENCHMARKS = {
     counterOfferRate: 0.19,
     sourcingChannels: { referral: 0.47, agency: 0.35, direct: 0.13, internal: 0.05 },
     salaryGrowthRate: 0.06,
-    typicalExperience: { min: 5, typical: 12 }
+    typicalExperience: { min: 5, typical: 12 },
+    retentionRisk: { firstYearAttrition: 0.18, topReasons: ['creative constraints', 'budget limits', 'seasonal pressure'] },
+    compensationStructure: { basePercent: 0.88, bonusPercent: 0.06, benefitsPercent: 0.06, signingBonusFrequency: 0.15, signingBonusRange: "3k-10k" },
+    relocationWillingness: 0.3,
+    backgroundCheckTimeline: 2
   },
   "Maintenance Manager": {
     category: "Grounds & Outdoor",
@@ -1242,7 +1434,11 @@ export const BENCHMARKS = {
     counterOfferRate: 0.15,
     sourcingChannels: { referral: 0.49, agency: 0.22, direct: 0.22, internal: 0.07 },
     salaryGrowthRate: 0.05,
-    typicalExperience: { min: 5, typical: 7 }
+    typicalExperience: { min: 5, typical: 7 },
+    retentionRisk: { firstYearAttrition: 0.18, topReasons: ['creative constraints', 'budget limits', 'seasonal pressure'] },
+    compensationStructure: { basePercent: 0.88, bonusPercent: 0.06, benefitsPercent: 0.06, signingBonusFrequency: 0.15, signingBonusRange: "3k-10k" },
+    relocationWillingness: 0.3,
+    backgroundCheckTimeline: 2
   },
   "Pool Manager": {
     category: "Grounds & Outdoor",
@@ -1264,7 +1460,11 @@ export const BENCHMARKS = {
     counterOfferRate: 0.14,
     sourcingChannels: { referral: 0.45, agency: 0.25, direct: 0.17, internal: 0.13 },
     salaryGrowthRate: 0.07,
-    typicalExperience: { min: 5, typical: 11 }
+    typicalExperience: { min: 5, typical: 11 },
+    retentionRisk: { firstYearAttrition: 0.18, topReasons: ['creative constraints', 'budget limits', 'seasonal pressure'] },
+    compensationStructure: { basePercent: 0.88, bonusPercent: 0.06, benefitsPercent: 0.06, signingBonusFrequency: 0.15, signingBonusRange: "3k-10k" },
+    relocationWillingness: 0.3,
+    backgroundCheckTimeline: 2
   },
   "Facilities Director": {
     category: "Grounds & Outdoor",
@@ -1286,7 +1486,11 @@ export const BENCHMARKS = {
     counterOfferRate: 0.16,
     sourcingChannels: { referral: 0.39, agency: 0.28, direct: 0.2, internal: 0.13 },
     salaryGrowthRate: 0.06,
-    typicalExperience: { min: 7, typical: 12 }
+    typicalExperience: { min: 7, typical: 12 },
+    retentionRisk: { firstYearAttrition: 0.18, topReasons: ['creative constraints', 'budget limits', 'seasonal pressure'] },
+    compensationStructure: { basePercent: 0.88, bonusPercent: 0.06, benefitsPercent: 0.06, signingBonusFrequency: 0.15, signingBonusRange: "3k-10k" },
+    relocationWillingness: 0.3,
+    backgroundCheckTimeline: 2
   },
 
   // ==========================================
@@ -1312,7 +1516,11 @@ export const BENCHMARKS = {
     counterOfferRate: 0.17,
     sourcingChannels: { referral: 0.29, agency: 0.49, direct: 0.22, internal: -0.0 },
     salaryGrowthRate: 0.03,
-    typicalExperience: { min: 3, typical: 7 }
+    typicalExperience: { min: 3, typical: 7 },
+    retentionRisk: { firstYearAttrition: 0.28, topReasons: ['regulatory burden', 'crew management', 'lifestyle burnout'] },
+    compensationStructure: { basePercent: 0.68, bonusPercent: 0.18, benefitsPercent: 0.14, signingBonusFrequency: 0.45, signingBonusRange: "10k-25k" },
+    relocationWillingness: 0.82,
+    backgroundCheckTimeline: 4
   },
   "Yacht Captain (100ft+)": {
     category: "Maritime / Yacht",
@@ -1334,7 +1542,11 @@ export const BENCHMARKS = {
     counterOfferRate: 0.11,
     sourcingChannels: { referral: 0.27, agency: 0.48, direct: 0.17, internal: 0.08 },
     salaryGrowthRate: 0.06,
-    typicalExperience: { min: 9, typical: 15 }
+    typicalExperience: { min: 9, typical: 15 },
+    retentionRisk: { firstYearAttrition: 0.25, topReasons: ['crew management stress', 'principal demands', 'lifestyle burnout'] },
+    compensationStructure: { basePercent: 0.65, bonusPercent: 0.2, benefitsPercent: 0.15, signingBonusFrequency: 0.55, signingBonusRange: "20k-50k" },
+    relocationWillingness: 0.85,
+    backgroundCheckTimeline: 4
   },
   "Yacht Captain (Superyacht 200ft+)": {
     category: "Maritime / Yacht",
@@ -1356,7 +1568,11 @@ export const BENCHMARKS = {
     counterOfferRate: 0.1,
     sourcingChannels: { referral: 0.26, agency: 0.46, direct: 0.23, internal: 0.05 },
     salaryGrowthRate: 0.09,
-    typicalExperience: { min: 10, typical: 14 }
+    typicalExperience: { min: 10, typical: 14 },
+    retentionRisk: { firstYearAttrition: 0.22, topReasons: ['operational pressure', 'regulatory complexity', 'family separation'] },
+    compensationStructure: { basePercent: 0.62, bonusPercent: 0.22, benefitsPercent: 0.16, signingBonusFrequency: 0.6, signingBonusRange: "30k-75k" },
+    relocationWillingness: 0.88,
+    backgroundCheckTimeline: 5
   },
   "Chief Officer / First Mate": {
     category: "Maritime / Yacht",
@@ -1378,7 +1594,11 @@ export const BENCHMARKS = {
     counterOfferRate: 0.16,
     sourcingChannels: { referral: 0.26, agency: 0.45, direct: 0.19, internal: 0.1 },
     salaryGrowthRate: 0.06,
-    typicalExperience: { min: 6, typical: 10 }
+    typicalExperience: { min: 6, typical: 10 },
+    retentionRisk: { firstYearAttrition: 0.3, topReasons: ['responsibility without authority', 'captain conflicts', 'lifestyle strain'] },
+    compensationStructure: { basePercent: 0.72, bonusPercent: 0.16, benefitsPercent: 0.12, signingBonusFrequency: 0.42, signingBonusRange: "12k-30k" },
+    relocationWillingness: 0.85,
+    backgroundCheckTimeline: 4
   },
   "Chief Engineer (Yacht)": {
     category: "Maritime / Yacht",
@@ -1400,7 +1620,11 @@ export const BENCHMARKS = {
     counterOfferRate: 0.18,
     sourcingChannels: { referral: 0.27, agency: 0.5, direct: 0.18, internal: 0.05 },
     salaryGrowthRate: 0.06,
-    typicalExperience: { min: 6, typical: 9 }
+    typicalExperience: { min: 6, typical: 9 },
+    retentionRisk: { firstYearAttrition: 0.22, topReasons: ['technical isolation', 'parts sourcing', 'sea time demands'] },
+    compensationStructure: { basePercent: 0.7, bonusPercent: 0.18, benefitsPercent: 0.12, signingBonusFrequency: 0.48, signingBonusRange: "15k-35k" },
+    relocationWillingness: 0.8,
+    backgroundCheckTimeline: 4
   },
   "Chief Stewardess": {
     category: "Maritime / Yacht",
@@ -1422,7 +1646,11 @@ export const BENCHMARKS = {
     counterOfferRate: 0.18,
     sourcingChannels: { referral: 0.22, agency: 0.45, direct: 0.23, internal: 0.1 },
     salaryGrowthRate: 0.04,
-    typicalExperience: { min: 4, typical: 8 }
+    typicalExperience: { min: 4, typical: 8 },
+    retentionRisk: { firstYearAttrition: 0.35, topReasons: ['service fatigue', 'guest demands', 'relationship strain'] },
+    compensationStructure: { basePercent: 0.72, bonusPercent: 0.16, benefitsPercent: 0.12, signingBonusFrequency: 0.4, signingBonusRange: "10k-25k" },
+    relocationWillingness: 0.85,
+    backgroundCheckTimeline: 3
   },
   "Purser": {
     category: "Maritime / Yacht",
@@ -1444,7 +1672,11 @@ export const BENCHMARKS = {
     counterOfferRate: 0.14,
     sourcingChannels: { referral: 0.28, agency: 0.47, direct: 0.24, internal: 0.01 },
     salaryGrowthRate: 0.07,
-    typicalExperience: { min: 6, typical: 12 }
+    typicalExperience: { min: 6, typical: 12 },
+    retentionRisk: { firstYearAttrition: 0.28, topReasons: ['administrative overload', 'guest complaints', 'schedule demands'] },
+    compensationStructure: { basePercent: 0.75, bonusPercent: 0.15, benefitsPercent: 0.1, signingBonusFrequency: 0.35, signingBonusRange: "8k-20k" },
+    relocationWillingness: 0.8,
+    backgroundCheckTimeline: 3
   },
   "Deckhand": {
     category: "Maritime / Yacht",
@@ -1466,7 +1698,11 @@ export const BENCHMARKS = {
     counterOfferRate: 0.12,
     sourcingChannels: { referral: 0.21, agency: 0.5, direct: 0.24, internal: 0.05 },
     salaryGrowthRate: 0.06,
-    typicalExperience: { min: 2, typical: 8 }
+    typicalExperience: { min: 2, typical: 8 },
+    retentionRisk: { firstYearAttrition: 0.28, topReasons: ['administrative overload', 'guest complaints', 'schedule demands'] },
+    compensationStructure: { basePercent: 0.75, bonusPercent: 0.15, benefitsPercent: 0.1, signingBonusFrequency: 0.35, signingBonusRange: "8k-20k" },
+    relocationWillingness: 0.8,
+    backgroundCheckTimeline: 3
   },
 
   // ==========================================
@@ -1492,7 +1728,11 @@ export const BENCHMARKS = {
     counterOfferRate: 0.25,
     sourcingChannels: { referral: 0.44, agency: 0.27, direct: 0.17, internal: 0.12 },
     salaryGrowthRate: 0.1,
-    typicalExperience: { min: 4, typical: 10 }
+    typicalExperience: { min: 4, typical: 10 },
+    retentionRisk: { firstYearAttrition: 0.28, topReasons: ['administrative overload', 'guest complaints', 'schedule demands'] },
+    compensationStructure: { basePercent: 0.75, bonusPercent: 0.15, benefitsPercent: 0.1, signingBonusFrequency: 0.35, signingBonusRange: "8k-20k" },
+    relocationWillingness: 0.8,
+    backgroundCheckTimeline: 3
   },
   "Elder Care Manager": {
     category: "Healthcare & Wellness",
@@ -1514,7 +1754,11 @@ export const BENCHMARKS = {
     counterOfferRate: 0.21,
     sourcingChannels: { referral: 0.41, agency: 0.28, direct: 0.14, internal: 0.17 },
     salaryGrowthRate: 0.06,
-    typicalExperience: { min: 5, typical: 11 }
+    typicalExperience: { min: 5, typical: 11 },
+    retentionRisk: { firstYearAttrition: 0.28, topReasons: ['administrative overload', 'guest complaints', 'schedule demands'] },
+    compensationStructure: { basePercent: 0.75, bonusPercent: 0.15, benefitsPercent: 0.1, signingBonusFrequency: 0.35, signingBonusRange: "8k-20k" },
+    relocationWillingness: 0.8,
+    backgroundCheckTimeline: 3
   },
   "Personal Trainer (Dedicated)": {
     category: "Healthcare & Wellness",
@@ -1536,7 +1780,11 @@ export const BENCHMARKS = {
     counterOfferRate: 0.27,
     sourcingChannels: { referral: 0.39, agency: 0.34, direct: 0.15, internal: 0.12 },
     salaryGrowthRate: 0.04,
-    typicalExperience: { min: 5, typical: 10 }
+    typicalExperience: { min: 5, typical: 10 },
+    retentionRisk: { firstYearAttrition: 0.28, topReasons: ['administrative overload', 'guest complaints', 'schedule demands'] },
+    compensationStructure: { basePercent: 0.75, bonusPercent: 0.15, benefitsPercent: 0.1, signingBonusFrequency: 0.35, signingBonusRange: "8k-20k" },
+    relocationWillingness: 0.8,
+    backgroundCheckTimeline: 3
   },
   "Wellness Coordinator": {
     category: "Healthcare & Wellness",
@@ -1558,7 +1806,11 @@ export const BENCHMARKS = {
     counterOfferRate: 0.18,
     sourcingChannels: { referral: 0.43, agency: 0.31, direct: 0.16, internal: 0.1 },
     salaryGrowthRate: 0.08,
-    typicalExperience: { min: 5, typical: 10 }
+    typicalExperience: { min: 5, typical: 10 },
+    retentionRisk: { firstYearAttrition: 0.28, topReasons: ['administrative overload', 'guest complaints', 'schedule demands'] },
+    compensationStructure: { basePercent: 0.75, bonusPercent: 0.15, benefitsPercent: 0.1, signingBonusFrequency: 0.35, signingBonusRange: "8k-20k" },
+    relocationWillingness: 0.8,
+    backgroundCheckTimeline: 3
   },
   "Medical Concierge": {
     category: "Healthcare & Wellness",
@@ -1580,7 +1832,11 @@ export const BENCHMARKS = {
     counterOfferRate: 0.33,
     sourcingChannels: { referral: 0.35, agency: 0.25, direct: 0.16, internal: 0.24 },
     salaryGrowthRate: 0.05,
-    typicalExperience: { min: 7, typical: 13 }
+    typicalExperience: { min: 7, typical: 13 },
+    retentionRisk: { firstYearAttrition: 0.28, topReasons: ['administrative overload', 'guest complaints', 'schedule demands'] },
+    compensationStructure: { basePercent: 0.75, bonusPercent: 0.15, benefitsPercent: 0.1, signingBonusFrequency: 0.35, signingBonusRange: "8k-20k" },
+    relocationWillingness: 0.8,
+    backgroundCheckTimeline: 3
   },
 
   // ==========================================
@@ -1606,7 +1862,11 @@ export const BENCHMARKS = {
     counterOfferRate: 0.24,
     sourcingChannels: { referral: 0.31, agency: 0.26, direct: 0.17, internal: 0.26 },
     salaryGrowthRate: 0.06,
-    typicalExperience: { min: 4, typical: 10 }
+    typicalExperience: { min: 4, typical: 10 },
+    retentionRisk: { firstYearAttrition: 0.28, topReasons: ['administrative overload', 'guest complaints', 'schedule demands'] },
+    compensationStructure: { basePercent: 0.75, bonusPercent: 0.15, benefitsPercent: 0.1, signingBonusFrequency: 0.35, signingBonusRange: "8k-20k" },
+    relocationWillingness: 0.8,
+    backgroundCheckTimeline: 3
   },
   "Event Manager (Private)": {
     category: "Hospitality & Collections",
@@ -1628,7 +1888,11 @@ export const BENCHMARKS = {
     counterOfferRate: 0.25,
     sourcingChannels: { referral: 0.49, agency: 0.2, direct: 0.21, internal: 0.1 },
     salaryGrowthRate: 0.07,
-    typicalExperience: { min: 5, typical: 7 }
+    typicalExperience: { min: 5, typical: 7 },
+    retentionRisk: { firstYearAttrition: 0.28, topReasons: ['administrative overload', 'guest complaints', 'schedule demands'] },
+    compensationStructure: { basePercent: 0.75, bonusPercent: 0.15, benefitsPercent: 0.1, signingBonusFrequency: 0.35, signingBonusRange: "8k-20k" },
+    relocationWillingness: 0.8,
+    backgroundCheckTimeline: 3
   },
   "Catering Manager": {
     category: "Hospitality & Collections",
@@ -1650,7 +1914,11 @@ export const BENCHMARKS = {
     counterOfferRate: 0.13,
     sourcingChannels: { referral: 0.38, agency: 0.33, direct: 0.2, internal: 0.09 },
     salaryGrowthRate: 0.07,
-    typicalExperience: { min: 6, typical: 11 }
+    typicalExperience: { min: 6, typical: 11 },
+    retentionRisk: { firstYearAttrition: 0.28, topReasons: ['administrative overload', 'guest complaints', 'schedule demands'] },
+    compensationStructure: { basePercent: 0.75, bonusPercent: 0.15, benefitsPercent: 0.1, signingBonusFrequency: 0.35, signingBonusRange: "8k-20k" },
+    relocationWillingness: 0.8,
+    backgroundCheckTimeline: 3
   },
   "Wine Cellar Manager": {
     category: "Hospitality & Collections",
@@ -1672,7 +1940,11 @@ export const BENCHMARKS = {
     counterOfferRate: 0.41,
     sourcingChannels: { referral: 0.4, agency: 0.24, direct: 0.16, internal: 0.2 },
     salaryGrowthRate: 0.05,
-    typicalExperience: { min: 9, typical: 15 }
+    typicalExperience: { min: 9, typical: 15 },
+    retentionRisk: { firstYearAttrition: 0.28, topReasons: ['administrative overload', 'guest complaints', 'schedule demands'] },
+    compensationStructure: { basePercent: 0.75, bonusPercent: 0.15, benefitsPercent: 0.1, signingBonusFrequency: 0.35, signingBonusRange: "8k-20k" },
+    relocationWillingness: 0.8,
+    backgroundCheckTimeline: 3
   },
 
   // ==========================================
@@ -1700,7 +1972,11 @@ export const BENCHMARKS = {
     counterOfferRate: 0.15,
     sourcingChannels: { referral: 0.55, agency: 0.3, direct: 0.1, internal: 0.05 },
     salaryGrowthRate: 0.06,
-    typicalExperience: { min: 6, typical: 12 }
+    typicalExperience: { min: 6, typical: 12 },
+    retentionRisk: { firstYearAttrition: 0.25, topReasons: ['au pair turnover management', 'family conflicts', 'cultural mediation fatigue'] },
+    compensationStructure: { basePercent: 0.86, bonusPercent: 0.07, benefitsPercent: 0.07, signingBonusFrequency: 0.18, signingBonusRange: "3k-8k" },
+    relocationWillingness: 0.3,
+    backgroundCheckTimeline: 2
   },
   "Night Nanny": {
     category: "Childcare & Education",
@@ -1722,7 +1998,11 @@ export const BENCHMARKS = {
     counterOfferRate: 0.3,
     sourcingChannels: { referral: 0.69, agency: 0.19, direct: 0.08, internal: 0.04 },
     salaryGrowthRate: 0.05,
-    typicalExperience: { min: 4, typical: 10 }
+    typicalExperience: { min: 4, typical: 10 },
+    retentionRisk: { firstYearAttrition: 0.35, topReasons: ['sleep disruption', 'health impact', 'role duration limits'] },
+    compensationStructure: { basePercent: 0.88, bonusPercent: 0.06, benefitsPercent: 0.06, signingBonusFrequency: 0.18, signingBonusRange: "3k-8k" },
+    relocationWillingness: 0.48,
+    backgroundCheckTimeline: 3
   },
 
   // FAMILY OFFICE - INVESTMENT (Additional)
@@ -1746,7 +2026,11 @@ export const BENCHMARKS = {
     counterOfferRate: 0.32,
     sourcingChannels: { referral: 0.46, agency: 0.33, direct: 0.14, internal: 0.07 },
     salaryGrowthRate: 0.06,
-    typicalExperience: { min: 4, typical: 10 }
+    typicalExperience: { min: 4, typical: 10 },
+    retentionRisk: { firstYearAttrition: 0.35, topReasons: ['sleep disruption', 'health impact', 'role duration limits'] },
+    compensationStructure: { basePercent: 0.88, bonusPercent: 0.06, benefitsPercent: 0.06, signingBonusFrequency: 0.18, signingBonusRange: "3k-8k" },
+    relocationWillingness: 0.48,
+    backgroundCheckTimeline: 3
   },
   "Villa Manager": {
     category: "Estate Leadership",
@@ -1768,7 +2052,11 @@ export const BENCHMARKS = {
     counterOfferRate: 0.22,
     sourcingChannels: { referral: 0.5, agency: 0.25, direct: 0.18, internal: 0.07 },
     salaryGrowthRate: 0.09,
-    typicalExperience: { min: 6, typical: 8 }
+    typicalExperience: { min: 6, typical: 8 },
+    retentionRisk: { firstYearAttrition: 0.32, topReasons: ['isolation', 'seasonal instability', 'cultural adjustment'] },
+    compensationStructure: { basePercent: 0.82, bonusPercent: 0.1, benefitsPercent: 0.08, signingBonusFrequency: 0.25, signingBonusRange: "8k-20k" },
+    relocationWillingness: 0.45,
+    backgroundCheckTimeline: 2
   },
   "Caretaker": {
     category: "Estate Leadership",
@@ -1790,7 +2078,11 @@ export const BENCHMARKS = {
     counterOfferRate: 0.19,
     sourcingChannels: { referral: 0.34, agency: 0.2, direct: 0.12, internal: 0.34 },
     salaryGrowthRate: 0.04,
-    typicalExperience: { min: 4, typical: 6 }
+    typicalExperience: { min: 4, typical: 6 },
+    retentionRisk: { firstYearAttrition: 0.18, topReasons: ['isolation', 'scope creep', 'compensation stagnation'] },
+    compensationStructure: { basePercent: 0.9, bonusPercent: 0.05, benefitsPercent: 0.05, signingBonusFrequency: 0.12, signingBonusRange: "3k-8k" },
+    relocationWillingness: 0.28,
+    backgroundCheckTimeline: 2
   },
 
   // PERSONAL & ADMINISTRATIVE (Additional)
@@ -1814,7 +2106,11 @@ export const BENCHMARKS = {
     counterOfferRate: 0.25,
     sourcingChannels: { referral: 0.44, agency: 0.32, direct: 0.12, internal: 0.12 },
     salaryGrowthRate: 0.05,
-    typicalExperience: { min: 6, typical: 12 }
+    typicalExperience: { min: 6, typical: 12 },
+    retentionRisk: { firstYearAttrition: 0.28, topReasons: ['availability expectations', 'scope creep', 'burnout'] },
+    compensationStructure: { basePercent: 0.84, bonusPercent: 0.09, benefitsPercent: 0.07, signingBonusFrequency: 0.22, signingBonusRange: "5k-15k" },
+    relocationWillingness: 0.38,
+    backgroundCheckTimeline: 2
   },
   "Scheduler / Calendar Manager": {
     category: "Personal & Administrative",
@@ -1836,7 +2132,11 @@ export const BENCHMARKS = {
     counterOfferRate: 0.18,
     sourcingChannels: { referral: 0.49, agency: 0.22, direct: 0.1, internal: 0.19 },
     salaryGrowthRate: 0.06,
-    typicalExperience: { min: 6, typical: 10 }
+    typicalExperience: { min: 6, typical: 10 },
+    retentionRisk: { firstYearAttrition: 0.26, topReasons: ['schedule chaos', 'blame absorption', 'role undervaluation'] },
+    compensationStructure: { basePercent: 0.88, bonusPercent: 0.06, benefitsPercent: 0.06, signingBonusFrequency: 0.18, signingBonusRange: "3k-10k" },
+    relocationWillingness: 0.35,
+    backgroundCheckTimeline: 2
   },
 
   // FORMAL SERVICE (Additional)
@@ -1860,7 +2160,11 @@ export const BENCHMARKS = {
     counterOfferRate: 0.17,
     sourcingChannels: { referral: 0.32, agency: 0.3, direct: 0.18, internal: 0.2 },
     salaryGrowthRate: 0.05,
-    typicalExperience: { min: 3, typical: 5 }
+    typicalExperience: { min: 3, typical: 5 },
+    retentionRisk: { firstYearAttrition: 0.35, topReasons: ['physical demands', 'comp stagnation', 'schedule demands'] },
+    compensationStructure: { basePercent: 0.92, bonusPercent: 0.04, benefitsPercent: 0.04, signingBonusFrequency: 0.1, signingBonusRange: "2k-6k" },
+    relocationWillingness: 0.4,
+    backgroundCheckTimeline: 2
   },
   "Florist (Private)": {
     category: "Formal Service",
@@ -1882,7 +2186,11 @@ export const BENCHMARKS = {
     counterOfferRate: 0.22,
     sourcingChannels: { referral: 0.31, agency: 0.28, direct: 0.18, internal: 0.23 },
     salaryGrowthRate: 0.04,
-    typicalExperience: { min: 6, typical: 9 }
+    typicalExperience: { min: 6, typical: 9 },
+    retentionRisk: { firstYearAttrition: 0.28, topReasons: ['principal standards pressure', 'cultural fit issues', 'schedule demands'] },
+    compensationStructure: { basePercent: 0.78, bonusPercent: 0.13, benefitsPercent: 0.09, signingBonusFrequency: 0.35, signingBonusRange: "8k-18k" },
+    relocationWillingness: 0.5,
+    backgroundCheckTimeline: 3
   },
   "Valet": {
     category: "Formal Service",
@@ -1904,7 +2212,11 @@ export const BENCHMARKS = {
     counterOfferRate: 0.2,
     sourcingChannels: { referral: 0.4, agency: 0.27, direct: 0.14, internal: 0.19 },
     salaryGrowthRate: 0.07,
-    typicalExperience: { min: 5, typical: 12 }
+    typicalExperience: { min: 5, typical: 12 },
+    retentionRisk: { firstYearAttrition: 0.3, topReasons: ['availability demands', 'physical strain', 'comp ceiling'] },
+    compensationStructure: { basePercent: 0.9, bonusPercent: 0.05, benefitsPercent: 0.05, signingBonusFrequency: 0.12, signingBonusRange: "2k-8k" },
+    relocationWillingness: 0.42,
+    backgroundCheckTimeline: 2
   },
   "Cook": {
     category: "Culinary",
@@ -1926,7 +2238,11 @@ export const BENCHMARKS = {
     counterOfferRate: 0.12,
     sourcingChannels: { referral: 0.4, agency: 0.3, direct: 0.17, internal: 0.13 },
     salaryGrowthRate: 0.07,
-    typicalExperience: { min: 5, typical: 10 }
+    typicalExperience: { min: 5, typical: 10 },
+    retentionRisk: { firstYearAttrition: 0.35, topReasons: ['comp ceiling', 'scope creep', 'lack of creative autonomy'] },
+    compensationStructure: { basePercent: 0.9, bonusPercent: 0.05, benefitsPercent: 0.05, signingBonusFrequency: 0.1, signingBonusRange: "2k-8k" },
+    relocationWillingness: 0.38,
+    backgroundCheckTimeline: 2
   },
 
   // GROUNDS & MAINTENANCE (Additional)
@@ -1950,7 +2266,11 @@ export const BENCHMARKS = {
     counterOfferRate: 0.17,
     sourcingChannels: { referral: 0.35, agency: 0.33, direct: 0.2, internal: 0.12 },
     salaryGrowthRate: 0.05,
-    typicalExperience: { min: 3, typical: 6 }
+    typicalExperience: { min: 3, typical: 6 },
+    retentionRisk: { firstYearAttrition: 0.35, topReasons: ['comp ceiling', 'scope creep', 'lack of creative autonomy'] },
+    compensationStructure: { basePercent: 0.9, bonusPercent: 0.05, benefitsPercent: 0.05, signingBonusFrequency: 0.1, signingBonusRange: "2k-8k" },
+    relocationWillingness: 0.38,
+    backgroundCheckTimeline: 2
   },
   "Dock Master": {
     category: "Grounds & Outdoor",
@@ -1972,7 +2292,11 @@ export const BENCHMARKS = {
     counterOfferRate: 0.22,
     sourcingChannels: { referral: 0.43, agency: 0.25, direct: 0.16, internal: 0.16 },
     salaryGrowthRate: 0.04,
-    typicalExperience: { min: 5, typical: 8 }
+    typicalExperience: { min: 5, typical: 8 },
+    retentionRisk: { firstYearAttrition: 0.35, topReasons: ['comp ceiling', 'scope creep', 'lack of creative autonomy'] },
+    compensationStructure: { basePercent: 0.9, bonusPercent: 0.05, benefitsPercent: 0.05, signingBonusFrequency: 0.1, signingBonusRange: "2k-8k" },
+    relocationWillingness: 0.38,
+    backgroundCheckTimeline: 2
   },
 
   // MARITIME / YACHT (Additional)
@@ -1996,7 +2320,11 @@ export const BENCHMARKS = {
     counterOfferRate: 0.11,
     sourcingChannels: { referral: 0.23, agency: 0.49, direct: 0.24, internal: 0.04 },
     salaryGrowthRate: 0.07,
-    typicalExperience: { min: 6, typical: 8 }
+    typicalExperience: { min: 6, typical: 8 },
+    retentionRisk: { firstYearAttrition: 0.35, topReasons: ['comp ceiling', 'scope creep', 'lack of creative autonomy'] },
+    compensationStructure: { basePercent: 0.9, bonusPercent: 0.05, benefitsPercent: 0.05, signingBonusFrequency: 0.1, signingBonusRange: "2k-8k" },
+    relocationWillingness: 0.38,
+    backgroundCheckTimeline: 2
   },
   "Interior Manager (Yacht)": {
     category: "Maritime / Yacht",
@@ -2018,7 +2346,11 @@ export const BENCHMARKS = {
     counterOfferRate: 0.15,
     sourcingChannels: { referral: 0.25, agency: 0.51, direct: 0.22, internal: 0.02 },
     salaryGrowthRate: 0.06,
-    typicalExperience: { min: 5, typical: 10 }
+    typicalExperience: { min: 5, typical: 10 },
+    retentionRisk: { firstYearAttrition: 0.35, topReasons: ['comp ceiling', 'scope creep', 'lack of creative autonomy'] },
+    compensationStructure: { basePercent: 0.9, bonusPercent: 0.05, benefitsPercent: 0.05, signingBonusFrequency: 0.1, signingBonusRange: "2k-8k" },
+    relocationWillingness: 0.38,
+    backgroundCheckTimeline: 2
   },
   "Yacht Steward/Stewardess": {
     category: "Maritime / Yacht",
@@ -2040,7 +2372,11 @@ export const BENCHMARKS = {
     counterOfferRate: 0.09,
     sourcingChannels: { referral: 0.22, agency: 0.5, direct: 0.18, internal: 0.1 },
     salaryGrowthRate: 0.05,
-    typicalExperience: { min: 3, typical: 7 }
+    typicalExperience: { min: 3, typical: 7 },
+    retentionRisk: { firstYearAttrition: 0.35, topReasons: ['comp ceiling', 'scope creep', 'lack of creative autonomy'] },
+    compensationStructure: { basePercent: 0.9, bonusPercent: 0.05, benefitsPercent: 0.05, signingBonusFrequency: 0.1, signingBonusRange: "2k-8k" },
+    relocationWillingness: 0.38,
+    backgroundCheckTimeline: 2
   },
 
   // SECURITY (Additional)
@@ -2064,7 +2400,11 @@ export const BENCHMARKS = {
     counterOfferRate: 0.45,
     sourcingChannels: { referral: 0.4, agency: 0.31, direct: 0.18, internal: 0.11 },
     salaryGrowthRate: 0.04,
-    typicalExperience: { min: 6, typical: 15 }
+    typicalExperience: { min: 6, typical: 15 },
+    retentionRisk: { firstYearAttrition: 0.35, topReasons: ['comp ceiling', 'scope creep', 'lack of creative autonomy'] },
+    compensationStructure: { basePercent: 0.9, bonusPercent: 0.05, benefitsPercent: 0.05, signingBonusFrequency: 0.1, signingBonusRange: "2k-8k" },
+    relocationWillingness: 0.38,
+    backgroundCheckTimeline: 2
   },
   "IT Manager (Private)": {
     category: "Security",
@@ -2086,7 +2426,11 @@ export const BENCHMARKS = {
     counterOfferRate: 0.24,
     sourcingChannels: { referral: 0.43, agency: 0.31, direct: 0.17, internal: 0.09 },
     salaryGrowthRate: 0.05,
-    typicalExperience: { min: 9, typical: 12 }
+    typicalExperience: { min: 9, typical: 12 },
+    retentionRisk: { firstYearAttrition: 0.35, topReasons: ['comp ceiling', 'scope creep', 'lack of creative autonomy'] },
+    compensationStructure: { basePercent: 0.9, bonusPercent: 0.05, benefitsPercent: 0.05, signingBonusFrequency: 0.1, signingBonusRange: "2k-8k" },
+    relocationWillingness: 0.38,
+    backgroundCheckTimeline: 2
   },
 
   // DRIVERS & TRANSPORTATION (Additional)
@@ -2110,7 +2454,11 @@ export const BENCHMARKS = {
     counterOfferRate: 0.42,
     sourcingChannels: { referral: 0.4, agency: 0.24, direct: 0.11, internal: 0.25 },
     salaryGrowthRate: 0.12,
-    typicalExperience: { min: 7, typical: 12 }
+    typicalExperience: { min: 7, typical: 12 },
+    retentionRisk: { firstYearAttrition: 0.15, topReasons: ['schedule demands', 'regulatory burden', 'airline offers'] },
+    compensationStructure: { basePercent: 0.75, bonusPercent: 0.15, benefitsPercent: 0.1, signingBonusFrequency: 0.5, signingBonusRange: "20k-50k" },
+    relocationWillingness: 0.48,
+    backgroundCheckTimeline: 4
   },
 
   // HEALTHCARE & WELLNESS (Additional)
@@ -2134,7 +2482,11 @@ export const BENCHMARKS = {
     counterOfferRate: 0.15,
     sourcingChannels: { referral: 0.41, agency: 0.24, direct: 0.22, internal: 0.13 },
     salaryGrowthRate: 0.07,
-    typicalExperience: { min: 6, typical: 8 }
+    typicalExperience: { min: 6, typical: 8 },
+    retentionRisk: { firstYearAttrition: 0.15, topReasons: ['schedule demands', 'regulatory burden', 'airline offers'] },
+    compensationStructure: { basePercent: 0.75, bonusPercent: 0.15, benefitsPercent: 0.1, signingBonusFrequency: 0.5, signingBonusRange: "20k-50k" },
+    relocationWillingness: 0.48,
+    backgroundCheckTimeline: 4
   },
   "Companion": {
     category: "Healthcare & Wellness",
@@ -2156,7 +2508,11 @@ export const BENCHMARKS = {
     counterOfferRate: 0.18,
     sourcingChannels: { referral: 0.32, agency: 0.2, direct: 0.13, internal: 0.35 },
     salaryGrowthRate: 0.07,
-    typicalExperience: { min: 3, typical: 6 }
+    typicalExperience: { min: 3, typical: 6 },
+    retentionRisk: { firstYearAttrition: 0.15, topReasons: ['schedule demands', 'regulatory burden', 'airline offers'] },
+    compensationStructure: { basePercent: 0.75, bonusPercent: 0.15, benefitsPercent: 0.1, signingBonusFrequency: 0.5, signingBonusRange: "20k-50k" },
+    relocationWillingness: 0.48,
+    backgroundCheckTimeline: 4
   },
   "Pet Care Specialist": {
     category: "Healthcare & Wellness",
@@ -2178,7 +2534,11 @@ export const BENCHMARKS = {
     counterOfferRate: 0.13,
     sourcingChannels: { referral: 0.47, agency: 0.22, direct: 0.11, internal: 0.2 },
     salaryGrowthRate: 0.05,
-    typicalExperience: { min: 4, typical: 6 }
+    typicalExperience: { min: 4, typical: 6 },
+    retentionRisk: { firstYearAttrition: 0.15, topReasons: ['schedule demands', 'regulatory burden', 'airline offers'] },
+    compensationStructure: { basePercent: 0.75, bonusPercent: 0.15, benefitsPercent: 0.1, signingBonusFrequency: 0.5, signingBonusRange: "20k-50k" },
+    relocationWillingness: 0.48,
+    backgroundCheckTimeline: 4
   },
 
   // HOSPITALITY & EVENTS (Additional)
@@ -2202,7 +2562,11 @@ export const BENCHMARKS = {
     counterOfferRate: 0.4,
     sourcingChannels: { referral: 0.49, agency: 0.21, direct: 0.13, internal: 0.17 },
     salaryGrowthRate: 0.07,
-    typicalExperience: { min: 9, typical: 14 }
+    typicalExperience: { min: 9, typical: 14 },
+    retentionRisk: { firstYearAttrition: 0.15, topReasons: ['schedule demands', 'regulatory burden', 'airline offers'] },
+    compensationStructure: { basePercent: 0.75, bonusPercent: 0.15, benefitsPercent: 0.1, signingBonusFrequency: 0.5, signingBonusRange: "20k-50k" },
+    relocationWillingness: 0.48,
+    backgroundCheckTimeline: 4
   },
   "Art Collection Manager": {
     category: "Hospitality & Collections",
@@ -2224,7 +2588,11 @@ export const BENCHMARKS = {
     counterOfferRate: 0.43,
     sourcingChannels: { referral: 0.46, agency: 0.26, direct: 0.21, internal: 0.07 },
     salaryGrowthRate: 0.04,
-    typicalExperience: { min: 10, typical: 13 }
+    typicalExperience: { min: 10, typical: 13 },
+    retentionRisk: { firstYearAttrition: 0.15, topReasons: ['schedule demands', 'regulatory burden', 'airline offers'] },
+    compensationStructure: { basePercent: 0.75, bonusPercent: 0.15, benefitsPercent: 0.1, signingBonusFrequency: 0.5, signingBonusRange: "20k-50k" },
+    relocationWillingness: 0.48,
+    backgroundCheckTimeline: 4
   },
   "Gallery Manager (Private)": {
     category: "Hospitality & Collections",
@@ -2246,7 +2614,11 @@ export const BENCHMARKS = {
     counterOfferRate: 0.3,
     sourcingChannels: { referral: 0.42, agency: 0.31, direct: 0.21, internal: 0.06 },
     salaryGrowthRate: 0.05,
-    typicalExperience: { min: 4, typical: 9 }
+    typicalExperience: { min: 4, typical: 9 },
+    retentionRisk: { firstYearAttrition: 0.15, topReasons: ['schedule demands', 'regulatory burden', 'airline offers'] },
+    compensationStructure: { basePercent: 0.75, bonusPercent: 0.15, benefitsPercent: 0.1, signingBonusFrequency: 0.5, signingBonusRange: "20k-50k" },
+    relocationWillingness: 0.48,
+    backgroundCheckTimeline: 4
   },
 
   // GROUNDS & MAINTENANCE (Additional)
@@ -2270,7 +2642,11 @@ export const BENCHMARKS = {
     counterOfferRate: 0.24,
     sourcingChannels: { referral: 0.33, agency: 0.21, direct: 0.1, internal: 0.36 },
     salaryGrowthRate: 0.05,
-    typicalExperience: { min: 6, typical: 10 }
+    typicalExperience: { min: 6, typical: 10 },
+    retentionRisk: { firstYearAttrition: 0.15, topReasons: ['schedule demands', 'regulatory burden', 'airline offers'] },
+    compensationStructure: { basePercent: 0.75, bonusPercent: 0.15, benefitsPercent: 0.1, signingBonusFrequency: 0.5, signingBonusRange: "20k-50k" },
+    relocationWillingness: 0.48,
+    backgroundCheckTimeline: 4
   },
 
   // ==========================================
@@ -2297,7 +2673,11 @@ export const BENCHMARKS = {
     counterOfferRate: 0.48,
     sourcingChannels: { referral: 0.51, agency: 0.32, direct: 0.11, internal: 0.06 },
     salaryGrowthRate: 0.08,
-    typicalExperience: { min: 14, typical: 21 }
+    typicalExperience: { min: 14, typical: 21 },
+    retentionRisk: { firstYearAttrition: 0.14, topReasons: ['governance conflicts', 'family dynamics', 'strategic disagreement'] },
+    compensationStructure: { basePercent: 0.6, bonusPercent: 0.25, benefitsPercent: 0.15, signingBonusFrequency: 0.7, signingBonusRange: "100k-200k" },
+    relocationWillingness: 0.52,
+    backgroundCheckTimeline: 5
   },
   "Family Office COO": {
     category: "Family Office - C-Suite",
@@ -2319,7 +2699,11 @@ export const BENCHMARKS = {
     counterOfferRate: 0.53,
     sourcingChannels: { referral: 0.5, agency: 0.34, direct: 0.14, internal: 0.02 },
     salaryGrowthRate: 0.03,
-    typicalExperience: { min: 13, typical: 22 }
+    typicalExperience: { min: 13, typical: 22 },
+    retentionRisk: { firstYearAttrition: 0.15, topReasons: ['operational friction', 'family expectations', 'talent wars'] },
+    compensationStructure: { basePercent: 0.62, bonusPercent: 0.23, benefitsPercent: 0.15, signingBonusFrequency: 0.6, signingBonusRange: "60k-120k" },
+    relocationWillingness: 0.48,
+    backgroundCheckTimeline: 4
   },
   "Family Office CIO": {
     category: "Family Office - C-Suite",
@@ -2341,7 +2725,11 @@ export const BENCHMARKS = {
     counterOfferRate: 0.57,
     sourcingChannels: { referral: 0.54, agency: 0.29, direct: 0.11, internal: 0.06 },
     salaryGrowthRate: 0.06,
-    typicalExperience: { min: 15, typical: 22 }
+    typicalExperience: { min: 15, typical: 22 },
+    retentionRisk: { firstYearAttrition: 0.13, topReasons: ['investment mandate changes', 'risk tolerance mismatch', 'comp vs hedge fund'] },
+    compensationStructure: { basePercent: 0.58, bonusPercent: 0.27, benefitsPercent: 0.15, signingBonusFrequency: 0.65, signingBonusRange: "80k-175k" },
+    relocationWillingness: 0.5,
+    backgroundCheckTimeline: 4
   },
   "Family Office CFO": {
     category: "Family Office - C-Suite",
@@ -2363,7 +2751,11 @@ export const BENCHMARKS = {
     counterOfferRate: 0.52,
     sourcingChannels: { referral: 0.41, agency: 0.25, direct: 0.11, internal: 0.23 },
     salaryGrowthRate: 0.06,
-    typicalExperience: { min: 10, typical: 12 }
+    typicalExperience: { min: 10, typical: 12 },
+    retentionRisk: { firstYearAttrition: 0.14, topReasons: ['governance disagreements', 'reporting complexity', 'compliance burden'] },
+    compensationStructure: { basePercent: 0.63, bonusPercent: 0.22, benefitsPercent: 0.15, signingBonusFrequency: 0.6, signingBonusRange: "60k-130k" },
+    relocationWillingness: 0.47,
+    backgroundCheckTimeline: 5
   },
   "Family Office General Counsel": {
     category: "Family Office - C-Suite",
@@ -2385,7 +2777,11 @@ export const BENCHMARKS = {
     counterOfferRate: 0.59,
     sourcingChannels: { referral: 0.53, agency: 0.31, direct: 0.15, internal: 0.01 },
     salaryGrowthRate: 0.1,
-    typicalExperience: { min: 17, typical: 22 }
+    typicalExperience: { min: 17, typical: 22 },
+    retentionRisk: { firstYearAttrition: 0.11, topReasons: ['conflict of interest concerns', 'family politics', 'better firm offers'] },
+    compensationStructure: { basePercent: 0.65, bonusPercent: 0.2, benefitsPercent: 0.15, signingBonusFrequency: 0.55, signingBonusRange: "50k-120k" },
+    relocationWillingness: 0.45,
+    backgroundCheckTimeline: 5
   },
   "Director of Tax": {
     category: "Family Office - Operations & Finance",
@@ -2407,7 +2803,11 @@ export const BENCHMARKS = {
     counterOfferRate: 0.45,
     sourcingChannels: { referral: 0.34, agency: 0.28, direct: 0.15, internal: 0.23 },
     salaryGrowthRate: 0.06,
-    typicalExperience: { min: 12, typical: 15 }
+    typicalExperience: { min: 12, typical: 15 },
+    retentionRisk: { firstYearAttrition: 0.11, topReasons: ['conflict of interest concerns', 'family politics', 'better firm offers'] },
+    compensationStructure: { basePercent: 0.65, bonusPercent: 0.2, benefitsPercent: 0.15, signingBonusFrequency: 0.55, signingBonusRange: "50k-120k" },
+    relocationWillingness: 0.45,
+    backgroundCheckTimeline: 5
   },
   "Director of Philanthropy": {
     category: "Family Office - Support",
@@ -2429,7 +2829,11 @@ export const BENCHMARKS = {
     counterOfferRate: 0.36,
     sourcingChannels: { referral: 0.32, agency: 0.25, direct: 0.14, internal: 0.29 },
     salaryGrowthRate: 0.08,
-    typicalExperience: { min: 9, typical: 14 }
+    typicalExperience: { min: 9, typical: 14 },
+    retentionRisk: { firstYearAttrition: 0.11, topReasons: ['conflict of interest concerns', 'family politics', 'better firm offers'] },
+    compensationStructure: { basePercent: 0.65, bonusPercent: 0.2, benefitsPercent: 0.15, signingBonusFrequency: 0.55, signingBonusRange: "50k-120k" },
+    relocationWillingness: 0.45,
+    backgroundCheckTimeline: 5
   },
   "Chief Information Officer": {
     category: "Family Office - Operations & Finance",
@@ -2451,7 +2855,11 @@ export const BENCHMARKS = {
     counterOfferRate: 0.36,
     sourcingChannels: { referral: 0.43, agency: 0.26, direct: 0.19, internal: 0.12 },
     salaryGrowthRate: 0.04,
-    typicalExperience: { min: 8, typical: 14 }
+    typicalExperience: { min: 8, typical: 14 },
+    retentionRisk: { firstYearAttrition: 0.11, topReasons: ['conflict of interest concerns', 'family politics', 'better firm offers'] },
+    compensationStructure: { basePercent: 0.65, bonusPercent: 0.2, benefitsPercent: 0.15, signingBonusFrequency: 0.55, signingBonusRange: "50k-120k" },
+    relocationWillingness: 0.45,
+    backgroundCheckTimeline: 5
   },
   "Chief Compliance Officer": {
     category: "Family Office - Operations & Finance",
@@ -2473,7 +2881,11 @@ export const BENCHMARKS = {
     counterOfferRate: 0.31,
     sourcingChannels: { referral: 0.45, agency: 0.33, direct: 0.2, internal: 0.02 },
     salaryGrowthRate: 0.04,
-    typicalExperience: { min: 12, typical: 15 }
+    typicalExperience: { min: 12, typical: 15 },
+    retentionRisk: { firstYearAttrition: 0.11, topReasons: ['conflict of interest concerns', 'family politics', 'better firm offers'] },
+    compensationStructure: { basePercent: 0.65, bonusPercent: 0.2, benefitsPercent: 0.15, signingBonusFrequency: 0.55, signingBonusRange: "50k-120k" },
+    relocationWillingness: 0.45,
+    backgroundCheckTimeline: 5
   },
   "Senior Portfolio Manager": {
     category: "Family Office - Investment",
@@ -2495,7 +2907,11 @@ export const BENCHMARKS = {
     counterOfferRate: 0.32,
     sourcingChannels: { referral: 0.45, agency: 0.33, direct: 0.12, internal: 0.1 },
     salaryGrowthRate: 0.06,
-    typicalExperience: { min: 13, typical: 22 }
+    typicalExperience: { min: 13, typical: 22 },
+    retentionRisk: { firstYearAttrition: 0.11, topReasons: ['conflict of interest concerns', 'family politics', 'better firm offers'] },
+    compensationStructure: { basePercent: 0.65, bonusPercent: 0.2, benefitsPercent: 0.15, signingBonusFrequency: 0.55, signingBonusRange: "50k-120k" },
+    relocationWillingness: 0.45,
+    backgroundCheckTimeline: 5
   },
   "Portfolio Manager": {
     category: "Family Office - Investment",
@@ -2517,7 +2933,11 @@ export const BENCHMARKS = {
     counterOfferRate: 0.34,
     sourcingChannels: { referral: 0.47, agency: 0.32, direct: 0.09, internal: 0.12 },
     salaryGrowthRate: 0.1,
-    typicalExperience: { min: 12, typical: 18 }
+    typicalExperience: { min: 12, typical: 18 },
+    retentionRisk: { firstYearAttrition: 0.11, topReasons: ['conflict of interest concerns', 'family politics', 'better firm offers'] },
+    compensationStructure: { basePercent: 0.65, bonusPercent: 0.2, benefitsPercent: 0.15, signingBonusFrequency: 0.55, signingBonusRange: "50k-120k" },
+    relocationWillingness: 0.45,
+    backgroundCheckTimeline: 5
   },
   "Senior Investment Analyst": {
     category: "Family Office - Investment",
@@ -2539,7 +2959,11 @@ export const BENCHMARKS = {
     counterOfferRate: 0.17,
     sourcingChannels: { referral: 0.48, agency: 0.31, direct: 0.09, internal: 0.12 },
     salaryGrowthRate: 0.1,
-    typicalExperience: { min: 6, typical: 13 }
+    typicalExperience: { min: 6, typical: 13 },
+    retentionRisk: { firstYearAttrition: 0.11, topReasons: ['conflict of interest concerns', 'family politics', 'better firm offers'] },
+    compensationStructure: { basePercent: 0.65, bonusPercent: 0.2, benefitsPercent: 0.15, signingBonusFrequency: 0.55, signingBonusRange: "50k-120k" },
+    relocationWillingness: 0.45,
+    backgroundCheckTimeline: 5
   },
   "Investment Analyst": {
     category: "Family Office - Investment",
@@ -2561,7 +2985,11 @@ export const BENCHMARKS = {
     counterOfferRate: 0.16,
     sourcingChannels: { referral: 0.42, agency: 0.34, direct: 0.1, internal: 0.14 },
     salaryGrowthRate: 0.06,
-    typicalExperience: { min: 5, typical: 10 }
+    typicalExperience: { min: 5, typical: 10 },
+    retentionRisk: { firstYearAttrition: 0.22, topReasons: ['career progression limits', 'comp below market', 'scope too narrow'] },
+    compensationStructure: { basePercent: 0.65, bonusPercent: 0.22, benefitsPercent: 0.13, signingBonusFrequency: 0.4, signingBonusRange: "20k-50k" },
+    relocationWillingness: 0.42,
+    backgroundCheckTimeline: 3
   },
   "Controller": {
     category: "Family Office - Operations & Finance",
@@ -2583,7 +3011,11 @@ export const BENCHMARKS = {
     counterOfferRate: 0.18,
     sourcingChannels: { referral: 0.41, agency: 0.26, direct: 0.21, internal: 0.12 },
     salaryGrowthRate: 0.05,
-    typicalExperience: { min: 9, typical: 18 }
+    typicalExperience: { min: 9, typical: 18 },
+    retentionRisk: { firstYearAttrition: 0.22, topReasons: ['career progression limits', 'comp below market', 'scope too narrow'] },
+    compensationStructure: { basePercent: 0.65, bonusPercent: 0.22, benefitsPercent: 0.13, signingBonusFrequency: 0.4, signingBonusRange: "20k-50k" },
+    relocationWillingness: 0.42,
+    backgroundCheckTimeline: 3
   },
   "Operations Manager": {
     category: "Family Office - Operations & Finance",
@@ -2605,7 +3037,11 @@ export const BENCHMARKS = {
     counterOfferRate: 0.25,
     sourcingChannels: { referral: 0.47, agency: 0.25, direct: 0.19, internal: 0.09 },
     salaryGrowthRate: 0.06,
-    typicalExperience: { min: 6, typical: 12 }
+    typicalExperience: { min: 6, typical: 12 },
+    retentionRisk: { firstYearAttrition: 0.22, topReasons: ['career progression limits', 'comp below market', 'scope too narrow'] },
+    compensationStructure: { basePercent: 0.65, bonusPercent: 0.22, benefitsPercent: 0.13, signingBonusFrequency: 0.4, signingBonusRange: "20k-50k" },
+    relocationWillingness: 0.42,
+    backgroundCheckTimeline: 3
   },
   "Risk & Compliance Manager": {
     category: "Family Office - Operations & Finance",
@@ -2627,7 +3063,11 @@ export const BENCHMARKS = {
     counterOfferRate: 0.26,
     sourcingChannels: { referral: 0.42, agency: 0.3, direct: 0.2, internal: 0.08 },
     salaryGrowthRate: 0.07,
-    typicalExperience: { min: 5, typical: 9 }
+    typicalExperience: { min: 5, typical: 9 },
+    retentionRisk: { firstYearAttrition: 0.22, topReasons: ['career progression limits', 'comp below market', 'scope too narrow'] },
+    compensationStructure: { basePercent: 0.65, bonusPercent: 0.22, benefitsPercent: 0.13, signingBonusFrequency: 0.4, signingBonusRange: "20k-50k" },
+    relocationWillingness: 0.42,
+    backgroundCheckTimeline: 3
   },
   "HR Director": {
     category: "Family Office - Support",
@@ -2649,7 +3089,11 @@ export const BENCHMARKS = {
     counterOfferRate: 0.32,
     sourcingChannels: { referral: 0.38, agency: 0.34, direct: 0.2, internal: 0.08 },
     salaryGrowthRate: 0.07,
-    typicalExperience: { min: 7, typical: 14 }
+    typicalExperience: { min: 7, typical: 14 },
+    retentionRisk: { firstYearAttrition: 0.22, topReasons: ['career progression limits', 'comp below market', 'scope too narrow'] },
+    compensationStructure: { basePercent: 0.65, bonusPercent: 0.22, benefitsPercent: 0.13, signingBonusFrequency: 0.4, signingBonusRange: "20k-50k" },
+    relocationWillingness: 0.42,
+    backgroundCheckTimeline: 3
   },
   "Executive Assistant to Principal": {
     category: "Family Office - Support",
@@ -2671,7 +3115,11 @@ export const BENCHMARKS = {
     counterOfferRate: 0.26,
     sourcingChannels: { referral: 0.38, agency: 0.25, direct: 0.16, internal: 0.21 },
     salaryGrowthRate: 0.07,
-    typicalExperience: { min: 9, typical: 13 }
+    typicalExperience: { min: 9, typical: 13 },
+    retentionRisk: { firstYearAttrition: 0.22, topReasons: ['career progression limits', 'comp below market', 'scope too narrow'] },
+    compensationStructure: { basePercent: 0.65, bonusPercent: 0.22, benefitsPercent: 0.13, signingBonusFrequency: 0.4, signingBonusRange: "20k-50k" },
+    relocationWillingness: 0.42,
+    backgroundCheckTimeline: 3
   }
 };
 

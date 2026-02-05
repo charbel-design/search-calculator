@@ -266,6 +266,67 @@ function generateEmailHTML(results) {
     ${divider}
     ` : ''}
 
+    <!-- Retention & Offer Strategy (Tier 3 Data) -->
+    ${results.benchmark?.retentionRisk ? `
+    <div style="background-color:#ffffff;padding:20px 24px 24px;${sectionBorder}">
+      ${sectionHeading('Retention & Offer Strategy')}
+      <table style="width:100%;border-collapse:collapse;margin-bottom:12px;">
+        <tr>
+          <td style="padding:12px;background-color:#fef2f2;border-radius:8px;text-align:center;width:31%;">
+            <div style="font-size:28px;font-weight:bold;color:#dc2626;">${Math.round(results.benchmark.retentionRisk.firstYearAttrition * 100)}%</div>
+            <div style="font-size:11px;color:#64748b;margin-top:4px;">First-Year Attrition</div>
+          </td>
+          <td style="width:3%;"></td>
+          <td style="padding:12px;background-color:#eeeeff;border-radius:8px;text-align:center;width:31%;">
+            <div style="font-size:28px;font-weight:bold;color:#2814ff;">${results.benchmark.relocationWillingness !== undefined ? Math.round(results.benchmark.relocationWillingness * 100) : '—'}%</div>
+            <div style="font-size:11px;color:#64748b;margin-top:4px;">Relocation Willingness</div>
+          </td>
+          <td style="width:3%;"></td>
+          <td style="padding:12px;background-color:#f0f7f5;border-radius:8px;text-align:center;width:31%;">
+            <div style="font-size:28px;font-weight:bold;color:#4a776d;">${results.benchmark.backgroundCheckTimeline || '—'} wks</div>
+            <div style="font-size:11px;color:#64748b;margin-top:4px;">Vetting Timeline</div>
+          </td>
+        </tr>
+      </table>
+      <div style="padding:14px;background-color:#fef8f0;border-radius:8px;border:1px solid #f2d0a9;margin-bottom:12px;">
+        <strong style="color:#a47840;font-size:12px;text-transform:uppercase;letter-spacing:0.5px;">Top Departure Risks</strong>
+        <div style="margin-top:8px;">
+          ${results.benchmark.retentionRisk.topReasons.map((reason, i) => `
+            <div style="display:inline-block;padding:5px 12px;background-color:#fff;border:1px solid #e2e8f0;border-radius:16px;margin:3px 4px;font-size:12px;color:#475569;">
+              ${reason}
+            </div>
+          `).join('')}
+        </div>
+      </div>
+      ${results.benchmark.compensationStructure ? `
+      <div style="padding:14px;background-color:#f8fafc;border-radius:8px;border:1px solid #e2e8f0;">
+        <strong style="color:#334155;font-size:12px;text-transform:uppercase;letter-spacing:0.5px;">Comp Structure Blueprint</strong>
+        <table style="width:100%;margin-top:10px;border-collapse:collapse;">
+          <tr>
+            <td style="padding:6px 4px;text-align:center;width:33%;">
+              <div style="font-size:20px;font-weight:bold;color:#2814ff;">${Math.round(results.benchmark.compensationStructure.basePercent * 100)}%</div>
+              <div style="font-size:10px;color:#64748b;">Base Salary</div>
+            </td>
+            <td style="padding:6px 4px;text-align:center;width:33%;">
+              <div style="font-size:20px;font-weight:bold;color:#9e5f6a;">${Math.round(results.benchmark.compensationStructure.bonusPercent * 100)}%</div>
+              <div style="font-size:10px;color:#64748b;">Bonus</div>
+            </td>
+            <td style="padding:6px 4px;text-align:center;width:33%;">
+              <div style="font-size:20px;font-weight:bold;color:#4a776d;">${Math.round(results.benchmark.compensationStructure.benefitsPercent * 100)}%</div>
+              <div style="font-size:10px;color:#64748b;">Benefits</div>
+            </td>
+          </tr>
+        </table>
+        <div style="margin-top:10px;padding-top:10px;border-top:1px solid #e2e8f0;text-align:center;">
+          <span style="font-size:12px;color:#475569;">Signing bonus offered in <strong style="color:#2814ff;">${Math.round(results.benchmark.compensationStructure.signingBonusFrequency * 100)}%</strong> of placements</span>
+          <span style="font-size:11px;color:#94a3b8;"> · Typical range: $${results.benchmark.compensationStructure.signingBonusRange}</span>
+        </div>
+      </div>
+      ` : ''}
+    </div>
+    ${divider}
+    ` : ''}
+
     <!-- Negotiation Leverage -->
     ${results.negotiationLeverage ? `
     <div style="background-color:#ffffff;padding:20px 24px 24px;${sectionBorder}">
