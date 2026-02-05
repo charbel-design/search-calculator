@@ -610,6 +610,11 @@ Return this exact JSON structure:
         regionalMultiplier
       });
 
+      // Capture lead if email provided
+      if (formData.email) {
+        captureLead(det.score, det.label);
+      }
+
     } catch (err) {
       console.error('AI analysis error:', err.message);
 
@@ -656,9 +661,47 @@ Return this exact JSON structure:
         adjustedBenchmark,
         regionalMultiplier
       });
+
+      // Capture lead if email provided (even on fallback)
+      if (formData.email) {
+        captureLead(det.score, det.label);
+      }
     }
 
     setLoading(false);
+  };
+
+  // Capture lead - send email notification
+  const captureLead = async (score, label) => {
+    try {
+      await fetch('/api/capture-lead', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          email: formData.email,
+          phone: formData.phone,
+          positionType: formData.positionType,
+          location: formData.location,
+          timeline: formData.timeline,
+          budgetRange: formData.budgetRange,
+          discretionLevel: formData.discretionLevel,
+          keyRequirements: formData.keyRequirements,
+          languageRequirements: formData.languageRequirements,
+          certifications: formData.certifications,
+          travelRequirement: formData.travelRequirement,
+          propertiesCount: formData.propertiesCount,
+          householdSize: formData.householdSize,
+          aumRange: formData.aumRange,
+          teamSize: formData.teamSize,
+          priorityCallback: formData.priorityCallback,
+          complexityScore: score,
+          complexityLabel: label
+        })
+      });
+    } catch (err) {
+      // Silent fail - don't interrupt user experience
+      console.error('Lead capture failed:', err.message);
+    }
   };
 
   const runComparison = () => {
