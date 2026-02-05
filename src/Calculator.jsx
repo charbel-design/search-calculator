@@ -1046,10 +1046,10 @@ This analysis provides general market guidance. Every search is unique.
   // HELPERS
   // ============================================
   const getComplexityColor = (score) => {
-    if (score <= 3) return { bg: '#d2d4ff', text: '#2814ff' };
-    if (score <= 5) return { bg: '#fdf2f4', text: '#2814ff' };
+    if (score <= 3) return { bg: '#f5e6e9', text: '#2814ff' };
+    if (score <= 5) return { bg: '#ebc7cd', text: '#2814ff' };
     if (score <= 7) return { bg: '#de9ea9', text: '#2814ff' };
-    return { bg: '#2814ff', text: '#ffffff' };
+    return { bg: '#c77d8a', text: '#ffffff' };
   };
 
   const resetForm = () => {

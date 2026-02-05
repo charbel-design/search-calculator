@@ -10,7 +10,7 @@ const ALLOWED_ORIGINS = [
 ].filter(Boolean);
 
 function generateEmailHTML(results) {
-  const scoreColor = results.score <= 3 ? '#99c1b9' : results.score <= 5 ? '#2814ff' : results.score <= 7 ? '#de9ea9' : '#9e5f6a';
+  const scoreColor = results.score <= 3 ? '#de9ea9' : results.score <= 5 ? '#c77d8a' : results.score <= 7 ? '#9e5f6a' : '#7a4a55';
   const sectionBorder = 'border-left:1px solid #e2e8f0;border-right:1px solid #e2e8f0;';
   const sectionHeading = (text) => `<h3 style="color:#2814ff;font-size:16px;margin:0 0 16px;font-weight:600;">${text}</h3>`;
   const divider = `<div style="background-color:#ffffff;padding:0 24px 0;${sectionBorder}"><hr style="border:none;border-top:1px solid #e2e8f0;margin:0;"></div>`;
