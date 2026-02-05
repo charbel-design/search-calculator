@@ -104,6 +104,7 @@ const SearchComplexityCalculator = () => {
   const [compareMode, setCompareMode] = useState(false);
   const [comparisonResults, setComparisonResults] = useState(null);
   const [showLanguages, setShowLanguages] = useState(false);
+  const [exportingPDF, setExportingPDF] = useState(false);
 
   const timelineOptions = [
     { value: 'immediate', label: 'Immediate (1-2 months)', points: 22, description: 'Rush search - premium sourcing required' },
@@ -655,11 +656,8 @@ Return this exact JSON structure:
     }
 
     try {
-      // Hide the buttons before capturing
-      const buttonsContainer = resultsRef.current.querySelector('.flex.flex-wrap.gap-3.pt-4');
-      if (buttonsContainer) {
-        buttonsContainer.style.display = 'none';
-      }
+      // Show loading state via React state
+      setExportingPDF(true);
 
       // Get section positions BEFORE capturing
       const containerRect = resultsRef.current.getBoundingClientRect();
@@ -683,11 +681,6 @@ Return this exact JSON structure:
         logging: false,
         backgroundColor: '#ffffff'
       });
-
-      // Show buttons again
-      if (buttonsContainer) {
-        buttonsContainer.style.display = '';
-      }
 
       // Create PDF - A4 dimensions in mm
       const doc = new jsPDF('p', 'mm', 'a4');
@@ -831,15 +824,14 @@ Return this exact JSON structure:
       // Save
       doc.save(`TG-Analysis-${results.displayTitle.replace(/[^a-zA-Z0-9]/g, '-')}-${new Date().toISOString().split('T')[0]}.pdf`);
 
+      // Reset loading state
+      setExportingPDF(false);
     } catch (err) {
       console.error('PDF export error:', err);
       alert('Unable to export PDF. Please try again or contact support.');
 
-      // Make sure buttons are visible on error
-      const buttonsContainer = resultsRef.current?.querySelector('.flex.flex-wrap.gap-3.pt-4');
-      if (buttonsContainer) {
-        buttonsContainer.style.display = '';
-      }
+      // Reset loading state on error
+      setExportingPDF(false);
     }
   };
 
@@ -1383,8 +1375,18 @@ Return this exact JSON structure:
               )}
 
               <div className="flex flex-wrap gap-3 pt-4 border-t border-slate-200">
-                <button data-export-btn onClick={exportToPDF} className="flex items-center gap-2 px-4 py-2 bg-slate-100 hover:bg-slate-200 rounded-lg text-sm font-medium text-slate-700">
-                  <Download className="w-4 h-4" />Export Report
+                <button onClick={exportToPDF} disabled={exportingPDF} className="flex items-center gap-2 px-4 py-2 bg-slate-100 hover:bg-slate-200 rounded-lg text-sm font-medium text-slate-700 disabled:opacity-50 disabled:cursor-not-allowed">
+                  {exportingPDF ? (
+                    <>
+                      <RefreshCw className="w-4 h-4 animate-spin" />
+                      Generating PDF...
+                    </>
+                  ) : (
+                    <>
+                      <Download className="w-4 h-4" />
+                      Export Report
+                    </>
+                  )}
                 </button>
                 <button onClick={runComparison} className="flex items-center gap-2 px-4 py-2 bg-slate-100 hover:bg-slate-200 rounded-lg text-sm font-medium text-slate-700">
                   <RefreshCw className="w-4 h-4" />Compare Scenarios
