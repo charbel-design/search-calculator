@@ -153,7 +153,12 @@ export const BENCHMARKS = {
     timeToFill: 21,
     candidatePoolSize: "12-40",
     turnover: { avgTenure: 5.7, annualTurnover: 0.07 },
-    demandTrend: { direction: "growing", yoyChange: 0.07 }
+    demandTrend: { direction: "growing", yoyChange: 0.07 },
+    offerAcceptanceRate: 0.57,
+    counterOfferRate: 0.4,
+    sourcingChannels: { referral: 0.36, agency: 0.23, direct: 0.19, internal: 0.22 },
+    salaryGrowthRate: 0.06,
+    typicalExperience: { min: 12, typical: 14 }
   },
   "Family Office Director": {
     category: "Family Office - C-Suite",
@@ -170,7 +175,12 @@ export const BENCHMARKS = {
     timeToFill: 28,
     candidatePoolSize: "14-50",
     turnover: { avgTenure: 6.3, annualTurnover: 0.06 },
-    demandTrend: { direction: "growing", yoyChange: 0.09 }
+    demandTrend: { direction: "growing", yoyChange: 0.09 },
+    offerAcceptanceRate: 0.56,
+    counterOfferRate: 0.45,
+    sourcingChannels: { referral: 0.41, agency: 0.27, direct: 0.12, internal: 0.2 },
+    salaryGrowthRate: 0.07,
+    typicalExperience: { min: 16, typical: 21 }
   },
   "Family Office Manager": {
     category: "Family Office - Operations & Finance",
@@ -187,7 +197,12 @@ export const BENCHMARKS = {
     timeToFill: 28,
     candidatePoolSize: "12-49",
     turnover: { avgTenure: 5.6, annualTurnover: 0.1 },
-    demandTrend: { direction: "stable", yoyChange: 0.01 }
+    demandTrend: { direction: "stable", yoyChange: 0.01 },
+    offerAcceptanceRate: 0.64,
+    counterOfferRate: 0.44,
+    sourcingChannels: { referral: 0.38, agency: 0.27, direct: 0.13, internal: 0.22 },
+    salaryGrowthRate: 0.06,
+    typicalExperience: { min: 9, typical: 17 }
   },
   "Estate Manager": {
     category: "Estate Leadership",
@@ -204,7 +219,12 @@ export const BENCHMARKS = {
     timeToFill: 23,
     candidatePoolSize: "26-50",
     turnover: { avgTenure: 5.8, annualTurnover: 0.11 },
-    demandTrend: { direction: "stable", yoyChange: 0.03 }
+    demandTrend: { direction: "stable", yoyChange: 0.03 },
+    offerAcceptanceRate: 0.72,
+    counterOfferRate: 0.26,
+    sourcingChannels: { referral: 0.34, agency: 0.31, direct: 0.11, internal: 0.24 },
+    salaryGrowthRate: 0.05,
+    typicalExperience: { min: 8, typical: 12 }
   },
   "Estate Manager (Multi-Property)": {
     category: "Estate Leadership",
@@ -221,7 +241,12 @@ export const BENCHMARKS = {
     timeToFill: 17,
     candidatePoolSize: "57-96",
     turnover: { avgTenure: 4.7, annualTurnover: 0.1 },
-    demandTrend: { direction: "growing", yoyChange: 0.18 }
+    demandTrend: { direction: "growing", yoyChange: 0.18 },
+    offerAcceptanceRate: 0.56,
+    counterOfferRate: 0.52,
+    sourcingChannels: { referral: 0.45, agency: 0.28, direct: 0.22, internal: 0.05 },
+    salaryGrowthRate: 0.08,
+    typicalExperience: { min: 11, typical: 13 }
   },
   "Household Manager": {
     category: "Estate Leadership",
@@ -238,7 +263,12 @@ export const BENCHMARKS = {
     timeToFill: 9,
     candidatePoolSize: "191-417",
     turnover: { avgTenure: 3.1, annualTurnover: 0.21 },
-    demandTrend: { direction: "growing", yoyChange: 0.15 }
+    demandTrend: { direction: "growing", yoyChange: 0.15 },
+    offerAcceptanceRate: 0.74,
+    counterOfferRate: 0.33,
+    sourcingChannels: { referral: 0.42, agency: 0.33, direct: 0.17, internal: 0.08 },
+    salaryGrowthRate: 0.08,
+    typicalExperience: { min: 4, typical: 12 }
   },
   "Property Manager": {
     category: "Estate Leadership",
@@ -255,7 +285,12 @@ export const BENCHMARKS = {
     timeToFill: 20,
     candidatePoolSize: "26-49",
     turnover: { avgTenure: 5.4, annualTurnover: 0.12 },
-    demandTrend: { direction: "growing", yoyChange: 0.06 }
+    demandTrend: { direction: "growing", yoyChange: 0.06 },
+    offerAcceptanceRate: 0.84,
+    counterOfferRate: 0.13,
+    sourcingChannels: { referral: 0.32, agency: 0.23, direct: 0.11, internal: 0.34 },
+    salaryGrowthRate: 0.06,
+    typicalExperience: { min: 6, typical: 9 }
   },
   "Director of Residences": {
     category: "Estate Leadership",
@@ -272,7 +307,12 @@ export const BENCHMARKS = {
     timeToFill: 11,
     candidatePoolSize: "286-480",
     turnover: { avgTenure: 3.9, annualTurnover: 0.21 },
-    demandTrend: { direction: "stable", yoyChange: 0.01 }
+    demandTrend: { direction: "stable", yoyChange: 0.01 },
+    offerAcceptanceRate: 0.57,
+    counterOfferRate: 0.4,
+    sourcingChannels: { referral: 0.43, agency: 0.31, direct: 0.18, internal: 0.08 },
+    salaryGrowthRate: 0.03,
+    typicalExperience: { min: 9, typical: 16 }
   },
 
   // ==========================================
@@ -293,7 +333,12 @@ export const BENCHMARKS = {
     timeToFill: 21,
     candidatePoolSize: "34-77",
     turnover: { avgTenure: 7.0, annualTurnover: 0.11 },
-    demandTrend: { direction: "growing", yoyChange: 0.22 }
+    demandTrend: { direction: "growing", yoyChange: 0.22 },
+    offerAcceptanceRate: 0.69,
+    counterOfferRate: 0.32,
+    sourcingChannels: { referral: 0.38, agency: 0.35, direct: 0.18, internal: 0.09 },
+    salaryGrowthRate: 0.09,
+    typicalExperience: { min: 10, typical: 12 }
   },
   "Personal Assistant": {
     category: "Personal & Administrative",
@@ -310,7 +355,12 @@ export const BENCHMARKS = {
     timeToFill: 13,
     candidatePoolSize: "92-208",
     turnover: { avgTenure: 4.7, annualTurnover: 0.12 },
-    demandTrend: { direction: "growing", yoyChange: 0.11 }
+    demandTrend: { direction: "growing", yoyChange: 0.11 },
+    offerAcceptanceRate: 0.82,
+    counterOfferRate: 0.26,
+    sourcingChannels: { referral: 0.46, agency: 0.23, direct: 0.1, internal: 0.21 },
+    salaryGrowthRate: 0.06,
+    typicalExperience: { min: 5, typical: 7 }
   },
   "Family Assistant": {
     category: "Personal & Administrative",
@@ -327,7 +377,12 @@ export const BENCHMARKS = {
     timeToFill: 14,
     candidatePoolSize: "125-186",
     turnover: { avgTenure: 5.7, annualTurnover: 0.13 },
-    demandTrend: { direction: "growing", yoyChange: 0.17 }
+    demandTrend: { direction: "growing", yoyChange: 0.17 },
+    offerAcceptanceRate: 0.77,
+    counterOfferRate: 0.27,
+    sourcingChannels: { referral: 0.48, agency: 0.25, direct: 0.18, internal: 0.09 },
+    salaryGrowthRate: 0.06,
+    typicalExperience: { min: 6, typical: 10 }
   },
   "Lifestyle Manager": {
     category: "Personal & Administrative",
@@ -344,7 +399,12 @@ export const BENCHMARKS = {
     timeToFill: 7,
     candidatePoolSize: "555-975",
     turnover: { avgTenure: 2.8, annualTurnover: 0.25 },
-    demandTrend: { direction: "stable", yoyChange: -0.01 }
+    demandTrend: { direction: "stable", yoyChange: -0.01 },
+    offerAcceptanceRate: 0.63,
+    counterOfferRate: 0.32,
+    sourcingChannels: { referral: 0.45, agency: 0.28, direct: 0.19, internal: 0.08 },
+    salaryGrowthRate: 0.05,
+    typicalExperience: { min: 10, typical: 13 }
   },
   "Travel Coordinator": {
     category: "Personal & Administrative",
@@ -361,7 +421,12 @@ export const BENCHMARKS = {
     timeToFill: 8,
     candidatePoolSize: "938-1955",
     turnover: { avgTenure: 3.5, annualTurnover: 0.2 },
-    demandTrend: { direction: "stable", yoyChange: -0.0 }
+    demandTrend: { direction: "stable", yoyChange: -0.0 },
+    offerAcceptanceRate: 0.79,
+    counterOfferRate: 0.28,
+    sourcingChannels: { referral: 0.33, agency: 0.27, direct: 0.19, internal: 0.21 },
+    salaryGrowthRate: 0.06,
+    typicalExperience: { min: 2, typical: 6 }
   },
   "Social Secretary": {
     category: "Personal & Administrative",
@@ -378,7 +443,12 @@ export const BENCHMARKS = {
     timeToFill: 12,
     candidatePoolSize: "109-164",
     turnover: { avgTenure: 5.1, annualTurnover: 0.13 },
-    demandTrend: { direction: "stable", yoyChange: -0.02 }
+    demandTrend: { direction: "stable", yoyChange: -0.02 },
+    offerAcceptanceRate: 0.83,
+    counterOfferRate: 0.2,
+    sourcingChannels: { referral: 0.31, agency: 0.26, direct: 0.22, internal: 0.21 },
+    salaryGrowthRate: 0.05,
+    typicalExperience: { min: 6, typical: 8 }
   },
 
   // ==========================================
@@ -399,7 +469,12 @@ export const BENCHMARKS = {
     timeToFill: 9,
     candidatePoolSize: "454-985",
     turnover: { avgTenure: 2.1, annualTurnover: 0.34 },
-    demandTrend: { direction: "growing", yoyChange: 0.16 }
+    demandTrend: { direction: "growing", yoyChange: 0.16 },
+    offerAcceptanceRate: 0.75,
+    counterOfferRate: 0.23,
+    sourcingChannels: { referral: 0.48, agency: 0.31, direct: 0.19, internal: 0.02 },
+    salaryGrowthRate: 0.06,
+    typicalExperience: { min: 5, typical: 10 }
   },
   "Butler (Formal)": {
     category: "Formal Service",
@@ -416,7 +491,12 @@ export const BENCHMARKS = {
     timeToFill: 10,
     candidatePoolSize: "213-355",
     turnover: { avgTenure: 3.4, annualTurnover: 0.18 },
-    demandTrend: { direction: "growing", yoyChange: 0.09 }
+    demandTrend: { direction: "growing", yoyChange: 0.09 },
+    offerAcceptanceRate: 0.64,
+    counterOfferRate: 0.3,
+    sourcingChannels: { referral: 0.44, agency: 0.31, direct: 0.22, internal: 0.03 },
+    salaryGrowthRate: 0.07,
+    typicalExperience: { min: 7, typical: 14 }
   },
   "Butler (American Style)": {
     category: "Formal Service",
@@ -433,7 +513,12 @@ export const BENCHMARKS = {
     timeToFill: 13,
     candidatePoolSize: "234-469",
     turnover: { avgTenure: 3.6, annualTurnover: 0.16 },
-    demandTrend: { direction: "stable", yoyChange: 0.04 }
+    demandTrend: { direction: "stable", yoyChange: 0.04 },
+    offerAcceptanceRate: 0.84,
+    counterOfferRate: 0.26,
+    sourcingChannels: { referral: 0.36, agency: 0.3, direct: 0.17, internal: 0.17 },
+    salaryGrowthRate: 0.04,
+    typicalExperience: { min: 4, typical: 11 }
   },
   "Executive Housekeeper": {
     category: "Formal Service",
@@ -450,7 +535,12 @@ export const BENCHMARKS = {
     timeToFill: 16,
     candidatePoolSize: "143-171",
     turnover: { avgTenure: 5.9, annualTurnover: 0.14 },
-    demandTrend: { direction: "growing", yoyChange: 0.08 }
+    demandTrend: { direction: "growing", yoyChange: 0.08 },
+    offerAcceptanceRate: 0.85,
+    counterOfferRate: 0.27,
+    sourcingChannels: { referral: 0.48, agency: 0.29, direct: 0.16, internal: 0.07 },
+    salaryGrowthRate: 0.05,
+    typicalExperience: { min: 5, typical: 9 }
   },
   "Head Housekeeper": {
     category: "Formal Service",
@@ -467,7 +557,12 @@ export const BENCHMARKS = {
     timeToFill: 8,
     candidatePoolSize: "574-866",
     turnover: { avgTenure: 3.4, annualTurnover: 0.22 },
-    demandTrend: { direction: "stable", yoyChange: 0.02 }
+    demandTrend: { direction: "stable", yoyChange: 0.02 },
+    offerAcceptanceRate: 0.77,
+    counterOfferRate: 0.18,
+    sourcingChannels: { referral: 0.41, agency: 0.21, direct: 0.19, internal: 0.19 },
+    salaryGrowthRate: 0.06,
+    typicalExperience: { min: 6, typical: 8 }
   },
   "Majordomo": {
     category: "Formal Service",
@@ -484,7 +579,12 @@ export const BENCHMARKS = {
     timeToFill: 10,
     candidatePoolSize: "535-778",
     turnover: { avgTenure: 2.8, annualTurnover: 0.34 },
-    demandTrend: { direction: "stable", yoyChange: -0.02 }
+    demandTrend: { direction: "stable", yoyChange: -0.02 },
+    offerAcceptanceRate: 0.57,
+    counterOfferRate: 0.41,
+    sourcingChannels: { referral: 0.41, agency: 0.24, direct: 0.2, internal: 0.15 },
+    salaryGrowthRate: 0.05,
+    typicalExperience: { min: 7, typical: 14 }
   },
 
   // ==========================================
@@ -505,7 +605,12 @@ export const BENCHMARKS = {
     timeToFill: 21,
     candidatePoolSize: "37-118",
     turnover: { avgTenure: 7.7, annualTurnover: 0.11 },
-    demandTrend: { direction: "growing", yoyChange: 0.18 }
+    demandTrend: { direction: "growing", yoyChange: 0.18 },
+    offerAcceptanceRate: 0.76,
+    counterOfferRate: 0.31,
+    sourcingChannels: { referral: 0.44, agency: 0.26, direct: 0.18, internal: 0.12 },
+    salaryGrowthRate: 0.06,
+    typicalExperience: { min: 8, typical: 13 }
   },
   "Private Chef (Traveling)": {
     category: "Culinary",
@@ -522,7 +627,12 @@ export const BENCHMARKS = {
     timeToFill: 11,
     candidatePoolSize: "194-395",
     turnover: { avgTenure: 4.4, annualTurnover: 0.14 },
-    demandTrend: { direction: "stable", yoyChange: 0.04 }
+    demandTrend: { direction: "stable", yoyChange: 0.04 },
+    offerAcceptanceRate: 0.67,
+    counterOfferRate: 0.41,
+    sourcingChannels: { referral: 0.35, agency: 0.21, direct: 0.1, internal: 0.34 },
+    salaryGrowthRate: 0.05,
+    typicalExperience: { min: 10, typical: 12 }
   },
   "Sous Chef (Private)": {
     category: "Culinary",
@@ -539,7 +649,12 @@ export const BENCHMARKS = {
     timeToFill: 11,
     candidatePoolSize: "244-365",
     turnover: { avgTenure: 4.5, annualTurnover: 0.11 },
-    demandTrend: { direction: "growing", yoyChange: 0.16 }
+    demandTrend: { direction: "growing", yoyChange: 0.16 },
+    offerAcceptanceRate: 0.75,
+    counterOfferRate: 0.24,
+    sourcingChannels: { referral: 0.31, agency: 0.21, direct: 0.1, internal: 0.38 },
+    salaryGrowthRate: 0.04,
+    typicalExperience: { min: 6, typical: 8 }
   },
   "Personal Chef (Part-time)": {
     category: "Culinary",
@@ -556,7 +671,12 @@ export const BENCHMARKS = {
     timeToFill: 22,
     candidatePoolSize: "70-107",
     turnover: { avgTenure: 5.5, annualTurnover: 0.09 },
-    demandTrend: { direction: "growing", yoyChange: 0.18 }
+    demandTrend: { direction: "growing", yoyChange: 0.18 },
+    offerAcceptanceRate: 0.85,
+    counterOfferRate: 0.15,
+    sourcingChannels: { referral: 0.41, agency: 0.31, direct: 0.21, internal: 0.07 },
+    salaryGrowthRate: 0.07,
+    typicalExperience: { min: 2, typical: 8 }
   },
   "Sommelier (Private)": {
     category: "Culinary",
@@ -573,7 +693,12 @@ export const BENCHMARKS = {
     timeToFill: 7,
     candidatePoolSize: "553-815",
     turnover: { avgTenure: 3.2, annualTurnover: 0.19 },
-    demandTrend: { direction: "growing", yoyChange: 0.11 }
+    demandTrend: { direction: "growing", yoyChange: 0.11 },
+    offerAcceptanceRate: 0.7,
+    counterOfferRate: 0.32,
+    sourcingChannels: { referral: 0.32, agency: 0.26, direct: 0.15, internal: 0.27 },
+    salaryGrowthRate: 0.07,
+    typicalExperience: { min: 6, typical: 15 }
   },
   "Pastry Chef (Private)": {
     category: "Culinary",
@@ -590,7 +715,12 @@ export const BENCHMARKS = {
     timeToFill: 5,
     candidatePoolSize: "2245-3618",
     turnover: { avgTenure: 1.8, annualTurnover: 0.31 },
-    demandTrend: { direction: "growing", yoyChange: 0.06 }
+    demandTrend: { direction: "growing", yoyChange: 0.06 },
+    offerAcceptanceRate: 0.82,
+    counterOfferRate: 0.23,
+    sourcingChannels: { referral: 0.31, agency: 0.31, direct: 0.2, internal: 0.18 },
+    salaryGrowthRate: 0.03,
+    typicalExperience: { min: 4, typical: 8 }
   },
   "Laundress / Wardrobe Manager": {
     category: "Formal Service",
@@ -607,7 +737,12 @@ export const BENCHMARKS = {
     timeToFill: 15,
     candidatePoolSize: "88-228",
     turnover: { avgTenure: 5.9, annualTurnover: 0.09 },
-    demandTrend: { direction: "growing", yoyChange: 0.13 }
+    demandTrend: { direction: "growing", yoyChange: 0.13 },
+    offerAcceptanceRate: 0.8,
+    counterOfferRate: 0.17,
+    sourcingChannels: { referral: 0.34, agency: 0.27, direct: 0.2, internal: 0.19 },
+    salaryGrowthRate: 0.04,
+    typicalExperience: { min: 6, typical: 8 }
   },
   "Household Couple": {
     category: "Formal Service",
@@ -624,7 +759,12 @@ export const BENCHMARKS = {
     timeToFill: 8,
     candidatePoolSize: "467-920",
     turnover: { avgTenure: 2.6, annualTurnover: 0.29 },
-    demandTrend: { direction: "growing", yoyChange: 0.09 }
+    demandTrend: { direction: "growing", yoyChange: 0.09 },
+    offerAcceptanceRate: 0.63,
+    counterOfferRate: 0.42,
+    sourcingChannels: { referral: 0.43999999999999995, agency: 0.35, direct: 0.21, internal: 0.0 },
+    salaryGrowthRate: 0.09,
+    typicalExperience: { min: 9, typical: 15 }
   },
 
   // ==========================================
@@ -645,7 +785,12 @@ export const BENCHMARKS = {
     timeToFill: 16,
     candidatePoolSize: "105-199",
     turnover: { avgTenure: 4.3, annualTurnover: 0.15 },
-    demandTrend: { direction: "growing", yoyChange: 0.11 }
+    demandTrend: { direction: "growing", yoyChange: 0.11 },
+    offerAcceptanceRate: 0.87,
+    counterOfferRate: 0.12,
+    sourcingChannels: { referral: 0.51, agency: 0.21, direct: 0.11, internal: 0.17 },
+    salaryGrowthRate: 0.1,
+    typicalExperience: { min: 5, typical: 10 }
   },
   "Nanny (Multiple Children)": {
     category: "Childcare & Education",
@@ -662,7 +807,12 @@ export const BENCHMARKS = {
     timeToFill: 8,
     candidatePoolSize: "861-1553",
     turnover: { avgTenure: 1.8, annualTurnover: 0.28 },
-    demandTrend: { direction: "stable", yoyChange: 0.02 }
+    demandTrend: { direction: "stable", yoyChange: 0.02 },
+    offerAcceptanceRate: 0.78,
+    counterOfferRate: 0.24,
+    sourcingChannels: { referral: 0.56, agency: 0.28, direct: 0.13, internal: 0.03 },
+    salaryGrowthRate: 0.05,
+    typicalExperience: { min: 4, typical: 9 }
   },
   "Nanny (Live-out)": {
     category: "Childcare & Education",
@@ -679,7 +829,12 @@ export const BENCHMARKS = {
     timeToFill: 6,
     candidatePoolSize: "1101-1525",
     turnover: { avgTenure: 1.5, annualTurnover: 0.32 },
-    demandTrend: { direction: "growing", yoyChange: 0.06 }
+    demandTrend: { direction: "growing", yoyChange: 0.06 },
+    offerAcceptanceRate: 0.84,
+    counterOfferRate: 0.11,
+    sourcingChannels: { referral: 0.56, agency: 0.21, direct: 0.1, internal: 0.13 },
+    salaryGrowthRate: 0.03,
+    typicalExperience: { min: 5, typical: 11 }
   },
   "Newborn Care Specialist": {
     category: "Childcare & Education",
@@ -696,7 +851,12 @@ export const BENCHMARKS = {
     timeToFill: 7,
     candidatePoolSize: "408-819",
     turnover: { avgTenure: 2.6, annualTurnover: 0.2 },
-    demandTrend: { direction: "growing", yoyChange: 0.16 }
+    demandTrend: { direction: "growing", yoyChange: 0.16 },
+    offerAcceptanceRate: 0.71,
+    counterOfferRate: 0.36,
+    sourcingChannels: { referral: 0.46, agency: 0.25, direct: 0.14, internal: 0.15 },
+    salaryGrowthRate: 0.04,
+    typicalExperience: { min: 4, typical: 12 }
   },
   "Governess": {
     category: "Childcare & Education",
@@ -713,7 +873,12 @@ export const BENCHMARKS = {
     timeToFill: 4,
     candidatePoolSize: "2552-3770",
     turnover: { avgTenure: 2.4, annualTurnover: 0.34 },
-    demandTrend: { direction: "stable", yoyChange: 0.01 }
+    demandTrend: { direction: "stable", yoyChange: 0.01 },
+    offerAcceptanceRate: 0.66,
+    counterOfferRate: 0.4,
+    sourcingChannels: { referral: 0.59, agency: 0.26, direct: 0.12, internal: 0.03 },
+    salaryGrowthRate: 0.03,
+    typicalExperience: { min: 6, typical: 13 }
   },
   "Tutor Coordinator": {
     category: "Childcare & Education",
@@ -730,7 +895,12 @@ export const BENCHMARKS = {
     timeToFill: 13,
     candidatePoolSize: "140-212",
     turnover: { avgTenure: 3.9, annualTurnover: 0.11 },
-    demandTrend: { direction: "stable", yoyChange: 0.01 }
+    demandTrend: { direction: "stable", yoyChange: 0.01 },
+    offerAcceptanceRate: 0.82,
+    counterOfferRate: 0.22,
+    sourcingChannels: { referral: 0.5, agency: 0.23, direct: 0.13, internal: 0.14 },
+    salaryGrowthRate: 0.04,
+    typicalExperience: { min: 5, typical: 10 }
   },
   "Family Educator": {
     category: "Childcare & Education",
@@ -747,7 +917,12 @@ export const BENCHMARKS = {
     timeToFill: 19,
     candidatePoolSize: "56-104",
     turnover: { avgTenure: 7.6, annualTurnover: 0.06 },
-    demandTrend: { direction: "stable", yoyChange: 0.02 }
+    demandTrend: { direction: "stable", yoyChange: 0.02 },
+    offerAcceptanceRate: 0.69,
+    counterOfferRate: 0.3,
+    sourcingChannels: { referral: 0.52, agency: 0.29, direct: 0.15, internal: 0.04 },
+    salaryGrowthRate: 0.03,
+    typicalExperience: { min: 10, typical: 14 }
   },
 
   // ==========================================
@@ -768,7 +943,12 @@ export const BENCHMARKS = {
     timeToFill: 9,
     candidatePoolSize: "187-423",
     turnover: { avgTenure: 5.0, annualTurnover: 0.16 },
-    demandTrend: { direction: "growing", yoyChange: 0.07 }
+    demandTrend: { direction: "growing", yoyChange: 0.07 },
+    offerAcceptanceRate: 0.72,
+    counterOfferRate: 0.31,
+    sourcingChannels: { referral: 0.38, agency: 0.24, direct: 0.24, internal: 0.14 },
+    salaryGrowthRate: 0.12,
+    typicalExperience: { min: 6, typical: 11 }
   },
   "Executive Protection Agent": {
     category: "Security",
@@ -785,7 +965,12 @@ export const BENCHMARKS = {
     timeToFill: 13,
     candidatePoolSize: "104-228",
     turnover: { avgTenure: 5.1, annualTurnover: 0.11 },
-    demandTrend: { direction: "stable", yoyChange: -0.0 }
+    demandTrend: { direction: "stable", yoyChange: -0.0 },
+    offerAcceptanceRate: 0.72,
+    counterOfferRate: 0.24,
+    sourcingChannels: { referral: 0.48, agency: 0.31, direct: 0.21, internal: 0.0 },
+    salaryGrowthRate: 0.07,
+    typicalExperience: { min: 6, typical: 11 }
   },
   "Residential Security Officer": {
     category: "Security",
@@ -802,7 +987,12 @@ export const BENCHMARKS = {
     timeToFill: 13,
     candidatePoolSize: "89-216",
     turnover: { avgTenure: 6.0, annualTurnover: 0.14 },
-    demandTrend: { direction: "stable", yoyChange: -0.01 }
+    demandTrend: { direction: "stable", yoyChange: -0.01 },
+    offerAcceptanceRate: 0.82,
+    counterOfferRate: 0.18,
+    sourcingChannels: { referral: 0.39, agency: 0.3, direct: 0.24, internal: 0.07 },
+    salaryGrowthRate: 0.04,
+    typicalExperience: { min: 4, typical: 7 }
   },
   "Security Driver": {
     category: "Security",
@@ -819,7 +1009,12 @@ export const BENCHMARKS = {
     timeToFill: 13,
     candidatePoolSize: "287-323",
     turnover: { avgTenure: 4.5, annualTurnover: 0.21 },
-    demandTrend: { direction: "growing", yoyChange: 0.19 }
+    demandTrend: { direction: "growing", yoyChange: 0.19 },
+    offerAcceptanceRate: 0.82,
+    counterOfferRate: 0.17,
+    sourcingChannels: { referral: 0.39, agency: 0.23, direct: 0.18, internal: 0.2 },
+    salaryGrowthRate: 0.08,
+    typicalExperience: { min: 5, typical: 11 }
   },
   "Travel Security Specialist": {
     category: "Security",
@@ -836,7 +1031,12 @@ export const BENCHMARKS = {
     timeToFill: 6,
     candidatePoolSize: "1008-1797",
     turnover: { avgTenure: 2.1, annualTurnover: 0.34 },
-    demandTrend: { direction: "stable", yoyChange: 0.03 }
+    demandTrend: { direction: "stable", yoyChange: 0.03 },
+    offerAcceptanceRate: 0.67,
+    counterOfferRate: 0.41,
+    sourcingChannels: { referral: 0.48, agency: 0.21, direct: 0.19, internal: 0.12 },
+    salaryGrowthRate: 0.04,
+    typicalExperience: { min: 6, typical: 12 }
   },
   "Cybersecurity Manager": {
     category: "Security",
@@ -853,7 +1053,12 @@ export const BENCHMARKS = {
     timeToFill: 8,
     candidatePoolSize: "497-651",
     turnover: { avgTenure: 4.0, annualTurnover: 0.21 },
-    demandTrend: { direction: "growing", yoyChange: 0.18 }
+    demandTrend: { direction: "growing", yoyChange: 0.18 },
+    offerAcceptanceRate: 0.65,
+    counterOfferRate: 0.43,
+    sourcingChannels: { referral: 0.39, agency: 0.31, direct: 0.21, internal: 0.09 },
+    salaryGrowthRate: 0.11,
+    typicalExperience: { min: 8, typical: 12 }
   },
 
   // ==========================================
@@ -874,7 +1079,12 @@ export const BENCHMARKS = {
     timeToFill: 19,
     candidatePoolSize: "48-102",
     turnover: { avgTenure: 7.1, annualTurnover: 0.1 },
-    demandTrend: { direction: "growing", yoyChange: 0.18 }
+    demandTrend: { direction: "growing", yoyChange: 0.18 },
+    offerAcceptanceRate: 0.83,
+    counterOfferRate: 0.19,
+    sourcingChannels: { referral: 0.48, agency: 0.28, direct: 0.2, internal: 0.04 },
+    salaryGrowthRate: 0.05,
+    typicalExperience: { min: 4, typical: 10 }
   },
   "Long-haul Driver": {
     category: "Transportation",
@@ -891,7 +1101,12 @@ export const BENCHMARKS = {
     timeToFill: 8,
     candidatePoolSize: "879-1494",
     turnover: { avgTenure: 1.9, annualTurnover: 0.35 },
-    demandTrend: { direction: "stable", yoyChange: 0.01 }
+    demandTrend: { direction: "stable", yoyChange: 0.01 },
+    offerAcceptanceRate: 0.83,
+    counterOfferRate: 0.13,
+    sourcingChannels: { referral: 0.48, agency: 0.32, direct: 0.2, internal: 0.0 },
+    salaryGrowthRate: 0.07,
+    typicalExperience: { min: 4, typical: 12 }
   },
   "Driver (Car Collector)": {
     category: "Transportation",
@@ -908,7 +1123,12 @@ export const BENCHMARKS = {
     timeToFill: 5,
     candidatePoolSize: "1182-1621",
     turnover: { avgTenure: 1.6, annualTurnover: 0.31 },
-    demandTrend: { direction: "stable", yoyChange: 0.01 }
+    demandTrend: { direction: "stable", yoyChange: 0.01 },
+    offerAcceptanceRate: 0.64,
+    counterOfferRate: 0.31,
+    sourcingChannels: { referral: 0.46, agency: 0.33, direct: 0.15, internal: 0.06 },
+    salaryGrowthRate: 0.05,
+    typicalExperience: { min: 7, typical: 11 }
   },
   "Aviation Coordinator": {
     category: "Transportation",
@@ -925,7 +1145,12 @@ export const BENCHMARKS = {
     timeToFill: 6,
     candidatePoolSize: "2161-3616",
     turnover: { avgTenure: 2.7, annualTurnover: 0.26 },
-    demandTrend: { direction: "stable", yoyChange: -0.01 }
+    demandTrend: { direction: "stable", yoyChange: -0.01 },
+    offerAcceptanceRate: 0.77,
+    counterOfferRate: 0.35,
+    sourcingChannels: { referral: 0.46, agency: 0.33, direct: 0.1, internal: 0.11 },
+    salaryGrowthRate: 0.06,
+    typicalExperience: { min: 5, typical: 10 }
   },
   "Flight Attendant (Private)": {
     category: "Transportation",
@@ -942,7 +1167,12 @@ export const BENCHMARKS = {
     timeToFill: 16,
     candidatePoolSize: "88-246",
     turnover: { avgTenure: 5.2, annualTurnover: 0.13 },
-    demandTrend: { direction: "stable", yoyChange: 0.04 }
+    demandTrend: { direction: "stable", yoyChange: 0.04 },
+    offerAcceptanceRate: 0.76,
+    counterOfferRate: 0.33,
+    sourcingChannels: { referral: 0.46, agency: 0.24, direct: 0.19, internal: 0.11 },
+    salaryGrowthRate: 0.03,
+    typicalExperience: { min: 4, typical: 10 }
   },
 
   // ==========================================
@@ -963,7 +1193,12 @@ export const BENCHMARKS = {
     timeToFill: 13,
     candidatePoolSize: "211-468",
     turnover: { avgTenure: 3.9, annualTurnover: 0.19 },
-    demandTrend: { direction: "stable", yoyChange: 0.01 }
+    demandTrend: { direction: "stable", yoyChange: 0.01 },
+    offerAcceptanceRate: 0.77,
+    counterOfferRate: 0.26,
+    sourcingChannels: { referral: 0.39, agency: 0.25, direct: 0.2, internal: 0.16 },
+    salaryGrowthRate: 0.04,
+    typicalExperience: { min: 4, typical: 12 }
   },
   "Head Gardener": {
     category: "Grounds & Outdoor",
@@ -980,7 +1215,12 @@ export const BENCHMARKS = {
     timeToFill: 9,
     candidatePoolSize: "466-754",
     turnover: { avgTenure: 3.5, annualTurnover: 0.21 },
-    demandTrend: { direction: "stable", yoyChange: -0.0 }
+    demandTrend: { direction: "stable", yoyChange: -0.0 },
+    offerAcceptanceRate: 0.77,
+    counterOfferRate: 0.19,
+    sourcingChannels: { referral: 0.47, agency: 0.35, direct: 0.13, internal: 0.05 },
+    salaryGrowthRate: 0.06,
+    typicalExperience: { min: 5, typical: 12 }
   },
   "Maintenance Manager": {
     category: "Grounds & Outdoor",
@@ -997,7 +1237,12 @@ export const BENCHMARKS = {
     timeToFill: 8,
     candidatePoolSize: "571-980",
     turnover: { avgTenure: 2.9, annualTurnover: 0.21 },
-    demandTrend: { direction: "growing", yoyChange: 0.18 }
+    demandTrend: { direction: "growing", yoyChange: 0.18 },
+    offerAcceptanceRate: 0.92,
+    counterOfferRate: 0.15,
+    sourcingChannels: { referral: 0.49, agency: 0.22, direct: 0.22, internal: 0.07 },
+    salaryGrowthRate: 0.05,
+    typicalExperience: { min: 5, typical: 7 }
   },
   "Pool Manager": {
     category: "Grounds & Outdoor",
@@ -1014,7 +1259,12 @@ export const BENCHMARKS = {
     timeToFill: 7,
     candidatePoolSize: "402-884",
     turnover: { avgTenure: 2.3, annualTurnover: 0.31 },
-    demandTrend: { direction: "growing", yoyChange: 0.07 }
+    demandTrend: { direction: "growing", yoyChange: 0.07 },
+    offerAcceptanceRate: 0.83,
+    counterOfferRate: 0.14,
+    sourcingChannels: { referral: 0.45, agency: 0.25, direct: 0.17, internal: 0.13 },
+    salaryGrowthRate: 0.07,
+    typicalExperience: { min: 5, typical: 11 }
   },
   "Facilities Director": {
     category: "Grounds & Outdoor",
@@ -1031,7 +1281,12 @@ export const BENCHMARKS = {
     timeToFill: 6,
     candidatePoolSize: "2218-4536",
     turnover: { avgTenure: 1.8, annualTurnover: 0.34 },
-    demandTrend: { direction: "stable", yoyChange: 0.03 }
+    demandTrend: { direction: "stable", yoyChange: 0.03 },
+    offerAcceptanceRate: 0.77,
+    counterOfferRate: 0.16,
+    sourcingChannels: { referral: 0.39, agency: 0.28, direct: 0.2, internal: 0.13 },
+    salaryGrowthRate: 0.06,
+    typicalExperience: { min: 7, typical: 12 }
   },
 
   // ==========================================
@@ -1052,7 +1307,12 @@ export const BENCHMARKS = {
     timeToFill: 8,
     candidatePoolSize: "494-795",
     turnover: { avgTenure: 1.7, annualTurnover: 0.33 },
-    demandTrend: { direction: "growing", yoyChange: 0.17 }
+    demandTrend: { direction: "growing", yoyChange: 0.17 },
+    offerAcceptanceRate: 0.76,
+    counterOfferRate: 0.17,
+    sourcingChannels: { referral: 0.29, agency: 0.49, direct: 0.22, internal: -0.0 },
+    salaryGrowthRate: 0.03,
+    typicalExperience: { min: 3, typical: 7 }
   },
   "Yacht Captain (100ft+)": {
     category: "Maritime / Yacht",
@@ -1069,7 +1329,12 @@ export const BENCHMARKS = {
     timeToFill: 7,
     candidatePoolSize: "570-933",
     turnover: { avgTenure: 1.9, annualTurnover: 0.33 },
-    demandTrend: { direction: "stable", yoyChange: 0.04 }
+    demandTrend: { direction: "stable", yoyChange: 0.04 },
+    offerAcceptanceRate: 0.8,
+    counterOfferRate: 0.11,
+    sourcingChannels: { referral: 0.27, agency: 0.48, direct: 0.17, internal: 0.08 },
+    salaryGrowthRate: 0.06,
+    typicalExperience: { min: 9, typical: 15 }
   },
   "Yacht Captain (Superyacht 200ft+)": {
     category: "Maritime / Yacht",
@@ -1086,7 +1351,12 @@ export const BENCHMARKS = {
     timeToFill: 8,
     candidatePoolSize: "467-709",
     turnover: { avgTenure: 2.8, annualTurnover: 0.34 },
-    demandTrend: { direction: "growing", yoyChange: 0.08 }
+    demandTrend: { direction: "growing", yoyChange: 0.08 },
+    offerAcceptanceRate: 0.81,
+    counterOfferRate: 0.1,
+    sourcingChannels: { referral: 0.26, agency: 0.46, direct: 0.23, internal: 0.05 },
+    salaryGrowthRate: 0.09,
+    typicalExperience: { min: 10, typical: 14 }
   },
   "Chief Officer / First Mate": {
     category: "Maritime / Yacht",
@@ -1103,7 +1373,12 @@ export const BENCHMARKS = {
     timeToFill: 11,
     candidatePoolSize: "257-373",
     turnover: { avgTenure: 2.6, annualTurnover: 0.25 },
-    demandTrend: { direction: "stable", yoyChange: 0.02 }
+    demandTrend: { direction: "stable", yoyChange: 0.02 },
+    offerAcceptanceRate: 0.73,
+    counterOfferRate: 0.16,
+    sourcingChannels: { referral: 0.26, agency: 0.45, direct: 0.19, internal: 0.1 },
+    salaryGrowthRate: 0.06,
+    typicalExperience: { min: 6, typical: 10 }
   },
   "Chief Engineer (Yacht)": {
     category: "Maritime / Yacht",
@@ -1120,7 +1395,12 @@ export const BENCHMARKS = {
     timeToFill: 18,
     candidatePoolSize: "62-106",
     turnover: { avgTenure: 1.9, annualTurnover: 0.37 },
-    demandTrend: { direction: "stable", yoyChange: -0.02 }
+    demandTrend: { direction: "stable", yoyChange: -0.02 },
+    offerAcceptanceRate: 0.82,
+    counterOfferRate: 0.18,
+    sourcingChannels: { referral: 0.27, agency: 0.5, direct: 0.18, internal: 0.05 },
+    salaryGrowthRate: 0.06,
+    typicalExperience: { min: 6, typical: 9 }
   },
   "Chief Stewardess": {
     category: "Maritime / Yacht",
@@ -1137,7 +1417,12 @@ export const BENCHMARKS = {
     timeToFill: 10,
     candidatePoolSize: "470-672",
     turnover: { avgTenure: 1.5, annualTurnover: 0.34 },
-    demandTrend: { direction: "stable", yoyChange: 0.02 }
+    demandTrend: { direction: "stable", yoyChange: 0.02 },
+    offerAcceptanceRate: 0.71,
+    counterOfferRate: 0.18,
+    sourcingChannels: { referral: 0.22, agency: 0.45, direct: 0.23, internal: 0.1 },
+    salaryGrowthRate: 0.04,
+    typicalExperience: { min: 4, typical: 8 }
   },
   "Purser": {
     category: "Maritime / Yacht",
@@ -1154,7 +1439,12 @@ export const BENCHMARKS = {
     timeToFill: 11,
     candidatePoolSize: "200-433",
     turnover: { avgTenure: 2.3, annualTurnover: 0.29 },
-    demandTrend: { direction: "growing", yoyChange: 0.05 }
+    demandTrend: { direction: "growing", yoyChange: 0.05 },
+    offerAcceptanceRate: 0.85,
+    counterOfferRate: 0.14,
+    sourcingChannels: { referral: 0.28, agency: 0.47, direct: 0.24, internal: 0.01 },
+    salaryGrowthRate: 0.07,
+    typicalExperience: { min: 6, typical: 12 }
   },
   "Deckhand": {
     category: "Maritime / Yacht",
@@ -1171,7 +1461,12 @@ export const BENCHMARKS = {
     timeToFill: 9,
     candidatePoolSize: "300-496",
     turnover: { avgTenure: 2.9, annualTurnover: 0.31 },
-    demandTrend: { direction: "stable", yoyChange: 0.03 }
+    demandTrend: { direction: "stable", yoyChange: 0.03 },
+    offerAcceptanceRate: 0.76,
+    counterOfferRate: 0.12,
+    sourcingChannels: { referral: 0.21, agency: 0.5, direct: 0.24, internal: 0.05 },
+    salaryGrowthRate: 0.06,
+    typicalExperience: { min: 2, typical: 8 }
   },
 
   // ==========================================
@@ -1192,7 +1487,12 @@ export const BENCHMARKS = {
     timeToFill: 6,
     candidatePoolSize: "2565-3803",
     turnover: { avgTenure: 2.1, annualTurnover: 0.23 },
-    demandTrend: { direction: "growing", yoyChange: 0.11 }
+    demandTrend: { direction: "growing", yoyChange: 0.11 },
+    offerAcceptanceRate: 0.77,
+    counterOfferRate: 0.25,
+    sourcingChannels: { referral: 0.44, agency: 0.27, direct: 0.17, internal: 0.12 },
+    salaryGrowthRate: 0.1,
+    typicalExperience: { min: 4, typical: 10 }
   },
   "Elder Care Manager": {
     category: "Healthcare & Wellness",
@@ -1209,7 +1509,12 @@ export const BENCHMARKS = {
     timeToFill: 7,
     candidatePoolSize: "491-757",
     turnover: { avgTenure: 2.4, annualTurnover: 0.32 },
-    demandTrend: { direction: "stable", yoyChange: 0.0 }
+    demandTrend: { direction: "stable", yoyChange: 0.0 },
+    offerAcceptanceRate: 0.76,
+    counterOfferRate: 0.21,
+    sourcingChannels: { referral: 0.41, agency: 0.28, direct: 0.14, internal: 0.17 },
+    salaryGrowthRate: 0.06,
+    typicalExperience: { min: 5, typical: 11 }
   },
   "Personal Trainer (Dedicated)": {
     category: "Healthcare & Wellness",
@@ -1226,7 +1531,12 @@ export const BENCHMARKS = {
     timeToFill: 10,
     candidatePoolSize: "558-729",
     turnover: { avgTenure: 2.7, annualTurnover: 0.27 },
-    demandTrend: { direction: "stable", yoyChange: -0.01 }
+    demandTrend: { direction: "stable", yoyChange: -0.01 },
+    offerAcceptanceRate: 0.83,
+    counterOfferRate: 0.27,
+    sourcingChannels: { referral: 0.39, agency: 0.34, direct: 0.15, internal: 0.12 },
+    salaryGrowthRate: 0.04,
+    typicalExperience: { min: 5, typical: 10 }
   },
   "Wellness Coordinator": {
     category: "Healthcare & Wellness",
@@ -1243,7 +1553,12 @@ export const BENCHMARKS = {
     timeToFill: 8,
     candidatePoolSize: "505-662",
     turnover: { avgTenure: 2.8, annualTurnover: 0.27 },
-    demandTrend: { direction: "growing", yoyChange: 0.18 }
+    demandTrend: { direction: "growing", yoyChange: 0.18 },
+    offerAcceptanceRate: 0.78,
+    counterOfferRate: 0.18,
+    sourcingChannels: { referral: 0.43, agency: 0.31, direct: 0.16, internal: 0.1 },
+    salaryGrowthRate: 0.08,
+    typicalExperience: { min: 5, typical: 10 }
   },
   "Medical Concierge": {
     category: "Healthcare & Wellness",
@@ -1260,7 +1575,12 @@ export const BENCHMARKS = {
     timeToFill: 8,
     candidatePoolSize: "1142-1554",
     turnover: { avgTenure: 2.9, annualTurnover: 0.26 },
-    demandTrend: { direction: "growing", yoyChange: 0.07 }
+    demandTrend: { direction: "growing", yoyChange: 0.07 },
+    offerAcceptanceRate: 0.63,
+    counterOfferRate: 0.33,
+    sourcingChannels: { referral: 0.35, agency: 0.25, direct: 0.16, internal: 0.24 },
+    salaryGrowthRate: 0.05,
+    typicalExperience: { min: 7, typical: 13 }
   },
 
   // ==========================================
@@ -1281,7 +1601,12 @@ export const BENCHMARKS = {
     timeToFill: 12,
     candidatePoolSize: "140-188",
     turnover: { avgTenure: 3.9, annualTurnover: 0.17 },
-    demandTrend: { direction: "growing", yoyChange: 0.11 }
+    demandTrend: { direction: "growing", yoyChange: 0.11 },
+    offerAcceptanceRate: 0.82,
+    counterOfferRate: 0.24,
+    sourcingChannels: { referral: 0.31, agency: 0.26, direct: 0.17, internal: 0.26 },
+    salaryGrowthRate: 0.06,
+    typicalExperience: { min: 4, typical: 10 }
   },
   "Event Manager (Private)": {
     category: "Hospitality & Collections",
@@ -1298,7 +1623,12 @@ export const BENCHMARKS = {
     timeToFill: 6,
     candidatePoolSize: "914-1324",
     turnover: { avgTenure: 3.5, annualTurnover: 0.22 },
-    demandTrend: { direction: "growing", yoyChange: 0.1 }
+    demandTrend: { direction: "growing", yoyChange: 0.1 },
+    offerAcceptanceRate: 0.79,
+    counterOfferRate: 0.25,
+    sourcingChannels: { referral: 0.49, agency: 0.2, direct: 0.21, internal: 0.1 },
+    salaryGrowthRate: 0.07,
+    typicalExperience: { min: 5, typical: 7 }
   },
   "Catering Manager": {
     category: "Hospitality & Collections",
@@ -1315,7 +1645,12 @@ export const BENCHMARKS = {
     timeToFill: 5,
     candidatePoolSize: "1195-1585",
     turnover: { avgTenure: 3.0, annualTurnover: 0.23 },
-    demandTrend: { direction: "growing", yoyChange: 0.17 }
+    demandTrend: { direction: "growing", yoyChange: 0.17 },
+    offerAcceptanceRate: 0.91,
+    counterOfferRate: 0.13,
+    sourcingChannels: { referral: 0.38, agency: 0.33, direct: 0.2, internal: 0.09 },
+    salaryGrowthRate: 0.07,
+    typicalExperience: { min: 6, typical: 11 }
   },
   "Wine Cellar Manager": {
     category: "Hospitality & Collections",
@@ -1332,7 +1667,12 @@ export const BENCHMARKS = {
     timeToFill: 9,
     candidatePoolSize: "407-709",
     turnover: { avgTenure: 2.6, annualTurnover: 0.28 },
-    demandTrend: { direction: "stable", yoyChange: 0.01 }
+    demandTrend: { direction: "stable", yoyChange: 0.01 },
+    offerAcceptanceRate: 0.7,
+    counterOfferRate: 0.41,
+    sourcingChannels: { referral: 0.4, agency: 0.24, direct: 0.16, internal: 0.2 },
+    salaryGrowthRate: 0.05,
+    typicalExperience: { min: 9, typical: 15 }
   },
 
   // ==========================================
@@ -1355,7 +1695,12 @@ export const BENCHMARKS = {
     timeToFill: 14,
     candidatePoolSize: "84-173",
     turnover: { avgTenure: 5.5, annualTurnover: 0.1 },
-    demandTrend: { direction: "growing", yoyChange: 0.18 }
+    demandTrend: { direction: "growing", yoyChange: 0.18 },
+    offerAcceptanceRate: 0.84,
+    counterOfferRate: 0.15,
+    sourcingChannels: { referral: 0.47, agency: 0.26, direct: 0.08, internal: 0.19 },
+    salaryGrowthRate: 0.06,
+    typicalExperience: { min: 6, typical: 12 }
   },
   "Night Nanny": {
     category: "Childcare & Education",
@@ -1372,7 +1717,12 @@ export const BENCHMARKS = {
     timeToFill: 8,
     candidatePoolSize: "1110-1823",
     turnover: { avgTenure: 1.7, annualTurnover: 0.34 },
-    demandTrend: { direction: "growing", yoyChange: 0.08 }
+    demandTrend: { direction: "growing", yoyChange: 0.08 },
+    offerAcceptanceRate: 0.68,
+    counterOfferRate: 0.3,
+    sourcingChannels: { referral: 0.47, agency: 0.25, direct: 0.08, internal: 0.2 },
+    salaryGrowthRate: 0.05,
+    typicalExperience: { min: 4, typical: 10 }
   },
 
   // FAMILY OFFICE - INVESTMENT (Additional)
@@ -1391,7 +1741,12 @@ export const BENCHMARKS = {
     timeToFill: 9,
     candidatePoolSize: "270-431",
     turnover: { avgTenure: 3.5, annualTurnover: 0.17 },
-    demandTrend: { direction: "growing", yoyChange: 0.14 }
+    demandTrend: { direction: "growing", yoyChange: 0.14 },
+    offerAcceptanceRate: 0.71,
+    counterOfferRate: 0.32,
+    sourcingChannels: { referral: 0.46, agency: 0.33, direct: 0.14, internal: 0.07 },
+    salaryGrowthRate: 0.06,
+    typicalExperience: { min: 4, typical: 10 }
   },
   "Villa Manager": {
     category: "Estate Leadership",
@@ -1408,7 +1763,12 @@ export const BENCHMARKS = {
     timeToFill: 10,
     candidatePoolSize: "226-430",
     turnover: { avgTenure: 3.1, annualTurnover: 0.19 },
-    demandTrend: { direction: "growing", yoyChange: 0.11 }
+    demandTrend: { direction: "growing", yoyChange: 0.11 },
+    offerAcceptanceRate: 0.75,
+    counterOfferRate: 0.22,
+    sourcingChannels: { referral: 0.5, agency: 0.25, direct: 0.18, internal: 0.07 },
+    salaryGrowthRate: 0.09,
+    typicalExperience: { min: 6, typical: 8 }
   },
   "Caretaker": {
     category: "Estate Leadership",
@@ -1425,7 +1785,12 @@ export const BENCHMARKS = {
     timeToFill: 11,
     candidatePoolSize: "264-351",
     turnover: { avgTenure: 4.1, annualTurnover: 0.16 },
-    demandTrend: { direction: "stable", yoyChange: -0.0 }
+    demandTrend: { direction: "stable", yoyChange: -0.0 },
+    offerAcceptanceRate: 0.9,
+    counterOfferRate: 0.19,
+    sourcingChannels: { referral: 0.34, agency: 0.2, direct: 0.12, internal: 0.34 },
+    salaryGrowthRate: 0.04,
+    typicalExperience: { min: 4, typical: 6 }
   },
 
   // PERSONAL & ADMINISTRATIVE (Additional)
@@ -1444,7 +1809,12 @@ export const BENCHMARKS = {
     timeToFill: 5,
     candidatePoolSize: "2334-4324",
     turnover: { avgTenure: 2.4, annualTurnover: 0.31 },
-    demandTrend: { direction: "stable", yoyChange: -0.01 }
+    demandTrend: { direction: "stable", yoyChange: -0.01 },
+    offerAcceptanceRate: 0.74,
+    counterOfferRate: 0.25,
+    sourcingChannels: { referral: 0.44, agency: 0.32, direct: 0.12, internal: 0.12 },
+    salaryGrowthRate: 0.05,
+    typicalExperience: { min: 6, typical: 12 }
   },
   "Scheduler / Calendar Manager": {
     category: "Personal & Administrative",
@@ -1461,7 +1831,12 @@ export const BENCHMARKS = {
     timeToFill: 12,
     candidatePoolSize: "266-364",
     turnover: { avgTenure: 3.9, annualTurnover: 0.16 },
-    demandTrend: { direction: "growing", yoyChange: 0.14 }
+    demandTrend: { direction: "growing", yoyChange: 0.14 },
+    offerAcceptanceRate: 0.83,
+    counterOfferRate: 0.18,
+    sourcingChannels: { referral: 0.49, agency: 0.22, direct: 0.1, internal: 0.19 },
+    salaryGrowthRate: 0.06,
+    typicalExperience: { min: 6, typical: 10 }
   },
 
   // FORMAL SERVICE (Additional)
@@ -1480,7 +1855,12 @@ export const BENCHMARKS = {
     timeToFill: 5,
     candidatePoolSize: "955-1593",
     turnover: { avgTenure: 1.8, annualTurnover: 0.33 },
-    demandTrend: { direction: "growing", yoyChange: 0.15 }
+    demandTrend: { direction: "growing", yoyChange: 0.15 },
+    offerAcceptanceRate: 0.86,
+    counterOfferRate: 0.17,
+    sourcingChannels: { referral: 0.32, agency: 0.3, direct: 0.18, internal: 0.2 },
+    salaryGrowthRate: 0.05,
+    typicalExperience: { min: 3, typical: 5 }
   },
   "Florist (Private)": {
     category: "Formal Service",
@@ -1497,7 +1877,12 @@ export const BENCHMARKS = {
     timeToFill: 5,
     candidatePoolSize: "2476-4404",
     turnover: { avgTenure: 2.1, annualTurnover: 0.27 },
-    demandTrend: { direction: "growing", yoyChange: 0.13 }
+    demandTrend: { direction: "growing", yoyChange: 0.13 },
+    offerAcceptanceRate: 0.83,
+    counterOfferRate: 0.22,
+    sourcingChannels: { referral: 0.31, agency: 0.28, direct: 0.18, internal: 0.23 },
+    salaryGrowthRate: 0.04,
+    typicalExperience: { min: 6, typical: 9 }
   },
   "Valet": {
     category: "Formal Service",
@@ -1514,7 +1899,12 @@ export const BENCHMARKS = {
     timeToFill: 6,
     candidatePoolSize: "2173-4849",
     turnover: { avgTenure: 1.6, annualTurnover: 0.3 },
-    demandTrend: { direction: "stable", yoyChange: 0.02 }
+    demandTrend: { direction: "stable", yoyChange: 0.02 },
+    offerAcceptanceRate: 0.75,
+    counterOfferRate: 0.2,
+    sourcingChannels: { referral: 0.4, agency: 0.27, direct: 0.14, internal: 0.19 },
+    salaryGrowthRate: 0.07,
+    typicalExperience: { min: 5, typical: 12 }
   },
   "Cook": {
     category: "Culinary",
@@ -1531,7 +1921,12 @@ export const BENCHMARKS = {
     timeToFill: 9,
     candidatePoolSize: "423-770",
     turnover: { avgTenure: 3.5, annualTurnover: 0.2 },
-    demandTrend: { direction: "growing", yoyChange: 0.08 }
+    demandTrend: { direction: "growing", yoyChange: 0.08 },
+    offerAcceptanceRate: 0.84,
+    counterOfferRate: 0.12,
+    sourcingChannels: { referral: 0.4, agency: 0.3, direct: 0.17, internal: 0.13 },
+    salaryGrowthRate: 0.07,
+    typicalExperience: { min: 5, typical: 10 }
   },
 
   // GROUNDS & MAINTENANCE (Additional)
@@ -1550,7 +1945,12 @@ export const BENCHMARKS = {
     timeToFill: 4,
     candidatePoolSize: "2047-4001",
     turnover: { avgTenure: 2.8, annualTurnover: 0.31 },
-    demandTrend: { direction: "growing", yoyChange: 0.18 }
+    demandTrend: { direction: "growing", yoyChange: 0.18 },
+    offerAcceptanceRate: 0.86,
+    counterOfferRate: 0.17,
+    sourcingChannels: { referral: 0.35, agency: 0.33, direct: 0.2, internal: 0.12 },
+    salaryGrowthRate: 0.05,
+    typicalExperience: { min: 3, typical: 6 }
   },
   "Dock Master": {
     category: "Grounds & Outdoor",
@@ -1567,7 +1967,12 @@ export const BENCHMARKS = {
     timeToFill: 5,
     candidatePoolSize: "2424-4789",
     turnover: { avgTenure: 2.2, annualTurnover: 0.32 },
-    demandTrend: { direction: "stable", yoyChange: 0.0 }
+    demandTrend: { direction: "stable", yoyChange: 0.0 },
+    offerAcceptanceRate: 0.83,
+    counterOfferRate: 0.22,
+    sourcingChannels: { referral: 0.43, agency: 0.25, direct: 0.16, internal: 0.16 },
+    salaryGrowthRate: 0.04,
+    typicalExperience: { min: 5, typical: 8 }
   },
 
   // MARITIME / YACHT (Additional)
@@ -1586,7 +1991,12 @@ export const BENCHMARKS = {
     timeToFill: 8,
     candidatePoolSize: "924-1451",
     turnover: { avgTenure: 3.5, annualTurnover: 0.18 },
-    demandTrend: { direction: "growing", yoyChange: 0.18 }
+    demandTrend: { direction: "growing", yoyChange: 0.18 },
+    offerAcceptanceRate: 0.75,
+    counterOfferRate: 0.11,
+    sourcingChannels: { referral: 0.23, agency: 0.49, direct: 0.24, internal: 0.04 },
+    salaryGrowthRate: 0.07,
+    typicalExperience: { min: 6, typical: 8 }
   },
   "Interior Manager (Yacht)": {
     category: "Maritime / Yacht",
@@ -1603,7 +2013,12 @@ export const BENCHMARKS = {
     timeToFill: 7,
     candidatePoolSize: "599-867",
     turnover: { avgTenure: 1.8, annualTurnover: 0.35 },
-    demandTrend: { direction: "stable", yoyChange: 0.02 }
+    demandTrend: { direction: "stable", yoyChange: 0.02 },
+    offerAcceptanceRate: 0.71,
+    counterOfferRate: 0.15,
+    sourcingChannels: { referral: 0.25, agency: 0.51, direct: 0.22, internal: 0.02 },
+    salaryGrowthRate: 0.06,
+    typicalExperience: { min: 5, typical: 10 }
   },
   "Yacht Steward/Stewardess": {
     category: "Maritime / Yacht",
@@ -1620,7 +2035,12 @@ export const BENCHMARKS = {
     timeToFill: 10,
     candidatePoolSize: "412-935",
     turnover: { avgTenure: 1.9, annualTurnover: 0.36 },
-    demandTrend: { direction: "growing", yoyChange: 0.13 }
+    demandTrend: { direction: "growing", yoyChange: 0.13 },
+    offerAcceptanceRate: 0.82,
+    counterOfferRate: 0.09,
+    sourcingChannels: { referral: 0.22, agency: 0.5, direct: 0.18, internal: 0.1 },
+    salaryGrowthRate: 0.05,
+    typicalExperience: { min: 3, typical: 7 }
   },
 
   // SECURITY (Additional)
@@ -1639,7 +2059,12 @@ export const BENCHMARKS = {
     timeToFill: 8,
     candidatePoolSize: "1141-1843",
     turnover: { avgTenure: 3.0, annualTurnover: 0.32 },
-    demandTrend: { direction: "stable", yoyChange: 0.04 }
+    demandTrend: { direction: "stable", yoyChange: 0.04 },
+    offerAcceptanceRate: 0.61,
+    counterOfferRate: 0.45,
+    sourcingChannels: { referral: 0.4, agency: 0.31, direct: 0.18, internal: 0.11 },
+    salaryGrowthRate: 0.04,
+    typicalExperience: { min: 6, typical: 15 }
   },
   "IT Manager (Private)": {
     category: "Security",
@@ -1656,7 +2081,12 @@ export const BENCHMARKS = {
     timeToFill: 19,
     candidatePoolSize: "69-107",
     turnover: { avgTenure: 5.1, annualTurnover: 0.14 },
-    demandTrend: { direction: "growing", yoyChange: 0.13 }
+    demandTrend: { direction: "growing", yoyChange: 0.13 },
+    offerAcceptanceRate: 0.7,
+    counterOfferRate: 0.24,
+    sourcingChannels: { referral: 0.43, agency: 0.31, direct: 0.17, internal: 0.09 },
+    salaryGrowthRate: 0.05,
+    typicalExperience: { min: 9, typical: 12 }
   },
 
   // DRIVERS & TRANSPORTATION (Additional)
@@ -1675,7 +2105,12 @@ export const BENCHMARKS = {
     timeToFill: 10,
     candidatePoolSize: "275-441",
     turnover: { avgTenure: 4.4, annualTurnover: 0.16 },
-    demandTrend: { direction: "growing", yoyChange: 0.19 }
+    demandTrend: { direction: "growing", yoyChange: 0.19 },
+    offerAcceptanceRate: 0.69,
+    counterOfferRate: 0.42,
+    sourcingChannels: { referral: 0.4, agency: 0.24, direct: 0.11, internal: 0.25 },
+    salaryGrowthRate: 0.09,
+    typicalExperience: { min: 7, typical: 12 }
   },
 
   // HEALTHCARE & WELLNESS (Additional)
@@ -1694,7 +2129,12 @@ export const BENCHMARKS = {
     timeToFill: 14,
     candidatePoolSize: "146-222",
     turnover: { avgTenure: 4.8, annualTurnover: 0.12 },
-    demandTrend: { direction: "growing", yoyChange: 0.06 }
+    demandTrend: { direction: "growing", yoyChange: 0.06 },
+    offerAcceptanceRate: 0.77,
+    counterOfferRate: 0.15,
+    sourcingChannels: { referral: 0.41, agency: 0.24, direct: 0.22, internal: 0.13 },
+    salaryGrowthRate: 0.07,
+    typicalExperience: { min: 6, typical: 8 }
   },
   "Companion": {
     category: "Healthcare & Wellness",
@@ -1711,7 +2151,12 @@ export const BENCHMARKS = {
     timeToFill: 9,
     candidatePoolSize: "460-789",
     turnover: { avgTenure: 1.9, annualTurnover: 0.34 },
-    demandTrend: { direction: "growing", yoyChange: 0.06 }
+    demandTrend: { direction: "growing", yoyChange: 0.06 },
+    offerAcceptanceRate: 0.88,
+    counterOfferRate: 0.18,
+    sourcingChannels: { referral: 0.32, agency: 0.2, direct: 0.13, internal: 0.35 },
+    salaryGrowthRate: 0.07,
+    typicalExperience: { min: 3, typical: 6 }
   },
   "Pet Care Specialist": {
     category: "Healthcare & Wellness",
@@ -1728,7 +2173,12 @@ export const BENCHMARKS = {
     timeToFill: 8,
     candidatePoolSize: "459-846",
     turnover: { avgTenure: 2.4, annualTurnover: 0.32 },
-    demandTrend: { direction: "stable", yoyChange: -0.02 }
+    demandTrend: { direction: "stable", yoyChange: -0.02 },
+    offerAcceptanceRate: 0.92,
+    counterOfferRate: 0.13,
+    sourcingChannels: { referral: 0.47, agency: 0.22, direct: 0.11, internal: 0.2 },
+    salaryGrowthRate: 0.05,
+    typicalExperience: { min: 4, typical: 6 }
   },
 
   // HOSPITALITY & EVENTS (Additional)
@@ -1747,7 +2197,12 @@ export const BENCHMARKS = {
     timeToFill: 8,
     candidatePoolSize: "969-1855",
     turnover: { avgTenure: 2.1, annualTurnover: 0.26 },
-    demandTrend: { direction: "growing", yoyChange: 0.19 }
+    demandTrend: { direction: "growing", yoyChange: 0.19 },
+    offerAcceptanceRate: 0.64,
+    counterOfferRate: 0.4,
+    sourcingChannels: { referral: 0.49, agency: 0.21, direct: 0.13, internal: 0.17 },
+    salaryGrowthRate: 0.07,
+    typicalExperience: { min: 9, typical: 14 }
   },
   "Art Collection Manager": {
     category: "Hospitality & Collections",
@@ -1764,7 +2219,12 @@ export const BENCHMARKS = {
     timeToFill: 15,
     candidatePoolSize: "82-233",
     turnover: { avgTenure: 4.3, annualTurnover: 0.1 },
-    demandTrend: { direction: "stable", yoyChange: 0.0 }
+    demandTrend: { direction: "stable", yoyChange: 0.0 },
+    offerAcceptanceRate: 0.63,
+    counterOfferRate: 0.43,
+    sourcingChannels: { referral: 0.46, agency: 0.26, direct: 0.21, internal: 0.07 },
+    salaryGrowthRate: 0.04,
+    typicalExperience: { min: 10, typical: 13 }
   },
   "Gallery Manager (Private)": {
     category: "Hospitality & Collections",
@@ -1781,7 +2241,12 @@ export const BENCHMARKS = {
     timeToFill: 15,
     candidatePoolSize: "133-228",
     turnover: { avgTenure: 5.0, annualTurnover: 0.14 },
-    demandTrend: { direction: "growing", yoyChange: 0.15 }
+    demandTrend: { direction: "growing", yoyChange: 0.15 },
+    offerAcceptanceRate: 0.71,
+    counterOfferRate: 0.3,
+    sourcingChannels: { referral: 0.42, agency: 0.31, direct: 0.21, internal: 0.06 },
+    salaryGrowthRate: 0.05,
+    typicalExperience: { min: 4, typical: 9 }
   },
 
   // GROUNDS & MAINTENANCE (Additional)
@@ -1800,7 +2265,12 @@ export const BENCHMARKS = {
     timeToFill: 10,
     candidatePoolSize: "242-376",
     turnover: { avgTenure: 3.4, annualTurnover: 0.18 },
-    demandTrend: { direction: "stable", yoyChange: 0.0 }
+    demandTrend: { direction: "stable", yoyChange: 0.0 },
+    offerAcceptanceRate: 0.75,
+    counterOfferRate: 0.24,
+    sourcingChannels: { referral: 0.33, agency: 0.21, direct: 0.1, internal: 0.36 },
+    salaryGrowthRate: 0.05,
+    typicalExperience: { min: 6, typical: 10 }
   },
 
   // ==========================================
@@ -1822,7 +2292,12 @@ export const BENCHMARKS = {
     timeToFill: 12,
     candidatePoolSize: "272-362",
     turnover: { avgTenure: 4.3, annualTurnover: 0.21 },
-    demandTrend: { direction: "growing", yoyChange: 0.22 }
+    demandTrend: { direction: "growing", yoyChange: 0.22 },
+    offerAcceptanceRate: 0.52,
+    counterOfferRate: 0.48,
+    sourcingChannels: { referral: 0.51, agency: 0.32, direct: 0.11, internal: 0.06 },
+    salaryGrowthRate: 0.08,
+    typicalExperience: { min: 14, typical: 21 }
   },
   "Family Office COO": {
     category: "Family Office - C-Suite",
@@ -1839,7 +2314,12 @@ export const BENCHMARKS = {
     timeToFill: 28,
     candidatePoolSize: "12-44",
     turnover: { avgTenure: 6.8, annualTurnover: 0.1 },
-    demandTrend: { direction: "stable", yoyChange: -0.01 }
+    demandTrend: { direction: "stable", yoyChange: -0.01 },
+    offerAcceptanceRate: 0.61,
+    counterOfferRate: 0.53,
+    sourcingChannels: { referral: 0.5, agency: 0.34, direct: 0.14, internal: 0.02 },
+    salaryGrowthRate: 0.03,
+    typicalExperience: { min: 13, typical: 22 }
   },
   "Family Office CIO": {
     category: "Family Office - C-Suite",
@@ -1856,7 +2336,12 @@ export const BENCHMARKS = {
     timeToFill: 26,
     candidatePoolSize: "16-46",
     turnover: { avgTenure: 5.5, annualTurnover: 0.08 },
-    demandTrend: { direction: "growing", yoyChange: 0.11 }
+    demandTrend: { direction: "growing", yoyChange: 0.11 },
+    offerAcceptanceRate: 0.56,
+    counterOfferRate: 0.57,
+    sourcingChannels: { referral: 0.54, agency: 0.29, direct: 0.11, internal: 0.06 },
+    salaryGrowthRate: 0.06,
+    typicalExperience: { min: 15, typical: 22 }
   },
   "Family Office CFO": {
     category: "Family Office - C-Suite",
@@ -1873,7 +2358,12 @@ export const BENCHMARKS = {
     timeToFill: 19,
     candidatePoolSize: "50-96",
     turnover: { avgTenure: 7.3, annualTurnover: 0.08 },
-    demandTrend: { direction: "growing", yoyChange: 0.18 }
+    demandTrend: { direction: "growing", yoyChange: 0.18 },
+    offerAcceptanceRate: 0.62,
+    counterOfferRate: 0.52,
+    sourcingChannels: { referral: 0.41, agency: 0.25, direct: 0.11, internal: 0.23 },
+    salaryGrowthRate: 0.06,
+    typicalExperience: { min: 10, typical: 12 }
   },
   "Family Office General Counsel": {
     category: "Family Office - C-Suite",
@@ -1890,7 +2380,12 @@ export const BENCHMARKS = {
     timeToFill: 26,
     candidatePoolSize: "20-34",
     turnover: { avgTenure: 6.4, annualTurnover: 0.1 },
-    demandTrend: { direction: "growing", yoyChange: 0.06 }
+    demandTrend: { direction: "growing", yoyChange: 0.06 },
+    offerAcceptanceRate: 0.56,
+    counterOfferRate: 0.59,
+    sourcingChannels: { referral: 0.53, agency: 0.31, direct: 0.15, internal: 0.01 },
+    salaryGrowthRate: 0.1,
+    typicalExperience: { min: 17, typical: 22 }
   },
   "Director of Tax": {
     category: "Family Office - Operations & Finance",
@@ -1907,7 +2402,12 @@ export const BENCHMARKS = {
     timeToFill: 18,
     candidatePoolSize: "44-116",
     turnover: { avgTenure: 5.2, annualTurnover: 0.12 },
-    demandTrend: { direction: "growing", yoyChange: 0.06 }
+    demandTrend: { direction: "growing", yoyChange: 0.06 },
+    offerAcceptanceRate: 0.62,
+    counterOfferRate: 0.45,
+    sourcingChannels: { referral: 0.34, agency: 0.28, direct: 0.15, internal: 0.23 },
+    salaryGrowthRate: 0.06,
+    typicalExperience: { min: 12, typical: 15 }
   },
   "Director of Philanthropy": {
     category: "Family Office - Support",
@@ -1924,7 +2424,12 @@ export const BENCHMARKS = {
     timeToFill: 16,
     candidatePoolSize: "45-87",
     turnover: { avgTenure: 7.5, annualTurnover: 0.1 },
-    demandTrend: { direction: "growing", yoyChange: 0.09 }
+    demandTrend: { direction: "growing", yoyChange: 0.09 },
+    offerAcceptanceRate: 0.68,
+    counterOfferRate: 0.36,
+    sourcingChannels: { referral: 0.32, agency: 0.25, direct: 0.14, internal: 0.29 },
+    salaryGrowthRate: 0.08,
+    typicalExperience: { min: 9, typical: 14 }
   },
   "Chief Information Officer": {
     category: "Family Office - Operations & Finance",
@@ -1941,7 +2446,12 @@ export const BENCHMARKS = {
     timeToFill: 19,
     candidatePoolSize: "37-111",
     turnover: { avgTenure: 7.8, annualTurnover: 0.09 },
-    demandTrend: { direction: "growing", yoyChange: 0.09 }
+    demandTrend: { direction: "growing", yoyChange: 0.09 },
+    offerAcceptanceRate: 0.66,
+    counterOfferRate: 0.36,
+    sourcingChannels: { referral: 0.43, agency: 0.26, direct: 0.19, internal: 0.12 },
+    salaryGrowthRate: 0.04,
+    typicalExperience: { min: 8, typical: 14 }
   },
   "Chief Compliance Officer": {
     category: "Family Office - Operations & Finance",
@@ -1958,7 +2468,12 @@ export const BENCHMARKS = {
     timeToFill: 14,
     candidatePoolSize: "101-237",
     turnover: { avgTenure: 5.5, annualTurnover: 0.13 },
-    demandTrend: { direction: "growing", yoyChange: 0.07 }
+    demandTrend: { direction: "growing", yoyChange: 0.07 },
+    offerAcceptanceRate: 0.65,
+    counterOfferRate: 0.31,
+    sourcingChannels: { referral: 0.45, agency: 0.33, direct: 0.2, internal: 0.02 },
+    salaryGrowthRate: 0.04,
+    typicalExperience: { min: 12, typical: 15 }
   },
   "Senior Portfolio Manager": {
     category: "Family Office - Investment",
@@ -1975,7 +2490,12 @@ export const BENCHMARKS = {
     timeToFill: 13,
     candidatePoolSize: "119-173",
     turnover: { avgTenure: 5.4, annualTurnover: 0.15 },
-    demandTrend: { direction: "growing", yoyChange: 0.15 }
+    demandTrend: { direction: "growing", yoyChange: 0.15 },
+    offerAcceptanceRate: 0.66,
+    counterOfferRate: 0.32,
+    sourcingChannels: { referral: 0.45, agency: 0.33, direct: 0.12, internal: 0.1 },
+    salaryGrowthRate: 0.06,
+    typicalExperience: { min: 13, typical: 22 }
   },
   "Portfolio Manager": {
     category: "Family Office - Investment",
@@ -1992,7 +2512,12 @@ export const BENCHMARKS = {
     timeToFill: 15,
     candidatePoolSize: "130-185",
     turnover: { avgTenure: 4.2, annualTurnover: 0.13 },
-    demandTrend: { direction: "growing", yoyChange: 0.16 }
+    demandTrend: { direction: "growing", yoyChange: 0.16 },
+    offerAcceptanceRate: 0.73,
+    counterOfferRate: 0.34,
+    sourcingChannels: { referral: 0.47, agency: 0.32, direct: 0.09, internal: 0.12 },
+    salaryGrowthRate: 0.1,
+    typicalExperience: { min: 12, typical: 18 }
   },
   "Senior Investment Analyst": {
     category: "Family Office - Investment",
@@ -2009,7 +2534,12 @@ export const BENCHMARKS = {
     timeToFill: 12,
     candidatePoolSize: "118-247",
     turnover: { avgTenure: 5.5, annualTurnover: 0.09 },
-    demandTrend: { direction: "growing", yoyChange: 0.22 }
+    demandTrend: { direction: "growing", yoyChange: 0.22 },
+    offerAcceptanceRate: 0.77,
+    counterOfferRate: 0.17,
+    sourcingChannels: { referral: 0.48, agency: 0.31, direct: 0.09, internal: 0.12 },
+    salaryGrowthRate: 0.1,
+    typicalExperience: { min: 6, typical: 13 }
   },
   "Investment Analyst": {
     category: "Family Office - Investment",
@@ -2026,7 +2556,12 @@ export const BENCHMARKS = {
     timeToFill: 9,
     candidatePoolSize: "224-456",
     turnover: { avgTenure: 3.6, annualTurnover: 0.17 },
-    demandTrend: { direction: "stable", yoyChange: 0.01 }
+    demandTrend: { direction: "stable", yoyChange: 0.01 },
+    offerAcceptanceRate: 0.91,
+    counterOfferRate: 0.16,
+    sourcingChannels: { referral: 0.42, agency: 0.34, direct: 0.1, internal: 0.14 },
+    salaryGrowthRate: 0.06,
+    typicalExperience: { min: 5, typical: 10 }
   },
   "Controller": {
     category: "Family Office - Operations & Finance",
@@ -2043,7 +2578,12 @@ export const BENCHMARKS = {
     timeToFill: 9,
     candidatePoolSize: "403-865",
     turnover: { avgTenure: 3.7, annualTurnover: 0.19 },
-    demandTrend: { direction: "stable", yoyChange: 0.04 }
+    demandTrend: { direction: "stable", yoyChange: 0.04 },
+    offerAcceptanceRate: 0.85,
+    counterOfferRate: 0.18,
+    sourcingChannels: { referral: 0.41, agency: 0.26, direct: 0.21, internal: 0.12 },
+    salaryGrowthRate: 0.05,
+    typicalExperience: { min: 9, typical: 18 }
   },
   "Operations Manager": {
     category: "Family Office - Operations & Finance",
@@ -2060,7 +2600,12 @@ export const BENCHMARKS = {
     timeToFill: 8,
     candidatePoolSize: "1162-1456",
     turnover: { avgTenure: 2.1, annualTurnover: 0.32 },
-    demandTrend: { direction: "growing", yoyChange: 0.21 }
+    demandTrend: { direction: "growing", yoyChange: 0.21 },
+    offerAcceptanceRate: 0.76,
+    counterOfferRate: 0.25,
+    sourcingChannels: { referral: 0.47, agency: 0.25, direct: 0.19, internal: 0.09 },
+    salaryGrowthRate: 0.06,
+    typicalExperience: { min: 6, typical: 12 }
   },
   "Risk & Compliance Manager": {
     category: "Family Office - Operations & Finance",
@@ -2077,7 +2622,12 @@ export const BENCHMARKS = {
     timeToFill: 9,
     candidatePoolSize: "557-925",
     turnover: { avgTenure: 2.5, annualTurnover: 0.3 },
-    demandTrend: { direction: "growing", yoyChange: 0.19 }
+    demandTrend: { direction: "growing", yoyChange: 0.19 },
+    offerAcceptanceRate: 0.82,
+    counterOfferRate: 0.26,
+    sourcingChannels: { referral: 0.42, agency: 0.3, direct: 0.2, internal: 0.08 },
+    salaryGrowthRate: 0.07,
+    typicalExperience: { min: 5, typical: 9 }
   },
   "HR Director": {
     category: "Family Office - Support",
@@ -2094,7 +2644,12 @@ export const BENCHMARKS = {
     timeToFill: 9,
     candidatePoolSize: "482-775",
     turnover: { avgTenure: 3.7, annualTurnover: 0.19 },
-    demandTrend: { direction: "growing", yoyChange: 0.2 }
+    demandTrend: { direction: "growing", yoyChange: 0.2 },
+    offerAcceptanceRate: 0.71,
+    counterOfferRate: 0.32,
+    sourcingChannels: { referral: 0.38, agency: 0.34, direct: 0.2, internal: 0.08 },
+    salaryGrowthRate: 0.07,
+    typicalExperience: { min: 7, typical: 14 }
   },
   "Executive Assistant to Principal": {
     category: "Family Office - Support",
@@ -2111,7 +2666,12 @@ export const BENCHMARKS = {
     timeToFill: 8,
     candidatePoolSize: "592-887",
     turnover: { avgTenure: 2.2, annualTurnover: 0.32 },
-    demandTrend: { direction: "stable", yoyChange: 0.0 }
+    demandTrend: { direction: "stable", yoyChange: 0.0 },
+    offerAcceptanceRate: 0.79,
+    counterOfferRate: 0.26,
+    sourcingChannels: { referral: 0.38, agency: 0.25, direct: 0.16, internal: 0.21 },
+    salaryGrowthRate: 0.07,
+    typicalExperience: { min: 9, typical: 13 }
   }
 };
 

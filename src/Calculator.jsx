@@ -566,9 +566,17 @@ ${benchmark?.timeToFill ? `Typical Time to Fill: ${benchmark.timeToFill} weeks` 
 ${benchmark?.candidatePoolSize ? `Estimated National Candidate Pool: ${benchmark.candidatePoolSize}` : ''}
 ${benchmark?.turnover ? `Avg Tenure in Role: ${benchmark.turnover.avgTenure} years | Annual Turnover: ${Math.round(benchmark.turnover.annualTurnover * 100)}%` : ''}
 ${benchmark?.demandTrend ? `Demand Trend: ${benchmark.demandTrend.direction} (${benchmark.demandTrend.yoyChange >= 0 ? '+' : ''}${Math.round(benchmark.demandTrend.yoyChange * 100)}% YoY)` : ''}
+${benchmark?.offerAcceptanceRate ? `Offer Acceptance Rate: ${Math.round(benchmark.offerAcceptanceRate * 100)}% (expect ~${(1 / benchmark.offerAcceptanceRate).toFixed(1)} candidates per placement)` : ''}
+${benchmark?.counterOfferRate ? `Counter-Offer Rate: ${Math.round(benchmark.counterOfferRate * 100)}% of candidates receive counteroffers from current employers` : ''}
+${benchmark?.sourcingChannels ? `Sourcing Mix: Referral ${Math.round(benchmark.sourcingChannels.referral * 100)}% | Agency ${Math.round(benchmark.sourcingChannels.agency * 100)}% | Direct ${Math.round(benchmark.sourcingChannels.direct * 100)}% | Internal ${Math.round(benchmark.sourcingChannels.internal * 100)}%` : ''}
+${benchmark?.salaryGrowthRate ? `Salary Growth: ${Math.round(benchmark.salaryGrowthRate * 100)}% YoY — benchmarks may shift ${Math.round(benchmark.salaryGrowthRate * 100 / 2)}% over a 6-month search` : ''}
+${benchmark?.typicalExperience ? `Typical Experience: ${benchmark.typicalExperience.min}-${benchmark.typicalExperience.typical} years` : ''}
 
 Your salary recommendation MUST be based on these ADJUSTED figures above, not national averages.
 Your timeline estimate should use the Time to Fill data as a baseline, adjusted for this specific search's complexity.
+Use the offer acceptance rate and counter-offer rate to inform timeline padding and negotiation strategy.
+Reference the sourcing channel data in your sourcingInsight — tell the client WHERE successful placements actually come from.
+Use salary growth rate to flag whether the client's budget will still be competitive if the search extends.
 Your timeline MUST align with the "${timelineOption?.label || formData.timeline}" timeframe the client selected.
 
 Be SPECIFIC and ACTIONABLE. Avoid generic advice. Reference the actual role, location, and requirements in your responses.
@@ -862,7 +870,12 @@ Return this exact JSON structure:
               p75: results.adjustedBenchmark?.p75 || results.benchmark.p75,
               trends: results.benchmark.trends,
               regionalNotes: results.benchmark.regionalNotes,
-              benefits: results.benchmark.benefits
+              benefits: results.benchmark.benefits,
+              offerAcceptanceRate: results.benchmark.offerAcceptanceRate,
+              counterOfferRate: results.benchmark.counterOfferRate,
+              sourcingChannels: results.benchmark.sourcingChannels,
+              salaryGrowthRate: results.benchmark.salaryGrowthRate,
+              typicalExperience: results.benchmark.typicalExperience
             } : null,
             drivers: results.drivers,
             regionalMultiplier: results.regionalMultiplier,

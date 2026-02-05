@@ -197,6 +197,75 @@ function generateEmailHTML(results) {
     ${divider}
     ` : ''}
 
+    <!-- Search Intelligence (Tier 2 Data) -->
+    ${results.benchmark?.offerAcceptanceRate ? `
+    <div style="background-color:#ffffff;padding:20px 24px 24px;${sectionBorder}">
+      ${sectionHeading('Search Intelligence')}
+      <table style="width:100%;border-collapse:collapse;margin-bottom:12px;">
+        <tr>
+          <td style="padding:12px;background-color:#eeeeff;border-radius:8px;text-align:center;width:48%;">
+            <div style="font-size:28px;font-weight:bold;color:#2814ff;">${Math.round(results.benchmark.offerAcceptanceRate * 100)}%</div>
+            <div style="font-size:11px;color:#64748b;margin-top:4px;">Offer Acceptance Rate</div>
+            <div style="font-size:10px;color:#94a3b8;">~${(1 / results.benchmark.offerAcceptanceRate).toFixed(1)} candidates per placement</div>
+          </td>
+          <td style="width:4%;"></td>
+          <td style="padding:12px;background-color:#fdf2f4;border-radius:8px;text-align:center;width:48%;">
+            <div style="font-size:28px;font-weight:bold;color:#9e5f6a;">${Math.round(results.benchmark.counterOfferRate * 100)}%</div>
+            <div style="font-size:11px;color:#64748b;margin-top:4px;">Counter-Offer Rate</div>
+            <div style="font-size:10px;color:#94a3b8;">Risk of candidate retention by current employer</div>
+          </td>
+        </tr>
+      </table>
+      ${results.benchmark.sourcingChannels ? `
+      <div style="padding:14px;background-color:#f8fafc;border-radius:8px;border:1px solid #e2e8f0;margin-bottom:12px;">
+        <strong style="color:#334155;font-size:12px;text-transform:uppercase;letter-spacing:0.5px;">Sourcing Channel Mix</strong>
+        <table style="width:100%;margin-top:10px;border-collapse:collapse;">
+          <tr>
+            <td style="padding:8px 4px;text-align:center;width:25%;">
+              <div style="height:${Math.round(results.benchmark.sourcingChannels.referral * 80)}px;min-height:12px;background-color:#2814ff;border-radius:4px 4px 0 0;margin:0 auto;width:40px;"></div>
+              <div style="font-size:16px;font-weight:bold;color:#2814ff;margin-top:6px;">${Math.round(results.benchmark.sourcingChannels.referral * 100)}%</div>
+              <div style="font-size:10px;color:#64748b;">Referral</div>
+            </td>
+            <td style="padding:8px 4px;text-align:center;width:25%;">
+              <div style="height:${Math.round(results.benchmark.sourcingChannels.agency * 80)}px;min-height:12px;background-color:#de9ea9;border-radius:4px 4px 0 0;margin:0 auto;width:40px;"></div>
+              <div style="font-size:16px;font-weight:bold;color:#9e5f6a;margin-top:6px;">${Math.round(results.benchmark.sourcingChannels.agency * 100)}%</div>
+              <div style="font-size:10px;color:#64748b;">Agency</div>
+            </td>
+            <td style="padding:8px 4px;text-align:center;width:25%;">
+              <div style="height:${Math.round(results.benchmark.sourcingChannels.direct * 80)}px;min-height:12px;background-color:#99c1b9;border-radius:4px 4px 0 0;margin:0 auto;width:40px;"></div>
+              <div style="font-size:16px;font-weight:bold;color:#4a776d;margin-top:6px;">${Math.round(results.benchmark.sourcingChannels.direct * 100)}%</div>
+              <div style="font-size:10px;color:#64748b;">Direct</div>
+            </td>
+            <td style="padding:8px 4px;text-align:center;width:25%;">
+              <div style="height:${Math.round(results.benchmark.sourcingChannels.internal * 80)}px;min-height:12px;background-color:#f2d0a9;border-radius:4px 4px 0 0;margin:0 auto;width:40px;"></div>
+              <div style="font-size:16px;font-weight:bold;color:#a47840;margin-top:6px;">${Math.round(results.benchmark.sourcingChannels.internal * 100)}%</div>
+              <div style="font-size:10px;color:#64748b;">Internal</div>
+            </td>
+          </tr>
+        </table>
+      </div>
+      ` : ''}
+      <table style="width:100%;border-collapse:collapse;">
+        <tr>
+          ${results.benchmark.salaryGrowthRate ? `
+          <td style="padding:10px;background-color:#f0f7f5;border-radius:8px;text-align:center;width:48%;">
+            <div style="font-size:20px;font-weight:bold;color:#4a776d;">+${Math.round(results.benchmark.salaryGrowthRate * 100)}%</div>
+            <div style="font-size:11px;color:#64748b;">Salary Growth YoY</div>
+          </td>
+          <td style="width:4%;"></td>
+          ` : ''}
+          ${results.benchmark.typicalExperience ? `
+          <td style="padding:10px;background-color:#fef8f0;border-radius:8px;text-align:center;width:48%;">
+            <div style="font-size:20px;font-weight:bold;color:#a47840;">${results.benchmark.typicalExperience.min}-${results.benchmark.typicalExperience.typical} yrs</div>
+            <div style="font-size:11px;color:#64748b;">Typical Experience Range</div>
+          </td>
+          ` : ''}
+        </tr>
+      </table>
+    </div>
+    ${divider}
+    ` : ''}
+
     <!-- Negotiation Leverage -->
     ${results.negotiationLeverage ? `
     <div style="background-color:#ffffff;padding:20px 24px 24px;${sectionBorder}">
