@@ -10,7 +10,7 @@ const ALLOWED_ORIGINS = [
 ].filter(Boolean);
 
 function generateEmailHTML(results) {
-  const scoreColor = results.score <= 3 ? '#2814ff' : results.score <= 5 ? '#e65100' : results.score <= 7 ? '#bf360c' : '#b71c1c';
+  const scoreColor = results.score <= 3 ? '#2814ff' : results.score <= 5 ? '#4d4dff' : results.score <= 7 ? '#b87a85' : '#9e5f6a';
 
   return `
 <!DOCTYPE html>
@@ -50,25 +50,25 @@ function generateEmailHTML(results) {
       <h3 style="color:#2814ff;font-size:16px;margin:0 0 16px;">Key Metrics</h3>
       <table style="width:100%;border-collapse:collapse;">
         <tr>
-          <td style="padding:12px;background-color:#ecfdf5;border-radius:8px;vertical-align:top;width:50%;">
-            <strong style="color:#065f46;font-size:12px;">SALARY GUIDANCE</strong><br>
+          <td style="padding:12px;background-color:#f0f7f5;border-radius:8px;vertical-align:top;width:50%;">
+            <strong style="color:#4a776d;font-size:12px;">SALARY GUIDANCE</strong><br>
             <span style="color:#334155;font-size:13px;">${results.salaryRangeGuidance || 'N/A'}</span>
           </td>
           <td style="width:8px;"></td>
-          <td style="padding:12px;background-color:#eff6ff;border-radius:8px;vertical-align:top;width:50%;">
-            <strong style="color:#1e40af;font-size:12px;">TIMELINE</strong><br>
+          <td style="padding:12px;background-color:#eeeeff;border-radius:8px;vertical-align:top;width:50%;">
+            <strong style="color:#2814ff;font-size:12px;">TIMELINE</strong><br>
             <span style="color:#334155;font-size:13px;">${results.estimatedTimeline || 'N/A'}</span>
           </td>
         </tr>
         <tr><td colspan="3" style="height:8px;"></td></tr>
         <tr>
-          <td style="padding:12px;background-color:#faf5ff;border-radius:8px;vertical-align:top;">
-            <strong style="color:#6b21a8;font-size:12px;">MARKET</strong><br>
+          <td style="padding:12px;background-color:#fdf2f4;border-radius:8px;vertical-align:top;">
+            <strong style="color:#9e5f6a;font-size:12px;">MARKET</strong><br>
             <span style="color:#334155;font-size:13px;">${results.marketCompetitiveness || 'N/A'}</span>
           </td>
           <td style="width:8px;"></td>
-          <td style="padding:12px;background-color:#fffbeb;border-radius:8px;vertical-align:top;">
-            <strong style="color:#92400e;font-size:12px;">AVAILABILITY</strong><br>
+          <td style="padding:12px;background-color:#fef8f0;border-radius:8px;vertical-align:top;">
+            <strong style="color:#a47840;font-size:12px;">AVAILABILITY</strong><br>
             <span style="color:#334155;font-size:13px;"><strong>${results.candidateAvailability || 'N/A'}</strong> — ${results.availabilityReason || ''}</span>
           </td>
         </tr>
@@ -105,8 +105,8 @@ function generateEmailHTML(results) {
     <div style="background-color:#ffffff;padding:0 24px 24px;border-left:1px solid #e2e8f0;border-right:1px solid #e2e8f0;">
       <h3 style="color:#2814ff;font-size:16px;margin:0 0 16px;">Key Success Factors</h3>
       ${results.keySuccessFactors.map(f => `
-        <div style="padding:10px 12px;background-color:#f0fdf4;border-radius:8px;margin-bottom:8px;border:1px solid #bbf7d0;">
-          <span style="color:#166534;">✓</span> <span style="color:#334155;font-size:13px;">${f}</span>
+        <div style="padding:10px 12px;background-color:#f0f7f5;border-radius:8px;margin-bottom:8px;border:1px solid #c2ddd7;">
+          <span style="color:#4a776d;">✓</span> <span style="color:#334155;font-size:13px;">${f}</span>
         </div>
       `).join('')}
     </div>

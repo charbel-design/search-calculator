@@ -1037,8 +1037,8 @@ This analysis provides general market guidance. Every search is unique.
   // HELPERS
   // ============================================
   const getComplexityColor = (score) => {
-    if (score <= 3) return { bg: '#e8e4ff', text: '#2814ff' };
-    if (score <= 5) return { bg: '#f5e6e9', text: '#2814ff' };
+    if (score <= 3) return { bg: '#d2d4ff', text: '#2814ff' };
+    if (score <= 5) return { bg: '#fdf2f4', text: '#2814ff' };
     if (score <= 7) return { bg: '#de9ea9', text: '#2814ff' };
     return { bg: '#c77d8a', text: '#ffffff' };
   };
@@ -1080,7 +1080,7 @@ This analysis provides general market guidance. Every search is unique.
   // RENDER
   // ============================================
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-white to-indigo-50 p-4 md:p-8">
+    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-white to-brand-50 p-4 md:p-8">
       <div className="max-w-4xl mx-auto" style={{ fontFamily: "'DM Sans', sans-serif" }}>
         {/* Header */}
         <div className="text-center mb-8">
@@ -1097,7 +1097,7 @@ This analysis provides general market guidance. Every search is unique.
             <button
               onClick={() => setShowRoleComparison(!showRoleComparison)}
               className="mt-4 inline-flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium transition-all"
-              style={{ backgroundColor: showRoleComparison ? '#2814ff' : '#e8e4ff', color: showRoleComparison ? '#ffffff' : '#2814ff' }}
+              style={{ backgroundColor: showRoleComparison ? '#2814ff' : '#d2d4ff', color: showRoleComparison ? '#ffffff' : '#2814ff' }}
             >
               <GitCompare className="w-4 h-4" />
               {showRoleComparison ? 'Back to Calculator' : 'Compare Roles Side-by-Side'}
@@ -1129,14 +1129,14 @@ This analysis provides general market guidance. Every search is unique.
                             disabled={!comparisonRoles.includes(pos.name) && comparisonRoles.length >= 3}
                             className={`w-full text-left px-3 py-1.5 rounded text-sm transition-all ${
                               comparisonRoles.includes(pos.name)
-                                ? 'bg-indigo-100 text-indigo-800 font-medium'
+                                ? 'bg-brand-100 text-brand-600 font-medium'
                                 : comparisonRoles.length >= 3
                                 ? 'text-slate-300 cursor-not-allowed'
                                 : 'text-slate-700 hover:bg-slate-50'
                             }`}
                           >
                             {pos.name}
-                            {comparisonRoles.includes(pos.name) && <span className="float-right text-indigo-600">✓</span>}
+                            {comparisonRoles.includes(pos.name) && <span className="float-right text-brand-500">✓</span>}
                           </button>
                         ))}
                       </div>
@@ -1165,7 +1165,7 @@ This analysis provides general market guidance. Every search is unique.
                         return <td key={role} className="text-center py-3 px-2">{b ? `$${Math.round(b.p25/1000)}k` : 'N/A'}</td>;
                       })}
                     </tr>
-                    <tr className="border-b border-slate-100 bg-indigo-50/50">
+                    <tr className="border-b border-slate-100 bg-brand-50/50">
                       <td className="py-3 pr-4 font-medium text-slate-700">Salary (Median)</td>
                       {comparisonRoles.map(role => {
                         const b = BENCHMARKS[role];
@@ -1185,7 +1185,7 @@ This analysis provides general market guidance. Every search is unique.
                         const b = BENCHMARKS[role];
                         const s = b?.scarcity || 5;
                         return <td key={role} className="text-center py-3 px-2">
-                          <span className={`px-2 py-1 rounded-full text-xs font-medium ${s >= 7 ? 'bg-red-100 text-red-700' : s >= 5 ? 'bg-amber-100 text-amber-700' : 'bg-green-100 text-green-700'}`}>
+                          <span className={`px-2 py-1 rounded-full text-xs font-medium ${s >= 7 ? 'bg-b-pink-100 text-b-pink-500' : s >= 5 ? 'bg-b-ocre-100 text-b-ocre-500' : 'bg-b-opal-100 text-b-opal-600'}`}>
                             {s}/10
                           </span>
                         </td>;
@@ -1252,7 +1252,7 @@ This analysis provides general market guidance. Every search is unique.
             <div className="mb-8">
               <div className="flex justify-between text-xs text-slate-500 mb-2">
                 {['Role & Location', 'Budget & Timeline', 'Requirements', 'Analysis'].map((label, i) => (
-                  <span key={i} className={step >= i + 1 ? 'font-semibold text-indigo-600' : ''}>{label}</span>
+                  <span key={i} className={step >= i + 1 ? 'font-semibold text-brand-500' : ''}>{label}</span>
                 ))}
               </div>
               <div className="w-full bg-slate-200 rounded-full h-2">
@@ -1269,7 +1269,7 @@ This analysis provides general market guidance. Every search is unique.
                   <div>
                     <label className="block text-sm font-medium text-slate-700 mb-2">Position Type *</label>
                     <select name="positionType" value={formData.positionType} onChange={handleInputChange}
-                      className="w-full px-4 py-3 border-2 border-slate-200 rounded-xl focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200">
+                      className="w-full px-4 py-3 border-2 border-slate-200 rounded-xl focus:border-brand-500 focus:ring-2 focus:ring-brand-100">
                       <option value="">Select a position ({commonRoles.length} roles available)</option>
                       <option disabled className="font-bold bg-slate-100">── FAMILY OFFICE CORPORATE ──</option>
                       {CATEGORY_GROUPS["Family Office - Corporate"].map(category => (
@@ -1314,7 +1314,7 @@ This analysis provides general market guidance. Every search is unique.
                           <button key={idx} type="button"
                             onClick={() => { setFormData({ ...formData, location: loc }); setShowLocationSuggestions(false); setHighlightedLocationIndex(-1); }}
                             onMouseEnter={() => setHighlightedLocationIndex(idx)}
-                            className={`w-full text-left px-4 py-2 text-sm ${idx === highlightedLocationIndex ? 'bg-indigo-100 text-indigo-900' : 'hover:bg-indigo-50'}`}>
+                            className={`w-full text-left px-4 py-2 text-sm ${idx === highlightedLocationIndex ? 'bg-brand-100 text-brand-700' : 'hover:bg-brand-50'}`}>
                             {loc} {REGIONAL_ADJUSTMENTS[loc] && <span className="text-slate-500 ml-2">({REGIONAL_ADJUSTMENTS[loc].label})</span>}
                           </button>
                         ))}
@@ -1342,17 +1342,17 @@ This analysis provides general market guidance. Every search is unique.
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
                       {timelineOptions.map(opt => (
                         <button key={opt.value} type="button" onClick={() => setFormData({ ...formData, timeline: opt.value })}
-                          className={`p-4 border-2 rounded-xl text-left transition-all relative ${formData.timeline === opt.value ? 'border-indigo-600 bg-indigo-100 shadow-md ring-2 ring-indigo-200' : 'border-slate-200 hover:border-slate-300 hover:bg-slate-50'}`}>
+                          className={`p-4 border-2 rounded-xl text-left transition-all relative ${formData.timeline === opt.value ? 'border-brand-500 bg-brand-100 shadow-md ring-2 ring-brand-100' : 'border-slate-200 hover:border-slate-300 hover:bg-slate-50'}`}>
                           {formData.timeline === opt.value && (
-                            <div className="absolute -top-2 -right-2 w-6 h-6 rounded-full bg-indigo-600 flex items-center justify-center shadow-md">
+                            <div className="absolute -top-2 -right-2 w-6 h-6 rounded-full bg-brand-500 flex items-center justify-center shadow-md">
                               <CheckCircle className="w-4 h-4 text-white" />
                             </div>
                           )}
                           <div className="flex justify-between items-center">
-                            <span className={`font-medium text-sm ${formData.timeline === opt.value ? 'text-indigo-900' : 'text-slate-700'}`}>{opt.label}</span>
-                            <Clock className={`w-4 h-4 ${formData.timeline === opt.value ? 'text-indigo-600' : 'text-slate-400'}`} />
+                            <span className={`font-medium text-sm ${formData.timeline === opt.value ? 'text-brand-700' : 'text-slate-700'}`}>{opt.label}</span>
+                            <Clock className={`w-4 h-4 ${formData.timeline === opt.value ? 'text-brand-500' : 'text-slate-400'}`} />
                           </div>
-                          <p className={`text-xs mt-1 ${formData.timeline === opt.value ? 'text-indigo-700' : 'text-slate-500'}`}>{opt.description}</p>
+                          <p className={`text-xs mt-1 ${formData.timeline === opt.value ? 'text-brand-500' : 'text-slate-500'}`}>{opt.description}</p>
                         </button>
                       ))}
                     </div>
@@ -1370,10 +1370,10 @@ This analysis provides general market guidance. Every search is unique.
                   {warnings.length > 0 && (
                     <div className="space-y-3">
                       {warnings.map((w, i) => (
-                        <div key={i} className={`p-4 rounded-xl flex items-start gap-3 ${w.type === 'critical' ? 'bg-red-50 border border-red-200' : w.type === 'warning' ? 'bg-amber-50 border border-amber-200' : 'bg-blue-50 border border-blue-200'}`}>
-                          <AlertCircle className={`w-5 h-5 flex-shrink-0 mt-0.5 ${w.type === 'critical' ? 'text-red-600' : w.type === 'warning' ? 'text-amber-600' : 'text-blue-600'}`} />
+                        <div key={i} className={`p-4 rounded-xl flex items-start gap-3 ${w.type === 'critical' ? 'bg-b-pink-50 border border-b-pink-200' : w.type === 'warning' ? 'bg-b-ocre-50 border border-b-ocre-200' : 'bg-brand-50 border border-brand-100'}`}>
+                          <AlertCircle className={`w-5 h-5 flex-shrink-0 mt-0.5 ${w.type === 'critical' ? 'text-b-pink-500' : w.type === 'warning' ? 'text-b-ocre-500' : 'text-brand-500'}`} />
                           <div>
-                            <p className={`text-sm font-medium ${w.type === 'critical' ? 'text-red-800' : w.type === 'warning' ? 'text-amber-800' : 'text-blue-800'}`}>{w.message}</p>
+                            <p className={`text-sm font-medium ${w.type === 'critical' ? 'text-b-pink-600' : w.type === 'warning' ? 'text-b-ocre-500' : 'text-brand-600'}`}>{w.message}</p>
                             {w.suggestion && <p className="text-xs mt-1 text-slate-600">💡 {w.suggestion}</p>}
                           </div>
                         </div>
@@ -1396,7 +1396,7 @@ This analysis provides general market guidance. Every search is unique.
                     <div className="flex flex-wrap gap-2">
                       {(isCorporateRole ? corporateCertificationOptions : householdCertificationOptions).map(cert => (
                         <button key={cert} type="button" onClick={() => handleMultiSelect('certifications', cert)}
-                          className={`px-3 py-1.5 rounded-full text-sm ${formData.certifications.includes(cert) ? 'bg-indigo-600 text-white' : 'bg-slate-100 text-slate-700 hover:bg-slate-200'}`}>
+                          className={`px-3 py-1.5 rounded-full text-sm ${formData.certifications.includes(cert) ? 'bg-brand-500 text-white' : 'bg-slate-100 text-slate-700 hover:bg-slate-200'}`}>
                           {cert}
                         </button>
                       ))}
@@ -1417,7 +1417,7 @@ This analysis provides general market guidance. Every search is unique.
                           <div className="flex flex-wrap gap-2">
                             {corporateLanguageShortList.map(lang => (
                               <button key={lang} type="button" onClick={() => handleMultiSelect('languageRequirements', lang)}
-                                className={`px-3 py-1.5 rounded-full text-sm ${formData.languageRequirements.includes(lang) ? 'bg-indigo-600 text-white' : 'bg-slate-100 text-slate-700 hover:bg-slate-200'}`}>
+                                className={`px-3 py-1.5 rounded-full text-sm ${formData.languageRequirements.includes(lang) ? 'bg-brand-500 text-white' : 'bg-slate-100 text-slate-700 hover:bg-slate-200'}`}>
                                 {lang}
                               </button>
                             ))}
@@ -1425,7 +1425,7 @@ This analysis provides general market guidance. Every search is unique.
                         </div>
                       )}
                       {formData.languageRequirements.length > 0 && !showLanguages && (
-                        <p className="text-xs text-indigo-600 mt-2">Selected: {formData.languageRequirements.join(', ')}</p>
+                        <p className="text-xs text-brand-500 mt-2">Selected: {formData.languageRequirements.join(', ')}</p>
                       )}
                     </div>
                   ) : (
@@ -1434,7 +1434,7 @@ This analysis provides general market guidance. Every search is unique.
                       <div className="flex flex-wrap gap-2">
                         {householdLanguageOptions.map(lang => (
                           <button key={lang} type="button" onClick={() => handleMultiSelect('languageRequirements', lang)}
-                            className={`px-3 py-1.5 rounded-full text-sm ${formData.languageRequirements.includes(lang) ? 'bg-indigo-600 text-white' : 'bg-slate-100 text-slate-700 hover:bg-slate-200'}`}>
+                            className={`px-3 py-1.5 rounded-full text-sm ${formData.languageRequirements.includes(lang) ? 'bg-brand-500 text-white' : 'bg-slate-100 text-slate-700 hover:bg-slate-200'}`}>
                             {lang}
                           </button>
                         ))}
@@ -1454,7 +1454,7 @@ This analysis provides general market guidance. Every search is unique.
                     <label className="block text-sm font-medium text-slate-700 mb-2">Additional Requirements *</label>
                     <textarea name="keyRequirements" value={formData.keyRequirements} onChange={handleInputChange} rows={4}
                       className="w-full px-4 py-3 border-2 border-slate-200 rounded-xl" placeholder="Describe specific experience, skills..." />
-                    <p className={`text-xs mt-1 ${formData.keyRequirements.length >= 25 ? 'text-green-600' : 'text-slate-500'}`}>
+                    <p className={`text-xs mt-1 ${formData.keyRequirements.length >= 25 ? 'text-b-opal-500' : 'text-slate-500'}`}>
                       {formData.keyRequirements.length} chars {formData.keyRequirements.length < 25 ? `(${25 - formData.keyRequirements.length} more needed)` : '✓'}
                     </p>
                   </div>
@@ -1466,17 +1466,17 @@ This analysis provides general market guidance. Every search is unique.
                 <div className="space-y-6">
                   <h3 className="text-xl font-semibold" style={{ color: '#2814ff' }}>Get Your Analysis</h3>
 
-                  <div className="bg-indigo-50 rounded-xl p-5 border border-indigo-100 flex gap-3">
+                  <div className="bg-brand-50 rounded-xl p-5 border border-brand-100 flex gap-3">
                     <Zap className="w-6 h-6 flex-shrink-0" style={{ color: '#2814ff' }} />
                     <div>
                       <h4 className="font-semibold text-slate-900 mb-1">Your analysis is almost ready</h4>
                       <p className="text-sm text-slate-600">In a few seconds, you'll receive a detailed complexity score, market analysis, and recommendations.</p>
                       <h4 className="font-semibold text-slate-900 mb-1">Your personalized analysis includes:</h4>
                       <ul className="text-sm text-slate-600 space-y-1 mt-2">
-                        <li className="flex items-center gap-2"><CheckCircle className="w-4 h-4 text-indigo-600" />Search complexity score & market positioning</li>
-                        <li className="flex items-center gap-2"><CheckCircle className="w-4 h-4 text-indigo-600" />Salary benchmarks for your location</li>
-                        <li className="flex items-center gap-2"><CheckCircle className="w-4 h-4 text-indigo-600" />Candidate availability & timeline estimates</li>
-                        <li className="flex items-center gap-2"><CheckCircle className="w-4 h-4 text-indigo-600" />Negotiation leverage insights</li>
+                        <li className="flex items-center gap-2"><CheckCircle className="w-4 h-4 text-brand-500" />Search complexity score & market positioning</li>
+                        <li className="flex items-center gap-2"><CheckCircle className="w-4 h-4 text-brand-500" />Salary benchmarks for your location</li>
+                        <li className="flex items-center gap-2"><CheckCircle className="w-4 h-4 text-brand-500" />Candidate availability & timeline estimates</li>
+                        <li className="flex items-center gap-2"><CheckCircle className="w-4 h-4 text-brand-500" />Negotiation leverage insights</li>
                       </ul>
                     </div>
                   </div>
@@ -1533,9 +1533,9 @@ This analysis provides general market guidance. Every search is unique.
                     </div>
                   )}
 
-                  <div className="bg-gradient-to-br from-indigo-50 to-purple-50 rounded-xl p-5 border border-indigo-200">
+                  <div className="bg-gradient-to-br from-brand-50 to-b-pink-50 rounded-xl p-5 border border-brand-100">
                     <div className="flex items-start gap-3 mb-4">
-                      <div className="w-10 h-10 rounded-full bg-indigo-600 flex items-center justify-center flex-shrink-0">
+                      <div className="w-10 h-10 rounded-full bg-brand-500 flex items-center justify-center flex-shrink-0">
                         <Download className="w-5 h-5 text-white" />
                       </div>
                       <div>
@@ -1545,7 +1545,7 @@ This analysis provides general market guidance. Every search is unique.
                     </div>
                     <div className="space-y-3">
                       <input type="email" name="email" value={formData.email} onChange={handleInputChange}
-                        className="w-full px-4 py-3 border-2 border-indigo-200 rounded-xl focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 bg-white"
+                        className="w-full px-4 py-3 border-2 border-brand-100 rounded-xl focus:border-brand-500 focus:ring-2 focus:ring-brand-100 bg-white"
                         placeholder="your@email.com" />
                       <p className="text-xs text-slate-500 flex items-center gap-1">
                         <Info className="w-3 h-3" />
@@ -1554,21 +1554,21 @@ This analysis provides general market guidance. Every search is unique.
                     </div>
                   </div>
 
-                  <div className="bg-gradient-to-r from-amber-50 to-orange-50 border-2 border-amber-300 rounded-xl p-5">
+                  <div className="bg-gradient-to-r from-b-ocre-50 to-b-ocre-50 border-2 border-b-ocre-200 rounded-xl p-5">
                     <div className="flex items-start gap-3">
-                      <div className="w-10 h-10 rounded-full bg-amber-500 flex items-center justify-center flex-shrink-0">
+                      <div className="w-10 h-10 rounded-full bg-b-ocre-300 flex items-center justify-center flex-shrink-0">
                         <Phone className="w-5 h-5 text-white" />
                       </div>
                       <div className="flex-1">
                         <label className="flex items-center gap-2 cursor-pointer">
                           <input type="checkbox" name="priorityCallback" checked={formData.priorityCallback} onChange={handleInputChange}
-                            className="w-5 h-5 rounded border-amber-400 text-amber-600 focus:ring-amber-500" />
-                          <span className="font-semibold text-amber-900">Request a Consultation (No Obligation)</span>
+                            className="w-5 h-5 rounded border-b-ocre-300 text-b-ocre-500 focus:ring-b-ocre-300" />
+                          <span className="font-semibold text-b-ocre-600">Request a Consultation (No Obligation)</span>
                         </label>
-                        <p className="text-sm text-amber-800 mt-2">Speak with a specialist within 24 hours. Get strategic advice tailored to your specific search.</p>
+                        <p className="text-sm text-b-ocre-500 mt-2">Speak with a specialist within 24 hours. Get strategic advice tailored to your specific search.</p>
                         {formData.priorityCallback && (
                           <input type="tel" name="phone" value={formData.phone} onChange={handleInputChange}
-                            className="mt-3 w-full px-4 py-3 border-2 border-amber-300 rounded-xl bg-white focus:border-amber-500 focus:ring-2 focus:ring-amber-200"
+                            className="mt-3 w-full px-4 py-3 border-2 border-b-ocre-200 rounded-xl bg-white focus:border-b-ocre-300 focus:ring-2 focus:ring-b-ocre-200"
                             placeholder="Best phone number to reach you" />
                         )}
                       </div>
@@ -1578,9 +1578,9 @@ This analysis provides general market guidance. Every search is unique.
               )}
 
               {error && (
-                <div className="mt-4 p-4 rounded-xl flex items-center bg-red-50 border border-red-200">
-                  <AlertCircle className="w-5 h-5 mr-2 text-red-600" />
-                  <p className="text-sm font-medium text-red-800">{error}</p>
+                <div className="mt-4 p-4 rounded-xl flex items-center bg-b-pink-50 border border-b-pink-200">
+                  <AlertCircle className="w-5 h-5 mr-2 text-b-pink-500" />
+                  <p className="text-sm font-medium text-b-pink-600">{error}</p>
                 </div>
               )}
 
@@ -1619,7 +1619,7 @@ This analysis provides general market guidance. Every search is unique.
                   <div className="flex gap-2">
                     <input type="text" readOnly value={shareUrl} className="flex-1 px-3 py-2 border border-slate-200 rounded-lg text-sm bg-slate-50 truncate" />
                     <button onClick={copyShareUrl} className="px-4 py-2 rounded-lg text-sm font-medium flex items-center gap-2 transition-all"
-                      style={{ backgroundColor: copiedShare ? '#10b981' : '#2814ff', color: '#ffffff' }}>
+                      style={{ backgroundColor: copiedShare ? '#99c1b9' : '#2814ff', color: '#ffffff' }}>
                       {copiedShare ? <><CheckCircle className="w-4 h-4" />Copied!</> : <><Copy className="w-4 h-4" />Copy</>}
                     </button>
                   </div>
@@ -1637,15 +1637,15 @@ This analysis provides general market guidance. Every search is unique.
                   </div>
                   {emailSent ? (
                     <div className="text-center py-6">
-                      <CheckCircle className="w-12 h-12 text-green-500 mx-auto mb-3" />
-                      <p className="font-semibold text-green-700">Report sent!</p>
+                      <CheckCircle className="w-12 h-12 text-b-opal-400 mx-auto mb-3" />
+                      <p className="font-semibold text-b-opal-600">Report sent!</p>
                       <p className="text-sm text-slate-500 mt-1">Check your inbox for the analysis report.</p>
                     </div>
                   ) : (
                     <>
                       <p className="text-sm text-slate-600 mb-4">We'll send a formatted report with your complete analysis.</p>
                       <input type="email" value={emailForReport} onChange={(e) => setEmailForReport(e.target.value)}
-                        className="w-full px-4 py-3 border-2 border-slate-200 rounded-xl mb-3 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200"
+                        className="w-full px-4 py-3 border-2 border-slate-200 rounded-xl mb-3 focus:border-brand-500 focus:ring-2 focus:ring-brand-100"
                         placeholder="your@email.com" />
                       <button onClick={handleSendEmail} disabled={sendingEmail || !emailForReport.includes('@')}
                         className="w-full text-white px-4 py-3 rounded-xl font-semibold flex items-center justify-center gap-2 disabled:opacity-50 transition-all"
@@ -1666,11 +1666,11 @@ This analysis provides general market guidance. Every search is unique.
             <div ref={resultsRef} className="bg-white rounded-2xl shadow-xl p-6 md:p-8 border border-slate-200">
               {/* Shared Result Banner */}
               {results.isSharedResult && (
-                <div className="bg-indigo-50 rounded-xl p-4 mb-6 flex items-start gap-3 border border-indigo-100">
-                  <Share2 className="w-5 h-5 text-indigo-600 flex-shrink-0 mt-0.5" />
+                <div className="bg-brand-50 rounded-xl p-4 mb-6 flex items-start gap-3 border border-brand-100">
+                  <Share2 className="w-5 h-5 text-brand-500 flex-shrink-0 mt-0.5" />
                   <div>
-                    <p className="text-sm font-medium text-indigo-800">This is a shared analysis</p>
-                    <p className="text-xs text-indigo-600 mt-1">Results are based on our scoring algorithm. For AI-powered insights, start a new analysis.</p>
+                    <p className="text-sm font-medium text-brand-600">This is a shared analysis</p>
+                    <p className="text-xs text-brand-500 mt-1">Results are based on our scoring algorithm. For AI-powered insights, start a new analysis.</p>
                   </div>
                 </div>
               )}
@@ -1715,14 +1715,14 @@ This analysis provides general market guidance. Every search is unique.
                 </button>
 
                 {whatIfMode && (
-                  <div className="bg-gradient-to-br from-indigo-50 to-purple-50 rounded-xl p-5 border border-indigo-200">
+                  <div className="bg-gradient-to-br from-brand-50 to-b-pink-50 rounded-xl p-5 border border-brand-100">
                     <p className="text-sm text-slate-600 mb-4">Adjust parameters to see how they affect your complexity score in real-time.</p>
 
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
                       <div>
                         <label className="block text-xs font-medium text-slate-600 mb-1">Timeline</label>
                         <select value={whatIfTimeline} onChange={(e) => setWhatIfTimeline(e.target.value)}
-                          className="w-full px-3 py-2 border border-indigo-200 rounded-lg text-sm bg-white">
+                          className="w-full px-3 py-2 border border-brand-100 rounded-lg text-sm bg-white">
                           {timelineOptions.map(t => (
                             <option key={t.value} value={t.value}>{t.label}</option>
                           ))}
@@ -1731,7 +1731,7 @@ This analysis provides general market guidance. Every search is unique.
                       <div>
                         <label className="block text-xs font-medium text-slate-600 mb-1">Budget</label>
                         <select value={whatIfBudget} onChange={(e) => setWhatIfBudget(e.target.value)}
-                          className="w-full px-3 py-2 border border-indigo-200 rounded-lg text-sm bg-white">
+                          className="w-full px-3 py-2 border border-brand-100 rounded-lg text-sm bg-white">
                           {budgetRanges.map(b => (
                             <option key={b.value} value={b.value}>{b.label}</option>
                           ))}
@@ -1740,7 +1740,7 @@ This analysis provides general market guidance. Every search is unique.
                     </div>
 
                     {calculateWhatIfScore && (
-                      <div className="flex items-center justify-between bg-white rounded-lg p-4 border border-indigo-100">
+                      <div className="flex items-center justify-between bg-white rounded-lg p-4 border border-brand-100">
                         <div>
                           <div className="text-xs text-slate-500 mb-1">What-If Score</div>
                           <div className="flex items-center gap-3">
@@ -1757,7 +1757,7 @@ This analysis provides general market guidance. Every search is unique.
                         <div className="text-right">
                           <div className="text-xs text-slate-500">vs. Current</div>
                           {calculateWhatIfScore.score !== results.score ? (
-                            <span className={`text-sm font-semibold ${calculateWhatIfScore.score < results.score ? 'text-green-600' : 'text-red-600'}`}>
+                            <span className={`text-sm font-semibold ${calculateWhatIfScore.score < results.score ? 'text-b-opal-500' : 'text-b-pink-500'}`}>
                               {calculateWhatIfScore.score < results.score ? '↓' : '↑'} {Math.abs(calculateWhatIfScore.score - results.score)} point{Math.abs(calculateWhatIfScore.score - results.score) !== 1 ? 's' : ''}
                             </span>
                           ) : (
@@ -1790,30 +1790,30 @@ This analysis provides general market guidance. Every search is unique.
 
               {/* Metrics */}
               <div data-pdf-section="metrics" className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
-                <div className="bg-emerald-50 rounded-xl p-5 border border-emerald-100">
-                  <div className="flex items-center gap-2 mb-2"><DollarSign className="w-5 h-5 text-emerald-600" /><h4 className="font-semibold text-sm text-emerald-800">Salary</h4></div>
+                <div className="bg-b-opal-50 rounded-xl p-5 border border-b-opal-100">
+                  <div className="flex items-center gap-2 mb-2"><DollarSign className="w-5 h-5 text-b-opal-500" /><h4 className="font-semibold text-sm text-b-opal-600">Salary</h4></div>
                   <p className="text-slate-700">{results.salaryRangeGuidance}</p>
                 </div>
-                <div className="bg-blue-50 rounded-xl p-5 border border-blue-100">
-                  <div className="flex items-center gap-2 mb-2"><Clock className="w-5 h-5 text-blue-600" /><h4 className="font-semibold text-sm text-blue-800">Timeline</h4></div>
+                <div className="bg-brand-50 rounded-xl p-5 border border-brand-100">
+                  <div className="flex items-center gap-2 mb-2"><Clock className="w-5 h-5 text-brand-500" /><h4 className="font-semibold text-sm text-brand-600">Timeline</h4></div>
                   <p className="text-slate-700">{results.estimatedTimeline}</p>
                 </div>
-                <div className="bg-purple-50 rounded-xl p-5 border border-purple-100">
-                  <div className="flex items-center gap-2 mb-2"><TrendingUp className="w-5 h-5 text-purple-600" /><h4 className="font-semibold text-sm text-purple-800">Market</h4></div>
+                <div className="bg-b-pink-50 rounded-xl p-5 border border-b-pink-100">
+                  <div className="flex items-center gap-2 mb-2"><TrendingUp className="w-5 h-5 text-b-pink-500" /><h4 className="font-semibold text-sm text-b-pink-600">Market</h4></div>
                   <p className="text-slate-700">{results.marketCompetitiveness}</p>
                 </div>
-                <div className="bg-amber-50 rounded-xl p-5 border border-amber-100">
-                  <div className="flex items-center gap-2 mb-2"><Users className="w-5 h-5 text-amber-600" /><h4 className="font-semibold text-sm text-amber-800">Availability</h4></div>
+                <div className="bg-b-ocre-50 rounded-xl p-5 border border-b-ocre-100">
+                  <div className="flex items-center gap-2 mb-2"><Users className="w-5 h-5 text-b-ocre-500" /><h4 className="font-semibold text-sm text-b-ocre-500">Availability</h4></div>
                   <p className="text-slate-700"><strong>{results.candidateAvailability}</strong> — {results.availabilityReason}</p>
                 </div>
               </div>
 
               {/* Sourcing Insight */}
               {results.sourcingInsight && (
-                <div data-pdf-section="sourcing" className="bg-indigo-50 rounded-xl p-5 mb-6 border border-indigo-100">
+                <div data-pdf-section="sourcing" className="bg-brand-50 rounded-xl p-5 mb-6 border border-brand-100">
                   <div className="flex items-center gap-2 mb-2">
-                    <Target className="w-5 h-5 text-indigo-600" />
-                    <h4 className="font-semibold text-sm text-indigo-800">Where to Find These Candidates</h4>
+                    <Target className="w-5 h-5 text-brand-500" />
+                    <h4 className="font-semibold text-sm text-brand-600">Where to Find These Candidates</h4>
                   </div>
                   <p className="text-slate-700">{results.sourcingInsight}</p>
                 </div>
@@ -1856,8 +1856,8 @@ This analysis provides general market guidance. Every search is unique.
                 <h4 className="font-semibold mb-3 flex items-center gap-2" style={{ color: '#2814ff' }}><CheckCircle className="w-5 h-5" />Success Factors</h4>
                 <ul className="space-y-2">
                   {results.keySuccessFactors?.map((f, i) => (
-                    <li key={i} className="flex items-start gap-3 bg-green-50 rounded-lg p-3 border border-green-100">
-                      <CheckCircle className="w-5 h-5 text-green-600 flex-shrink-0 mt-0.5" />
+                    <li key={i} className="flex items-start gap-3 bg-b-opal-50 rounded-lg p-3 border border-b-opal-100">
+                      <CheckCircle className="w-5 h-5 text-b-opal-500 flex-shrink-0 mt-0.5" />
                       <span className="text-slate-700">{f}</span>
                     </li>
                   ))}
@@ -1869,8 +1869,8 @@ This analysis provides general market guidance. Every search is unique.
                   <h4 className="font-semibold mb-3 flex items-center gap-2" style={{ color: '#2814ff' }}><Lightbulb className="w-5 h-5" />Recommendations</h4>
                   <ul className="space-y-2">
                     {results.recommendedAdjustments.map((r, i) => (
-                      <li key={i} className="flex items-start gap-3 bg-amber-50 rounded-lg p-3 border border-amber-100">
-                        <ArrowRight className="w-5 h-5 text-amber-600 flex-shrink-0 mt-0.5" />
+                      <li key={i} className="flex items-start gap-3 bg-b-ocre-50 rounded-lg p-3 border border-b-ocre-100">
+                        <ArrowRight className="w-5 h-5 text-b-ocre-500 flex-shrink-0 mt-0.5" />
                         <span className="text-slate-700">{r}</span>
                       </li>
                     ))}
@@ -1881,8 +1881,8 @@ This analysis provides general market guidance. Every search is unique.
               {/* Red Flag Analysis */}
               {results.redFlagAnalysis && results.redFlagAnalysis !== "None - well-positioned search" && (
                 <div data-pdf-section="red-flags" className="mb-6">
-                  <h4 className="font-semibold mb-3 flex items-center gap-2" style={{ color: '#dc2626' }}><AlertCircle className="w-5 h-5" />Red Flag Analysis</h4>
-                  <div className="bg-red-50 rounded-xl p-4 border border-red-200">
+                  <h4 className="font-semibold mb-3 flex items-center gap-2" style={{ color: '#2814ff' }}><AlertCircle className="w-5 h-5" />Red Flag Analysis</h4>
+                  <div className="bg-b-pink-50 rounded-xl p-4 border border-b-pink-200">
                     <p className="text-slate-700">{results.redFlagAnalysis}</p>
                   </div>
                 </div>
@@ -1892,7 +1892,7 @@ This analysis provides general market guidance. Every search is unique.
               {results.benchmark?.trends && (
                 <div data-pdf-section="market-intelligence" className="mb-6">
                   <h4 className="font-semibold mb-3 flex items-center gap-2" style={{ color: '#2814ff' }}><TrendingUp className="w-5 h-5" />Market Intelligence</h4>
-                  <div className="bg-gradient-to-br from-slate-50 to-indigo-50 rounded-xl p-5 border border-slate-200">
+                  <div className="bg-gradient-to-br from-slate-50 to-brand-50 rounded-xl p-5 border border-slate-200">
                     <p className="text-slate-700 mb-3">{results.benchmark.trends}</p>
                     {results.benchmark.regionalNotes && (
                       <div className="mt-3 pt-3 border-t border-slate-200">
@@ -1907,12 +1907,12 @@ This analysis provides general market guidance. Every search is unique.
                 <div data-pdf-section="negotiation" className="mb-6">
                   <h4 className="font-semibold mb-3 flex items-center gap-2" style={{ color: '#2814ff' }}><ArrowLeftRight className="w-5 h-5" />Negotiation</h4>
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <div className="bg-red-50 rounded-xl p-4 border border-red-100">
-                      <h5 className="font-medium text-red-800 mb-2 text-sm">Candidate Advantages</h5>
+                    <div className="bg-b-pink-50 rounded-xl p-4 border border-b-pink-100">
+                      <h5 className="font-medium text-b-pink-600 mb-2 text-sm">Candidate Advantages</h5>
                       <ul className="space-y-1">{results.negotiationLeverage.candidateAdvantages?.map((a, i) => <li key={i} className="text-sm text-slate-700">• {a}</li>)}</ul>
                     </div>
-                    <div className="bg-green-50 rounded-xl p-4 border border-green-100">
-                      <h5 className="font-medium text-green-800 mb-2 text-sm">Your Advantages</h5>
+                    <div className="bg-b-opal-50 rounded-xl p-4 border border-b-opal-100">
+                      <h5 className="font-medium text-b-opal-600 mb-2 text-sm">Your Advantages</h5>
                       <ul className="space-y-1">{results.negotiationLeverage.employerAdvantages?.map((a, i) => <li key={i} className="text-sm text-slate-700">• {a}</li>)}</ul>
                     </div>
                   </div>
@@ -1932,7 +1932,7 @@ This analysis provides general market guidance. Every search is unique.
                     {results.decisionIntelligence.tradeoffScenarios && (
                       <div className="bg-white border border-slate-200 rounded-xl p-5 shadow-sm">
                         <div className="flex items-center gap-2 mb-3">
-                          <div className="w-8 h-8 rounded-lg flex items-center justify-center" style={{ backgroundColor: '#e8e4ff' }}>
+                          <div className="w-8 h-8 rounded-lg flex items-center justify-center" style={{ backgroundColor: '#d2d4ff' }}>
                             <GitBranch className="w-4 h-4" style={{ color: '#2814ff' }} />
                           </div>
                           <h5 className="font-semibold text-slate-900">Trade-Off Scenarios</h5>
@@ -1940,7 +1940,7 @@ This analysis provides general market guidance. Every search is unique.
                         <ul className="space-y-2 mb-4">
                           {results.decisionIntelligence.tradeoffScenarios.initial?.map((item, i) => (
                             <li key={i} className="text-sm text-slate-700 flex items-start gap-2">
-                              <span className="text-indigo-500 font-medium">→</span>
+                              <span className="text-brand-500 font-medium">→</span>
                               <span>{item}</span>
                             </li>
                           ))}
@@ -1956,7 +1956,7 @@ This analysis provides general market guidance. Every search is unique.
                     {results.decisionIntelligence.candidatePsychology && (
                       <div className="bg-white border border-slate-200 rounded-xl p-5 shadow-sm">
                         <div className="flex items-center gap-2 mb-3">
-                          <div className="w-8 h-8 rounded-lg flex items-center justify-center" style={{ backgroundColor: '#f5e6e9' }}>
+                          <div className="w-8 h-8 rounded-lg flex items-center justify-center" style={{ backgroundColor: '#fdf2f4' }}>
                             <Users className="w-4 h-4" style={{ color: '#de9ea9' }} />
                           </div>
                           <h5 className="font-semibold text-slate-900">Candidate Psychology</h5>
@@ -1982,7 +1982,7 @@ This analysis provides general market guidance. Every search is unique.
                       {results.decisionIntelligence.probabilityOfSuccess && (
                         <div className="bg-white border border-slate-200 rounded-xl p-5 shadow-sm">
                           <div className="flex items-center gap-2 mb-3">
-                            <div className="w-8 h-8 rounded-lg flex items-center justify-center" style={{ backgroundColor: '#e8e4ff' }}>
+                            <div className="w-8 h-8 rounded-lg flex items-center justify-center" style={{ backgroundColor: '#d2d4ff' }}>
                               <Gauge className="w-4 h-4" style={{ color: '#2814ff' }} />
                             </div>
                             <h5 className="font-semibold text-slate-900">Success Probability</h5>
@@ -1990,10 +1990,10 @@ This analysis provides general market guidance. Every search is unique.
                           <div className="mb-4">
                             <span className={`inline-block px-4 py-2 rounded-full text-sm font-semibold ${
                               results.decisionIntelligence.probabilityOfSuccess.initialLabel === 'High'
-                                ? 'bg-green-100 text-green-800'
+                                ? 'bg-b-opal-100 text-b-opal-600'
                                 : results.decisionIntelligence.probabilityOfSuccess.initialLabel === 'Moderate'
-                                ? 'bg-amber-100 text-amber-800'
-                                : 'bg-red-100 text-red-800'
+                                ? 'bg-b-ocre-100 text-b-ocre-500'
+                                : 'bg-b-pink-100 text-b-pink-600'
                             }`}>
                               {results.decisionIntelligence.probabilityOfSuccess.initialLabel}
                             </span>
@@ -2009,7 +2009,7 @@ This analysis provides general market guidance. Every search is unique.
                       {results.decisionIntelligence.mandateStrength && (
                         <div className="bg-white border border-slate-200 rounded-xl p-5 shadow-sm">
                           <div className="flex items-center gap-2 mb-3">
-                            <div className="w-8 h-8 rounded-lg flex items-center justify-center" style={{ backgroundColor: '#f5e6e9' }}>
+                            <div className="w-8 h-8 rounded-lg flex items-center justify-center" style={{ backgroundColor: '#fdf2f4' }}>
                               <BarChart3 className="w-4 h-4" style={{ color: '#de9ea9' }} />
                             </div>
                             <h5 className="font-semibold text-slate-900">Mandate Strength</h5>
@@ -2035,31 +2035,31 @@ This analysis provides general market guidance. Every search is unique.
 
                     {/* False Signal Warnings */}
                     {results.decisionIntelligence.falseSignals && (
-                      <div className="bg-amber-50 border border-amber-200 rounded-xl p-5">
+                      <div className="bg-b-ocre-50 border border-b-ocre-200 rounded-xl p-5">
                         <div className="flex items-center gap-2 mb-3">
-                          <div className="w-8 h-8 rounded-lg flex items-center justify-center bg-amber-100">
-                            <AlertTriangle className="w-4 h-4 text-amber-600" />
+                          <div className="w-8 h-8 rounded-lg flex items-center justify-center bg-b-ocre-100">
+                            <AlertTriangle className="w-4 h-4 text-b-ocre-500" />
                           </div>
-                          <h5 className="font-semibold text-amber-900">False Signal Warnings</h5>
+                          <h5 className="font-semibold text-b-ocre-600">False Signal Warnings</h5>
                         </div>
                         <ul className="space-y-2 mb-4">
                           {results.decisionIntelligence.falseSignals.initial?.map((item, i) => (
-                            <li key={i} className="text-sm text-amber-800 flex items-start gap-2">
-                              <AlertCircle className="w-4 h-4 text-amber-500 flex-shrink-0 mt-0.5" />
+                            <li key={i} className="text-sm text-b-ocre-500 flex items-start gap-2">
+                              <AlertCircle className="w-4 h-4 text-b-ocre-400 flex-shrink-0 mt-0.5" />
                               <span>{item}</span>
                             </li>
                           ))}
                         </ul>
-                        <div className="border-t border-amber-200 pt-3 flex items-center gap-2">
-                          <Lock className="w-3.5 h-3.5 text-amber-400" />
-                          <span className="text-xs text-amber-700">{results.decisionIntelligence.falseSignals.completeTeaser}</span>
+                        <div className="border-t border-b-ocre-200 pt-3 flex items-center gap-2">
+                          <Lock className="w-3.5 h-3.5 text-b-ocre-400" />
+                          <span className="text-xs text-b-ocre-500">{results.decisionIntelligence.falseSignals.completeTeaser}</span>
                         </div>
                       </div>
                     )}
                   </div>
 
                   {/* CTA to unlock complete analysis */}
-                  <div className="mt-4 bg-gradient-to-r from-indigo-50 to-pink-50 rounded-xl p-4 border border-indigo-100">
+                  <div className="mt-4 bg-gradient-to-r from-brand-50 to-b-pink-50 rounded-xl p-4 border border-brand-100">
                     <div className="flex items-center justify-between flex-wrap gap-3">
                       <div className="flex items-center gap-2">
                         <Lock className="w-4 h-4" style={{ color: '#2814ff' }} />
@@ -2105,14 +2105,14 @@ This analysis provides general market guidance. Every search is unique.
                 </div>
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                   {comparisonResults.withDecrease ? (
-                    <div className="bg-red-50 rounded-xl p-4 border border-red-200">
-                      <h5 className="font-medium mb-2 text-red-800 text-sm">If Budget: {comparisonResults.prevLabel}</h5>
-                      <div className="text-2xl font-bold text-red-700">{comparisonResults.withDecrease.score}/10</div>
-                      <p className="text-xs text-red-600">{comparisonResults.withDecrease.label}</p>
+                    <div className="bg-b-pink-50 rounded-xl p-4 border border-b-pink-200">
+                      <h5 className="font-medium mb-2 text-b-pink-600 text-sm">If Budget: {comparisonResults.prevLabel}</h5>
+                      <div className="text-2xl font-bold text-b-pink-500">{comparisonResults.withDecrease.score}/10</div>
+                      <p className="text-xs text-b-pink-500">{comparisonResults.withDecrease.label}</p>
                       {comparisonResults.withDecrease.score > comparisonResults.current.score ? (
-                        <p className="text-xs font-medium text-red-800 mt-2">+{comparisonResults.withDecrease.score - comparisonResults.current.score} points harder</p>
+                        <p className="text-xs font-medium text-b-pink-600 mt-2">+{comparisonResults.withDecrease.score - comparisonResults.current.score} points harder</p>
                       ) : comparisonResults.withDecrease.score === comparisonResults.current.score && (
-                        <p className="text-xs text-red-700 mt-2">Already below market — timeline and location drive score</p>
+                        <p className="text-xs text-b-pink-500 mt-2">Already below market — timeline and location drive score</p>
                       )}
                     </div>
                   ) : (
@@ -2122,21 +2122,21 @@ This analysis provides general market guidance. Every search is unique.
                     </div>
                   )}
 
-                  <div className="bg-indigo-50 rounded-xl p-4 border-2 border-indigo-300">
-                    <h5 className="font-medium mb-2 text-indigo-800 text-sm">Your Budget (Current)</h5>
+                  <div className="bg-brand-50 rounded-xl p-4 border-2 border-brand-200">
+                    <h5 className="font-medium mb-2 text-brand-600 text-sm">Your Budget (Current)</h5>
                     <div className="text-2xl font-bold" style={{ color: '#2814ff' }}>{comparisonResults.current.score}/10</div>
-                    <p className="text-xs text-indigo-600">{comparisonResults.current.label}</p>
+                    <p className="text-xs text-brand-500">{comparisonResults.current.label}</p>
                   </div>
 
                   {comparisonResults.withIncrease ? (
-                    <div className="bg-green-50 rounded-xl p-4 border border-green-200">
-                      <h5 className="font-medium mb-2 text-green-800 text-sm">If Budget: {comparisonResults.nextLabel}</h5>
-                      <div className="text-2xl font-bold text-green-700">{comparisonResults.withIncrease.score}/10</div>
-                      <p className="text-xs text-green-600">{comparisonResults.withIncrease.label}</p>
+                    <div className="bg-b-opal-50 rounded-xl p-4 border border-b-opal-200">
+                      <h5 className="font-medium mb-2 text-b-opal-600 text-sm">If Budget: {comparisonResults.nextLabel}</h5>
+                      <div className="text-2xl font-bold text-b-opal-600">{comparisonResults.withIncrease.score}/10</div>
+                      <p className="text-xs text-b-opal-500">{comparisonResults.withIncrease.label}</p>
                       {comparisonResults.current.score > comparisonResults.withIncrease.score ? (
-                        <p className="text-xs font-medium text-green-800 mt-2">✓ {comparisonResults.current.score - comparisonResults.withIncrease.score} points easier</p>
+                        <p className="text-xs font-medium text-b-opal-600 mt-2">✓ {comparisonResults.current.score - comparisonResults.withIncrease.score} points easier</p>
                       ) : comparisonResults.current.score === comparisonResults.withIncrease.score ? (
-                        <p className="text-xs text-amber-700 mt-2 font-medium">≈ No change — see note below</p>
+                        <p className="text-xs text-b-ocre-500 mt-2 font-medium">≈ No change — see note below</p>
                       ) : null}
                     </div>
                   ) : (
@@ -2147,8 +2147,8 @@ This analysis provides general market guidance. Every search is unique.
                   )}
                 </div>
                 {comparisonResults.withIncrease && comparisonResults.current.score === comparisonResults.withIncrease.score ? (
-                  <div className="bg-amber-50 border border-amber-200 rounded-lg p-3 mt-4">
-                    <p className="text-sm text-amber-800">
+                  <div className="bg-b-ocre-50 border border-b-ocre-200 rounded-lg p-3 mt-4">
+                    <p className="text-sm text-b-ocre-500">
                       <strong>💡 Why no change?</strong> Your budget is already competitive for this role. At this point, complexity is driven by timeline, location, role scarcity, and specialized requirements — not compensation.
                     </p>
                   </div>
@@ -2161,23 +2161,23 @@ This analysis provides general market guidance. Every search is unique.
             )}
 
             {/* CTA */}
-            <div className="bg-gradient-to-r from-indigo-600 via-purple-600 to-indigo-700 rounded-2xl shadow-xl p-8 text-white">
+            <div className="bg-gradient-to-r from-brand-500 via-brand-400 to-brand-500 rounded-2xl shadow-xl p-8 text-white">
               <div className="text-center mb-6">
-                <p className="text-indigo-200 text-sm uppercase tracking-wider mb-2">This is your initial analysis</p>
+                <p className="text-brand-100 text-sm uppercase tracking-wider mb-2">This is your initial analysis</p>
                 <h3 className="text-2xl font-bold mb-3" style={{ fontFamily: "'Playfair Display', serif" }}>Get the Complete Picture</h3>
               </div>
               <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6 text-sm">
                 <div className="bg-white/10 rounded-lg p-3">
                   <p className="font-semibold mb-1">Sourcing Strategy</p>
-                  <p className="text-indigo-200 text-xs">Exactly where and how to find qualified candidates</p>
+                  <p className="text-brand-100 text-xs">Exactly where and how to find qualified candidates</p>
                 </div>
                 <div className="bg-white/10 rounded-lg p-3">
                   <p className="font-semibold mb-1">Compensation Deep-Dive</p>
-                  <p className="text-indigo-200 text-xs">Benefits, equity, and package structuring</p>
+                  <p className="text-brand-100 text-xs">Benefits, equity, and package structuring</p>
                 </div>
                 <div className="bg-white/10 rounded-lg p-3">
                   <p className="font-semibold mb-1">Interview Framework</p>
-                  <p className="text-indigo-200 text-xs">Key questions and evaluation criteria</p>
+                  <p className="text-brand-100 text-xs">Key questions and evaluation criteria</p>
                 </div>
               </div>
               <div className="text-center">
@@ -2185,7 +2185,7 @@ This analysis provides general market guidance. Every search is unique.
                   className="inline-flex items-center gap-2 bg-white px-8 py-3 rounded-xl font-semibold shadow-lg hover:shadow-xl" style={{ color: '#2814ff' }}>
                   Schedule Your Comprehensive Analysis<ArrowRight className="w-5 h-5" />
                 </a>
-                <p className="text-indigo-200 text-xs mt-3">30-minute strategy call • No commitment</p>
+                <p className="text-brand-100 text-xs mt-3">30-minute strategy call • No commitment</p>
               </div>
             </div>
 
