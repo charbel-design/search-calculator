@@ -149,7 +149,11 @@ export const BENCHMARKS = {
     },
     scarcity: 9,
     regionalNotes: "NYC/Hamptons: +30-35%; San Francisco: +25-30%; Palm Beach: +20-25%",
-    trends: "Salaries up roughly 15-20% since 2022 with strong demand in family offices above $500M AUM"
+    trends: "Salaries up roughly 15-20% since 2022 with strong demand in family offices above $500M AUM",
+    timeToFill: 21,
+    candidatePoolSize: "12-40",
+    turnover: { avgTenure: 5.7, annualTurnover: 0.07 },
+    demandTrend: { direction: "growing", yoyChange: 0.07 }
   },
   "Family Office Director": {
     category: "Family Office - C-Suite",
@@ -162,7 +166,11 @@ export const BENCHMARKS = {
     },
     scarcity: 9.5,
     regionalNotes: "San Francisco: +$150k-$200k over national; Middle East/Monaco often +$200k-$300k",
-    trends: "Compensation up ~20-25% since 2022 driven by competition with PE and multi-family offices"
+    trends: "Compensation up ~20-25% since 2022 driven by competition with PE and multi-family offices",
+    timeToFill: 28,
+    candidatePoolSize: "14-50",
+    turnover: { avgTenure: 6.3, annualTurnover: 0.06 },
+    demandTrend: { direction: "growing", yoyChange: 0.09 }
   },
   "Family Office Manager": {
     category: "Family Office - Operations & Finance",
@@ -175,7 +183,11 @@ export const BENCHMARKS = {
     },
     scarcity: 8,
     regionalNotes: "Comp highly sensitive to AUM and office headcount; coastal metros pay at top of range",
-    trends: "Role professionalized post-2020; more formal bonuses and carried interest structures"
+    trends: "Role professionalized post-2020; more formal bonuses and carried interest structures",
+    timeToFill: 28,
+    candidatePoolSize: "12-49",
+    turnover: { avgTenure: 5.6, annualTurnover: 0.1 },
+    demandTrend: { direction: "stable", yoyChange: 0.01 }
   },
   "Estate Manager": {
     category: "Estate Leadership",
@@ -188,7 +200,11 @@ export const BENCHMARKS = {
     },
     scarcity: 6,
     regionalNotes: "NYC/Hamptons: $150k-$250k; Palm Beach: $140k-$220k; Aspen seasonal $8k-$15k/month",
-    trends: "Single-property roles pay ~15-25% less than multi-estate positions"
+    trends: "Single-property roles pay ~15-25% less than multi-estate positions",
+    timeToFill: 23,
+    candidatePoolSize: "26-50",
+    turnover: { avgTenure: 5.8, annualTurnover: 0.11 },
+    demandTrend: { direction: "stable", yoyChange: 0.03 }
   },
   "Estate Manager (Multi-Property)": {
     category: "Estate Leadership",
@@ -201,7 +217,11 @@ export const BENCHMARKS = {
     },
     scarcity: 9,
     regionalNotes: "US/Swiss portfolios often $250k-$400k+; Middle East/Monaco can reach $300k-$500k",
-    trends: "Salaries up ~20-30% since 2022 as portfolios become more global and complex"
+    trends: "Salaries up ~20-30% since 2022 as portfolios become more global and complex",
+    timeToFill: 17,
+    candidatePoolSize: "57-96",
+    turnover: { avgTenure: 4.7, annualTurnover: 0.1 },
+    demandTrend: { direction: "growing", yoyChange: 0.18 }
   },
   "Household Manager": {
     category: "Estate Leadership",
@@ -214,7 +234,11 @@ export const BENCHMARKS = {
     },
     scarcity: 6,
     regionalNotes: "NYC: $120k-$180k; San Francisco: $110k-$160k; Palm Beach: $100k-$150k",
-    trends: "Role increasingly incorporates HR and vendor management"
+    trends: "Role increasingly incorporates HR and vendor management",
+    timeToFill: 9,
+    candidatePoolSize: "191-417",
+    turnover: { avgTenure: 3.1, annualTurnover: 0.21 },
+    demandTrend: { direction: "growing", yoyChange: 0.15 }
   },
   "Property Manager": {
     category: "Estate Leadership",
@@ -227,7 +251,11 @@ export const BENCHMARKS = {
     },
     scarcity: 4,
     regionalNotes: "Higher in gateway cities (NYC, SF, LA); can exceed $130k with construction oversight",
-    trends: "Growing integration with facilities tech and smart-home systems"
+    trends: "Growing integration with facilities tech and smart-home systems",
+    timeToFill: 20,
+    candidatePoolSize: "26-49",
+    turnover: { avgTenure: 5.4, annualTurnover: 0.12 },
+    demandTrend: { direction: "growing", yoyChange: 0.06 }
   },
   "Director of Residences": {
     category: "Estate Leadership",
@@ -240,7 +268,11 @@ export const BENCHMARKS = {
     },
     scarcity: 8.5,
     regionalNotes: "International multi-residence portfolios at upper end; London/Monaco competitive",
-    trends: "More estates formalizing this as a distinct role above property/estate managers"
+    trends: "More estates formalizing this as a distinct role above property/estate managers",
+    timeToFill: 11,
+    candidatePoolSize: "286-480",
+    turnover: { avgTenure: 3.9, annualTurnover: 0.21 },
+    demandTrend: { direction: "stable", yoyChange: 0.01 }
   },
 
   // ==========================================
@@ -257,7 +289,11 @@ export const BENCHMARKS = {
     },
     scarcity: 7.5,
     regionalNotes: "NYC/Hamptons: $110k-$250k; SF Bay Area: $100k-$200k; Palm Beach: $95k-$220k",
-    trends: "Demand up roughly 25-30% since 2022; expectations for 24/7 availability"
+    trends: "Demand up roughly 25-30% since 2022; expectations for 24/7 availability",
+    timeToFill: 21,
+    candidatePoolSize: "34-77",
+    turnover: { avgTenure: 7.0, annualTurnover: 0.11 },
+    demandTrend: { direction: "growing", yoyChange: 0.22 }
   },
   "Personal Assistant": {
     category: "Personal & Administrative",
@@ -270,7 +306,11 @@ export const BENCHMARKS = {
     },
     scarcity: 5,
     regionalNotes: "West Palm Beach average around high-$60k; UHNW families can exceed $120k",
-    trends: "Roles often blend family support, admin, and light household management"
+    trends: "Roles often blend family support, admin, and light household management",
+    timeToFill: 13,
+    candidatePoolSize: "92-208",
+    turnover: { avgTenure: 4.7, annualTurnover: 0.12 },
+    demandTrend: { direction: "growing", yoyChange: 0.11 }
   },
   "Family Assistant": {
     category: "Personal & Administrative",
@@ -283,7 +323,11 @@ export const BENCHMARKS = {
     },
     scarcity: 4.5,
     regionalNotes: "Comp rises with number of children and school/extracurricular coordination",
-    trends: "Hybrid nanny/family-assistant roles increasingly common among younger UHNW families"
+    trends: "Hybrid nanny/family-assistant roles increasingly common among younger UHNW families",
+    timeToFill: 14,
+    candidatePoolSize: "125-186",
+    turnover: { avgTenure: 5.7, annualTurnover: 0.13 },
+    demandTrend: { direction: "growing", yoyChange: 0.17 }
   },
   "Lifestyle Manager": {
     category: "Personal & Administrative",
@@ -296,7 +340,11 @@ export const BENCHMARKS = {
     },
     scarcity: 7,
     regionalNotes: "Strongest markets: NYC, LA, Miami, London; premium on entertainment networks",
-    trends: "Role is converging with concierge and travel advisory; strong growth in UHNW segment"
+    trends: "Role is converging with concierge and travel advisory; strong growth in UHNW segment",
+    timeToFill: 7,
+    candidatePoolSize: "555-975",
+    turnover: { avgTenure: 2.8, annualTurnover: 0.25 },
+    demandTrend: { direction: "stable", yoyChange: -0.01 }
   },
   "Travel Coordinator": {
     category: "Personal & Administrative",
@@ -309,7 +357,11 @@ export const BENCHMARKS = {
     },
     scarcity: 5,
     regionalNotes: "Luxury travel coordinators earn more than mainstream advisors",
-    trends: "Private aviation and villa/yacht integration now baseline for UHNW"
+    trends: "Private aviation and villa/yacht integration now baseline for UHNW",
+    timeToFill: 8,
+    candidatePoolSize: "938-1955",
+    turnover: { avgTenure: 3.5, annualTurnover: 0.2 },
+    demandTrend: { direction: "stable", yoyChange: -0.0 }
   },
   "Social Secretary": {
     category: "Personal & Administrative",
@@ -322,7 +374,11 @@ export const BENCHMARKS = {
     },
     scarcity: 5.5,
     regionalNotes: "Highest demand in social hubs like NYC, Palm Beach, London",
-    trends: "Traditional role evolving to include digital/social media coordination"
+    trends: "Traditional role evolving to include digital/social media coordination",
+    timeToFill: 12,
+    candidatePoolSize: "109-164",
+    turnover: { avgTenure: 5.1, annualTurnover: 0.13 },
+    demandTrend: { direction: "stable", yoyChange: -0.02 }
   },
 
   // ==========================================
@@ -339,7 +395,11 @@ export const BENCHMARKS = {
     },
     scarcity: 6,
     regionalNotes: "NYC: $120k-$180k; Hamptons: $130k-$190k; Palm Beach: $110k-$160k",
-    trends: "Role increasingly spans HR, vendor negotiation, and project management"
+    trends: "Role increasingly spans HR, vendor negotiation, and project management",
+    timeToFill: 9,
+    candidatePoolSize: "454-985",
+    turnover: { avgTenure: 2.1, annualTurnover: 0.34 },
+    demandTrend: { direction: "growing", yoyChange: 0.16 }
   },
   "Butler (Formal)": {
     category: "Formal Service",
@@ -352,7 +412,11 @@ export const BENCHMARKS = {
     },
     scarcity: 7.5,
     regionalNotes: "UHNW/celebrity households can reach $150k-$250k+; London butlers ~£60k-£90k",
-    trends: "Formal butlers in notably short supply; salaries up about 20-25% since 2022"
+    trends: "Formal butlers in notably short supply; salaries up about 20-25% since 2022",
+    timeToFill: 10,
+    candidatePoolSize: "213-355",
+    turnover: { avgTenure: 3.4, annualTurnover: 0.18 },
+    demandTrend: { direction: "growing", yoyChange: 0.09 }
   },
   "Butler (American Style)": {
     category: "Formal Service",
@@ -365,7 +429,11 @@ export const BENCHMARKS = {
     },
     scarcity: 5,
     regionalNotes: "Pay lower than fully formal butler roles; more common in LA, Miami",
-    trends: "Service expectations high but protocol less formal than traditional European butlers"
+    trends: "Service expectations high but protocol less formal than traditional European butlers",
+    timeToFill: 13,
+    candidatePoolSize: "234-469",
+    turnover: { avgTenure: 3.6, annualTurnover: 0.16 },
+    demandTrend: { direction: "stable", yoyChange: 0.04 }
   },
   "Executive Housekeeper": {
     category: "Formal Service",
@@ -378,7 +446,11 @@ export const BENCHMARKS = {
     },
     scarcity: 5.5,
     regionalNotes: "NYC/Hamptons: $110k-$180k at UHNW level; Palm Beach: $95k-$150k",
-    trends: "Tech (inventory systems, scheduling) increasingly part of job"
+    trends: "Tech (inventory systems, scheduling) increasingly part of job",
+    timeToFill: 16,
+    candidatePoolSize: "143-171",
+    turnover: { avgTenure: 5.9, annualTurnover: 0.14 },
+    demandTrend: { direction: "growing", yoyChange: 0.08 }
   },
   "Head Housekeeper": {
     category: "Formal Service",
@@ -391,7 +463,11 @@ export const BENCHMARKS = {
     },
     scarcity: 4.5,
     regionalNotes: "Paid more in major metros and for complex residences or art-heavy homes",
-    trends: "Role sometimes merges with Executive Housekeeper for smaller households"
+    trends: "Role sometimes merges with Executive Housekeeper for smaller households",
+    timeToFill: 8,
+    candidatePoolSize: "574-866",
+    turnover: { avgTenure: 3.4, annualTurnover: 0.22 },
+    demandTrend: { direction: "stable", yoyChange: 0.02 }
   },
   "Majordomo": {
     category: "Formal Service",
@@ -404,7 +480,11 @@ export const BENCHMARKS = {
     },
     scarcity: 8.5,
     regionalNotes: "More common in Europe and Middle East; comp in Middle East significantly higher",
-    trends: "Revival of this traditional role in very large/heritage estates"
+    trends: "Revival of this traditional role in very large/heritage estates",
+    timeToFill: 10,
+    candidatePoolSize: "535-778",
+    turnover: { avgTenure: 2.8, annualTurnover: 0.34 },
+    demandTrend: { direction: "stable", yoyChange: -0.02 }
   },
 
   // ==========================================
@@ -421,7 +501,11 @@ export const BENCHMARKS = {
     },
     scarcity: 6.5,
     regionalNotes: "NYC/Hamptons: $130k-$250k+; SF Bay: $120k-$200k; top chefs can exceed $400k",
-    trends: "Demand and comp up ~15-20% since 2022; specialized diets command premium"
+    trends: "Demand and comp up ~15-20% since 2022; specialized diets command premium",
+    timeToFill: 21,
+    candidatePoolSize: "37-118",
+    turnover: { avgTenure: 7.7, annualTurnover: 0.11 },
+    demandTrend: { direction: "growing", yoyChange: 0.18 }
   },
   "Private Chef (Traveling)": {
     category: "Culinary",
@@ -434,7 +518,11 @@ export const BENCHMARKS = {
     },
     scarcity: 8,
     regionalNotes: "International and yacht-heavy travel portfolios sit at the top of range",
-    trends: "Travel flexibility is a major bottleneck; few chefs willing to travel constantly"
+    trends: "Travel flexibility is a major bottleneck; few chefs willing to travel constantly",
+    timeToFill: 11,
+    candidatePoolSize: "194-395",
+    turnover: { avgTenure: 4.4, annualTurnover: 0.14 },
+    demandTrend: { direction: "stable", yoyChange: 0.04 }
   },
   "Sous Chef (Private)": {
     category: "Culinary",
@@ -447,7 +535,11 @@ export const BENCHMARKS = {
     },
     scarcity: 5,
     regionalNotes: "NYC/SF roles often $15k-$25k higher than national averages",
-    trends: "Fine-dining backgrounds favored; competition from high-end restaurants"
+    trends: "Fine-dining backgrounds favored; competition from high-end restaurants",
+    timeToFill: 11,
+    candidatePoolSize: "244-365",
+    turnover: { avgTenure: 4.5, annualTurnover: 0.11 },
+    demandTrend: { direction: "growing", yoyChange: 0.16 }
   },
   "Personal Chef (Part-time)": {
     category: "Culinary",
@@ -460,7 +552,11 @@ export const BENCHMARKS = {
     },
     scarcity: 3,
     regionalNotes: "Day rates $500-$1,200 in premium markets; hourly often $35-$60+",
-    trends: "Growing with work-from-home and health-conscious UHNW clients"
+    trends: "Growing with work-from-home and health-conscious UHNW clients",
+    timeToFill: 22,
+    candidatePoolSize: "70-107",
+    turnover: { avgTenure: 5.5, annualTurnover: 0.09 },
+    demandTrend: { direction: "growing", yoyChange: 0.18 }
   },
   "Sommelier (Private)": {
     category: "Culinary",
@@ -473,7 +569,11 @@ export const BENCHMARKS = {
     },
     scarcity: 7.5,
     regionalNotes: "Master Sommelier-level private roles often $150k-$200k+",
-    trends: "Increasing interest among collectors with multi-million-dollar cellars"
+    trends: "Increasing interest among collectors with multi-million-dollar cellars",
+    timeToFill: 7,
+    candidatePoolSize: "553-815",
+    turnover: { avgTenure: 3.2, annualTurnover: 0.19 },
+    demandTrend: { direction: "growing", yoyChange: 0.11 }
   },
   "Pastry Chef (Private)": {
     category: "Culinary",
@@ -486,7 +586,11 @@ export const BENCHMARKS = {
     },
     scarcity: 5.5,
     regionalNotes: "Roles more common in large estates or with strong entertaining culture",
-    trends: "Demand tied to event-heavy households and high-end entertaining"
+    trends: "Demand tied to event-heavy households and high-end entertaining",
+    timeToFill: 5,
+    candidatePoolSize: "2245-3618",
+    turnover: { avgTenure: 1.8, annualTurnover: 0.31 },
+    demandTrend: { direction: "growing", yoyChange: 0.06 }
   },
   "Laundress / Wardrobe Manager": {
     category: "Formal Service",
@@ -499,7 +603,11 @@ export const BENCHMARKS = {
     },
     scarcity: 4.5,
     regionalNotes: "Expertise with couture, vintage, and luxury fabrics at upper end",
-    trends: "Growing emphasis on archival-quality care for wardrobes"
+    trends: "Growing emphasis on archival-quality care for wardrobes",
+    timeToFill: 15,
+    candidatePoolSize: "88-228",
+    turnover: { avgTenure: 5.9, annualTurnover: 0.09 },
+    demandTrend: { direction: "growing", yoyChange: 0.13 }
   },
   "Household Couple": {
     category: "Formal Service",
@@ -512,7 +620,11 @@ export const BENCHMARKS = {
     },
     scarcity: 7,
     regionalNotes: "Top-tier couples in NYC/Hamptons/Palm Beach can reach $280k-$380k combined",
-    trends: "Increasing popularity for flexibility and continuity; especially on remote estates"
+    trends: "Increasing popularity for flexibility and continuity; especially on remote estates",
+    timeToFill: 8,
+    candidatePoolSize: "467-920",
+    turnover: { avgTenure: 2.6, annualTurnover: 0.29 },
+    demandTrend: { direction: "growing", yoyChange: 0.09 }
   },
 
   // ==========================================
@@ -529,7 +641,11 @@ export const BENCHMARKS = {
     },
     scarcity: 4,
     regionalNotes: "NYC average $30-$40/hr; UHNW live-in roles can exceed $150k",
-    trends: "Demand up ~20% post-pandemic, especially for candidates with education or language skills"
+    trends: "Demand up ~20% post-pandemic, especially for candidates with education or language skills",
+    timeToFill: 16,
+    candidatePoolSize: "105-199",
+    turnover: { avgTenure: 4.3, annualTurnover: 0.15 },
+    demandTrend: { direction: "growing", yoyChange: 0.11 }
   },
   "Nanny (Multiple Children)": {
     category: "Childcare & Education",
@@ -542,7 +658,11 @@ export const BENCHMARKS = {
     },
     scarcity: 5,
     regionalNotes: "Add roughly 15-25% to baseline nanny pay for 2-3 children in UHNW homes",
-    trends: "Higher stress roles; many families add rotating nannies for coverage"
+    trends: "Higher stress roles; many families add rotating nannies for coverage",
+    timeToFill: 8,
+    candidatePoolSize: "861-1553",
+    turnover: { avgTenure: 1.8, annualTurnover: 0.28 },
+    demandTrend: { direction: "stable", yoyChange: 0.02 }
   },
   "Nanny (Live-out)": {
     category: "Childcare & Education",
@@ -555,7 +675,11 @@ export const BENCHMARKS = {
     },
     scarcity: 3,
     regionalNotes: "Rates often 15-25% below comparable live-in roles on cash basis",
-    trends: "Strong demand for live-out in high-cost cities as housing becomes harder"
+    trends: "Strong demand for live-out in high-cost cities as housing becomes harder",
+    timeToFill: 6,
+    candidatePoolSize: "1101-1525",
+    turnover: { avgTenure: 1.5, annualTurnover: 0.32 },
+    demandTrend: { direction: "growing", yoyChange: 0.06 }
   },
   "Newborn Care Specialist": {
     category: "Childcare & Education",
@@ -568,7 +692,11 @@ export const BENCHMARKS = {
     },
     scarcity: 7,
     regionalNotes: "Day/night rates often $300-$1,000/day in top markets; annualized can exceed $200k",
-    trends: "Growing use among older parents and high-risk pregnancies"
+    trends: "Growing use among older parents and high-risk pregnancies",
+    timeToFill: 7,
+    candidatePoolSize: "408-819",
+    turnover: { avgTenure: 2.6, annualTurnover: 0.2 },
+    demandTrend: { direction: "growing", yoyChange: 0.16 }
   },
   "Governess": {
     category: "Childcare & Education",
@@ -581,7 +709,11 @@ export const BENCHMARKS = {
     },
     scarcity: 8.5,
     regionalNotes: "International traveling governess roles show high salaries globally",
-    trends: "Post-pandemic interest in bespoke at-home schooling and hybrid programs"
+    trends: "Post-pandemic interest in bespoke at-home schooling and hybrid programs",
+    timeToFill: 4,
+    candidatePoolSize: "2552-3770",
+    turnover: { avgTenure: 2.4, annualTurnover: 0.34 },
+    demandTrend: { direction: "stable", yoyChange: 0.01 }
   },
   "Tutor Coordinator": {
     category: "Childcare & Education",
@@ -594,7 +726,11 @@ export const BENCHMARKS = {
     },
     scarcity: 5.5,
     regionalNotes: "Premium for high-stakes exam prep and coordinating multiple specialists",
-    trends: "More common in families with heavy tutoring for school and test prep"
+    trends: "More common in families with heavy tutoring for school and test prep",
+    timeToFill: 13,
+    candidatePoolSize: "140-212",
+    turnover: { avgTenure: 3.9, annualTurnover: 0.11 },
+    demandTrend: { direction: "stable", yoyChange: 0.01 }
   },
   "Family Educator": {
     category: "Childcare & Education",
@@ -607,7 +743,11 @@ export const BENCHMARKS = {
     },
     scarcity: 6.5,
     regionalNotes: "Educators with teaching credentials and international curricula (IB, A-levels) at top",
-    trends: "Hybrid role between governess, tutor coordinator, and education consultant"
+    trends: "Hybrid role between governess, tutor coordinator, and education consultant",
+    timeToFill: 19,
+    candidatePoolSize: "56-104",
+    turnover: { avgTenure: 7.6, annualTurnover: 0.06 },
+    demandTrend: { direction: "stable", yoyChange: 0.02 }
   },
 
   // ==========================================
@@ -624,7 +764,11 @@ export const BENCHMARKS = {
     },
     scarcity: 7.5,
     regionalNotes: "Los Angeles medians around $170k; NYC and SF can exceed $220k for UHNW",
-    trends: "Demand up 30-40% since 2020; oversight increasingly includes cyber and travel risk"
+    trends: "Demand up 30-40% since 2020; oversight increasingly includes cyber and travel risk",
+    timeToFill: 9,
+    candidatePoolSize: "187-423",
+    turnover: { avgTenure: 5.0, annualTurnover: 0.16 },
+    demandTrend: { direction: "growing", yoyChange: 0.07 }
   },
   "Executive Protection Agent": {
     category: "Security",
@@ -637,7 +781,11 @@ export const BENCHMARKS = {
     },
     scarcity: 6,
     regionalNotes: "Bay Area roles often $100k-$200k+; NYC/LA similarly high for celebrity clients",
-    trends: "Greater emphasis on de-escalation skills and social media monitoring"
+    trends: "Greater emphasis on de-escalation skills and social media monitoring",
+    timeToFill: 13,
+    candidatePoolSize: "104-228",
+    turnover: { avgTenure: 5.1, annualTurnover: 0.11 },
+    demandTrend: { direction: "stable", yoyChange: -0.0 }
   },
   "Residential Security Officer": {
     category: "Security",
@@ -650,7 +798,11 @@ export const BENCHMARKS = {
     },
     scarcity: 4,
     regionalNotes: "Urban and high-risk areas pay closer to 75th percentile with armed licensing",
-    trends: "More integration with smart surveillance systems"
+    trends: "More integration with smart surveillance systems",
+    timeToFill: 13,
+    candidatePoolSize: "89-216",
+    turnover: { avgTenure: 6.0, annualTurnover: 0.14 },
+    demandTrend: { direction: "stable", yoyChange: -0.01 }
   },
   "Security Driver": {
     category: "Security",
@@ -663,7 +815,11 @@ export const BENCHMARKS = {
     },
     scarcity: 5,
     regionalNotes: "Security drivers with advanced training can earn $100k-$200k+ in major cities",
-    trends: "Growing focus on advanced driving, medical training, and threat avoidance"
+    trends: "Growing focus on advanced driving, medical training, and threat avoidance",
+    timeToFill: 13,
+    candidatePoolSize: "287-323",
+    turnover: { avgTenure: 4.5, annualTurnover: 0.21 },
+    demandTrend: { direction: "growing", yoyChange: 0.19 }
   },
   "Travel Security Specialist": {
     category: "Security",
@@ -676,7 +832,11 @@ export const BENCHMARKS = {
     },
     scarcity: 7.5,
     regionalNotes: "Higher pay when working in higher-risk regions or with frequent international travel",
-    trends: "More UHNW families using travel security in medium-risk destinations"
+    trends: "More UHNW families using travel security in medium-risk destinations",
+    timeToFill: 6,
+    candidatePoolSize: "1008-1797",
+    turnover: { avgTenure: 2.1, annualTurnover: 0.34 },
+    demandTrend: { direction: "stable", yoyChange: 0.03 }
   },
   "Cybersecurity Manager": {
     category: "Security",
@@ -689,7 +849,11 @@ export const BENCHMARKS = {
     },
     scarcity: 8.5,
     regionalNotes: "SF Bay and NYC can reach top of range or higher due to competition with tech",
-    trends: "One of the fastest-growing roles in family offices; pay rising 40-50% in recent years"
+    trends: "One of the fastest-growing roles in family offices; pay rising 40-50% in recent years",
+    timeToFill: 8,
+    candidatePoolSize: "497-651",
+    turnover: { avgTenure: 4.0, annualTurnover: 0.21 },
+    demandTrend: { direction: "growing", yoyChange: 0.18 }
   },
 
   // ==========================================
@@ -706,7 +870,11 @@ export const BENCHMARKS = {
     },
     scarcity: 4,
     regionalNotes: "Daily drivers in NYC/LA often $90k-$160k; UHNW clients at high end",
-    trends: "App-based transport hasn't reduced demand among UHNW; trust and discretion crucial"
+    trends: "App-based transport hasn't reduced demand among UHNW; trust and discretion crucial",
+    timeToFill: 19,
+    candidatePoolSize: "48-102",
+    turnover: { avgTenure: 7.1, annualTurnover: 0.1 },
+    demandTrend: { direction: "growing", yoyChange: 0.18 }
   },
   "Long-haul Driver": {
     category: "Transportation",
@@ -719,7 +887,11 @@ export const BENCHMARKS = {
     },
     scarcity: 3.5,
     regionalNotes: "Higher pay when integrated with security or logistics tasks",
-    trends: "Used for cross-country re-positioning of vehicles and family logistics"
+    trends: "Used for cross-country re-positioning of vehicles and family logistics",
+    timeToFill: 8,
+    candidatePoolSize: "879-1494",
+    turnover: { avgTenure: 1.9, annualTurnover: 0.35 },
+    demandTrend: { direction: "stable", yoyChange: 0.01 }
   },
   "Driver (Car Collector)": {
     category: "Transportation",
@@ -732,7 +904,11 @@ export const BENCHMARKS = {
     },
     scarcity: 7,
     regionalNotes: "Highest pay where collections contain ultra-rare vehicles and track events",
-    trends: "Growth tied to expansion of UHNW car collecting and motorsport hobbies"
+    trends: "Growth tied to expansion of UHNW car collecting and motorsport hobbies",
+    timeToFill: 5,
+    candidatePoolSize: "1182-1621",
+    turnover: { avgTenure: 1.6, annualTurnover: 0.31 },
+    demandTrend: { direction: "stable", yoyChange: 0.01 }
   },
   "Aviation Coordinator": {
     category: "Transportation",
@@ -745,7 +921,11 @@ export const BENCHMARKS = {
     },
     scarcity: 6.5,
     regionalNotes: "Major aviation hubs, especially NYC/LA/Miami, pay near upper end",
-    trends: "Emerging as dedicated role in households with private jets and frequent travel"
+    trends: "Emerging as dedicated role in households with private jets and frequent travel",
+    timeToFill: 6,
+    candidatePoolSize: "2161-3616",
+    turnover: { avgTenure: 2.7, annualTurnover: 0.26 },
+    demandTrend: { direction: "stable", yoyChange: -0.01 }
   },
   "Flight Attendant (Private)": {
     category: "Transportation",
@@ -758,7 +938,11 @@ export const BENCHMARKS = {
     },
     scarcity: 6,
     regionalNotes: "Long-haul and international positions pay more, especially for multilingual crew",
-    trends: "Private aviation growth post-2020 has pushed comp higher"
+    trends: "Private aviation growth post-2020 has pushed comp higher",
+    timeToFill: 16,
+    candidatePoolSize: "88-246",
+    turnover: { avgTenure: 5.2, annualTurnover: 0.13 },
+    demandTrend: { direction: "stable", yoyChange: 0.04 }
   },
 
   // ==========================================
@@ -775,7 +959,11 @@ export const BENCHMARKS = {
     },
     scarcity: 5,
     regionalNotes: "Large multi-acre or multi-property estates pay closer to P75 and above",
-    trends: "Sustainability and irrigation tech skills becoming more valuable"
+    trends: "Sustainability and irrigation tech skills becoming more valuable",
+    timeToFill: 13,
+    candidatePoolSize: "211-468",
+    turnover: { avgTenure: 3.9, annualTurnover: 0.19 },
+    demandTrend: { direction: "stable", yoyChange: 0.01 }
   },
   "Head Gardener": {
     category: "Grounds & Outdoor",
@@ -788,7 +976,11 @@ export const BENCHMARKS = {
     },
     scarcity: 5.5,
     regionalNotes: "Specialty gardens (vineyards, Japanese, botanical) increase pay",
-    trends: "Organic and regenerative landscaping driving new skill requirements"
+    trends: "Organic and regenerative landscaping driving new skill requirements",
+    timeToFill: 9,
+    candidatePoolSize: "466-754",
+    turnover: { avgTenure: 3.5, annualTurnover: 0.21 },
+    demandTrend: { direction: "stable", yoyChange: -0.0 }
   },
   "Maintenance Manager": {
     category: "Grounds & Outdoor",
@@ -801,7 +993,11 @@ export const BENCHMARKS = {
     },
     scarcity: 3.5,
     regionalNotes: "Pay rises with responsibility for multiple homes or complex systems",
-    trends: "Smart-home and building management tech increasingly required"
+    trends: "Smart-home and building management tech increasingly required",
+    timeToFill: 8,
+    candidatePoolSize: "571-980",
+    turnover: { avgTenure: 2.9, annualTurnover: 0.21 },
+    demandTrend: { direction: "growing", yoyChange: 0.18 }
   },
   "Pool Manager": {
     category: "Grounds & Outdoor",
@@ -814,7 +1010,11 @@ export const BENCHMARKS = {
     },
     scarcity: 3,
     regionalNotes: "More complex pools/spas/indoor aquatic facilities command higher pay",
-    trends: "Saltwater, ozone, and wellness-related installations increasing complexity"
+    trends: "Saltwater, ozone, and wellness-related installations increasing complexity",
+    timeToFill: 7,
+    candidatePoolSize: "402-884",
+    turnover: { avgTenure: 2.3, annualTurnover: 0.31 },
+    demandTrend: { direction: "growing", yoyChange: 0.07 }
   },
   "Facilities Director": {
     category: "Grounds & Outdoor",
@@ -827,7 +1027,11 @@ export const BENCHMARKS = {
     },
     scarcity: 5.5,
     regionalNotes: "Large estates with multiple buildings or compounds pay near upper end",
-    trends: "Role now often covers CAPEX planning and sustainability initiatives"
+    trends: "Role now often covers CAPEX planning and sustainability initiatives",
+    timeToFill: 6,
+    candidatePoolSize: "2218-4536",
+    turnover: { avgTenure: 1.8, annualTurnover: 0.34 },
+    demandTrend: { direction: "stable", yoyChange: 0.03 }
   },
 
   // ==========================================
@@ -844,7 +1048,11 @@ export const BENCHMARKS = {
     },
     scarcity: 5,
     regionalNotes: "Typical €4k-€7k/month in Med/Caribbean; US East Coast comparable",
-    trends: "Growth in owner-operated smaller yachts keeps demand healthy"
+    trends: "Growth in owner-operated smaller yachts keeps demand healthy",
+    timeToFill: 8,
+    candidatePoolSize: "494-795",
+    turnover: { avgTenure: 1.7, annualTurnover: 0.33 },
+    demandTrend: { direction: "growing", yoyChange: 0.17 }
   },
   "Yacht Captain (100ft+)": {
     category: "Maritime / Yacht",
@@ -857,7 +1065,11 @@ export const BENCHMARKS = {
     },
     scarcity: 6.5,
     regionalNotes: "Med and Caribbean charter yachts often pay €7k-€14k/month",
-    trends: "Larger average yacht size drives higher compensation"
+    trends: "Larger average yacht size drives higher compensation",
+    timeToFill: 7,
+    candidatePoolSize: "570-933",
+    turnover: { avgTenure: 1.9, annualTurnover: 0.33 },
+    demandTrend: { direction: "stable", yoyChange: 0.04 }
   },
   "Yacht Captain (Superyacht 200ft+)": {
     category: "Maritime / Yacht",
@@ -870,7 +1082,11 @@ export const BENCHMARKS = {
     },
     scarcity: 8.5,
     regionalNotes: "€14k-€25k+/month typical upper ranges (~$168k-$300k+ annually)",
-    trends: "Superyacht captain comp up ~25-30% since 2022; severe global shortage"
+    trends: "Superyacht captain comp up ~25-30% since 2022; severe global shortage",
+    timeToFill: 8,
+    candidatePoolSize: "467-709",
+    turnover: { avgTenure: 2.8, annualTurnover: 0.34 },
+    demandTrend: { direction: "growing", yoyChange: 0.08 }
   },
   "Chief Officer / First Mate": {
     category: "Maritime / Yacht",
@@ -883,7 +1099,11 @@ export const BENCHMARKS = {
     },
     scarcity: 5.5,
     regionalNotes: "Typical €3.2k-€8k/month in superyacht segment",
-    trends: "Career progression path to captain roles; retention a key issue"
+    trends: "Career progression path to captain roles; retention a key issue",
+    timeToFill: 11,
+    candidatePoolSize: "257-373",
+    turnover: { avgTenure: 2.6, annualTurnover: 0.25 },
+    demandTrend: { direction: "stable", yoyChange: 0.02 }
   },
   "Chief Engineer (Yacht)": {
     category: "Maritime / Yacht",
@@ -896,7 +1116,11 @@ export const BENCHMARKS = {
     },
     scarcity: 6,
     regionalNotes: "Engineer salaries scale with vessel size and complexity",
-    trends: "Technical systems and hybrid propulsion increase value of experienced engineers"
+    trends: "Technical systems and hybrid propulsion increase value of experienced engineers",
+    timeToFill: 18,
+    candidatePoolSize: "62-106",
+    turnover: { avgTenure: 1.9, annualTurnover: 0.37 },
+    demandTrend: { direction: "stable", yoyChange: -0.02 }
   },
   "Chief Stewardess": {
     category: "Maritime / Yacht",
@@ -909,7 +1133,11 @@ export const BENCHMARKS = {
     },
     scarcity: 6,
     regionalNotes: "Typical €3k-€7k/month plus tips on Med/Caribbean charters",
-    trends: "Hospitality and event skills critical; strong pipeline from luxury hotel industry"
+    trends: "Hospitality and event skills critical; strong pipeline from luxury hotel industry",
+    timeToFill: 10,
+    candidatePoolSize: "470-672",
+    turnover: { avgTenure: 1.5, annualTurnover: 0.34 },
+    demandTrend: { direction: "stable", yoyChange: 0.02 }
   },
   "Purser": {
     category: "Maritime / Yacht",
@@ -922,7 +1150,11 @@ export const BENCHMARKS = {
     },
     scarcity: 4,
     regionalNotes: "Generally €2.5k-€5k/month on large yachts, plus tips",
-    trends: "Role increasingly tech-driven (inventory, accounting systems)"
+    trends: "Role increasingly tech-driven (inventory, accounting systems)",
+    timeToFill: 11,
+    candidatePoolSize: "200-433",
+    turnover: { avgTenure: 2.3, annualTurnover: 0.29 },
+    demandTrend: { direction: "growing", yoyChange: 0.05 }
   },
   "Deckhand": {
     category: "Maritime / Yacht",
@@ -935,7 +1167,11 @@ export const BENCHMARKS = {
     },
     scarcity: 3,
     regionalNotes: "Typical base €2k-€3.5k/month, but tips can add $1k-$3k+ per charter",
-    trends: "Entry point for many crew; rapid wage gains in busy charter seasons"
+    trends: "Entry point for many crew; rapid wage gains in busy charter seasons",
+    timeToFill: 9,
+    candidatePoolSize: "300-496",
+    turnover: { avgTenure: 2.9, annualTurnover: 0.31 },
+    demandTrend: { direction: "stable", yoyChange: 0.03 }
   },
 
   // ==========================================
@@ -952,7 +1188,11 @@ export const BENCHMARKS = {
     },
     scarcity: 5.5,
     regionalNotes: "California private duty roles often above national RN levels",
-    trends: "Aging client base and home-based post-acute care support demand"
+    trends: "Aging client base and home-based post-acute care support demand",
+    timeToFill: 6,
+    candidatePoolSize: "2565-3803",
+    turnover: { avgTenure: 2.1, annualTurnover: 0.23 },
+    demandTrend: { direction: "growing", yoyChange: 0.11 }
   },
   "Elder Care Manager": {
     category: "Healthcare & Wellness",
@@ -965,7 +1205,11 @@ export const BENCHMARKS = {
     },
     scarcity: 5,
     regionalNotes: "Higher pay for those managing multiple properties or complex medical regimes",
-    trends: "Geriatric care management and coordination with concierge physicians on the rise"
+    trends: "Geriatric care management and coordination with concierge physicians on the rise",
+    timeToFill: 7,
+    candidatePoolSize: "491-757",
+    turnover: { avgTenure: 2.4, annualTurnover: 0.32 },
+    demandTrend: { direction: "stable", yoyChange: 0.0 }
   },
   "Personal Trainer (Dedicated)": {
     category: "Healthcare & Wellness",
@@ -978,7 +1222,11 @@ export const BENCHMARKS = {
     },
     scarcity: 4.5,
     regionalNotes: "Celebrity trainers in LA and NYC can easily exceed $200k+",
-    trends: "Strong growth in wellness and high-end fitness programs"
+    trends: "Strong growth in wellness and high-end fitness programs",
+    timeToFill: 10,
+    candidatePoolSize: "558-729",
+    turnover: { avgTenure: 2.7, annualTurnover: 0.27 },
+    demandTrend: { direction: "stable", yoyChange: -0.01 }
   },
   "Wellness Coordinator": {
     category: "Healthcare & Wellness",
@@ -991,7 +1239,11 @@ export const BENCHMARKS = {
     },
     scarcity: 5,
     regionalNotes: "Works closely with medical concierge and trainers; highest pay in coastal metros",
-    trends: "Holistic wellness programs (nutrition, mental health, retreats) increasingly expected"
+    trends: "Holistic wellness programs (nutrition, mental health, retreats) increasingly expected",
+    timeToFill: 8,
+    candidatePoolSize: "505-662",
+    turnover: { avgTenure: 2.8, annualTurnover: 0.27 },
+    demandTrend: { direction: "growing", yoyChange: 0.18 }
   },
   "Medical Concierge": {
     category: "Healthcare & Wellness",
@@ -1004,7 +1256,11 @@ export const BENCHMARKS = {
     },
     scarcity: 7,
     regionalNotes: "Physician-licensed roles in NYC/SF can exceed these ranges",
-    trends: "Growing niche as UHNW families seek one-stop coordination of medical services"
+    trends: "Growing niche as UHNW families seek one-stop coordination of medical services",
+    timeToFill: 8,
+    candidatePoolSize: "1142-1554",
+    turnover: { avgTenure: 2.9, annualTurnover: 0.26 },
+    demandTrend: { direction: "growing", yoyChange: 0.07 }
   },
 
   // ==========================================
@@ -1021,7 +1277,11 @@ export const BENCHMARKS = {
     },
     scarcity: 4.5,
     regionalNotes: "Resort markets like Aspen, Vail, and Hamptons pay near upper range",
-    trends: "Guest services roles increasingly incorporate concierge and event functions"
+    trends: "Guest services roles increasingly incorporate concierge and event functions",
+    timeToFill: 12,
+    candidatePoolSize: "140-188",
+    turnover: { avgTenure: 3.9, annualTurnover: 0.17 },
+    demandTrend: { direction: "growing", yoyChange: 0.11 }
   },
   "Event Manager (Private)": {
     category: "Hospitality & Collections",
@@ -1034,7 +1294,11 @@ export const BENCHMARKS = {
     },
     scarcity: 5.5,
     regionalNotes: "Florida and coastal markets show strong demand for private event management",
-    trends: "High-end private events increasingly complex, with large budgets and global vendors"
+    trends: "High-end private events increasingly complex, with large budgets and global vendors",
+    timeToFill: 6,
+    candidatePoolSize: "914-1324",
+    turnover: { avgTenure: 3.5, annualTurnover: 0.22 },
+    demandTrend: { direction: "growing", yoyChange: 0.1 }
   },
   "Catering Manager": {
     category: "Hospitality & Collections",
@@ -1047,7 +1311,11 @@ export const BENCHMARKS = {
     },
     scarcity: 4,
     regionalNotes: "Top of range when integrated with private chef and events teams",
-    trends: "Sustainability and special-diet awareness increasingly important"
+    trends: "Sustainability and special-diet awareness increasingly important",
+    timeToFill: 5,
+    candidatePoolSize: "1195-1585",
+    turnover: { avgTenure: 3.0, annualTurnover: 0.23 },
+    demandTrend: { direction: "growing", yoyChange: 0.17 }
   },
   "Wine Cellar Manager": {
     category: "Hospitality & Collections",
@@ -1060,7 +1328,11 @@ export const BENCHMARKS = {
     },
     scarcity: 7.5,
     regionalNotes: "Large private collections ($5M+ in wine value) sit at top of band",
-    trends: "More UHNW collectors treat cellars as alternative assets requiring professional management"
+    trends: "More UHNW collectors treat cellars as alternative assets requiring professional management",
+    timeToFill: 9,
+    candidatePoolSize: "407-709",
+    turnover: { avgTenure: 2.6, annualTurnover: 0.28 },
+    demandTrend: { direction: "stable", yoyChange: 0.01 }
   },
 
   // ==========================================
@@ -1079,7 +1351,11 @@ export const BENCHMARKS = {
     },
     scarcity: 4,
     regionalNotes: "Higher in markets with large au pair populations (NYC, LA, DC)",
-    trends: "Growing role as UHNW families manage multiple au pairs across properties"
+    trends: "Growing role as UHNW families manage multiple au pairs across properties",
+    timeToFill: 14,
+    candidatePoolSize: "84-173",
+    turnover: { avgTenure: 5.5, annualTurnover: 0.1 },
+    demandTrend: { direction: "growing", yoyChange: 0.18 }
   },
   "Night Nanny": {
     category: "Childcare & Education",
@@ -1092,7 +1368,11 @@ export const BENCHMARKS = {
     },
     scarcity: 6.5,
     regionalNotes: "Daily rates $300-$600/night in premium markets; annualized can exceed $150k",
-    trends: "High demand among new parents; often overlaps with newborn care specialist roles"
+    trends: "High demand among new parents; often overlaps with newborn care specialist roles",
+    timeToFill: 8,
+    candidatePoolSize: "1110-1823",
+    turnover: { avgTenure: 1.7, annualTurnover: 0.34 },
+    demandTrend: { direction: "growing", yoyChange: 0.08 }
   },
 
   // FAMILY OFFICE - INVESTMENT (Additional)
@@ -1107,7 +1387,11 @@ export const BENCHMARKS = {
     },
     scarcity: 6,
     regionalNotes: "NYC and SF pay at top of range; competition from institutional finance",
-    trends: "Increasing demand as family offices professionalize investment operations"
+    trends: "Increasing demand as family offices professionalize investment operations",
+    timeToFill: 9,
+    candidatePoolSize: "270-431",
+    turnover: { avgTenure: 3.5, annualTurnover: 0.17 },
+    demandTrend: { direction: "growing", yoyChange: 0.14 }
   },
   "Villa Manager": {
     category: "Estate Leadership",
@@ -1120,7 +1404,11 @@ export const BENCHMARKS = {
     },
     scarcity: 5.5,
     regionalNotes: "Mediterranean and Caribbean villa positions often higher; seasonal markets vary",
-    trends: "Growing with expansion of UHNW vacation property portfolios"
+    trends: "Growing with expansion of UHNW vacation property portfolios",
+    timeToFill: 10,
+    candidatePoolSize: "226-430",
+    turnover: { avgTenure: 3.1, annualTurnover: 0.19 },
+    demandTrend: { direction: "growing", yoyChange: 0.11 }
   },
   "Caretaker": {
     category: "Estate Leadership",
@@ -1133,7 +1421,11 @@ export const BENCHMARKS = {
     },
     scarcity: 3.5,
     regionalNotes: "Remote and seasonal properties pay at higher end of range",
-    trends: "Essential for properties with limited family use; often combined with security duties"
+    trends: "Essential for properties with limited family use; often combined with security duties",
+    timeToFill: 11,
+    candidatePoolSize: "264-351",
+    turnover: { avgTenure: 4.1, annualTurnover: 0.16 },
+    demandTrend: { direction: "stable", yoyChange: -0.0 }
   },
 
   // PERSONAL & ADMINISTRATIVE (Additional)
@@ -1148,7 +1440,11 @@ export const BENCHMARKS = {
     },
     scarcity: 6,
     regionalNotes: "Luxury hospitality backgrounds command premium; NYC/LA/Miami markets strongest",
-    trends: "Role expanding beyond traditional concierge to lifestyle management"
+    trends: "Role expanding beyond traditional concierge to lifestyle management",
+    timeToFill: 5,
+    candidatePoolSize: "2334-4324",
+    turnover: { avgTenure: 2.4, annualTurnover: 0.31 },
+    demandTrend: { direction: "stable", yoyChange: -0.01 }
   },
   "Scheduler / Calendar Manager": {
     category: "Personal & Administrative",
@@ -1161,7 +1457,11 @@ export const BENCHMARKS = {
     },
     scarcity: 4,
     regionalNotes: "Higher pay for managing complex multi-principal calendars",
-    trends: "Increasing tech sophistication required; often part of larger EA role"
+    trends: "Increasing tech sophistication required; often part of larger EA role",
+    timeToFill: 12,
+    candidatePoolSize: "266-364",
+    turnover: { avgTenure: 3.9, annualTurnover: 0.16 },
+    demandTrend: { direction: "growing", yoyChange: 0.14 }
   },
 
   // FORMAL SERVICE (Additional)
@@ -1176,7 +1476,11 @@ export const BENCHMARKS = {
     },
     scarcity: 3,
     regionalNotes: "UHNW households pay 25-50% above market rates; coastal metros at top",
-    trends: "Increasing demand for specialized skills (fine fabrics, art-safe cleaning)"
+    trends: "Increasing demand for specialized skills (fine fabrics, art-safe cleaning)",
+    timeToFill: 5,
+    candidatePoolSize: "955-1593",
+    turnover: { avgTenure: 1.8, annualTurnover: 0.33 },
+    demandTrend: { direction: "growing", yoyChange: 0.15 }
   },
   "Florist (Private)": {
     category: "Formal Service",
@@ -1189,7 +1493,11 @@ export const BENCHMARKS = {
     },
     scarcity: 5,
     regionalNotes: "Event-heavy households and large estates pay at upper range",
-    trends: "Growing role in estates with extensive gardens and frequent entertaining"
+    trends: "Growing role in estates with extensive gardens and frequent entertaining",
+    timeToFill: 5,
+    candidatePoolSize: "2476-4404",
+    turnover: { avgTenure: 2.1, annualTurnover: 0.27 },
+    demandTrend: { direction: "growing", yoyChange: 0.13 }
   },
   "Valet": {
     category: "Formal Service",
@@ -1202,7 +1510,11 @@ export const BENCHMARKS = {
     },
     scarcity: 5.5,
     regionalNotes: "Traditional gentleman's valet roles in high demand; UK training premium",
-    trends: "Revival of traditional valet service among UHNW principals"
+    trends: "Revival of traditional valet service among UHNW principals",
+    timeToFill: 6,
+    candidatePoolSize: "2173-4849",
+    turnover: { avgTenure: 1.6, annualTurnover: 0.3 },
+    demandTrend: { direction: "stable", yoyChange: 0.02 }
   },
   "Cook": {
     category: "Culinary",
@@ -1215,7 +1527,11 @@ export const BENCHMARKS = {
     },
     scarcity: 3.5,
     regionalNotes: "Distinct from private chef; more family-style cooking, less formal",
-    trends: "Strong demand for health-conscious and family-friendly meal preparation"
+    trends: "Strong demand for health-conscious and family-friendly meal preparation",
+    timeToFill: 9,
+    candidatePoolSize: "423-770",
+    turnover: { avgTenure: 3.5, annualTurnover: 0.2 },
+    demandTrend: { direction: "growing", yoyChange: 0.08 }
   },
 
   // GROUNDS & MAINTENANCE (Additional)
@@ -1230,7 +1546,11 @@ export const BENCHMARKS = {
     },
     scarcity: 3,
     regionalNotes: "Specialized skills (Japanese gardens, tropical) command premium",
-    trends: "Sustainability and native plantings increasing in importance"
+    trends: "Sustainability and native plantings increasing in importance",
+    timeToFill: 4,
+    candidatePoolSize: "2047-4001",
+    turnover: { avgTenure: 2.8, annualTurnover: 0.31 },
+    demandTrend: { direction: "growing", yoyChange: 0.18 }
   },
   "Dock Master": {
     category: "Grounds & Outdoor",
@@ -1243,7 +1563,11 @@ export const BENCHMARKS = {
     },
     scarcity: 4.5,
     regionalNotes: "Waterfront estates in FL, Northeast, and Pacific NW pay at upper range",
-    trends: "Role often includes tender and small craft maintenance"
+    trends: "Role often includes tender and small craft maintenance",
+    timeToFill: 5,
+    candidatePoolSize: "2424-4789",
+    turnover: { avgTenure: 2.2, annualTurnover: 0.32 },
+    demandTrend: { direction: "stable", yoyChange: 0.0 }
   },
 
   // MARITIME / YACHT (Additional)
@@ -1258,7 +1582,11 @@ export const BENCHMARKS = {
     },
     scarcity: 5,
     regionalNotes: "Typical €3k-€6k/month in superyacht segment",
-    trends: "Technical certifications increasingly required; hybrid systems knowledge valued"
+    trends: "Technical certifications increasingly required; hybrid systems knowledge valued",
+    timeToFill: 8,
+    candidatePoolSize: "924-1451",
+    turnover: { avgTenure: 3.5, annualTurnover: 0.18 },
+    demandTrend: { direction: "growing", yoyChange: 0.18 }
   },
   "Interior Manager (Yacht)": {
     category: "Maritime / Yacht",
@@ -1271,7 +1599,11 @@ export const BENCHMARKS = {
     },
     scarcity: 6,
     regionalNotes: "Typical €3.5k-€7k/month on large yachts; luxury hotel experience premium",
-    trends: "Role gaining prominence on larger vessels with complex interior operations"
+    trends: "Role gaining prominence on larger vessels with complex interior operations",
+    timeToFill: 7,
+    candidatePoolSize: "599-867",
+    turnover: { avgTenure: 1.8, annualTurnover: 0.35 },
+    demandTrend: { direction: "stable", yoyChange: 0.02 }
   },
   "Yacht Steward/Stewardess": {
     category: "Maritime / Yacht",
@@ -1284,7 +1616,11 @@ export const BENCHMARKS = {
     },
     scarcity: 4,
     regionalNotes: "Typical €2.5k-€4.5k/month base; tips can double effective compensation",
-    trends: "Entry point to yachting career; strong demand in charter seasons"
+    trends: "Entry point to yachting career; strong demand in charter seasons",
+    timeToFill: 10,
+    candidatePoolSize: "412-935",
+    turnover: { avgTenure: 1.9, annualTurnover: 0.36 },
+    demandTrend: { direction: "growing", yoyChange: 0.13 }
   },
 
   // SECURITY (Additional)
@@ -1299,7 +1635,11 @@ export const BENCHMARKS = {
     },
     scarcity: 8,
     regionalNotes: "SF Bay and NYC tech hubs pay at top; competition from corporate sector",
-    trends: "Role encompasses IT, AV, smart home, and security systems integration"
+    trends: "Role encompasses IT, AV, smart home, and security systems integration",
+    timeToFill: 8,
+    candidatePoolSize: "1141-1843",
+    turnover: { avgTenure: 3.0, annualTurnover: 0.32 },
+    demandTrend: { direction: "stable", yoyChange: 0.04 }
   },
   "IT Manager (Private)": {
     category: "Security",
@@ -1312,7 +1652,11 @@ export const BENCHMARKS = {
     },
     scarcity: 6.5,
     regionalNotes: "Multi-property portfolios with complex networks at upper range",
-    trends: "Increasingly critical role as homes become more connected and security-conscious"
+    trends: "Increasingly critical role as homes become more connected and security-conscious",
+    timeToFill: 19,
+    candidatePoolSize: "69-107",
+    turnover: { avgTenure: 5.1, annualTurnover: 0.14 },
+    demandTrend: { direction: "growing", yoyChange: 0.13 }
   },
 
   // DRIVERS & TRANSPORTATION (Additional)
@@ -1327,7 +1671,11 @@ export const BENCHMARKS = {
     },
     scarcity: 7,
     regionalNotes: "Jet types and flight hours significantly impact pay; international operations premium",
-    trends: "Private aviation boom since 2020 has increased competition for experienced pilots"
+    trends: "Private aviation boom since 2020 has increased competition for experienced pilots",
+    timeToFill: 10,
+    candidatePoolSize: "275-441",
+    turnover: { avgTenure: 4.4, annualTurnover: 0.16 },
+    demandTrend: { direction: "growing", yoyChange: 0.19 }
   },
 
   // HEALTHCARE & WELLNESS (Additional)
@@ -1342,7 +1690,11 @@ export const BENCHMARKS = {
     },
     scarcity: 5.5,
     regionalNotes: "Large estates with dedicated spa facilities; resort and yacht markets strongest",
-    trends: "Growing demand as UHNW families invest in home wellness facilities"
+    trends: "Growing demand as UHNW families invest in home wellness facilities",
+    timeToFill: 14,
+    candidatePoolSize: "146-222",
+    turnover: { avgTenure: 4.8, annualTurnover: 0.12 },
+    demandTrend: { direction: "growing", yoyChange: 0.06 }
   },
   "Companion": {
     category: "Healthcare & Wellness",
@@ -1355,7 +1707,11 @@ export const BENCHMARKS = {
     },
     scarcity: 4,
     regionalNotes: "Higher pay for medical background or specialized skills (languages, travel)",
-    trends: "Increasing demand for elderly companionship with aging UHNW population"
+    trends: "Increasing demand for elderly companionship with aging UHNW population",
+    timeToFill: 9,
+    candidatePoolSize: "460-789",
+    turnover: { avgTenure: 1.9, annualTurnover: 0.34 },
+    demandTrend: { direction: "growing", yoyChange: 0.06 }
   },
   "Pet Care Specialist": {
     category: "Healthcare & Wellness",
@@ -1368,7 +1724,11 @@ export const BENCHMARKS = {
     },
     scarcity: 4,
     regionalNotes: "Show dogs, exotic pets, and multiple animals command premium",
-    trends: "Role professionalizing with more UHNW families seeking dedicated pet staff"
+    trends: "Role professionalizing with more UHNW families seeking dedicated pet staff",
+    timeToFill: 8,
+    candidatePoolSize: "459-846",
+    turnover: { avgTenure: 2.4, annualTurnover: 0.32 },
+    demandTrend: { direction: "stable", yoyChange: -0.02 }
   },
 
   // HOSPITALITY & EVENTS (Additional)
@@ -1383,7 +1743,11 @@ export const BENCHMARKS = {
     },
     scarcity: 7,
     regionalNotes: "Art, cars, wine, watches—specialized knowledge commands premium",
-    trends: "Growing as UHNW families professionalize management of diverse collections"
+    trends: "Growing as UHNW families professionalize management of diverse collections",
+    timeToFill: 8,
+    candidatePoolSize: "969-1855",
+    turnover: { avgTenure: 2.1, annualTurnover: 0.26 },
+    demandTrend: { direction: "growing", yoyChange: 0.19 }
   },
   "Art Collection Manager": {
     category: "Hospitality & Collections",
@@ -1396,7 +1760,11 @@ export const BENCHMARKS = {
     },
     scarcity: 8,
     regionalNotes: "Major art markets (NYC, LA, London) pay at top; gallery/auction house experience valued",
-    trends: "More collectors seeking in-house expertise for portfolio management and acquisitions"
+    trends: "More collectors seeking in-house expertise for portfolio management and acquisitions",
+    timeToFill: 15,
+    candidatePoolSize: "82-233",
+    turnover: { avgTenure: 4.3, annualTurnover: 0.1 },
+    demandTrend: { direction: "stable", yoyChange: 0.0 }
   },
   "Gallery Manager (Private)": {
     category: "Hospitality & Collections",
@@ -1409,7 +1777,11 @@ export const BENCHMARKS = {
     },
     scarcity: 6,
     regionalNotes: "Private gallery spaces in homes requiring curatorial and operational management",
-    trends: "Growing with expansion of private exhibition spaces in UHNW homes"
+    trends: "Growing with expansion of private exhibition spaces in UHNW homes",
+    timeToFill: 15,
+    candidatePoolSize: "133-228",
+    turnover: { avgTenure: 5.0, annualTurnover: 0.14 },
+    demandTrend: { direction: "growing", yoyChange: 0.15 }
   },
 
   // GROUNDS & MAINTENANCE (Additional)
@@ -1424,7 +1796,11 @@ export const BENCHMARKS = {
     },
     scarcity: 6,
     regionalNotes: "Show horse and polo operations pay at upper range; Wellington FL, Kentucky markets strong",
-    trends: "Role often includes oversight of trainers, grooms, and facility maintenance"
+    trends: "Role often includes oversight of trainers, grooms, and facility maintenance",
+    timeToFill: 10,
+    candidatePoolSize: "242-376",
+    turnover: { avgTenure: 3.4, annualTurnover: 0.18 },
+    demandTrend: { direction: "stable", yoyChange: 0.0 }
   },
 
   // ==========================================
@@ -1442,7 +1818,11 @@ export const BENCHMARKS = {
     },
     scarcity: 9,
     regionalNotes: "NYC/SF +35-40%; Middle East can exceed $1.2M base; total comp median $1.1M",
-    trends: "Compensation up 4-10% in 2024-2025; competition from multi-family offices intensifying"
+    trends: "Compensation up 4-10% in 2024-2025; competition from multi-family offices intensifying",
+    timeToFill: 12,
+    candidatePoolSize: "272-362",
+    turnover: { avgTenure: 4.3, annualTurnover: 0.21 },
+    demandTrend: { direction: "growing", yoyChange: 0.22 }
   },
   "Family Office COO": {
     category: "Family Office - C-Suite",
@@ -1455,7 +1835,11 @@ export const BENCHMARKS = {
     },
     scarcity: 8,
     regionalNotes: "Only 29% of SFOs have dedicated COO; median $275k in smaller offices; total comp $850k",
-    trends: "Role gaining prominence as family offices professionalize operations"
+    trends: "Role gaining prominence as family offices professionalize operations",
+    timeToFill: 28,
+    candidatePoolSize: "12-44",
+    turnover: { avgTenure: 6.8, annualTurnover: 0.1 },
+    demandTrend: { direction: "stable", yoyChange: -0.01 }
   },
   "Family Office CIO": {
     category: "Family Office - C-Suite",
@@ -1468,7 +1852,11 @@ export const BENCHMARKS = {
     },
     scarcity: 9.5,
     regionalNotes: "$1B+ AUM: $700k-$1.5M base; median total comp $2.5M with incentives",
-    trends: "Highest-paid role in most family offices; co-investment rights increasingly common"
+    trends: "Highest-paid role in most family offices; co-investment rights increasingly common",
+    timeToFill: 26,
+    candidatePoolSize: "16-46",
+    turnover: { avgTenure: 5.5, annualTurnover: 0.08 },
+    demandTrend: { direction: "growing", yoyChange: 0.11 }
   },
   "Family Office CFO": {
     category: "Family Office - C-Suite",
@@ -1481,7 +1869,11 @@ export const BENCHMARKS = {
     },
     scarcity: 8,
     regionalNotes: "Median $275k SFO; 1.5x higher in $1B+ AUM offices; total comp median $620k",
-    trends: "Increasingly responsible for tax strategy and multi-entity consolidation"
+    trends: "Increasingly responsible for tax strategy and multi-entity consolidation",
+    timeToFill: 19,
+    candidatePoolSize: "50-96",
+    turnover: { avgTenure: 7.3, annualTurnover: 0.08 },
+    demandTrend: { direction: "growing", yoyChange: 0.18 }
   },
   "Family Office General Counsel": {
     category: "Family Office - C-Suite",
@@ -1494,7 +1886,11 @@ export const BENCHMARKS = {
     },
     scarcity: 8.5,
     regionalNotes: "Total comp median $500k; higher for trust/estate expertise; NYC/SF premium",
-    trends: "Growing demand for in-house counsel as regulatory complexity increases"
+    trends: "Growing demand for in-house counsel as regulatory complexity increases",
+    timeToFill: 26,
+    candidatePoolSize: "20-34",
+    turnover: { avgTenure: 6.4, annualTurnover: 0.1 },
+    demandTrend: { direction: "growing", yoyChange: 0.06 }
   },
   "Director of Tax": {
     category: "Family Office - Operations & Finance",
@@ -1507,7 +1903,11 @@ export const BENCHMARKS = {
     },
     scarcity: 8.5,
     regionalNotes: "Total comp median $450k; Big 4 experience premium; international tax expertise valued",
-    trends: "Critical role with changing tax landscape; demand exceeds supply"
+    trends: "Critical role with changing tax landscape; demand exceeds supply",
+    timeToFill: 18,
+    candidatePoolSize: "44-116",
+    turnover: { avgTenure: 5.2, annualTurnover: 0.12 },
+    demandTrend: { direction: "growing", yoyChange: 0.06 }
   },
   "Director of Philanthropy": {
     category: "Family Office - Support",
@@ -1520,7 +1920,11 @@ export const BENCHMARKS = {
     },
     scarcity: 7.5,
     regionalNotes: "Total comp median $300k; larger family foundations pay at upper range",
-    trends: "Growing emphasis on impact measurement and next-gen engagement"
+    trends: "Growing emphasis on impact measurement and next-gen engagement",
+    timeToFill: 16,
+    candidatePoolSize: "45-87",
+    turnover: { avgTenure: 7.5, annualTurnover: 0.1 },
+    demandTrend: { direction: "growing", yoyChange: 0.09 }
   },
   "Chief Information Officer": {
     category: "Family Office - Operations & Finance",
@@ -1533,7 +1937,11 @@ export const BENCHMARKS = {
     },
     scarcity: 7.5,
     regionalNotes: "Total comp median $360k; cybersecurity expertise commands premium; SF/NYC +25%",
-    trends: "Cybersecurity and data privacy increasingly critical; cloud migration driving demand"
+    trends: "Cybersecurity and data privacy increasingly critical; cloud migration driving demand",
+    timeToFill: 19,
+    candidatePoolSize: "37-111",
+    turnover: { avgTenure: 7.8, annualTurnover: 0.09 },
+    demandTrend: { direction: "growing", yoyChange: 0.09 }
   },
   "Chief Compliance Officer": {
     category: "Family Office - Operations & Finance",
@@ -1546,7 +1954,11 @@ export const BENCHMARKS = {
     },
     scarcity: 7.5,
     regionalNotes: "Total comp median $360k; SEC/FINRA experience valued; RIA compliance expertise",
-    trends: "Regulatory scrutiny of family offices increasing; demand growing rapidly"
+    trends: "Regulatory scrutiny of family offices increasing; demand growing rapidly",
+    timeToFill: 14,
+    candidatePoolSize: "101-237",
+    turnover: { avgTenure: 5.5, annualTurnover: 0.13 },
+    demandTrend: { direction: "growing", yoyChange: 0.07 }
   },
   "Senior Portfolio Manager": {
     category: "Family Office - Investment",
@@ -1559,7 +1971,11 @@ export const BENCHMARKS = {
     },
     scarcity: 7.5,
     regionalNotes: "Median total comp $785k; $1B+ AUM: $350k-$800k base; co-investment rights common",
-    trends: "Direct investment expertise highly valued; competition from PE/hedge funds"
+    trends: "Direct investment expertise highly valued; competition from PE/hedge funds",
+    timeToFill: 13,
+    candidatePoolSize: "119-173",
+    turnover: { avgTenure: 5.4, annualTurnover: 0.15 },
+    demandTrend: { direction: "growing", yoyChange: 0.15 }
   },
   "Portfolio Manager": {
     category: "Family Office - Investment",
@@ -1572,7 +1988,11 @@ export const BENCHMARKS = {
     },
     scarcity: 6,
     regionalNotes: "Median total comp $400k; alternative investment experience premium",
-    trends: "Growing allocation to alternatives increases demand for specialized PMs"
+    trends: "Growing allocation to alternatives increases demand for specialized PMs",
+    timeToFill: 15,
+    candidatePoolSize: "130-185",
+    turnover: { avgTenure: 4.2, annualTurnover: 0.13 },
+    demandTrend: { direction: "growing", yoyChange: 0.16 }
   },
   "Senior Investment Analyst": {
     category: "Family Office - Investment",
@@ -1585,7 +2005,11 @@ export const BENCHMARKS = {
     },
     scarcity: 5,
     regionalNotes: "Median total comp $220k; PE/VC experience valued; $1B+: $150k-$320k base",
-    trends: "Direct deal sourcing skills increasingly important"
+    trends: "Direct deal sourcing skills increasingly important",
+    timeToFill: 12,
+    candidatePoolSize: "118-247",
+    turnover: { avgTenure: 5.5, annualTurnover: 0.09 },
+    demandTrend: { direction: "growing", yoyChange: 0.22 }
   },
   "Investment Analyst": {
     category: "Family Office - Investment",
@@ -1598,7 +2022,11 @@ export const BENCHMARKS = {
     },
     scarcity: 4,
     regionalNotes: "National average $86k; $1B+ AUM: $100k-$190k; total comp median $95k",
-    trends: "Entry point to family office investment careers; strong candidate pipeline"
+    trends: "Entry point to family office investment careers; strong candidate pipeline",
+    timeToFill: 9,
+    candidatePoolSize: "224-456",
+    turnover: { avgTenure: 3.6, annualTurnover: 0.17 },
+    demandTrend: { direction: "stable", yoyChange: 0.01 }
   },
   "Controller": {
     category: "Family Office - Operations & Finance",
@@ -1611,7 +2039,11 @@ export const BENCHMARKS = {
     },
     scarcity: 5.5,
     regionalNotes: "Median $240k; $1B+: $280k-$520k; total comp median $270k; fund accounting expertise valued",
-    trends: "Multi-entity consolidation and alternative investment accounting driving complexity"
+    trends: "Multi-entity consolidation and alternative investment accounting driving complexity",
+    timeToFill: 9,
+    candidatePoolSize: "403-865",
+    turnover: { avgTenure: 3.7, annualTurnover: 0.19 },
+    demandTrend: { direction: "stable", yoyChange: 0.04 }
   },
   "Operations Manager": {
     category: "Family Office - Operations & Finance",
@@ -1624,7 +2056,11 @@ export const BENCHMARKS = {
     },
     scarcity: 5,
     regionalNotes: "Miami market $143k median; total comp median $185k; process improvement skills valued",
-    trends: "Technology implementation and vendor management increasingly important"
+    trends: "Technology implementation and vendor management increasingly important",
+    timeToFill: 8,
+    candidatePoolSize: "1162-1456",
+    turnover: { avgTenure: 2.1, annualTurnover: 0.32 },
+    demandTrend: { direction: "growing", yoyChange: 0.21 }
   },
   "Risk & Compliance Manager": {
     category: "Family Office - Operations & Finance",
@@ -1637,7 +2073,11 @@ export const BENCHMARKS = {
     },
     scarcity: 5.5,
     regionalNotes: "National average $95k; total comp median $110k; regulatory experience premium",
-    trends: "Growing role as family offices face increased regulatory scrutiny"
+    trends: "Growing role as family offices face increased regulatory scrutiny",
+    timeToFill: 9,
+    candidatePoolSize: "557-925",
+    turnover: { avgTenure: 2.5, annualTurnover: 0.3 },
+    demandTrend: { direction: "growing", yoyChange: 0.19 }
   },
   "HR Director": {
     category: "Family Office - Support",
@@ -1650,7 +2090,11 @@ export const BENCHMARKS = {
     },
     scarcity: 6.5,
     regionalNotes: "NYC family office $200k; SF $190k; LA $169k; total comp median $190k",
-    trends: "Talent retention and culture building critical as competition for FO talent intensifies"
+    trends: "Talent retention and culture building critical as competition for FO talent intensifies",
+    timeToFill: 9,
+    candidatePoolSize: "482-775",
+    turnover: { avgTenure: 3.7, annualTurnover: 0.19 },
+    demandTrend: { direction: "growing", yoyChange: 0.2 }
   },
   "Executive Assistant to Principal": {
     category: "Family Office - Support",
@@ -1663,7 +2107,11 @@ export const BENCHMARKS = {
     },
     scarcity: 4.5,
     regionalNotes: "Total comp median $155k; $1B+: $150k-$290k; family dynamics expertise valued",
-    trends: "High-trust role with significant principal access; discretion paramount"
+    trends: "High-trust role with significant principal access; discretion paramount",
+    timeToFill: 8,
+    candidatePoolSize: "592-887",
+    turnover: { avgTenure: 2.2, annualTurnover: 0.32 },
+    demandTrend: { direction: "stable", yoyChange: 0.0 }
   }
 };
 
@@ -1731,3 +2179,4 @@ export function detectRegion(locationString) {
 
   return null;
 }
+

@@ -460,7 +460,34 @@ const SearchComplexityCalculator = () => {
     points += rolePoints;
     drivers.push({ factor: "Role Scarcity", points: rolePoints, rationale: `${formData.positionType} (${roleScarcity}/10)` });
 
-    const score = Math.min(10, Math.max(1, Math.round(1 + (points / 120) * 9)));
+    // Market demand trend - growing demand = harder search
+    if (benchmark?.demandTrend) {
+      const { direction, yoyChange } = benchmark.demandTrend;
+      let demandPoints = 0;
+      let demandRationale = '';
+      if (direction === 'growing' && yoyChange >= 0.15) {
+        demandPoints = 7;
+        demandRationale = `Rapidly growing demand (+${Math.round(yoyChange * 100)}% YoY)`;
+      } else if (direction === 'growing' && yoyChange >= 0.08) {
+        demandPoints = 4;
+        demandRationale = `Growing demand (+${Math.round(yoyChange * 100)}% YoY)`;
+      } else if (direction === 'growing') {
+        demandPoints = 2;
+        demandRationale = `Modest growth (+${Math.round(yoyChange * 100)}% YoY)`;
+      } else if (direction === 'declining') {
+        demandPoints = -3;
+        demandRationale = `Declining demand (${Math.round(yoyChange * 100)}% YoY)`;
+      } else {
+        demandPoints = 0;
+        demandRationale = 'Stable market demand';
+      }
+      if (demandPoints !== 0) {
+        points += demandPoints;
+        drivers.push({ factor: "Market Demand", points: demandPoints, rationale: demandRationale });
+      }
+    }
+
+    const score = Math.min(10, Math.max(1, Math.round(1 + (points / 130) * 9)));
     const label = score <= 3 ? "Straightforward" : score <= 5 ? "Moderate" : score <= 7 ? "Challenging" : score <= 9 ? "Highly Complex" : "Exceptional";
     const confidence = (budgetOverride || formData.budgetRange) === 'not-sure' || !benchmark ? "Medium" : "High";
 
@@ -535,11 +562,24 @@ ${adjustedBenchmark ? `- 25th Percentile: $${adjustedBenchmark.p25.toLocaleStrin
 - Median (50th): $${adjustedBenchmark.p50.toLocaleString()}
 - 75th Percentile: $${adjustedBenchmark.p75.toLocaleString()}` : 'No benchmark available - provide general guidance'}
 ${benchmark?.scarcity ? `Role Scarcity: ${benchmark.scarcity}/10` : ''}
+${benchmark?.timeToFill ? `Typical Time to Fill: ${benchmark.timeToFill} weeks` : ''}
+${benchmark?.candidatePoolSize ? `Estimated National Candidate Pool: ${benchmark.candidatePoolSize}` : ''}
+${benchmark?.turnover ? `Avg Tenure in Role: ${benchmark.turnover.avgTenure} years | Annual Turnover: ${Math.round(benchmark.turnover.annualTurnover * 100)}%` : ''}
+${benchmark?.demandTrend ? `Demand Trend: ${benchmark.demandTrend.direction} (${benchmark.demandTrend.yoyChange >= 0 ? '+' : ''}${Math.round(benchmark.demandTrend.yoyChange * 100)}% YoY)` : ''}
 
 Your salary recommendation MUST be based on these ADJUSTED figures above, not national averages.
+Your timeline estimate should use the Time to Fill data as a baseline, adjusted for this specific search's complexity.
 Your timeline MUST align with the "${timelineOption?.label || formData.timeline}" timeframe the client selected.
 
 Be SPECIFIC and ACTIONABLE. Avoid generic advice. Reference the actual role, location, and requirements in your responses.
+
+CRITICAL GUARDRAILS FOR DECISION INTELLIGENCE:
+1. COMPLEXITY SCORE (${det.score}/10): Higher = MORE difficult search. Do NOT suggest "improving" or "reaching a higher" complexity score. A score of 9 means the search is extremely challenging.
+2. MANDATE STRENGTH: This is a SEPARATE metric from complexity. Higher mandate strength = STRONGER client position (good). Score reflects budget adequacy, role attractiveness, timeline feasibility, and requirement reasonableness. The teaser should describe what factors strengthen or weaken the mandate, NOT suggest "reaching a higher score."
+3. PROBABILITY OF SUCCESS: Must be logically consistent with complexity score and mandate strength. High complexity + weak mandate = lower probability. Low complexity + strong mandate = higher probability.
+4. TRADE-OFF SCENARIOS: Must use concrete IF/THEN with specific numbers from this search (salary figures, timeline, requirements). Never use generic advice.
+5. FALSE SIGNALS: Must be specific to this role and market. Never use generic hiring warnings.
+6. ALL teasers must describe WHAT the full analysis contains, not suggest improvements to scores.
 
 Return this exact JSON structure:
 {
@@ -568,14 +608,15 @@ Return this exact JSON structure:
     },
     "probabilityOfSuccess": {
       "initialLabel": "Low|Moderate|High",
-      "completeTeaser": "Probability delta analysis with specific levers to improve success rate"
+      "initialConfidence": "X% estimated fill probability within stated timeline",
+      "completeTeaser": "Probability delta analysis showing how adjusting budget, timeline, or requirements impacts fill probability"
     },
     "mandateStrength": {
       "initial": {
-        "score": "1.0-10.0 composite score",
-        "rationale": "One sentence explaining the score based on budget, timeline, requirements alignment"
+        "score": "1.0-10.0 composite score (higher = stronger mandate, meaning better-positioned search)",
+        "rationale": "One sentence explaining what strengthens or weakens this mandate (budget adequacy, timeline feasibility, requirement reasonableness, role attractiveness)"
       },
-      "completeTeaser": "Factor-by-factor breakdown with prioritized improvement recommendations"
+      "completeTeaser": "Factor-by-factor breakdown across 12 mandate dimensions with specific action items to strengthen the client's position"
     },
     "falseSignals": {
       "initial": ["Warning about misleading indicator 1", "Warning about misleading indicator 2", "Warning about misleading indicator 3"],
