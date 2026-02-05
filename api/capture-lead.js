@@ -162,7 +162,7 @@ Submitted: ${timestamp} ET
         'Authorization': `Bearer ${apiKey}`
       },
       body: JSON.stringify({
-        from: 'Search Calculator <onboarding@resend.dev>',
+        from: 'Talent Gurus <leads@talent-gurus.com>',
         to: [notifyEmail],
         subject: `${priorityCallback ? '⚡ ' : ''}New Lead: ${positionType || 'Unknown Role'} in ${location || 'Unknown Location'}`,
         html: htmlContent,
