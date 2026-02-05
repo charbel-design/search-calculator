@@ -1,5 +1,5 @@
 import React, { useState, useMemo, useCallback, useRef, useEffect } from 'react';
-import { TrendingUp, Clock, DollarSign, Target, AlertCircle, CheckCircle, ArrowRight, Info, Download, RefreshCw, Users, Car, Heart, Home, ChevronDown, HelpCircle, Zap, MapPin, Phone, X, Layers, Lightbulb, ArrowLeftRight } from 'lucide-react';
+import { TrendingUp, Clock, DollarSign, Target, AlertCircle, CheckCircle, ArrowRight, Info, Download, RefreshCw, Users, Car, Heart, Home, ChevronDown, HelpCircle, Zap, MapPin, Phone, X, Layers, Lightbulb, ArrowLeftRight, Lock, GitBranch, Brain, Gauge, BarChart3, AlertTriangle } from 'lucide-react';
 import { jsPDF } from 'jspdf';
 import html2canvas from 'html2canvas';
 import {
@@ -494,7 +494,11 @@ const SearchComplexityCalculator = () => {
 
     try {
       const roleContext = isCorporateRole ? 'family office executive/investment' : 'UHNW household staff';
-      const prompt = `You are an expert ${roleContext} recruiter. Analyze this search and return detailed, actionable JSON.
+      const roleSpecificContext = isCorporateRole
+        ? 'Focus on governance, discretion, investment committee cadence, and principal dynamics.'
+        : 'Focus on trust, longevity, logistics, lifestyle constraints, and discretion.';
+
+      const prompt = `You are an expert ${roleContext} recruiter advising UHNW principals. Analyze this search and return detailed, actionable JSON. Be direct and board-ready. No hype, no emojis.
 
 Position: ${displayTitle}
 Location: ${formData.location}${det.regionalData ? ` (${det.regionalData.label}, ${regionalMultiplier}x cost multiplier)` : ''}
@@ -518,6 +522,8 @@ ${adjustedBenchmark ? `- 25th Percentile: $${adjustedBenchmark.p25.toLocaleStrin
 - 75th Percentile: $${adjustedBenchmark.p75.toLocaleString()}` : 'No benchmark available - provide general guidance'}
 ${benchmark?.scarcity ? `Role Scarcity: ${benchmark.scarcity}/10` : ''}
 
+${roleSpecificContext}
+
 Your salary recommendation MUST be based on these ADJUSTED figures above, not national averages.
 Your timeline MUST align with the "${timelineOption?.label || formData.timeline}" timeframe the client selected.
 
@@ -538,7 +544,32 @@ Return this exact JSON structure:
     "employerAdvantages": ["Specific advantages the employer can use"]
   },
   "redFlagAnalysis": "Any concerns about the search parameters, or 'None - well-positioned search'",
-  "bottomLine": "3-4 sentence executive summary that's specific to THIS search, not generic advice"
+  "bottomLine": "3-4 sentence executive summary that's specific to THIS search, not generic advice",
+  "decisionIntelligence": {
+    "tradeoffScenarios": {
+      "initial": ["IF [condition] THEN [outcome] - high-level trade-off bullet 1", "IF [condition] THEN [outcome] - high-level trade-off bullet 2", "IF [condition] THEN [outcome] - optional third bullet"],
+      "completeTeaser": "Full scenario modeling with quantified impact analysis and recommended decision paths"
+    },
+    "candidatePsychology": {
+      "initial": ["Sharp psychological insight about candidate motivations", "What candidates in this role truly prioritize", "Hidden concerns candidates may not voice"],
+      "completeTeaser": "Role-specific positioning language and objection-handling frameworks"
+    },
+    "probabilityOfSuccess": {
+      "initialLabel": "Low|Moderate|High",
+      "completeTeaser": "Probability delta analysis with specific levers to improve success rate"
+    },
+    "mandateStrength": {
+      "initial": {
+        "score": 1.0-10.0,
+        "rationale": "One sentence explaining the score based on budget, timeline, requirements alignment"
+      },
+      "completeTeaser": "Factor-by-factor breakdown with prioritized improvement recommendations"
+    },
+    "falseSignals": {
+      "initial": ["Warning about misleading indicator 1", "Warning about misleading indicator 2", "Warning about misleading indicator 3"],
+      "completeTeaser": "Screening protocols and verification frameworks for each signal"
+    }
+  }
 }`;
 
       const response = await fetchWithRetry("/api/analyze", {
@@ -1379,6 +1410,160 @@ Return this exact JSON structure:
                     <div className="bg-green-50 rounded-xl p-4 border border-green-100">
                       <h5 className="font-medium text-green-800 mb-2 text-sm">Your Advantages</h5>
                       <ul className="space-y-1">{results.negotiationLeverage.employerAdvantages?.map((a, i) => <li key={i} className="text-sm text-slate-700">• {a}</li>)}</ul>
+                    </div>
+                  </div>
+                </div>
+              )}
+
+              {/* Decision Intelligence Section */}
+              {results.decisionIntelligence && (
+                <div data-pdf-section="decision-intelligence" className="mb-6">
+                  <h4 className="font-semibold text-lg mb-4 flex items-center gap-2" style={{ color: '#2814ff' }}>
+                    <Brain className="w-5 h-5" />Decision Intelligence
+                  </h4>
+                  <p className="text-sm text-slate-600 mb-4">Strategic insights to inform your hiring decisions. Each module provides initial analysis with deeper insights available in your consultation.</p>
+
+                  <div className="space-y-4">
+                    {/* Trade-Off Scenarios */}
+                    {results.decisionIntelligence.tradeoffScenarios && (
+                      <div className="bg-white border border-slate-200 rounded-xl p-5 shadow-sm">
+                        <div className="flex items-center gap-2 mb-3">
+                          <div className="w-8 h-8 rounded-lg flex items-center justify-center" style={{ backgroundColor: '#e8e4ff' }}>
+                            <GitBranch className="w-4 h-4" style={{ color: '#2814ff' }} />
+                          </div>
+                          <h5 className="font-semibold text-slate-900">Trade-Off Scenarios</h5>
+                        </div>
+                        <ul className="space-y-2 mb-4">
+                          {results.decisionIntelligence.tradeoffScenarios.initial?.map((item, i) => (
+                            <li key={i} className="text-sm text-slate-700 flex items-start gap-2">
+                              <span className="text-indigo-500 font-medium">→</span>
+                              <span>{item}</span>
+                            </li>
+                          ))}
+                        </ul>
+                        <div className="border-t border-slate-100 pt-3 flex items-center gap-2">
+                          <Lock className="w-3.5 h-3.5 text-slate-400" />
+                          <span className="text-xs text-slate-500">{results.decisionIntelligence.tradeoffScenarios.completeTeaser}</span>
+                        </div>
+                      </div>
+                    )}
+
+                    {/* Candidate Psychology */}
+                    {results.decisionIntelligence.candidatePsychology && (
+                      <div className="bg-white border border-slate-200 rounded-xl p-5 shadow-sm">
+                        <div className="flex items-center gap-2 mb-3">
+                          <div className="w-8 h-8 rounded-lg flex items-center justify-center" style={{ backgroundColor: '#f5e6e9' }}>
+                            <Users className="w-4 h-4" style={{ color: '#de9ea9' }} />
+                          </div>
+                          <h5 className="font-semibold text-slate-900">Candidate Psychology</h5>
+                        </div>
+                        <ul className="space-y-2 mb-4">
+                          {results.decisionIntelligence.candidatePsychology.initial?.map((item, i) => (
+                            <li key={i} className="text-sm text-slate-700 flex items-start gap-2">
+                              <span style={{ color: '#de9ea9' }} className="font-medium">•</span>
+                              <span>{item}</span>
+                            </li>
+                          ))}
+                        </ul>
+                        <div className="border-t border-slate-100 pt-3 flex items-center gap-2">
+                          <Lock className="w-3.5 h-3.5 text-slate-400" />
+                          <span className="text-xs text-slate-500">{results.decisionIntelligence.candidatePsychology.completeTeaser}</span>
+                        </div>
+                      </div>
+                    )}
+
+                    {/* Probability of Success & Mandate Strength - Side by side */}
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                      {/* Probability of Success */}
+                      {results.decisionIntelligence.probabilityOfSuccess && (
+                        <div className="bg-white border border-slate-200 rounded-xl p-5 shadow-sm">
+                          <div className="flex items-center gap-2 mb-3">
+                            <div className="w-8 h-8 rounded-lg flex items-center justify-center" style={{ backgroundColor: '#e8e4ff' }}>
+                              <Gauge className="w-4 h-4" style={{ color: '#2814ff' }} />
+                            </div>
+                            <h5 className="font-semibold text-slate-900">Success Probability</h5>
+                          </div>
+                          <div className="mb-4">
+                            <span className={`inline-block px-4 py-2 rounded-full text-sm font-semibold ${
+                              results.decisionIntelligence.probabilityOfSuccess.initialLabel === 'High'
+                                ? 'bg-green-100 text-green-800'
+                                : results.decisionIntelligence.probabilityOfSuccess.initialLabel === 'Moderate'
+                                ? 'bg-amber-100 text-amber-800'
+                                : 'bg-red-100 text-red-800'
+                            }`}>
+                              {results.decisionIntelligence.probabilityOfSuccess.initialLabel}
+                            </span>
+                          </div>
+                          <div className="border-t border-slate-100 pt-3 flex items-center gap-2">
+                            <Lock className="w-3.5 h-3.5 text-slate-400" />
+                            <span className="text-xs text-slate-500">{results.decisionIntelligence.probabilityOfSuccess.completeTeaser}</span>
+                          </div>
+                        </div>
+                      )}
+
+                      {/* Mandate Strength */}
+                      {results.decisionIntelligence.mandateStrength && (
+                        <div className="bg-white border border-slate-200 rounded-xl p-5 shadow-sm">
+                          <div className="flex items-center gap-2 mb-3">
+                            <div className="w-8 h-8 rounded-lg flex items-center justify-center" style={{ backgroundColor: '#f5e6e9' }}>
+                              <BarChart3 className="w-4 h-4" style={{ color: '#de9ea9' }} />
+                            </div>
+                            <h5 className="font-semibold text-slate-900">Mandate Strength</h5>
+                          </div>
+                          <div className="mb-3">
+                            <div className="flex items-baseline gap-2">
+                              <span className="text-3xl font-bold" style={{ color: '#2814ff' }}>
+                                {results.decisionIntelligence.mandateStrength.initial?.score?.toFixed(1) || 'N/A'}
+                              </span>
+                              <span className="text-sm text-slate-500">/ 10</span>
+                            </div>
+                            <p className="text-sm text-slate-600 mt-1">{results.decisionIntelligence.mandateStrength.initial?.rationale}</p>
+                          </div>
+                          <div className="border-t border-slate-100 pt-3 flex items-center gap-2">
+                            <Lock className="w-3.5 h-3.5 text-slate-400" />
+                            <span className="text-xs text-slate-500">{results.decisionIntelligence.mandateStrength.completeTeaser}</span>
+                          </div>
+                        </div>
+                      )}
+                    </div>
+
+                    {/* False Signal Warnings */}
+                    {results.decisionIntelligence.falseSignals && (
+                      <div className="bg-amber-50 border border-amber-200 rounded-xl p-5">
+                        <div className="flex items-center gap-2 mb-3">
+                          <div className="w-8 h-8 rounded-lg flex items-center justify-center bg-amber-100">
+                            <AlertTriangle className="w-4 h-4 text-amber-600" />
+                          </div>
+                          <h5 className="font-semibold text-amber-900">False Signal Warnings</h5>
+                        </div>
+                        <ul className="space-y-2 mb-4">
+                          {results.decisionIntelligence.falseSignals.initial?.map((item, i) => (
+                            <li key={i} className="text-sm text-amber-800 flex items-start gap-2">
+                              <AlertCircle className="w-4 h-4 text-amber-500 flex-shrink-0 mt-0.5" />
+                              <span>{item}</span>
+                            </li>
+                          ))}
+                        </ul>
+                        <div className="border-t border-amber-200 pt-3 flex items-center gap-2">
+                          <Lock className="w-3.5 h-3.5 text-amber-400" />
+                          <span className="text-xs text-amber-700">{results.decisionIntelligence.falseSignals.completeTeaser}</span>
+                        </div>
+                      </div>
+                    )}
+                  </div>
+
+                  {/* CTA to unlock complete analysis */}
+                  <div className="mt-4 bg-gradient-to-r from-indigo-50 to-pink-50 rounded-xl p-4 border border-indigo-100">
+                    <div className="flex items-center justify-between flex-wrap gap-3">
+                      <div className="flex items-center gap-2">
+                        <Lock className="w-4 h-4" style={{ color: '#2814ff' }} />
+                        <span className="text-sm font-medium text-slate-700">Unlock complete decision intelligence analysis</span>
+                      </div>
+                      <a href="https://calendly.com/charbel-talentgurus" target="_blank" rel="noopener noreferrer"
+                        className="inline-flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-semibold text-white hover:shadow-md transition-shadow"
+                        style={{ backgroundColor: '#2814ff' }}>
+                        Schedule Consultation<ArrowRight className="w-4 h-4" />
+                      </a>
                     </div>
                   </div>
                 </div>
