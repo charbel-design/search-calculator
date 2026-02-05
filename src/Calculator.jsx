@@ -13,6 +13,27 @@ import {
   detectRegion,
   getBenchmark
 } from './salaryData';
+import React, { useState, useMemo, useRef, useEffect } from 'react';
+import { TrendingUp, Clock, DollarSign, Target, AlertCircle, CheckCircle, ArrowRight, Info, Download, RefreshCw, Users, Car, Heart, Home, ChevronDown, HelpCircle, Zap, MapPin, Phone, X, Scale } from 'lucide-react';
+
+// Version indicator - check console to verify deployment version
+const APP_VERSION = "2.0.0-enhanced";
+console.log(`Search Calculator v${APP_VERSION} - Enhanced with PDF export, trust signals, and improved UX`);
+
+// jsPDF will be loaded via CDN
+const loadJsPDF = () => {
+  return new Promise((resolve, reject) => {
+    if (window.jspdf) {
+      resolve(window.jspdf.jsPDF);
+      return;
+    }
+    const script = document.createElement('script');
+    script.src = 'https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js';
+    script.onload = () => resolve(window.jspdf.jsPDF);
+    script.onerror = reject;
+    document.head.appendChild(script);
+  });
+};
 
 // ============================================
 // CUSTOM HOOKS
@@ -96,6 +117,7 @@ const SearchComplexityCalculator = () => {
   });
   
   const [loading, setLoading] = useState(false);
+  const [loadingStep, setLoadingStep] = useState('');
   const [results, setResults] = useState(null);
   const [error, setError] = useState(null);
   const [warnings, setWarnings] = useState([]);
@@ -474,6 +496,7 @@ const SearchComplexityCalculator = () => {
 
   const calculateComplexity = async () => {
     setLoading(true);
+    setLoadingStep('Calculating complexity factors...');
     setError(null);
 
     const det = calculateDeterministicScore();
@@ -495,6 +518,16 @@ const SearchComplexityCalculator = () => {
     try {
       const roleContext = isCorporateRole ? 'family office executive/investment' : 'UHNW household staff';
       const prompt = `You are an expert ${roleContext} recruiter. Analyze this search and return detailed, actionable JSON.
+    const ANALYSIS_TIMEOUT = 45000; // 45 seconds timeout
+
+    try {
+      const det = calculateDeterministicScore();
+      const displayTitle = formData.positionType === 'Other' ? formData.customPositionTitle : formData.positionType;
+      const benchmark = det.benchmark;
+
+      setLoadingStep('Analyzing market conditions...');
+
+      const prompt = `You are advising a UHNW principal. Be warm, direct. Use "you/your". Never use "staffing".
 
 Position: ${displayTitle}
 Location: ${formData.location}${det.regionalData ? ` (${det.regionalData.label}, ${regionalMultiplier}x cost multiplier)` : ''}
@@ -551,6 +584,24 @@ Return this exact JSON structure:
         const errorData = await response.json().catch(() => ({}));
         throw new Error(errorData.error || `Analysis failed (${response.status})`);
       }
+      // Create abort controller for timeout
+      const controller = new AbortController();
+      const timeoutId = setTimeout(() => controller.abort(), ANALYSIS_TIMEOUT);
+
+      setLoadingStep('Generating personalized insights...');
+
+      const response = await fetch("/api/analyze", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ prompt }),
+        signal: controller.signal
+      });
+
+      clearTimeout(timeoutId);
+
+      if (!response.ok) throw new Error('Analysis failed');
+
+      setLoadingStep('Finalizing your analysis...');
 
       const data = await response.json();
       let text = data.content?.[0]?.text || '';
@@ -587,6 +638,10 @@ Return this exact JSON structure:
       const fallbackSalary = adjustedBenchmark
         ? `$${Math.round(adjustedBenchmark.p25/1000)}k - $${Math.round(adjustedBenchmark.p75/1000)}k for ${formData.location || 'this market'}`
         : "Contact us for guidance";
+      setResults({ ...det, ...ai, displayTitle, formData: { ...formData } });
+    } catch (err) {
+      const det = calculateDeterministicScore();
+      const isTimeout = err.name === 'AbortError';
 
       setResults({
         ...det,
@@ -624,10 +679,17 @@ Return this exact JSON structure:
         aiAnalysisSuccess: false,
         adjustedBenchmark,
         regionalMultiplier
+        availabilityReason: "Based on complexity factors",
+        bottomLine: isTimeout
+          ? "Analysis timed out, but we've calculated your search complexity. For detailed AI insights, please try again or schedule a consultation."
+          : "Detailed AI analysis unavailable. Results based on our proprietary scoring algorithm.",
+        formData: { ...formData },
+        analysisNote: isTimeout ? 'timeout' : 'fallback'
       });
     }
 
     setLoading(false);
+    setLoadingStep('');
   };
 
   const runComparison = () => {
@@ -832,6 +894,199 @@ Return this exact JSON structure:
 
       // Reset loading state on error
       setExportingPDF(false);
+    try {
+      const jsPDF = await loadJsPDF();
+      const doc = new jsPDF();
+
+      const pageWidth = doc.internal.pageSize.getWidth();
+      const margin = 20;
+      const contentWidth = pageWidth - margin * 2;
+      let y = 20;
+
+      // Helper functions
+      const addText = (text, fontSize = 10, isBold = false, color = [0, 0, 0]) => {
+        doc.setFontSize(fontSize);
+        doc.setFont('helvetica', isBold ? 'bold' : 'normal');
+        doc.setTextColor(...color);
+        const lines = doc.splitTextToSize(text, contentWidth);
+        doc.text(lines, margin, y);
+        y += lines.length * (fontSize * 0.5) + 2;
+      };
+
+      const addSection = (title) => {
+        if (y > 250) { doc.addPage(); y = 20; }
+        y += 5;
+        doc.setDrawColor(40, 20, 255);
+        doc.setLineWidth(0.5);
+        doc.line(margin, y, pageWidth - margin, y);
+        y += 8;
+        addText(title, 12, true, [40, 20, 255]);
+        y += 3;
+      };
+
+      // Header
+      doc.setFillColor(40, 20, 255);
+      doc.rect(0, 0, pageWidth, 35, 'F');
+      doc.setFontSize(20);
+      doc.setFont('helvetica', 'bold');
+      doc.setTextColor(255, 255, 255);
+      doc.text('TALENT GURUS', pageWidth / 2, 15, { align: 'center' });
+      doc.setFontSize(12);
+      doc.setFont('helvetica', 'normal');
+      doc.text('Search Complexity Analysis', pageWidth / 2, 25, { align: 'center' });
+      y = 45;
+
+      // Position and Score Summary
+      doc.setFontSize(16);
+      doc.setFont('helvetica', 'bold');
+      doc.setTextColor(0, 0, 0);
+      doc.text(results.displayTitle, margin, y);
+      y += 8;
+      doc.setFontSize(10);
+      doc.setFont('helvetica', 'normal');
+      doc.setTextColor(100, 100, 100);
+      doc.text(`Location: ${results.formData.location} | Generated: ${new Date().toLocaleDateString()}`, margin, y);
+      y += 12;
+
+      // Score Circle (simulated)
+      const scoreColor = results.score <= 3 ? [27, 94, 32] : results.score <= 5 ? [230, 81, 0] : results.score <= 7 ? [191, 54, 12] : [183, 28, 28];
+      doc.setFillColor(...scoreColor);
+      doc.circle(pageWidth / 2, y + 15, 20, 'F');
+      doc.setFontSize(24);
+      doc.setFont('helvetica', 'bold');
+      doc.setTextColor(255, 255, 255);
+      doc.text(`${results.score}`, pageWidth / 2, y + 18, { align: 'center' });
+      doc.setFontSize(8);
+      doc.text('out of 10', pageWidth / 2, y + 25, { align: 'center' });
+      y += 45;
+
+      doc.setTextColor(0, 0, 0);
+      doc.setFontSize(12);
+      doc.setFont('helvetica', 'bold');
+      doc.text(`${results.label} Search`, pageWidth / 2, y, { align: 'center' });
+      y += 15;
+
+      // Executive Summary
+      if (results.bottomLine) {
+        addSection('EXECUTIVE SUMMARY');
+        addText(results.bottomLine, 10, false, [50, 50, 50]);
+      }
+
+      // Key Metrics
+      addSection('KEY METRICS');
+      addText(`Salary Guidance: ${results.salaryRangeGuidance || 'N/A'}`, 10);
+      addText(`Expected Timeline: ${results.estimatedTimeline || 'N/A'}`, 10);
+      addText(`Candidate Availability: ${results.candidateAvailability || 'N/A'} - ${results.availabilityReason || ''}`, 10);
+      addText(`Market Dynamics: ${results.marketCompetitiveness || 'N/A'}`, 10);
+
+      // Benchmarks
+      if (results.benchmark) {
+        addSection(`MARKET BENCHMARKS: ${results.displayTitle.toUpperCase()}`);
+        addText(`25th Percentile: $${results.benchmark.p25.toLocaleString()}`, 10);
+        addText(`Market Median: $${results.benchmark.p50.toLocaleString()}`, 10, true);
+        addText(`75th Percentile: $${results.benchmark.p75.toLocaleString()}`, 10);
+        y += 5;
+        addText('Benefits:', 10, true);
+        addText(`Housing: ${results.benchmark.benefits.housing}`, 9);
+        addText(`Vehicle: ${results.benchmark.benefits.vehicle}`, 9);
+        addText(`Health: ${results.benchmark.benefits.health}`, 9);
+        addText(`Bonus: ${results.benchmark.benefits.bonus}`, 9);
+      }
+
+      // Complexity Drivers
+      addSection(`COMPLEXITY DRIVERS (Total: ${results.points} points)`);
+      results.drivers?.forEach(d => {
+        addText(`[+${d.points}] ${d.factor}: ${d.rationale}`, 9);
+      });
+
+      // Success Factors
+      addSection('KEY SUCCESS FACTORS');
+      results.keySuccessFactors?.forEach(f => {
+        addText(`• ${f}`, 9);
+      });
+
+      // Recommendations
+      if (results.recommendedAdjustments?.length > 0) {
+        addSection('RECOMMENDATIONS');
+        results.recommendedAdjustments.forEach(r => {
+          addText(`→ ${r}`, 9);
+        });
+      }
+
+      // Negotiation Dynamics
+      if (results.negotiationLeverage) {
+        addSection('NEGOTIATION DYNAMICS');
+        addText('Candidate Advantages:', 10, true);
+        results.negotiationLeverage.candidateAdvantages?.forEach(a => addText(`• ${a}`, 9));
+        y += 3;
+        addText('Your Advantages:', 10, true);
+        results.negotiationLeverage.employerAdvantages?.forEach(a => addText(`• ${a}`, 9));
+      }
+
+      // Footer
+      if (y > 240) { doc.addPage(); y = 20; }
+      y = doc.internal.pageSize.getHeight() - 25;
+      doc.setDrawColor(200, 200, 200);
+      doc.line(margin, y, pageWidth - margin, y);
+      y += 8;
+      doc.setFontSize(9);
+      doc.setFont('helvetica', 'bold');
+      doc.setTextColor(40, 20, 255);
+      doc.text('TALENT GURUS', margin, y);
+      doc.setFont('helvetica', 'normal');
+      doc.setTextColor(100, 100, 100);
+      doc.text('Finding Exceptional Talent for Family Offices | talent-gurus.com', margin, y + 5);
+      doc.setFontSize(7);
+      doc.text('This analysis provides general market guidance. Every search is unique.', margin, y + 10);
+
+      // Save
+      doc.save(`Search-Analysis-${results.displayTitle.replace(/\s+/g, '-')}-${new Date().toISOString().split('T')[0]}.pdf`);
+    } catch (err) {
+      // Fallback to text export if PDF fails
+      console.error('PDF generation failed, falling back to text:', err);
+      const content = `
+TALENT GURUS - Search Complexity Analysis
+
+Position: ${results.displayTitle}
+Location: ${results.formData.location}
+Score: ${results.score}/10 - ${results.label}
+Generated: ${new Date().toLocaleDateString()}
+
+EXECUTIVE SUMMARY
+${results.bottomLine || 'N/A'}
+
+KEY METRICS
+- Salary Guidance: ${results.salaryRangeGuidance || 'N/A'}
+- Expected Timeline: ${results.estimatedTimeline || 'N/A'}
+- Candidate Availability: ${results.candidateAvailability || 'N/A'} - ${results.availabilityReason || ''}
+- Market Dynamics: ${results.marketCompetitiveness || 'N/A'}
+
+${results.benchmark ? `MARKET BENCHMARKS
+- 25th Percentile: $${results.benchmark.p25.toLocaleString()}
+- Market Median: $${results.benchmark.p50.toLocaleString()}
+- 75th Percentile: $${results.benchmark.p75.toLocaleString()}` : ''}
+
+COMPLEXITY DRIVERS (Total: ${results.points} points)
+${results.drivers?.map(d => `[+${d.points}] ${d.factor}: ${d.rationale}`).join('\n') || 'N/A'}
+
+KEY SUCCESS FACTORS
+${results.keySuccessFactors?.map(f => `- ${f}`).join('\n') || 'N/A'}
+
+${results.recommendedAdjustments?.length > 0 ? `RECOMMENDATIONS\n${results.recommendedAdjustments.map(r => `- ${r}`).join('\n')}` : ''}
+
+TALENT GURUS | talent-gurus.com
+This analysis provides general market guidance. Every search is unique.
+      `.trim();
+
+      const blob = new Blob([content], { type: 'text/plain;charset=utf-8' });
+      const url = URL.createObjectURL(blob);
+      const link = document.createElement('a');
+      link.href = url;
+      link.download = `Search-Analysis-${results.displayTitle.replace(/\s+/g, '-')}-${new Date().toISOString().split('T')[0]}.txt`;
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      URL.revokeObjectURL(url);
     }
   };
 
@@ -982,12 +1237,17 @@ Return this exact JSON structure:
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
                       {timelineOptions.map(opt => (
                         <button key={opt.value} type="button" onClick={() => setFormData({ ...formData, timeline: opt.value })}
-                          className={`p-4 border-2 rounded-xl text-left transition-all ${formData.timeline === opt.value ? 'border-indigo-500 bg-indigo-50' : 'border-slate-200 hover:border-slate-300'}`}>
+                          className={`p-4 border-2 rounded-xl text-left transition-all relative ${formData.timeline === opt.value ? 'border-indigo-600 bg-indigo-100 shadow-md ring-2 ring-indigo-200' : 'border-slate-200 hover:border-slate-300 hover:bg-slate-50'}`}>
+                          {formData.timeline === opt.value && (
+                            <div className="absolute -top-2 -right-2 w-6 h-6 rounded-full bg-indigo-600 flex items-center justify-center shadow-md">
+                              <CheckCircle className="w-4 h-4 text-white" />
+                            </div>
+                          )}
                           <div className="flex justify-between items-center">
-                            <span className="font-medium text-sm">{opt.label}</span>
+                            <span className={`font-medium text-sm ${formData.timeline === opt.value ? 'text-indigo-900' : 'text-slate-700'}`}>{opt.label}</span>
                             <Clock className={`w-4 h-4 ${formData.timeline === opt.value ? 'text-indigo-600' : 'text-slate-400'}`} />
                           </div>
-                          <p className="text-xs text-slate-500 mt-1">{opt.description}</p>
+                          <p className={`text-xs mt-1 ${formData.timeline === opt.value ? 'text-indigo-700' : 'text-slate-500'}`}>{opt.description}</p>
                         </button>
                       ))}
                     </div>
@@ -1114,6 +1374,13 @@ Return this exact JSON structure:
                     <div>
                       <h4 className="font-semibold text-slate-900 mb-1">Your analysis is almost ready</h4>
                       <p className="text-sm text-slate-600">In a few seconds, you'll receive a detailed complexity score, market analysis, and recommendations.</p>
+                      <h4 className="font-semibold text-slate-900 mb-1">Your personalized analysis includes:</h4>
+                      <ul className="text-sm text-slate-600 space-y-1 mt-2">
+                        <li className="flex items-center gap-2"><CheckCircle className="w-4 h-4 text-indigo-600" />Search complexity score & market positioning</li>
+                        <li className="flex items-center gap-2"><CheckCircle className="w-4 h-4 text-indigo-600" />Salary benchmarks for your location</li>
+                        <li className="flex items-center gap-2"><CheckCircle className="w-4 h-4 text-indigo-600" />Candidate availability & timeline estimates</li>
+                        <li className="flex items-center gap-2"><CheckCircle className="w-4 h-4 text-indigo-600" />Negotiation leverage insights</li>
+                      </ul>
                     </div>
                   </div>
 
@@ -1170,21 +1437,48 @@ Return this exact JSON structure:
                     </div>
                   )}
 
-                  <div className="border-t border-slate-200 pt-5">
-                    <h4 className="font-medium text-slate-900 mb-3">Optional: Save Results</h4>
-                    <input type="email" name="email" value={formData.email} onChange={handleInputChange}
-                      className="w-full px-4 py-3 border-2 border-slate-200 rounded-xl" placeholder="your@email.com" />
+                  {/* Enhanced Lead Capture Section */}
+                  <div className="bg-gradient-to-br from-indigo-50 to-purple-50 rounded-xl p-5 border border-indigo-200">
+                    <div className="flex items-start gap-3 mb-4">
+                      <div className="w-10 h-10 rounded-full bg-indigo-600 flex items-center justify-center flex-shrink-0">
+                        <Download className="w-5 h-5 text-white" />
+                      </div>
+                      <div>
+                        <h4 className="font-semibold text-slate-900">Get Your Full Report</h4>
+                        <p className="text-sm text-slate-600 mt-1">Receive a detailed PDF analysis you can reference and share with decision-makers.</p>
+                      </div>
+                    </div>
+                    <div className="space-y-3">
+                      <input type="email" name="email" value={formData.email} onChange={handleInputChange}
+                        className="w-full px-4 py-3 border-2 border-indigo-200 rounded-xl focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 bg-white"
+                        placeholder="your@email.com" />
+                      <p className="text-xs text-slate-500 flex items-center gap-1">
+                        <Info className="w-3 h-3" />
+                        Your information stays private. We'll only use it to send your analysis and relevant insights.
+                      </p>
+                    </div>
                   </div>
 
-                  <div className="bg-amber-50 border border-amber-200 rounded-xl p-4">
-                    <label className="flex items-center gap-2">
-                      <input type="checkbox" name="priorityCallback" checked={formData.priorityCallback} onChange={handleInputChange} />
-                      <span className="font-medium text-amber-900">Request Priority Callback (24hr)</span>
-                    </label>
-                    {formData.priorityCallback && (
-                      <input type="tel" name="phone" value={formData.phone} onChange={handleInputChange}
-                        className="mt-2 w-full px-4 py-2 border border-amber-300 rounded-lg" placeholder="Phone number" />
-                    )}
+                  {/* Priority Callback - More Prominent */}
+                  <div className="bg-gradient-to-r from-amber-50 to-orange-50 border-2 border-amber-300 rounded-xl p-5">
+                    <div className="flex items-start gap-3">
+                      <div className="w-10 h-10 rounded-full bg-amber-500 flex items-center justify-center flex-shrink-0">
+                        <Phone className="w-5 h-5 text-white" />
+                      </div>
+                      <div className="flex-1">
+                        <label className="flex items-center gap-2 cursor-pointer">
+                          <input type="checkbox" name="priorityCallback" checked={formData.priorityCallback} onChange={handleInputChange}
+                            className="w-5 h-5 rounded border-amber-400 text-amber-600 focus:ring-amber-500" />
+                          <span className="font-semibold text-amber-900">Request a Consultation (No Obligation)</span>
+                        </label>
+                        <p className="text-sm text-amber-800 mt-2">Speak with a specialist within 24 hours. Get strategic advice tailored to your specific search.</p>
+                        {formData.priorityCallback && (
+                          <input type="tel" name="phone" value={formData.phone} onChange={handleInputChange}
+                            className="mt-3 w-full px-4 py-3 border-2 border-amber-300 rounded-xl bg-white focus:border-amber-500 focus:ring-2 focus:ring-amber-200"
+                            placeholder="Best phone number to reach you" />
+                        )}
+                      </div>
+                    </div>
                   </div>
                 </div>
               )}
@@ -1202,10 +1496,14 @@ Return this exact JSON structure:
                 ) : <div />}
                 
                 <button onClick={step === 4 ? calculateComplexity : nextStep} disabled={loading}
-                  className="text-white px-6 py-3 rounded-xl font-semibold flex items-center gap-2 hover:shadow-lg disabled:opacity-70"
+                  className="text-white px-6 py-3 rounded-xl font-semibold flex items-center gap-2 hover:shadow-lg disabled:opacity-70 transition-all"
                   style={{ backgroundColor: '#2814ff' }}>
-                  {loading ? (<><div className="animate-spin rounded-full h-5 w-5 border-b-2 border-white"></div>Analyzing...</>) : 
-                   step === 4 ? (<><Target className="w-5 h-5" />Get Analysis</>) : (<>Continue<ArrowRight className="w-5 h-5" /></>)}
+                  {loading ? (
+                    <div className="flex items-center gap-2">
+                      <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-white"></div>
+                      <span className="animate-pulse">{loadingStep || 'Analyzing...'}</span>
+                    </div>
+                  ) : step === 4 ? (<><Target className="w-5 h-5" />Get Analysis</>) : (<>Continue<ArrowRight className="w-5 h-5" /></>)}
                 </button>
               </div>
             </div>
@@ -1488,6 +1786,33 @@ Return this exact JSON structure:
               </div>
             </div>
 
+            {/* Trust Signals & Methodology */}
+            <div className="bg-slate-50 rounded-xl p-6 border border-slate-200">
+              <h4 className="font-semibold text-slate-900 mb-4 flex items-center gap-2">
+                <Info className="w-5 h-5" style={{ color: '#2814ff' }} />
+                About This Analysis
+              </h4>
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
+                <div className="text-center p-3 bg-white rounded-lg border border-slate-100">
+                  <div className="text-2xl font-bold" style={{ color: '#2814ff' }}>500+</div>
+                  <div className="text-xs text-slate-600">UHNW Placements</div>
+                </div>
+                <div className="text-center p-3 bg-white rounded-lg border border-slate-100">
+                  <div className="text-2xl font-bold" style={{ color: '#2814ff' }}>16</div>
+                  <div className="text-xs text-slate-600">Role Categories</div>
+                </div>
+                <div className="text-center p-3 bg-white rounded-lg border border-slate-100">
+                  <div className="text-2xl font-bold" style={{ color: '#2814ff' }}>Feb 2026</div>
+                  <div className="text-xs text-slate-600">Data Updated</div>
+                </div>
+              </div>
+              <div className="space-y-2 text-sm text-slate-600">
+                <p><strong>Our Methodology:</strong> Salary benchmarks are derived from our proprietary database of completed placements across family offices, private estates, and UHNW households in North America and Europe.</p>
+                <p><strong>Complexity Scoring:</strong> Our algorithm weighs 9 key factors including timeline urgency, location tier, language requirements, and market scarcity to provide an accurate difficulty assessment.</p>
+                <p className="text-xs text-slate-500 mt-3 pt-3 border-t border-slate-200">Analysis combines human expertise with AI-assisted market insights. Results are guidance only—every search is unique. Talent Gurus advisors bring 15+ years of executive household placement experience.</p>
+              </div>
+            </div>
+
             <button onClick={resetForm} className="w-full text-center text-sm text-slate-500 hover:text-slate-700 py-4">← Start New Analysis</button>
           </div>
         )}
@@ -1497,6 +1822,7 @@ Return this exact JSON structure:
           <p className="text-slate-500">We find the people you'll rely on for years.</p>
           <a href="https://talent-gurus.com" target="_blank" rel="noopener noreferrer" className="text-xs hover:underline" style={{ color: '#2814ff' }}>talent-gurus.com</a>
           <p className="text-xs text-slate-400 mt-4">Salary data: {SALARY_DATA_META.lastUpdated} | {commonRoles.length} positions tracked</p>
+          <p className="text-xs text-slate-400 mt-4">v{APP_VERSION}</p>
         </div>
       </div>
     </div>
