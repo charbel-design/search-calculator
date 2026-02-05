@@ -364,7 +364,7 @@ const SearchComplexityCalculator = () => {
     const timelineOption = timelineOptions.find(t => t.value === timelineValue);
     if (timelineOption) {
       points += timelineOption.points;
-      drivers.push({ factor: "Timeline", points: timelineOption.points, rationale: timelineOption.label, tooltip: timelineOption.description });
+      drivers.push({ factor: "Client Timeline", points: timelineOption.points, rationale: timelineOption.label, tooltip: timelineOption.description });
     }
 
     // Location
@@ -451,7 +451,7 @@ const SearchComplexityCalculator = () => {
     const seasonalPoints = Math.round((seasonality.factor - 1) * 50);
     if (seasonalPoints !== 0) {
       points += seasonalPoints;
-      drivers.push({ factor: "Timing", points: seasonalPoints, rationale: seasonality.label });
+      drivers.push({ factor: "Seasonal Timing", points: seasonalPoints, rationale: seasonality.label });
     }
 
     // Role scarcity - use benchmark scarcity if available
