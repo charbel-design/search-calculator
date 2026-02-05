@@ -1504,14 +1504,14 @@ Return this exact JSON structure:
                 <TrendingUp className="w-5 h-5" style={{ color: '#2814ff' }} />
               </div>
               <h5 className="font-medium text-slate-800 mb-1">Market Data</h5>
-              <p className="text-slate-600 text-xs">Aggregated from 500+ placements, industry surveys, and proprietary network intelligence across UHNW households and family offices.</p>
+              <p className="text-slate-600 text-xs">Aggregated from real placements, industry surveys, and proprietary network intelligence across UHNW households and family offices.</p>
             </div>
             <div className="text-center">
               <div className="w-10 h-10 rounded-full flex items-center justify-center mx-auto mb-2" style={{ backgroundColor: '#e8e4ff' }}>
                 <Users className="w-5 h-5" style={{ color: '#2814ff' }} />
               </div>
               <h5 className="font-medium text-slate-800 mb-1">Expert Review</h5>
-              <p className="text-slate-600 text-xs">All insights are informed by our team's 15+ years placing senior staff for prominent families, with AI assisting—not replacing—human judgment.</p>
+              <p className="text-slate-600 text-xs">All insights are informed by our team's experience placing senior staff for prominent families, with AI assisting—not replacing—human judgment.</p>
             </div>
             <div className="text-center">
               <div className="w-10 h-10 rounded-full flex items-center justify-center mx-auto mb-2" style={{ backgroundColor: '#e8e4ff' }}>
