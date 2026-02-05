@@ -874,10 +874,6 @@ Return this exact JSON structure:
           </div>
           <h2 className="text-2xl md:text-3xl font-bold mb-3" style={{ color: '#2814ff', fontFamily: "'Playfair Display', serif" }}>Search Complexity Calculator</h2>
           <p className="text-base text-slate-600 max-w-2xl mx-auto">Understanding what you're up against matters. Get a clear picture in 90 seconds.</p>
-          <a href="/sample-report.pdf" target="_blank" rel="noopener noreferrer"
-            className="inline-flex items-center gap-1 text-sm mt-3 hover:underline" style={{ color: '#2814ff' }}>
-            <Download className="w-4 h-4" />See Sample Report
-          </a>
         </div>
 
         <div className="bg-slate-50 border-l-4 rounded-lg p-4 mb-8 text-sm text-slate-600" style={{ borderColor: '#2814ff' }}>
