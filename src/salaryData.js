@@ -21,29 +21,231 @@ export const SALARY_DATA_META = {
 // REGIONAL MULTIPLIERS
 // ============================================
 export const REGIONAL_MULTIPLIERS = {
-  "National_US": { multiplier: 1.0, label: "National Average", tier: "standard" },
-  "Midwest_US": { multiplier: 0.9, label: "Midwest", tier: "below-average" },
-  "South_US": { multiplier: 0.95, label: "South (non-FL)", tier: "below-average" },
-  "Los Angeles": { multiplier: 1.2, label: "LA Premium", tier: "high" },
-  "San Francisco": { multiplier: 1.3, label: "SF Bay Premium", tier: "ultra-high" },
-  "New York City": { multiplier: 1.4, label: "NYC Premium", tier: "ultra-high" },
-  "Manhattan": { multiplier: 1.4, label: "Manhattan Premium", tier: "ultra-high" },
-  "Palm Beach": { multiplier: 1.3, label: "Palm Beach Premium", tier: "high" },
-  "Miami": { multiplier: 1.15, label: "Miami Premium", tier: "moderate" },
-  "The Hamptons": { multiplier: 1.45, label: "Hamptons Premium", tier: "ultra-high" },
-  "Greenwich": { multiplier: 1.3, label: "Greenwich Premium", tier: "high" },
-  "Aspen": { multiplier: 1.6, label: "Aspen Peak Season", tier: "ultra-high" },
-  "Vail": { multiplier: 1.5, label: "Vail Peak Season", tier: "ultra-high" },
-  "Jackson Hole": { multiplier: 1.4, label: "Jackson Hole Premium", tier: "high" },
-  "Nantucket": { multiplier: 1.35, label: "Island Premium", tier: "high" },
-  "Martha's Vineyard": { multiplier: 1.35, label: "Island Premium", tier: "high" },
-  "Seattle": { multiplier: 1.15, label: "Pacific NW Premium", tier: "moderate" },
-  "Chicago": { multiplier: 1.05, label: "Slight Premium", tier: "moderate" },
-  "Dallas": { multiplier: 1.0, label: "Market Rate", tier: "standard" },
-  "Houston": { multiplier: 0.95, label: "Below Coastal", tier: "standard" },
-  "London": { multiplier: 0.9, label: "London (GBP adjusted)", tier: "high" },
-  "Monaco": { multiplier: 1.75, label: "Monaco Premium", tier: "ultra-high" },
-  "Remote/Multiple": { multiplier: 1.1, label: "Flexibility Premium", tier: "variable" }
+  // US Regions
+  "National_US": { multiplier: 1.0, label: "National Average", tier: "standard", country: "US" },
+  "Midwest_US": { multiplier: 0.9, label: "Midwest", tier: "below-average", country: "US" },
+  "South_US": { multiplier: 0.95, label: "South (non-FL)", tier: "below-average", country: "US" },
+  "Los Angeles": { multiplier: 1.2, label: "LA Premium", tier: "high", country: "US" },
+  "San Francisco": { multiplier: 1.3, label: "SF Bay Premium", tier: "ultra-high", country: "US" },
+  "New York City": { multiplier: 1.4, label: "NYC Premium", tier: "ultra-high", country: "US" },
+  "Manhattan": { multiplier: 1.4, label: "Manhattan Premium", tier: "ultra-high", country: "US" },
+  "Palm Beach": { multiplier: 1.3, label: "Palm Beach Premium", tier: "high", country: "US" },
+  "Miami": { multiplier: 1.15, label: "Miami Premium", tier: "moderate", country: "US" },
+  "The Hamptons": { multiplier: 1.45, label: "Hamptons Premium", tier: "ultra-high", country: "US" },
+  "Greenwich": { multiplier: 1.3, label: "Greenwich Premium", tier: "high", country: "US" },
+  "Aspen": { multiplier: 1.6, label: "Aspen Peak Season", tier: "ultra-high", country: "US" },
+  "Vail": { multiplier: 1.5, label: "Vail Peak Season", tier: "ultra-high", country: "US" },
+  "Jackson Hole": { multiplier: 1.4, label: "Jackson Hole Premium", tier: "high", country: "US" },
+  "Nantucket": { multiplier: 1.35, label: "Island Premium", tier: "high", country: "US" },
+  "Martha's Vineyard": { multiplier: 1.35, label: "Island Premium", tier: "high", country: "US" },
+  "Seattle": { multiplier: 1.15, label: "Pacific NW Premium", tier: "moderate", country: "US" },
+  "Chicago": { multiplier: 1.05, label: "Slight Premium", tier: "moderate", country: "US" },
+  "Dallas": { multiplier: 1.0, label: "Market Rate", tier: "standard", country: "US" },
+  "Houston": { multiplier: 0.95, label: "Below Coastal", tier: "standard", country: "US" },
+  // International Regions
+  "London": { multiplier: 0.85, label: "London (GBP adjusted)", tier: "high", country: "UK" },
+  "UK Europe": { multiplier: 0.85, label: "UK/Europe", tier: "high", country: "UK_Europe" },
+  "Monaco": { multiplier: 1.0, label: "Monaco", tier: "ultra-high", country: "Monaco_Switzerland" },
+  "Switzerland": { multiplier: 1.0, label: "Switzerland", tier: "ultra-high", country: "Monaco_Switzerland" },
+  "Geneva": { multiplier: 1.05, label: "Geneva Premium", tier: "ultra-high", country: "Monaco_Switzerland" },
+  "Zurich": { multiplier: 1.05, label: "Zurich Premium", tier: "ultra-high", country: "Monaco_Switzerland" },
+  "Dubai": { multiplier: 1.3, label: "Dubai (Tax-Free)", tier: "ultra-high", country: "Dubai_UAE" },
+  "UAE": { multiplier: 1.3, label: "UAE (Tax-Free)", tier: "ultra-high", country: "Dubai_UAE" },
+  "Abu Dhabi": { multiplier: 1.25, label: "Abu Dhabi", tier: "ultra-high", country: "Dubai_UAE" },
+  "Qatar": { multiplier: 1.25, label: "Qatar", tier: "ultra-high", country: "Dubai_UAE" },
+  "Saudi Arabia": { multiplier: 1.2, label: "Saudi Arabia", tier: "high", country: "Dubai_UAE" },
+  "Mediterranean": { multiplier: 1.0, label: "Mediterranean", tier: "high", country: "Global_Med_Caribbean" },
+  "Caribbean": { multiplier: 1.0, label: "Caribbean", tier: "high", country: "Global_Med_Caribbean" },
+  "Remote/Multiple": { multiplier: 1.1, label: "Flexibility Premium", tier: "variable", country: "US" }
+};
+
+// ============================================
+// INTERNATIONAL SALARY DATA
+// Role-specific regional variations (estimates based on 2025-2026 market data)
+// ============================================
+export const INTERNATIONAL_SALARY_DATA = {
+  // Family Office C-Suite
+  "Family Office CEO": {
+    base_region: "US",
+    regions: {
+      US: { type: "multiplier", multiplier_min: 1.0, multiplier_max: 1.0, estimate: false },
+      UK_Europe_London: { type: "multiplier", multiplier_min: 0.7, multiplier_max: 0.9, estimate: true, note: "European family office CEOs typically earn 70–90% of comparable US pay" },
+      Monaco_Switzerland: { type: "multiplier", multiplier_min: 0.9, multiplier_max: 1.1, estimate: true, note: "Monaco/Swiss private banks often match or slightly exceed US base" },
+      Dubai_UAE: { type: "multiplier", multiplier_min: 1.2, multiplier_max: 1.6, estimate: true, note: "Middle East family offices pay 20–60% more cash, often tax-free with housing" }
+    }
+  },
+  "Family Office CIO": {
+    base_region: "US",
+    regions: {
+      US: { type: "absolute", p25: 550000, p50: 900000, p75: 1500000, estimate: true, note: "Typical $500M–$1B+ US single family office" },
+      UK_Europe_London: { type: "absolute", p25: 350000, p50: 500000, p75: 800000, estimate: true, note: "European family offices often earn €350k–€800k all-in" },
+      Monaco_Switzerland: { type: "multiplier", multiplier_min: 1.0, multiplier_max: 1.3, estimate: true, note: "Swiss/Monaco CIOs often at or above US medians with co-investment and fund carry" },
+      Dubai_UAE: { type: "multiplier", multiplier_min: 1.2, multiplier_max: 1.7, estimate: true, note: "Cash frequently above US rates, plus tax-free treatment and housing/education" }
+    }
+  },
+  "Family Office CFO": {
+    base_region: "US",
+    regions: {
+      US: { type: "absolute", p25: 275000, p50: 420000, p75: 580000, estimate: false },
+      UK_Europe_London: { type: "multiplier", multiplier_min: 0.75, multiplier_max: 0.95, estimate: true, note: "European CFOs trend slightly below US peers on base" },
+      Monaco_Switzerland: { type: "multiplier", multiplier_min: 0.95, multiplier_max: 1.15, estimate: true, note: "Swiss SFO CFOs often match US base for $1B+ offices" },
+      Dubai_UAE: { type: "multiplier", multiplier_min: 1.1, multiplier_max: 1.4, estimate: true, note: "Gulf family offices pay 10–40% more for cross-border tax expertise" }
+    }
+  },
+  "Family Office COO": {
+    base_region: "US",
+    regions: {
+      US: { type: "absolute", p25: 300000, p50: 400000, p75: 550000, estimate: true },
+      UK_Europe_London: { type: "multiplier", multiplier_min: 0.75, multiplier_max: 0.9, estimate: true, note: "European COO roles tend to sit below US on base" },
+      Monaco_Switzerland: { type: "multiplier", multiplier_min: 0.9, multiplier_max: 1.1, estimate: true, note: "Swiss/Monaco COO packages often on par with US" },
+      Dubai_UAE: { type: "multiplier", multiplier_min: 1.1, multiplier_max: 1.4, estimate: true, note: "Higher for complex cross-border structures" }
+    }
+  },
+  // Investment Roles
+  "Senior Portfolio Manager": {
+    base_region: "US",
+    regions: {
+      US: { type: "absolute", p25: 300000, p50: 500000, p75: 800000, estimate: true, note: "~$785k median total comp including bonus" },
+      UK_Europe_London: { type: "multiplier", multiplier_min: 0.7, multiplier_max: 0.95, estimate: true, note: "Larger London/Swiss family offices can match US packages" },
+      Dubai_UAE: { type: "multiplier", multiplier_min: 1.1, multiplier_max: 1.5, estimate: true, note: "Gulf offices pay at or above US total comp, often tax-free" }
+    }
+  },
+  "Portfolio Manager": {
+    base_region: "US",
+    regions: {
+      US: { type: "absolute", p25: 225000, p50: 300000, p75: 425000, estimate: false },
+      UK_Europe_London: { type: "multiplier", multiplier_min: 0.75, multiplier_max: 0.95, estimate: true, note: "European PMs often earn modest discount to US base" },
+      Dubai_UAE: { type: "multiplier", multiplier_min: 1.1, multiplier_max: 1.4, estimate: true, note: "PMs in Dubai SFOs often earn US-level or higher cash, tax-free" }
+    }
+  },
+  "Investment Analyst": {
+    base_region: "US",
+    regions: {
+      US: { type: "absolute", p25: 75000, p50: 95000, p75: 125000, estimate: false },
+      UK_Europe_London: { type: "multiplier", multiplier_min: 0.8, multiplier_max: 1.0, estimate: true, note: "Analyst salaries in London broadly similar on FX-adjusted basis" },
+      Dubai_UAE: { type: "multiplier", multiplier_min: 1.0, multiplier_max: 1.3, estimate: true, note: "Dubai analyst roles pay near US levels with tax advantages" }
+    }
+  },
+  // Legal/Counsel
+  "Family Office General Counsel": {
+    base_region: "US",
+    regions: {
+      US: { type: "absolute", p25: 300000, p50: 400000, p75: 550000, estimate: true },
+      UK_Europe_London: { type: "multiplier", multiplier_min: 0.75, multiplier_max: 0.9, estimate: true, note: "UK/Europe family office GC roles track near US numbers at high end" },
+      Dubai_UAE: { type: "multiplier", multiplier_min: 1.0, multiplier_max: 1.4, estimate: true, note: "Strong premiums for US/UK-qualified lawyers with cross-border expertise" }
+    }
+  },
+  "Director of Tax": {
+    base_region: "US",
+    regions: {
+      US: { type: "absolute", p25: 250000, p50: 350000, p75: 500000, estimate: true },
+      UK_Europe_London: { type: "multiplier", multiplier_min: 0.75, multiplier_max: 0.9, estimate: true, note: "Swiss/Monaco closer to US levels" },
+      Dubai_UAE: { type: "multiplier", multiplier_min: 1.0, multiplier_max: 1.3, estimate: true, note: "Blended with corporate/treaty structuring" }
+    }
+  },
+  "HR Director": {
+    base_region: "US",
+    regions: {
+      US: { type: "absolute", p25: 140000, p50: 190000, p75: 260000, estimate: true },
+      UK_Europe_London: { type: "multiplier", multiplier_min: 0.8, multiplier_max: 1.0, estimate: true, note: "London family offices near US medians at large offices" },
+      Dubai_UAE: { type: "multiplier", multiplier_min: 1.0, multiplier_max: 1.3, estimate: true, note: "Dubai SFO HR leads earn comparable or slightly higher cash" }
+    }
+  },
+  // Childcare & Education
+  "Nanny (Live-in)": {
+    base_region: "US",
+    regions: {
+      US: { type: "absolute", p25: 70000, p50: 105000, p75: 160000, estimate: false },
+      UK_Europe_London: { type: "absolute", p25: 52000, p50: 71500, p75: 104000, currency: "USD_equiv", estimate: true, note: "Morgan & Mallet: £45k–£80k+ for luxury nannies in London" },
+      Monaco_Switzerland: { type: "multiplier", multiplier_min: 1.1, multiplier_max: 1.4, estimate: true, note: "Nannies in Monaco/Geneva often 10–40% above London cash" },
+      Dubai_UAE: { type: "multiplier", multiplier_min: 1.0, multiplier_max: 1.3, estimate: true, note: "Similar or higher net pay when full package included" }
+    }
+  },
+  "Governess": {
+    base_region: "US",
+    regions: {
+      US: { type: "absolute", p25: 100000, p50: 160000, p75: 250000, estimate: true },
+      UK_Europe_London: { type: "absolute", p25: 65000, p50: 91000, p75: 130000, currency: "USD_equiv", estimate: true, note: "Luxury governess roles £50k–£100k+ depending on credentials" },
+      Monaco_Switzerland: { type: "multiplier", multiplier_min: 1.15, multiplier_max: 1.4, estimate: true },
+      Dubai_UAE: { type: "multiplier", multiplier_min: 1.0, multiplier_max: 1.4, estimate: true, note: "London-level cash plus in-kind benefits" }
+    }
+  },
+  "Newborn Care Specialist": {
+    base_region: "US",
+    regions: {
+      US: { type: "absolute", p25: 80000, p50: 130000, p75: 190000, estimate: true },
+      UK_Europe_London: { type: "absolute", p25: 65000, p50: 104000, p75: 156000, currency: "USD_equiv", estimate: true, note: "UK/EU maternity nurses £250–£400/day" },
+      Dubai_UAE: { type: "multiplier", multiplier_min: 1.0, multiplier_max: 1.4, estimate: true, note: "Gulf packages are London-level or above with housing/flights" }
+    }
+  },
+  // Culinary
+  "Private Chef": {
+    base_region: "US",
+    regions: {
+      US: { type: "absolute", p25: 120000, p50: 170000, p75: 250000, estimate: true, note: "Concentrated in NYC/LA/Miami UHNW hubs" },
+      UK_Europe_London: { type: "absolute", p25: 90000, p50: 120000, p75: 160000, currency: "USD_equiv", estimate: true, note: "UK £50k–£90k+; continental Europe €90k–€150k" },
+      Monaco_Switzerland: { type: "multiplier", multiplier_min: 1.1, multiplier_max: 1.5, estimate: true, note: "Top chefs in Monaco/Geneva frequently out-earn London peers" },
+      Dubai_UAE: { type: "absolute", p25: 100000, p50: 140000, p75: 180000, estimate: true, note: "AED 25k–30k/month net plus housing/visa" }
+    }
+  },
+  "Private Chef (Traveling)": {
+    base_region: "US",
+    regions: {
+      US: { type: "absolute", p25: 140000, p50: 200000, p75: 310000, estimate: true },
+      UK_Europe_London: { type: "multiplier", multiplier_min: 0.9, multiplier_max: 1.1, estimate: true, note: "Often match US cash with day-rates and seasonal spikes" },
+      Dubai_UAE: { type: "multiplier", multiplier_min: 1.0, multiplier_max: 1.4, estimate: true, note: "Packages broadly match or exceed static villa roles" }
+    }
+  },
+  // House/Estate Management
+  "House Manager": {
+    base_region: "US",
+    regions: {
+      US: { type: "absolute", p25: 85000, p50: 130000, p75: 170000, estimate: false },
+      UK_Europe_London: { type: "absolute", p25: 65000, p50: 90000, p75: 130000, currency: "USD_equiv", estimate: true, note: "London house managers £50k–£150k" },
+      Monaco_Switzerland: { type: "multiplier", multiplier_min: 1.1, multiplier_max: 1.4, estimate: true, note: "Monaco/Geneva house managers 10–40% above London" },
+      Dubai_UAE: { type: "multiplier", multiplier_min: 1.0, multiplier_max: 1.3, estimate: true, note: "Similar cash with more in-kind benefits" }
+    }
+  },
+  "Estate Manager": {
+    base_region: "US",
+    regions: {
+      US: { type: "absolute", p25: 120000, p50: 160000, p75: 220000, estimate: false },
+      UK_Europe_London: { type: "absolute", p25: 104000, p50: 130000, p75: 169000, currency: "USD_equiv", estimate: true, note: "UK estate managers £800–£1,000+ net/week plus accommodation" },
+      Monaco_Switzerland: { type: "multiplier", multiplier_min: 1.15, multiplier_max: 1.5, estimate: true },
+      Dubai_UAE: { type: "multiplier", multiplier_min: 1.0, multiplier_max: 1.4, estimate: true }
+    }
+  },
+  // Security
+  "Executive Protection Agent": {
+    base_region: "US",
+    regions: {
+      US: { type: "absolute", p25: 85000, p50: 130000, p75: 190000, estimate: true },
+      UK_Europe_London: { type: "absolute", p25: 71500, p50: 84500, p75: 117000, currency: "USD_equiv", estimate: true, note: "UK CPO roles ~£55k–£60k+ plus overtime; day-rate £300–£800+" },
+      Dubai_UAE: { type: "absolute", p25: 80000, p50: 100000, p75: 130000, estimate: true, note: "AED 25k–30k/month for experienced Western-trained bodyguards" }
+    }
+  },
+  // Yacht Crew (Global/Med/Caribbean)
+  "Yacht Captain (100ft+)": {
+    base_region: "Global_Med_Caribbean",
+    regions: {
+      Global_Med_Caribbean: { type: "absolute", p25: 84000, p50: 132000, p75: 168000, currency: "USD_equiv", estimate: false, note: "€7k–€14k/month depending on size and program" },
+      Dubai_UAE: { type: "multiplier", multiplier_min: 0.9, multiplier_max: 1.1, estimate: true, note: "Generally follows Med/Caribbean salary grids" }
+    }
+  },
+  "Chief Stewardess": {
+    base_region: "Global_Med_Caribbean",
+    regions: {
+      Global_Med_Caribbean: { type: "absolute", p25: 36000, p50: 60000, p75: 84000, currency: "USD_equiv", estimate: false, note: "€3k–€7k/month" },
+      Dubai_UAE: { type: "multiplier", multiplier_min: 0.9, multiplier_max: 1.1, estimate: true }
+    }
+  },
+  "Deckhand": {
+    base_region: "Global_Med_Caribbean",
+    regions: {
+      Global_Med_Caribbean: { type: "absolute", p25: 24000, p50: 33600, p75: 42000, currency: "USD_equiv", estimate: false, note: "€2k–€3.5k/month base; tips significantly increase total" },
+      Dubai_UAE: { type: "multiplier", multiplier_min: 0.9, multiplier_max: 1.1, estimate: true }
+    }
+  }
 };
 
 // ============================================
@@ -1722,12 +1924,90 @@ export function detectRegion(locationString) {
     }
   }
 
-  // Check for common variations
+  // Check for common variations - US
   if (lower.includes('nyc') || lower.includes('new york')) return { region: 'New York City', ...REGIONAL_MULTIPLIERS['New York City'] };
   if (lower.includes('sf') || lower.includes('bay area')) return { region: 'San Francisco', ...REGIONAL_MULTIPLIERS['San Francisco'] };
   if (lower.includes('la') || lower.includes('los angeles')) return { region: 'Los Angeles', ...REGIONAL_MULTIPLIERS['Los Angeles'] };
   if (lower.includes('hamptons')) return { region: 'The Hamptons', ...REGIONAL_MULTIPLIERS['The Hamptons'] };
   if (lower.includes('palm beach') || lower.includes('west palm')) return { region: 'Palm Beach', ...REGIONAL_MULTIPLIERS['Palm Beach'] };
 
+  // International variations
+  if (lower.includes('uk') || lower.includes('united kingdom') || lower.includes('england')) return { region: 'UK Europe', ...REGIONAL_MULTIPLIERS['UK Europe'] };
+  if (lower.includes('europe') && !lower.includes('uk')) return { region: 'UK Europe', ...REGIONAL_MULTIPLIERS['UK Europe'] };
+  if (lower.includes('paris') || lower.includes('france')) return { region: 'UK Europe', ...REGIONAL_MULTIPLIERS['UK Europe'] };
+  if (lower.includes('germany') || lower.includes('munich') || lower.includes('frankfurt')) return { region: 'UK Europe', ...REGIONAL_MULTIPLIERS['UK Europe'] };
+  if (lower.includes('uae') || lower.includes('emirates')) return { region: 'UAE', ...REGIONAL_MULTIPLIERS['UAE'] };
+  if (lower.includes('middle east') || lower.includes('gulf')) return { region: 'Dubai', ...REGIONAL_MULTIPLIERS['Dubai'] };
+  if (lower.includes('riyadh') || lower.includes('jeddah')) return { region: 'Saudi Arabia', ...REGIONAL_MULTIPLIERS['Saudi Arabia'] };
+  if (lower.includes('doha')) return { region: 'Qatar', ...REGIONAL_MULTIPLIERS['Qatar'] };
+  if (lower.includes('swiss') || lower.includes('zurich') || lower.includes('zug')) return { region: 'Switzerland', ...REGIONAL_MULTIPLIERS['Switzerland'] };
+  if (lower.includes('med') || lower.includes('riviera') || lower.includes('côte d\'azur') || lower.includes('cote d\'azur')) return { region: 'Mediterranean', ...REGIONAL_MULTIPLIERS['Mediterranean'] };
+  if (lower.includes('caribbean') || lower.includes('bahamas') || lower.includes('cayman')) return { region: 'Caribbean', ...REGIONAL_MULTIPLIERS['Caribbean'] };
+
   return null;
+}
+
+/**
+ * Map detected region to international data region key
+ */
+export function getInternationalRegionKey(regionData) {
+  if (!regionData || !regionData.country) return 'US';
+
+  const countryMapping = {
+    'US': 'US',
+    'UK': 'UK_Europe_London',
+    'UK_Europe': 'UK_Europe_London',
+    'Monaco_Switzerland': 'Monaco_Switzerland',
+    'Dubai_UAE': 'Dubai_UAE',
+    'Global_Med_Caribbean': 'Global_Med_Caribbean'
+  };
+
+  return countryMapping[regionData.country] || 'US';
+}
+
+/**
+ * Get international salary data for a position and region
+ * Returns adjusted salary figures based on region
+ */
+export function getInternationalSalary(positionName, regionKey) {
+  const intlData = INTERNATIONAL_SALARY_DATA[positionName];
+  if (!intlData) return null;
+
+  const regionData = intlData.regions[regionKey];
+  if (!regionData) return null;
+
+  const baseBenchmark = BENCHMARKS[positionName];
+  if (!baseBenchmark) return null;
+
+  if (regionData.type === 'absolute') {
+    return {
+      p25: regionData.p25,
+      p50: regionData.p50,
+      p75: regionData.p75,
+      estimate: regionData.estimate,
+      note: regionData.note,
+      currency: regionData.currency || 'USD'
+    };
+  } else if (regionData.type === 'multiplier') {
+    // Use midpoint of multiplier range
+    const avgMultiplier = (regionData.multiplier_min + regionData.multiplier_max) / 2;
+    return {
+      p25: Math.round(baseBenchmark.p25 * avgMultiplier),
+      p50: Math.round(baseBenchmark.p50 * avgMultiplier),
+      p75: Math.round(baseBenchmark.p75 * avgMultiplier),
+      multiplierRange: { min: regionData.multiplier_min, max: regionData.multiplier_max },
+      estimate: regionData.estimate,
+      note: regionData.note,
+      currency: 'USD'
+    };
+  }
+
+  return null;
+}
+
+/**
+ * Check if a position has international salary data
+ */
+export function hasInternationalData(positionName) {
+  return !!INTERNATIONAL_SALARY_DATA[positionName];
 }
