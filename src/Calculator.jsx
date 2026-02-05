@@ -1,3 +1,18 @@
+import React, { useState, useMemo, useCallback, useRef, useEffect } from 'react';
+import { TrendingUp, Clock, DollarSign, Target, AlertCircle, CheckCircle, ArrowRight, Info, Download, RefreshCw, Users, Car, Heart, Home, ChevronDown, HelpCircle, Zap, MapPin, Phone, X, Layers, Lightbulb, ArrowLeftRight } from 'lucide-react';
+import { jsPDF } from 'jspdf';
+import html2canvas from 'html2canvas';
+import {
+  BENCHMARKS,
+  REGIONAL_MULTIPLIERS,
+  CATEGORIES,
+  CATEGORY_GROUPS,
+  SALARY_DATA_META,
+  getPositionsByCategory,
+  getAllPositionNames,
+  detectRegion,
+  getBenchmark
+} from './salaryData';
 import React, { useState, useMemo, useRef, useEffect } from 'react';
 import { TrendingUp, Clock, DollarSign, Target, AlertCircle, CheckCircle, ArrowRight, Info, Download, RefreshCw, Users, Car, Heart, Home, ChevronDown, HelpCircle, Zap, MapPin, Phone, X, Scale } from 'lucide-react';
 
@@ -21,107 +36,28 @@ const loadJsPDF = () => {
 };
 
 // ============================================
-// COMPREHENSIVE BENCHMARKS WITH BENEFITS
+// CUSTOM HOOKS
 // ============================================
-const BENCHMARKS = {
-  "Chief of Staff": { 
-    p25: 220000, p50: 275000, p75: 350000,
-    benefits: { housing: "Often included", vehicle: "Company car common", health: "Premium coverage", bonus: "15-25% target" }
-  },
-  "Estate Manager": { 
-    p25: 160000, p50: 200000, p75: 260000,
-    benefits: { housing: "On-site housing typical", vehicle: "Estate vehicle provided", health: "Full coverage", bonus: "10-15% target" }
-  },
-  "Executive Housekeeper": { 
-    p25: 110000, p50: 135000, p75: 165000,
-    benefits: { housing: "Sometimes included", vehicle: "Rarely", health: "Standard coverage", bonus: "5-10% target" }
-  },
-  "Personal Assistant": { 
-    p25: 90000, p50: 120000, p75: 160000,
-    benefits: { housing: "Rarely", vehicle: "Rarely", health: "Standard coverage", bonus: "10-15% target" }
-  },
-  "Private Chef": { 
-    p25: 140000, p50: 185000, p75: 240000,
-    benefits: { housing: "Sometimes for live-in", vehicle: "Rarely", health: "Full coverage", bonus: "Holiday bonus typical" }
-  },
-  "Security Director": { 
-    p25: 200000, p50: 250000, p75: 320000,
-    benefits: { housing: "On-site often required", vehicle: "Security vehicle provided", health: "Premium coverage", bonus: "15-20% target" }
-  },
-  "Household Manager": { 
-    p25: 130000, p50: 165000, p75: 210000,
-    benefits: { housing: "Often included", vehicle: "Sometimes", health: "Full coverage", bonus: "10-15% target" }
-  },
-  "Family Office Analyst": { 
-    p25: 95000, p50: 130000, p75: 175000,
-    benefits: { housing: "Rarely", vehicle: "Rarely", health: "Premium coverage", bonus: "20-40% target" }
-  },
-  "Nanny/Governess": { 
-    p25: 85000, p50: 115000, p75: 165000,
-    benefits: { housing: "Live-in common", vehicle: "Family vehicle access", health: "Full coverage", bonus: "Holiday bonus + education stipend" }
-  },
-  "Butler": { 
-    p25: 120000, p50: 150000, p75: 200000,
-    benefits: { housing: "Live-in typical", vehicle: "Sometimes", health: "Full coverage", bonus: "10-15% target" }
-  },
-  "Driver/Security Driver": { 
-    p25: 75000, p50: 95000, p75: 130000,
-    benefits: { housing: "Rarely unless live-in", vehicle: "N/A - work vehicle", health: "Standard coverage", bonus: "5-10% target" }
-  },
-  "Property Manager": { 
-    p25: 100000, p50: 140000, p75: 185000,
-    benefits: { housing: "On-site common", vehicle: "Property vehicle", health: "Full coverage", bonus: "10-15% target" }
-  },
-  "Guest Services Manager": { 
-    p25: 95000, p50: 125000, p75: 160000,
-    benefits: { housing: "Often included", vehicle: "Sometimes", health: "Full coverage", bonus: "10-15% target" }
-  },
-  "Chief Stewardess": { 
-    p25: 85000, p50: 110000, p75: 145000,
-    benefits: { housing: "On-vessel", vehicle: "N/A", health: "Maritime coverage", bonus: "Charter tips + 1-2 months" }
-  },
-  "Yacht Captain": { 
-    p25: 150000, p50: 200000, p75: 280000,
-    benefits: { housing: "On-vessel", vehicle: "N/A", health: "Maritime coverage", bonus: "Charter tips + 2-3 months" }
-  },
-  "Yacht Engineer": { 
-    p25: 110000, p50: 145000, p75: 190000,
-    benefits: { housing: "On-vessel", vehicle: "N/A", health: "Maritime coverage", bonus: "Charter tips + 1-2 months" }
-  }
-};
 
-// ============================================
-// REGIONAL COST OF LIVING MULTIPLIERS
-// ============================================
-const REGIONAL_ADJUSTMENTS = {
-  "New York City": { multiplier: 1.35, label: "NYC Premium", tier: "ultra-high" },
-  "Manhattan": { multiplier: 1.40, label: "Manhattan Premium", tier: "ultra-high" },
-  "San Francisco": { multiplier: 1.30, label: "SF Bay Premium", tier: "ultra-high" },
-  "Los Angeles": { multiplier: 1.20, label: "LA Premium", tier: "high" },
-  "Aspen": { multiplier: 1.25, label: "Resort Premium", tier: "high" },
-  "Palm Beach": { multiplier: 1.20, label: "Palm Beach Premium", tier: "high" },
-  "The Hamptons": { multiplier: 1.30, label: "Hamptons Premium", tier: "high" },
-  "Monaco": { multiplier: 1.45, label: "Monaco Premium", tier: "ultra-high" },
-  "London": { multiplier: 1.30, label: "London Premium", tier: "ultra-high" },
-  "Miami": { multiplier: 1.10, label: "Miami Premium", tier: "moderate" },
-  "Greenwich": { multiplier: 1.25, label: "Greenwich Premium", tier: "high" },
-  "Nantucket": { multiplier: 1.20, label: "Island Premium", tier: "high" },
-  "Martha's Vineyard": { multiplier: 1.20, label: "Island Premium", tier: "high" },
-  "Jackson Hole": { multiplier: 1.20, label: "Resort Premium", tier: "high" },
-  "Vail": { multiplier: 1.15, label: "Resort Premium", tier: "high" },
-  "Dallas": { multiplier: 1.00, label: "Market Rate", tier: "standard" },
-  "Houston": { multiplier: 0.95, label: "Below Coastal Average", tier: "standard" },
-  "Chicago": { multiplier: 1.05, label: "Slight Premium", tier: "moderate" },
-  "Seattle": { multiplier: 1.15, label: "Pacific NW Premium", tier: "moderate" },
-  "Remote/Multiple": { multiplier: 1.10, label: "Flexibility Premium", tier: "variable" }
-};
+// Debounce hook to limit re-renders during rapid input
+function useDebounce(value, delay = 150) {
+  const [debouncedValue, setDebouncedValue] = useState(value);
 
-const LOCATION_SUGGESTIONS = [
-  "New York City", "Manhattan", "San Francisco", "Los Angeles", "Aspen",
-  "Palm Beach", "The Hamptons", "Monaco", "London", "Miami", "Greenwich",
-  "Nantucket", "Martha's Vineyard", "Jackson Hole", "Vail", "Dallas",
-  "Houston", "Chicago", "Seattle", "Remote/Multiple Locations"
-];
+  useEffect(() => {
+    const timer = setTimeout(() => setDebouncedValue(value), delay);
+    return () => clearTimeout(timer);
+  }, [value, delay]);
+
+  return debouncedValue;
+}
+
+// Use the new regional multipliers as REGIONAL_ADJUSTMENTS for backwards compatibility
+const REGIONAL_ADJUSTMENTS = REGIONAL_MULTIPLIERS;
+
+// Generate location suggestions from the regional multipliers
+const LOCATION_SUGGESTIONS = Object.keys(REGIONAL_MULTIPLIERS).filter(
+  loc => !['National_US', 'Midwest_US', 'South_US'].includes(loc)
+).map(loc => loc.replace(/_/g, ' '));
 
 // ============================================
 // SEASONALITY FACTORS
@@ -161,7 +97,6 @@ const SearchComplexityCalculator = () => {
   const [step, setStep] = useState(1);
   const [formData, setFormData] = useState({
     positionType: '',
-    customPositionTitle: '',
     location: '',
     timeline: '',
     budgetRange: '',
@@ -175,7 +110,10 @@ const SearchComplexityCalculator = () => {
     phone: '',
     languageRequirements: [],
     certifications: [],
-    travelRequirement: 'minimal'
+    travelRequirement: 'minimal',
+    // Corporate family office fields
+    aumRange: '',
+    teamSize: ''
   });
   
   const [loading, setLoading] = useState(false);
@@ -183,10 +121,12 @@ const SearchComplexityCalculator = () => {
   const [results, setResults] = useState(null);
   const [error, setError] = useState(null);
   const [warnings, setWarnings] = useState([]);
-  const [showCustomTitle, setShowCustomTitle] = useState(false);
   const [showLocationSuggestions, setShowLocationSuggestions] = useState(false);
+  const [highlightedLocationIndex, setHighlightedLocationIndex] = useState(-1);
   const [compareMode, setCompareMode] = useState(false);
   const [comparisonResults, setComparisonResults] = useState(null);
+  const [showLanguages, setShowLanguages] = useState(false);
+  const [exportingPDF, setExportingPDF] = useState(false);
 
   const timelineOptions = [
     { value: 'immediate', label: 'Immediate (1-2 months)', points: 22, description: 'Rush search - premium sourcing required' },
@@ -195,13 +135,24 @@ const SearchComplexityCalculator = () => {
     { value: 'building-pipeline', label: 'Building Pipeline (6+ months)', points: 3, description: 'Strategic talent mapping' }
   ];
 
-  const budgetRanges = [
+  // Budget ranges - different for household vs corporate roles
+  const householdBudgetRanges = [
     { value: 'under-80k', label: 'Under $80k', midpoint: 70000 },
     { value: '80k-120k', label: '$80k - $120k', midpoint: 100000 },
     { value: '120k-180k', label: '$120k - $180k', midpoint: 150000 },
     { value: '180k-250k', label: '$180k - $250k', midpoint: 215000 },
     { value: '250k-350k', label: '$250k - $350k', midpoint: 300000 },
     { value: 'over-350k', label: 'Over $350k', midpoint: 400000 },
+    { value: 'not-sure', label: 'Not Sure / Need Guidance', midpoint: null }
+  ];
+
+  const corporateBudgetRanges = [
+    { value: 'under-200k', label: 'Under $200k', midpoint: 175000 },
+    { value: '200k-350k', label: '$200k - $350k', midpoint: 275000 },
+    { value: '350k-500k', label: '$350k - $500k', midpoint: 425000 },
+    { value: '500k-750k', label: '$500k - $750k', midpoint: 625000 },
+    { value: '750k-1m', label: '$750k - $1M', midpoint: 875000 },
+    { value: 'over-1m', label: 'Over $1M', midpoint: 1250000 },
     { value: 'not-sure', label: 'Not Sure / Need Guidance', midpoint: null }
   ];
 
@@ -212,8 +163,16 @@ const SearchComplexityCalculator = () => {
     { value: 'ultra-discrete', label: 'Ultra-Discrete', points: 15, description: 'Maximum confidentiality, blind search' }
   ];
 
-  const languageOptions = ['Mandarin', 'Spanish', 'French', 'Arabic', 'Russian', 'Italian', 'German', 'Japanese', 'Portuguese', 'Korean', 'Hindi'];
-  const certificationOptions = ['STCW (Maritime)', 'CPR/First Aid', 'Firearms License', 'Commercial Driver', 'Culinary Degree', 'Security Clearance', 'Child Development', 'Sommelier', 'ServSafe'];
+  // Language options - slightly different focus for corporate vs household
+  const householdLanguageOptions = ['English (Native/Fluent)', 'Spanish', 'French', 'Mandarin', 'Tagalog', 'Portuguese', 'Russian', 'Italian', 'German', 'Polish', 'Vietnamese', 'Korean', 'Japanese', 'Arabic', 'Hindi', 'Greek', 'Thai', 'Swedish', 'Dutch', 'Hebrew'];
+  const corporateLanguageOptions = ['English (Native/Fluent)', 'Mandarin', 'Spanish', 'French', 'German', 'Japanese', 'Arabic', 'Portuguese', 'Korean', 'Russian', 'Italian', 'Hindi', 'Dutch', 'Swedish', 'Hebrew', 'Cantonese', 'Swiss German', 'Luxembourgish', 'Singaporean English', 'Thai'];
+
+  // Certification options - very different between corporate and household roles
+  const householdCertificationOptions = ['STCW (Maritime)', 'CPR/First Aid', 'Firearms License', 'LEOSA', 'Commercial Driver (CDL)', 'Culinary Degree', 'Security Clearance', 'Child Development (CDA)', 'Sommelier (CMS)', 'WSET Level 3/4', 'Certified Wine Educator', 'Cicerone (Beer)', 'ServSafe', 'ENG1 Medical', 'PEC (Yacht)', 'RYA Yachtmaster', 'Butler Training (Starkey/IICS)', 'Nursing License (RN/LPN)', 'Montessori Certification', 'Private Pilot License', 'Close Protection (SIA)', 'AED/BLS Certified', 'Estate Management Certification'];
+  const corporateCertificationOptions = ['CFA (Chartered Financial Analyst)', 'Series 7 (General Securities)', 'Series 65/66 (Investment Adviser)', 'CPA (Certified Public Accountant)', 'CFP (Certified Financial Planner)', 'CAIA (Alternative Investments)', 'CTFA (Trust & Fiduciary)', 'CIMA (Investment Management)', 'MBA', 'JD (Law Degree)', 'PMP (Project Management)', 'CISSP (Cybersecurity)', 'FRM (Financial Risk Manager)', 'CMA (Management Accounting)', 'EA (Enrolled Agent)', 'CEBS (Employee Benefits)', 'ChFC (Chartered Financial Consultant)', 'CLU (Chartered Life Underwriter)', 'AAMS (Asset Management)', 'CPWA (Private Wealth Advisor)'];
+
+  // Short language list for corporate roles (optional, collapsed)
+  const corporateLanguageShortList = ['Mandarin', 'Spanish', 'German', 'Japanese', 'Arabic', 'French'];
   
   const travelOptions = [
     { value: 'minimal', label: 'Minimal (Local only)', points: 0 },
@@ -222,7 +181,38 @@ const SearchComplexityCalculator = () => {
     { value: 'heavy-rotation', label: 'Heavy/Rotation (Following principal)', points: 15 }
   ];
 
-  const commonRoles = Object.keys(BENCHMARKS);
+  // Get positions grouped by category for the dropdown
+  const positionsByCategory = useMemo(() => getPositionsByCategory(), []);
+  const commonRoles = useMemo(() => getAllPositionNames(), []);
+
+  // Check if selected position is a corporate family office role
+  const isCorporateRole = useMemo(() => {
+    if (!formData.positionType) return false;
+    const benchmark = getBenchmark(formData.positionType);
+    // Check if category starts with "Family Office -" (C-Suite, Investment, Operations, Support)
+    return benchmark?.category?.startsWith('Family Office -');
+  }, [formData.positionType]);
+
+  // Ref for the results container (used for PDF export)
+  const resultsRef = useRef(null);
+
+  // Clear selections when role category changes (budget ranges, certs, languages differ)
+  const prevIsCorporateRole = useRef(isCorporateRole);
+  useEffect(() => {
+    if (prevIsCorporateRole.current !== isCorporateRole && formData.positionType) {
+      // Role category changed - clear selections that may not exist in new options
+      setFormData(prev => ({
+        ...prev,
+        languageRequirements: [],
+        certifications: [],
+        budgetRange: '' // Budget ranges are different for corporate vs household
+      }));
+    }
+    prevIsCorporateRole.current = isCorporateRole;
+  }, [isCorporateRole, formData.positionType]);
+
+  // Get the appropriate budget ranges based on role type
+  const budgetRanges = isCorporateRole ? corporateBudgetRanges : householdBudgetRanges;
 
   const handleInputChange = (e) => {
     const { name, value, type, checked } = e.target;
@@ -239,10 +229,41 @@ const SearchComplexityCalculator = () => {
     }
   };
 
+  // Debounce location input to reduce autocomplete re-renders
+  const debouncedLocation = useDebounce(formData.location, 150);
+
   const filteredLocationSuggestions = useMemo(() => {
-    if (!formData.location) return [];
-    return LOCATION_SUGGESTIONS.filter(loc => loc.toLowerCase().includes(formData.location.toLowerCase())).slice(0, 5);
-  }, [formData.location]);
+    if (!debouncedLocation) return [];
+    return LOCATION_SUGGESTIONS.filter(loc => loc.toLowerCase().includes(debouncedLocation.toLowerCase())).slice(0, 5);
+  }, [debouncedLocation]);
+
+  // Reset highlighted index when suggestions change
+  useEffect(() => {
+    setHighlightedLocationIndex(-1);
+  }, [filteredLocationSuggestions]);
+
+  // Handle keyboard navigation for location dropdown
+  const handleLocationKeyDown = (e) => {
+    if (!showLocationSuggestions || filteredLocationSuggestions.length === 0) return;
+
+    if (e.key === 'ArrowDown') {
+      e.preventDefault();
+      setHighlightedLocationIndex(prev =>
+        prev < filteredLocationSuggestions.length - 1 ? prev + 1 : prev
+      );
+    } else if (e.key === 'ArrowUp') {
+      e.preventDefault();
+      setHighlightedLocationIndex(prev => prev > 0 ? prev - 1 : prev);
+    } else if (e.key === 'Enter' && highlightedLocationIndex >= 0) {
+      e.preventDefault();
+      setFormData({ ...formData, location: filteredLocationSuggestions[highlightedLocationIndex] });
+      setShowLocationSuggestions(false);
+      setHighlightedLocationIndex(-1);
+    } else if (e.key === 'Escape') {
+      setShowLocationSuggestions(false);
+      setHighlightedLocationIndex(-1);
+    }
+  };
 
   // ============================================
   // VALIDATION WITH RED FLAGS
@@ -308,10 +329,6 @@ const SearchComplexityCalculator = () => {
       setError('Please complete all required fields');
       return false;
     }
-    if (step === 1 && formData.positionType === 'Other' && !formData.customPositionTitle) {
-      setError('Please enter the position title');
-      return false;
-    }
     if (step === 2 && (!formData.timeline || !formData.budgetRange)) {
       setError('Please select timeline and budget range');
       return false;
@@ -366,21 +383,34 @@ const SearchComplexityCalculator = () => {
     const benchmark = BENCHMARKS[formData.positionType];
     let budgetPoints = 14;
 
+    let budgetRationale = "Unknown";
     if (benchmark && budgetOption?.midpoint) {
       const multiplier = regionalData?.multiplier || 1;
       const adjP25 = benchmark.p25 * multiplier;
       const adjP50 = benchmark.p50 * multiplier;
       const adjP75 = benchmark.p75 * multiplier;
 
-      if (budgetOption.midpoint >= adjP75) budgetPoints = 4;
-      else if (budgetOption.midpoint >= adjP50) budgetPoints = 10;
-      else if (budgetOption.midpoint >= adjP25) budgetPoints = 18;
-      else { budgetPoints = 25; redFlags.push("Budget below market"); }
-      
-      assumptions.push(`Regional adjustment: ${regionalData?.label || 'Standard'}`);
+      if (budgetOption.midpoint >= adjP75) {
+        budgetPoints = 4;
+        budgetRationale = "Above 75th percentile - highly competitive";
+      } else if (budgetOption.midpoint >= adjP50) {
+        budgetPoints = 10;
+        budgetRationale = "At or above median - competitive";
+      } else if (budgetOption.midpoint >= adjP25) {
+        budgetPoints = 18;
+        budgetRationale = "Below median (25th-50th percentile)";
+      } else {
+        budgetPoints = 25;
+        budgetRationale = "Below 25th percentile - limits candidate pool";
+        redFlags.push("Budget below market");
+      }
+
+      assumptions.push(`Regional adjustment: ${regionalData?.label || 'Standard'} (${multiplier}x)`);
+    } else if (formData.budgetRange === 'not-sure') {
+      budgetRationale = "Budget TBD - needs guidance";
     }
     points += budgetPoints;
-    drivers.push({ factor: "Budget", points: budgetPoints, rationale: budgetPoints <= 10 ? "Competitive" : budgetPoints <= 18 ? "At market" : "Below market" });
+    drivers.push({ factor: "Budget", points: budgetPoints, rationale: budgetRationale });
 
     // Languages (compound)
     const langCount = formData.languageRequirements.length;
@@ -434,13 +464,60 @@ const SearchComplexityCalculator = () => {
   };
 
   // ============================================
-  // AI ANALYSIS
+  // AI ANALYSIS WITH RETRY LOGIC
   // ============================================
+
+  // Retry helper with exponential backoff
+  const fetchWithRetry = async (url, options, maxRetries = 2) => {
+    let lastError;
+
+    for (let attempt = 0; attempt <= maxRetries; attempt++) {
+      try {
+        const response = await fetch(url, options);
+
+        // Don't retry client errors (4xx), only server errors (5xx)
+        if (response.ok || (response.status >= 400 && response.status < 500)) {
+          return response;
+        }
+
+        lastError = new Error(`Server error: ${response.status}`);
+      } catch (err) {
+        lastError = err;
+      }
+
+      // Wait before retrying (exponential backoff: 1s, 2s)
+      if (attempt < maxRetries) {
+        await new Promise(resolve => setTimeout(resolve, 1000 * Math.pow(2, attempt)));
+      }
+    }
+
+    throw lastError;
+  };
+
   const calculateComplexity = async () => {
     setLoading(true);
     setLoadingStep('Calculating complexity factors...');
     setError(null);
 
+    const det = calculateDeterministicScore();
+    const displayTitle = formData.positionType;
+    const benchmark = det.benchmark;
+
+    // Get the timeline and budget labels for clearer AI context
+    const timelineOption = timelineOptions.find(t => t.value === formData.timeline);
+    const budgetOption = budgetRanges.find(b => b.value === formData.budgetRange);
+
+    // Calculate regionally-adjusted salary figures
+    const regionalMultiplier = det.regionalData?.multiplier || 1;
+    const adjustedBenchmark = benchmark ? {
+      p25: Math.round(benchmark.p25 * regionalMultiplier),
+      p50: Math.round(benchmark.p50 * regionalMultiplier),
+      p75: Math.round(benchmark.p75 * regionalMultiplier)
+    } : null;
+
+    try {
+      const roleContext = isCorporateRole ? 'family office executive/investment' : 'UHNW household staff';
+      const prompt = `You are an expert ${roleContext} recruiter. Analyze this search and return detailed, actionable JSON.
     const ANALYSIS_TIMEOUT = 45000; // 45 seconds timeout
 
     try {
@@ -453,31 +530,60 @@ const SearchComplexityCalculator = () => {
       const prompt = `You are advising a UHNW principal. Be warm, direct. Use "you/your". Never use "staffing".
 
 Position: ${displayTitle}
-Location: ${formData.location}${det.regionalData ? ` (${det.regionalData.label})` : ''}
-Timeline: ${formData.timeline}
-Budget: ${formData.budgetRange}
+Location: ${formData.location}${det.regionalData ? ` (${det.regionalData.label}, ${regionalMultiplier}x cost multiplier)` : ''}
+Client Timeline: ${timelineOption?.label || formData.timeline}
+Client Budget: ${budgetOption?.label || formData.budgetRange}
 Requirements: ${formData.keyRequirements}
-Languages: ${formData.languageRequirements.join(', ') || 'None'}
+Languages: ${formData.languageRequirements.join(', ') || 'None specified'}
+Certifications: ${formData.certifications.join(', ') || 'None specified'}
 Travel: ${formData.travelRequirement}
 Discretion: ${formData.discretionLevel}
+${isCorporateRole && formData.aumRange ? `AUM Range: ${formData.aumRange}` : ''}
+${isCorporateRole && formData.teamSize ? `Team Size: ${formData.teamSize}` : ''}
+${!isCorporateRole && formData.propertiesCount ? `Properties: ${formData.propertiesCount}` : ''}
+${!isCorporateRole && formData.householdSize ? `Household Size: ${formData.householdSize}` : ''}
 
-SCORE: ${det.score}/10 (${det.label})
-BENCHMARK: ${benchmark ? `P25: $${benchmark.p25.toLocaleString()}, P50: $${benchmark.p50.toLocaleString()}, P75: $${benchmark.p75.toLocaleString()}` : 'None'}
+Computed Score: ${det.score}/10 (${det.label})
 
-Return JSON only:
+CRITICAL - Use these REGIONALLY-ADJUSTED salary figures for ${formData.location || 'this market'}:
+${adjustedBenchmark ? `- 25th Percentile: $${adjustedBenchmark.p25.toLocaleString()}
+- Median (50th): $${adjustedBenchmark.p50.toLocaleString()}
+- 75th Percentile: $${adjustedBenchmark.p75.toLocaleString()}` : 'No benchmark available - provide general guidance'}
+${benchmark?.scarcity ? `Role Scarcity: ${benchmark.scarcity}/10` : ''}
+
+Your salary recommendation MUST be based on these ADJUSTED figures above, not national averages.
+Your timeline MUST align with the "${timelineOption?.label || formData.timeline}" timeframe the client selected.
+
+Be SPECIFIC and ACTIONABLE. Avoid generic advice. Reference the actual role, location, and requirements in your responses.
+
+Return this exact JSON structure:
 {
-  "salaryRangeGuidance": "string",
-  "estimatedTimeline": "string",
-  "marketCompetitiveness": "string",
-  "keySuccessFactors": ["string", "string", "string"],
-  "recommendedAdjustments": ["string"] or [],
+  "salaryRangeGuidance": "Specific salary range with reasoning based on ADJUSTED regional figures. Example: '$X-$Y base, targeting the Nth percentile because [specific reason]'",
+  "estimatedTimeline": "Specific timeline with phases. Example: '8-10 weeks: 2 weeks sourcing, 4 weeks interviewing, 2 weeks offer/close'",
+  "marketCompetitiveness": "Detailed market assessment mentioning specific dynamics in ${formData.location || 'this market'} for this role",
+  "keySuccessFactors": ["Be specific - reference actual requirements", "Mention what will differentiate this opportunity", "Include at least one compensation-related factor"],
+  "recommendedAdjustments": ["Specific, actionable changes if budget/timeline/requirements need adjustment"] or [],
   "candidateAvailability": "Abundant|Moderate|Limited|Rare",
-  "availabilityReason": "string",
-  "negotiationLeverage": { "candidateAdvantages": ["string"], "employerAdvantages": ["string"] },
-  "redFlagAnalysis": "string",
-  "bottomLine": "2-3 sentences"
+  "availabilityReason": "Specific explanation referencing the role requirements and market",
+  "sourcingInsight": "Where these candidates typically come from and how to reach them",
+  "negotiationLeverage": {
+    "candidateAdvantages": ["Specific leverage points candidates have"],
+    "employerAdvantages": ["Specific advantages the employer can use"]
+  },
+  "redFlagAnalysis": "Any concerns about the search parameters, or 'None - well-positioned search'",
+  "bottomLine": "3-4 sentence executive summary that's specific to THIS search, not generic advice"
 }`;
 
+      const response = await fetchWithRetry("/api/analyze", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ prompt })
+      }, 2);
+
+      if (!response.ok) {
+        const errorData = await response.json().catch(() => ({}));
+        throw new Error(errorData.error || `Analysis failed (${response.status})`);
+      }
       // Create abort controller for timeout
       const controller = new AbortController();
       const timeoutId = setTimeout(() => controller.abort(), ANALYSIS_TIMEOUT);
@@ -498,10 +604,40 @@ Return JSON only:
       setLoadingStep('Finalizing your analysis...');
 
       const data = await response.json();
-      let text = data.content[0]?.text || '';
-      text = text.trim().replace(/^```(?:json)?\n?/g, '').replace(/\n?```$/g, '');
+      let text = data.content?.[0]?.text || '';
+
+      // Clean up response - remove any markdown formatting
+      text = text.trim()
+        .replace(/^```(?:json)?\s*/gi, '')
+        .replace(/\s*```$/gi, '')
+        .trim();
+
+      // Parse and validate JSON
       const ai = JSON.parse(text);
 
+      // Validate required fields exist
+      if (!ai.salaryRangeGuidance || !ai.bottomLine) {
+        throw new Error('Incomplete response from AI');
+      }
+
+      setResults({
+        ...det,
+        ...ai,
+        displayTitle,
+        formData: { ...formData },
+        aiAnalysisSuccess: true,
+        adjustedBenchmark,
+        regionalMultiplier
+      });
+
+    } catch (err) {
+      console.error('AI analysis error:', err.message);
+
+      // Fallback to deterministic results with clear indication
+      // Use regionally-adjusted figures for fallback too
+      const fallbackSalary = adjustedBenchmark
+        ? `$${Math.round(adjustedBenchmark.p25/1000)}k - $${Math.round(adjustedBenchmark.p75/1000)}k for ${formData.location || 'this market'}`
+        : "Contact us for guidance";
       setResults({ ...det, ...ai, displayTitle, formData: { ...formData } });
     } catch (err) {
       const det = calculateDeterministicScore();
@@ -509,13 +645,40 @@ Return JSON only:
 
       setResults({
         ...det,
-        displayTitle: formData.positionType === 'Other' ? formData.customPositionTitle : formData.positionType,
-        salaryRangeGuidance: det.benchmark ? `$${Math.round(det.benchmark.p25/1000)}k - $${Math.round(det.benchmark.p75/1000)}k` : "N/A",
-        estimatedTimeline: formData.timeline === 'immediate' ? "6-10 weeks" : "8-14 weeks",
-        marketCompetitiveness: "Analysis based on scoring factors",
-        keySuccessFactors: ["Competitive compensation", "Clear expectations", "Efficient process"],
-        recommendedAdjustments: [],
+        displayTitle,
+        salaryRangeGuidance: fallbackSalary,
+        estimatedTimeline: timelineOption?.label || (formData.timeline === 'immediate' ? "6-10 weeks"
+          : formData.timeline === 'standard' ? "8-12 weeks"
+          : "10-16 weeks"),
+        marketCompetitiveness: det.score <= 4
+          ? "Favorable conditions for this search"
+          : det.score <= 7
+          ? "Competitive market - strategic approach recommended"
+          : "Challenging search - expect extended timeline",
+        keySuccessFactors: [
+          "Competitive total compensation package",
+          "Clear role definition and expectations",
+          "Efficient interview and decision process"
+        ],
+        recommendedAdjustments: det.redFlags?.length > 0
+          ? det.redFlags.map(flag => `Address: ${flag}`)
+          : [],
         candidateAvailability: det.score <= 4 ? "Moderate" : det.score <= 7 ? "Limited" : "Rare",
+        availabilityReason: `Based on ${det.drivers?.length || 0} complexity factors analyzed`,
+        sourcingInsight: "Schedule a consultation for detailed sourcing strategies tailored to this specific search.",
+        negotiationLeverage: {
+          candidateAdvantages: det.score >= 6
+            ? ["Limited candidate pool", "High market demand"]
+            : ["Standard market conditions"],
+          employerAdvantages: formData.budgetRange?.includes('350') || formData.budgetRange?.includes('250')
+            ? ["Competitive compensation", "Attractive opportunity"]
+            : ["Growth opportunity"]
+        },
+        bottomLine: "This preliminary analysis is based on our scoring algorithm and market benchmarks. For comprehensive insights including sourcing strategies, compensation structuring, and interview frameworks, schedule a consultation.",
+        formData: { ...formData },
+        aiAnalysisSuccess: false,
+        adjustedBenchmark,
+        regionalMultiplier
         availabilityReason: "Based on complexity factors",
         bottomLine: isTimeout
           ? "Analysis timed out, but we've calculated your search complexity. For detailed AI insights, please try again or schedule a consultation."
@@ -524,6 +687,7 @@ Return JSON only:
         analysisNote: isTimeout ? 'timeout' : 'fallback'
       });
     }
+
     setLoading(false);
     setLoadingStep('');
   };
@@ -531,16 +695,205 @@ Return JSON only:
   const runComparison = () => {
     const current = calculateDeterministicScore();
     const currentIdx = budgetRanges.findIndex(b => b.value === formData.budgetRange);
+
+    // Get next budget (higher) if available
     const nextBudget = currentIdx < budgetRanges.length - 2 ? budgetRanges[currentIdx + 1] : null;
+    // Get previous budget (lower) if available
+    const prevBudget = currentIdx > 0 ? budgetRanges[currentIdx - 1] : null;
+
     setComparisonResults({
       current,
       withIncrease: nextBudget ? calculateDeterministicScore(nextBudget.value) : null,
-      nextLabel: nextBudget?.label
+      nextLabel: nextBudget?.label,
+      withDecrease: prevBudget && prevBudget.midpoint ? calculateDeterministicScore(prevBudget.value) : null,
+      prevLabel: prevBudget?.label
     });
     setCompareMode(true);
   };
 
   const exportToPDF = async () => {
+    if (!resultsRef.current) {
+      alert('Unable to export PDF. Please try again.');
+      return;
+    }
+
+    try {
+      // Show loading state via React state
+      setExportingPDF(true);
+
+      // Get section positions BEFORE capturing
+      const containerRect = resultsRef.current.getBoundingClientRect();
+      const sections = resultsRef.current.querySelectorAll('[data-pdf-section]');
+      const sectionPositions = {};
+      sections.forEach(section => {
+        const rect = section.getBoundingClientRect();
+        sectionPositions[section.getAttribute('data-pdf-section')] = {
+          top: rect.top - containerRect.top,
+          bottom: rect.bottom - containerRect.top
+        };
+      });
+
+      // Small delay to ensure DOM updates
+      await new Promise(resolve => setTimeout(resolve, 100));
+
+      // Capture the results container as an image
+      const canvas = await html2canvas(resultsRef.current, {
+        scale: 2,
+        useCORS: true,
+        logging: false,
+        backgroundColor: '#ffffff'
+      });
+
+      // Create PDF - A4 dimensions in mm
+      const doc = new jsPDF('p', 'mm', 'a4');
+      const pageWidth = doc.internal.pageSize.getWidth();
+      const pageHeight = doc.internal.pageSize.getHeight();
+      const margin = 10;
+      const headerHeight = 25;
+      const footerHeight = 15;
+
+      // Calculate dimensions
+      const imgWidth = canvas.width;
+      const imgHeight = canvas.height;
+      const scale = 2;
+      const contentWidth = pageWidth - (margin * 2);
+
+      // Convert source pixels to mm
+      const pxToMm = (px) => (px / scale) * (contentWidth / (imgWidth / scale));
+
+      // Page content heights in mm
+      const firstPageContentMm = pageHeight - headerHeight - footerHeight - 5;
+      const otherPageContentMm = pageHeight - footerHeight - 10;
+
+      // Find key section positions for forced page breaks
+      const metricsTop = sectionPositions['metrics']?.top || 0;
+      const metricsTopPx = metricsTop * scale;
+      const successFactorsTop = sectionPositions['success-factors']?.top || 0;
+      const successFactorsTopPx = successFactorsTop * scale;
+
+      // Build page slices with forced breaks:
+      // Page 1: Score, Complexity Breakdown (everything before Metrics)
+      // Page 2: Metrics, Sourcing, Benchmarks (everything before Success Factors)
+      // Page 3+: Success Factors, Recommendations, Negotiation
+
+      const mmToPx = (mm) => mm * scale * (imgWidth / scale) / contentWidth;
+      const otherPageMaxPx = mmToPx(otherPageContentMm);
+
+      const slices = [];
+
+      // Page 1: Everything before Metrics
+      if (metricsTopPx > 0) {
+        slices.push({ start: 0, end: metricsTopPx });
+      }
+
+      // Page 2: Metrics until Success Factors
+      if (metricsTopPx < successFactorsTopPx) {
+        slices.push({ start: metricsTopPx, end: successFactorsTopPx });
+      }
+
+      // Page 3+: Success Factors and everything after
+      if (successFactorsTopPx < imgHeight) {
+        let currentPos = successFactorsTopPx;
+        while (currentPos < imgHeight) {
+          const pageEnd = Math.min(currentPos + otherPageMaxPx, imgHeight);
+          slices.push({ start: currentPos, end: pageEnd });
+          currentPos = pageEnd;
+        }
+      }
+
+      // Track content end position on each page for CTA placement
+      let lastPageContentEndMm = 0;
+
+      // Render each page
+      for (let i = 0; i < slices.length; i++) {
+        if (i > 0) {
+          doc.addPage();
+        }
+
+        const slice = slices[i];
+        const sliceHeightPx = slice.end - slice.start;
+
+        // Add header only on first page
+        if (i === 0) {
+          doc.setFillColor(40, 20, 255);
+          doc.rect(0, 0, pageWidth, headerHeight, 'F');
+          doc.setTextColor(255, 255, 255);
+          doc.setFontSize(14);
+          doc.setFont('helvetica', 'bold');
+          doc.text('TALENT GURUS', pageWidth / 2, 10, { align: 'center' });
+          doc.setFontSize(10);
+          doc.setFont('helvetica', 'normal');
+          doc.text('Search Complexity Analysis', pageWidth / 2, 18, { align: 'center' });
+        }
+
+        // Create canvas for this page's portion
+        const pageCanvas = document.createElement('canvas');
+        pageCanvas.width = imgWidth;
+        pageCanvas.height = sliceHeightPx;
+        const pageCtx = pageCanvas.getContext('2d');
+        
+        // Check if context was created successfully
+        if (!pageCtx) {
+          console.error('Failed to create 2D canvas context for PDF page', i);
+          throw new Error('Failed to create canvas context for PDF generation');
+        }
+        
+        pageCtx.drawImage(canvas, 0, slice.start, imgWidth, sliceHeightPx, 0, 0, imgWidth, sliceHeightPx);
+
+        // Calculate destination dimensions
+        const destHeight = pxToMm(sliceHeightPx);
+        const destY = i === 0 ? headerHeight + 2 : 8;
+
+        doc.addImage(pageCanvas.toDataURL('image/png'), 'PNG', margin, destY, contentWidth, destHeight);
+
+        lastPageContentEndMm = destY + destHeight;
+      }
+
+      // Add CTA after all content
+      const ctaHeight = 22;
+      const ctaMargin = 8;
+
+      // Check if CTA fits on current page
+      if (lastPageContentEndMm + ctaHeight + ctaMargin > pageHeight - footerHeight) {
+        doc.addPage();
+        lastPageContentEndMm = 15;
+      }
+
+      const ctaY = lastPageContentEndMm + ctaMargin;
+      doc.setFillColor(40, 20, 255);
+      doc.roundedRect(margin, ctaY, contentWidth, ctaHeight, 2, 2, 'F');
+      doc.setTextColor(255, 255, 255);
+      doc.setFontSize(11);
+      doc.setFont('helvetica', 'bold');
+      doc.text('Ready for a comprehensive analysis?', pageWidth / 2, ctaY + 9, { align: 'center' });
+      doc.setFontSize(9);
+      doc.setFont('helvetica', 'normal');
+      doc.text('Schedule a consultation: calendly.com/charbel-talentgurus', pageWidth / 2, ctaY + 17, { align: 'center' });
+
+      // Add clickable link
+      doc.link(margin, ctaY, contentWidth, ctaHeight, { url: 'https://calendly.com/charbel-talentgurus' });
+
+      // Add footers to all pages
+      const totalPages = doc.internal.getNumberOfPages();
+      for (let i = 1; i <= totalPages; i++) {
+        doc.setPage(i);
+        doc.setFontSize(8);
+        doc.setTextColor(130, 130, 130);
+        doc.text('TALENT GURUS | talent-gurus.com | AI-assisted analysis for informational purposes only.', pageWidth / 2, pageHeight - 6, { align: 'center' });
+        doc.text(`Page ${i} of ${totalPages}`, pageWidth - margin, pageHeight - 6, { align: 'right' });
+      }
+
+      // Save
+      doc.save(`TG-Analysis-${results.displayTitle.replace(/[^a-zA-Z0-9]/g, '-')}-${new Date().toISOString().split('T')[0]}.pdf`);
+
+      // Reset loading state
+      setExportingPDF(false);
+    } catch (err) {
+      console.error('PDF export error:', err);
+      alert('Unable to export PDF. Please try again or contact support.');
+
+      // Reset loading state on error
+      setExportingPDF(false);
     try {
       const jsPDF = await loadJsPDF();
       const doc = new jsPDF();
@@ -693,7 +1046,6 @@ Return JSON only:
       console.error('PDF generation failed, falling back to text:', err);
       const content = `
 TALENT GURUS - Search Complexity Analysis
-==========================================
 
 Position: ${results.displayTitle}
 Location: ${results.formData.location}
@@ -739,23 +1091,24 @@ This analysis provides general market guidance. Every search is unique.
   };
 
   const getComplexityColor = (score) => {
-    if (score <= 3) return { bg: '#c8e6c9', text: '#1b5e20' };
-    if (score <= 5) return { bg: '#fff3e0', text: '#e65100' };
-    if (score <= 7) return { bg: '#ffccbc', text: '#bf360c' };
-    return { bg: '#ffcdd2', text: '#b71c1c' };
+    // Using brand colors: Indigo #2814ff, Pink #de9ea9
+    if (score <= 3) return { bg: '#e8e4ff', text: '#2814ff' }; // Light indigo bg, indigo text
+    if (score <= 5) return { bg: '#f5e6e9', text: '#2814ff' }; // Light pink bg, indigo text
+    if (score <= 7) return { bg: '#de9ea9', text: '#2814ff' }; // Brand pink bg, indigo text
+    return { bg: '#c77d8a', text: '#ffffff' }; // Darker pink bg, white text
   };
 
   const resetForm = () => {
     setResults(null);
     setStep(1);
-    setShowCustomTitle(false);
     setCompareMode(false);
     setComparisonResults(null);
     setWarnings([]);
     setFormData({
-      positionType: '', customPositionTitle: '', location: '', timeline: '', budgetRange: '', keyRequirements: '',
+      positionType: '', location: '', timeline: '', budgetRange: '', keyRequirements: '',
       email: '', emailConsent: false, discretionLevel: 'standard', propertiesCount: '', householdSize: '',
-      priorityCallback: false, phone: '', languageRequirements: [], certifications: [], travelRequirement: 'minimal'
+      priorityCallback: false, phone: '', languageRequirements: [], certifications: [], travelRequirement: 'minimal',
+      aumRange: '', teamSize: ''
     });
   };
 
@@ -764,21 +1117,26 @@ This analysis provides general market guidance. Every search is unique.
   // ============================================
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 via-white to-indigo-50 p-4 md:p-8">
-      <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet" />
-      
       <div className="max-w-4xl mx-auto" style={{ fontFamily: "'DM Sans', sans-serif" }}>
         {/* Header */}
         <div className="text-center mb-8">
-          <div className="inline-block px-10 py-5 rounded-xl shadow-lg mb-6" style={{ backgroundColor: '#2814ff' }}>
-            <h1 className="text-2xl md:text-3xl font-bold text-white tracking-widest" style={{ fontFamily: "'Playfair Display', serif" }}>TALENT GURUS</h1>
+          <div className="inline-block mb-6">
+            <div className="px-6 py-3 rounded-xl" style={{ backgroundColor: '#2814ff' }}>
+              <span className="text-white text-2xl md:text-3xl font-bold tracking-wide" style={{ fontFamily: "'Playfair Display', serif" }}>talent gurus</span>
+            </div>
           </div>
           <h2 className="text-2xl md:text-3xl font-bold mb-3" style={{ color: '#2814ff', fontFamily: "'Playfair Display', serif" }}>Search Complexity Calculator</h2>
           <p className="text-base text-slate-600 max-w-2xl mx-auto">Understanding what you're up against matters. Get a clear picture in 90 seconds.</p>
         </div>
 
-        <div className="bg-slate-50 border-l-4 rounded-lg p-4 mb-8 text-sm text-slate-600 flex gap-2" style={{ borderColor: '#2814ff' }}>
-          <Info className="w-5 h-5 flex-shrink-0" style={{ color: '#2814ff' }} />
-          <p><strong>Important:</strong> This analysis provides general market guidance. Every search is unique.</p>
+        <div className="bg-slate-50 border-l-4 rounded-lg p-4 mb-8 text-sm text-slate-600" style={{ borderColor: '#2814ff' }}>
+          <div className="flex gap-2 mb-2">
+            <Info className="w-5 h-5 flex-shrink-0 mt-0.5" style={{ color: '#2814ff' }} />
+            <div>
+              <p className="mb-2"><strong>Disclaimer:</strong> This calculator provides general market guidance based on aggregated industry data and should not be construed as a guarantee of search outcomes, candidate availability, or compensation accuracy. Every search is unique, and actual results may vary based on market conditions, candidate preferences, and specific role requirements.</p>
+              <p className="text-xs text-slate-500"><strong>AI Disclosure:</strong> Portions of this analysis are generated using AI language models. While we strive for accuracy, AI-generated content may contain errors or inaccuracies. This tool is for informational purposes only and does not constitute professional staffing advice. For personalized guidance, please consult directly with Talent Gurus.</p>
+            </div>
+          </div>
         </div>
 
         {!results ? (
@@ -803,38 +1161,55 @@ This analysis provides general market guidance. Every search is unique.
                   
                   <div>
                     <label className="block text-sm font-medium text-slate-700 mb-2">Position Type *</label>
-                    <select name="positionType" value={formData.positionType} onChange={(e) => { handleInputChange(e); setShowCustomTitle(e.target.value === 'Other'); }}
+                    <select name="positionType" value={formData.positionType} onChange={handleInputChange}
                       className="w-full px-4 py-3 border-2 border-slate-200 rounded-xl focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200">
-                      <option value="">Select a position</option>
-                      {commonRoles.map(role => <option key={role} value={role}>{role}</option>)}
-                      <option value="Other">Other / Not Listed</option>
+                      <option value="">Select a position ({commonRoles.length} roles available)</option>
+                      {/* Family Office - Corporate */}
+                      <option disabled className="font-bold bg-slate-100">── FAMILY OFFICE CORPORATE ──</option>
+                      {CATEGORY_GROUPS["Family Office - Corporate"].map(category => (
+                        <optgroup key={category} label={category.replace('Family Office - ', '')}>
+                          {positionsByCategory[category]?.map(pos => (
+                            <option key={pos.name} value={pos.name}>{pos.name}</option>
+                          ))}
+                        </optgroup>
+                      ))}
+                      {/* Private Service */}
+                      <option disabled className="font-bold bg-slate-100">── PRIVATE SERVICE ──</option>
+                      {CATEGORY_GROUPS["Private Service"].map(category => (
+                        <optgroup key={category} label={category}>
+                          {positionsByCategory[category]?.map(pos => (
+                            <option key={pos.name} value={pos.name}>{pos.name}</option>
+                          ))}
+                        </optgroup>
+                      ))}
                     </select>
                     {formData.positionType && BENCHMARKS[formData.positionType] && (
-                      <p className="mt-2 text-xs text-slate-500">💡 Market: ${BENCHMARKS[formData.positionType].p25.toLocaleString()} - ${BENCHMARKS[formData.positionType].p75.toLocaleString()}</p>
+                      <div className="mt-2 text-xs text-slate-500 space-y-1">
+                        <p>Market: ${BENCHMARKS[formData.positionType].p25.toLocaleString()} - ${BENCHMARKS[formData.positionType].p75.toLocaleString()}</p>
+                        {BENCHMARKS[formData.positionType].scarcity && (
+                          <p>Talent Scarcity: {BENCHMARKS[formData.positionType].scarcity}/10 {BENCHMARKS[formData.positionType].scarcity >= 7 ? '(Hard to find)' : BENCHMARKS[formData.positionType].scarcity >= 5 ? '(Moderate)' : '(Accessible)'}</p>
+                        )}
+                      </div>
                     )}
                   </div>
-
-                  {showCustomTitle && (
-                    <div>
-                      <label className="block text-sm font-medium text-slate-700 mb-2">Position Title *</label>
-                      <input type="text" name="customPositionTitle" value={formData.customPositionTitle} onChange={handleInputChange}
-                        className="w-full px-4 py-3 border-2 border-slate-200 rounded-xl" placeholder="e.g., Lifestyle Manager" />
-                    </div>
-                  )}
 
                   <div className="relative">
                     <label className="block text-sm font-medium text-slate-700 mb-2">Primary Location *</label>
                     <div className="relative">
                       <MapPin className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400" />
                       <input type="text" name="location" value={formData.location} onChange={handleInputChange}
-                        onFocus={() => setShowLocationSuggestions(true)} onBlur={() => setTimeout(() => setShowLocationSuggestions(false), 200)}
+                        onFocus={() => setShowLocationSuggestions(true)}
+                        onBlur={() => setTimeout(() => { setShowLocationSuggestions(false); setHighlightedLocationIndex(-1); }, 200)}
+                        onKeyDown={handleLocationKeyDown}
                         className="w-full pl-10 pr-4 py-3 border-2 border-slate-200 rounded-xl" placeholder="e.g., Palm Beach, Monaco" />
                     </div>
                     {showLocationSuggestions && filteredLocationSuggestions.length > 0 && (
                       <div className="absolute z-10 w-full mt-1 bg-white border border-slate-200 rounded-xl shadow-lg overflow-hidden">
                         {filteredLocationSuggestions.map((loc, idx) => (
-                          <button key={idx} type="button" onClick={() => { setFormData({ ...formData, location: loc }); setShowLocationSuggestions(false); }}
-                            className="w-full text-left px-4 py-2 hover:bg-indigo-50 text-sm">
+                          <button key={idx} type="button"
+                            onClick={() => { setFormData({ ...formData, location: loc }); setShowLocationSuggestions(false); setHighlightedLocationIndex(-1); }}
+                            onMouseEnter={() => setHighlightedLocationIndex(idx)}
+                            className={`w-full text-left px-4 py-2 text-sm ${idx === highlightedLocationIndex ? 'bg-indigo-100 text-indigo-900' : 'hover:bg-indigo-50'}`}>
                             {loc} {REGIONAL_ADJUSTMENTS[loc] && <span className="text-slate-500 ml-2">({REGIONAL_ADJUSTMENTS[loc].label})</span>}
                           </button>
                         ))}
@@ -908,22 +1283,14 @@ This analysis provides general market guidance. Every search is unique.
                 <div className="space-y-6">
                   <h3 className="text-xl font-semibold" style={{ color: '#2814ff' }}>Key Requirements</h3>
 
+                  {/* Certifications - shown first for both corporate and household */}
                   <div>
-                    <label className="block text-sm font-medium text-slate-700 mb-2">Language Requirements</label>
+                    <label className="block text-sm font-medium text-slate-700 mb-2">
+                      {isCorporateRole ? 'Professional Certifications' : 'Certifications'}
+                      {isCorporateRole && <span className="text-xs text-slate-500 ml-2">(Finance/Investment)</span>}
+                    </label>
                     <div className="flex flex-wrap gap-2">
-                      {languageOptions.map(lang => (
-                        <button key={lang} type="button" onClick={() => handleMultiSelect('languageRequirements', lang)}
-                          className={`px-3 py-1.5 rounded-full text-sm ${formData.languageRequirements.includes(lang) ? 'bg-indigo-600 text-white' : 'bg-slate-100 text-slate-700 hover:bg-slate-200'}`}>
-                          {lang}
-                        </button>
-                      ))}
-                    </div>
-                  </div>
-
-                  <div>
-                    <label className="block text-sm font-medium text-slate-700 mb-2">Certifications</label>
-                    <div className="flex flex-wrap gap-2">
-                      {certificationOptions.map(cert => (
+                      {(isCorporateRole ? corporateCertificationOptions : householdCertificationOptions).map(cert => (
                         <button key={cert} type="button" onClick={() => handleMultiSelect('certifications', cert)}
                           className={`px-3 py-1.5 rounded-full text-sm ${formData.certifications.includes(cert) ? 'bg-indigo-600 text-white' : 'bg-slate-100 text-slate-700 hover:bg-slate-200'}`}>
                           {cert}
@@ -931,6 +1298,52 @@ This analysis provides general market guidance. Every search is unique.
                       ))}
                     </div>
                   </div>
+
+                  {/* Languages - different display for corporate vs household */}
+                  {isCorporateRole ? (
+                    <div className="border border-slate-200 rounded-xl p-4 bg-slate-50">
+                      <button
+                        type="button"
+                        onClick={() => setShowLanguages(!showLanguages)}
+                        className="flex items-center justify-between w-full text-left"
+                      >
+                        <div>
+                          <span className="text-sm font-medium text-slate-700">Language Requirements</span>
+                          <span className="text-xs text-slate-500 ml-2">(Optional - for international operations)</span>
+                        </div>
+                        <ChevronDown className={`w-5 h-5 text-slate-400 transition-transform ${showLanguages ? 'rotate-180' : ''}`} />
+                      </button>
+                      {showLanguages && (
+                        <div className="mt-3 pt-3 border-t border-slate-200">
+                          <div className="flex flex-wrap gap-2">
+                            {corporateLanguageShortList.map(lang => (
+                              <button key={lang} type="button" onClick={() => handleMultiSelect('languageRequirements', lang)}
+                                className={`px-3 py-1.5 rounded-full text-sm ${formData.languageRequirements.includes(lang) ? 'bg-indigo-600 text-white' : 'bg-slate-100 text-slate-700 hover:bg-slate-200'}`}>
+                                {lang}
+                              </button>
+                            ))}
+                          </div>
+                        </div>
+                      )}
+                      {formData.languageRequirements.length > 0 && !showLanguages && (
+                        <p className="text-xs text-indigo-600 mt-2">
+                          Selected: {formData.languageRequirements.join(', ')}
+                        </p>
+                      )}
+                    </div>
+                  ) : (
+                    <div>
+                      <label className="block text-sm font-medium text-slate-700 mb-2">Language Requirements</label>
+                      <div className="flex flex-wrap gap-2">
+                        {householdLanguageOptions.map(lang => (
+                          <button key={lang} type="button" onClick={() => handleMultiSelect('languageRequirements', lang)}
+                            className={`px-3 py-1.5 rounded-full text-sm ${formData.languageRequirements.includes(lang) ? 'bg-indigo-600 text-white' : 'bg-slate-100 text-slate-700 hover:bg-slate-200'}`}>
+                            {lang}
+                          </button>
+                        ))}
+                      </div>
+                    </div>
+                  )}
 
                   <div>
                     <label className="block text-sm font-medium text-slate-700 mb-2">Travel Requirements</label>
@@ -941,10 +1354,12 @@ This analysis provides general market guidance. Every search is unique.
                   </div>
 
                   <div>
-                    <label className="block text-sm font-medium text-slate-700 mb-2">Additional Requirements * (min 25 chars)</label>
+                    <label className="block text-sm font-medium text-slate-700 mb-2">Additional Requirements *</label>
                     <textarea name="keyRequirements" value={formData.keyRequirements} onChange={handleInputChange} rows={4}
                       className="w-full px-4 py-3 border-2 border-slate-200 rounded-xl" placeholder="Describe specific experience, skills..." />
-                    <p className="text-xs text-slate-500 mt-1">{formData.keyRequirements.length} / 25</p>
+                    <p className={`text-xs mt-1 ${formData.keyRequirements.length >= 25 ? 'text-green-600' : 'text-slate-500'}`}>
+                      {formData.keyRequirements.length} chars {formData.keyRequirements.length < 25 ? `(${25 - formData.keyRequirements.length} more needed)` : '✓'}
+                    </p>
                   </div>
                 </div>
               )}
@@ -957,6 +1372,8 @@ This analysis provides general market guidance. Every search is unique.
                   <div className="bg-indigo-50 rounded-xl p-5 border border-indigo-100 flex gap-3">
                     <Zap className="w-6 h-6 flex-shrink-0" style={{ color: '#2814ff' }} />
                     <div>
+                      <h4 className="font-semibold text-slate-900 mb-1">Your analysis is almost ready</h4>
+                      <p className="text-sm text-slate-600">In a few seconds, you'll receive a detailed complexity score, market analysis, and recommendations.</p>
                       <h4 className="font-semibold text-slate-900 mb-1">Your personalized analysis includes:</h4>
                       <ul className="text-sm text-slate-600 space-y-1 mt-2">
                         <li className="flex items-center gap-2"><CheckCircle className="w-4 h-4 text-indigo-600" />Search complexity score & market positioning</li>
@@ -967,29 +1384,58 @@ This analysis provides general market guidance. Every search is unique.
                     </div>
                   </div>
 
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <div>
-                      <label className="block text-sm font-medium text-slate-700 mb-2">Properties to Staff</label>
-                      <select name="propertiesCount" value={formData.propertiesCount} onChange={handleInputChange}
-                        className="w-full px-4 py-3 border-2 border-slate-200 rounded-xl">
-                        <option value="">Select...</option>
-                        <option value="1">1</option>
-                        <option value="2-3">2-3</option>
-                        <option value="4-6">4-6</option>
-                        <option value="7+">7+</option>
-                      </select>
+                  {/* Conditional fields based on role type */}
+                  {isCorporateRole ? (
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                      <div>
+                        <label className="block text-sm font-medium text-slate-700 mb-2">Assets Under Management (AUM)</label>
+                        <select name="aumRange" value={formData.aumRange} onChange={handleInputChange}
+                          className="w-full px-4 py-3 border-2 border-slate-200 rounded-xl">
+                          <option value="">Select...</option>
+                          <option value="under-100M">Under $100M</option>
+                          <option value="100M-300M">$100M - $300M</option>
+                          <option value="300M-500M">$300M - $500M</option>
+                          <option value="500M-1B">$500M - $1B</option>
+                          <option value="1B-plus">$1B+</option>
+                        </select>
+                      </div>
+                      <div>
+                        <label className="block text-sm font-medium text-slate-700 mb-2">Team Size (Direct Reports)</label>
+                        <select name="teamSize" value={formData.teamSize} onChange={handleInputChange}
+                          className="w-full px-4 py-3 border-2 border-slate-200 rounded-xl">
+                          <option value="">Select...</option>
+                          <option value="0">Individual contributor</option>
+                          <option value="1-3">1-3 reports</option>
+                          <option value="4-10">4-10 reports</option>
+                          <option value="10-plus">10+ reports</option>
+                        </select>
+                      </div>
                     </div>
-                    <div>
-                      <label className="block text-sm font-medium text-slate-700 mb-2">Household Size</label>
-                      <select name="householdSize" value={formData.householdSize} onChange={handleInputChange}
-                        className="w-full px-4 py-3 border-2 border-slate-200 rounded-xl">
-                        <option value="">Select...</option>
-                        <option value="1-2">1-2</option>
-                        <option value="3-5">3-5 (family)</option>
-                        <option value="6+">6+ (extended)</option>
-                      </select>
+                  ) : (
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                      <div>
+                        <label className="block text-sm font-medium text-slate-700 mb-2">Properties to Staff</label>
+                        <select name="propertiesCount" value={formData.propertiesCount} onChange={handleInputChange}
+                          className="w-full px-4 py-3 border-2 border-slate-200 rounded-xl">
+                          <option value="">Select...</option>
+                          <option value="1">1</option>
+                          <option value="2-3">2-3</option>
+                          <option value="4-6">4-6</option>
+                          <option value="7+">7+</option>
+                        </select>
+                      </div>
+                      <div>
+                        <label className="block text-sm font-medium text-slate-700 mb-2">Household Size</label>
+                        <select name="householdSize" value={formData.householdSize} onChange={handleInputChange}
+                          className="w-full px-4 py-3 border-2 border-slate-200 rounded-xl">
+                          <option value="">Select...</option>
+                          <option value="1-2">1-2</option>
+                          <option value="3-5">3-5 (family)</option>
+                          <option value="6+">6+ (extended)</option>
+                        </select>
+                      </div>
                     </div>
-                  </div>
+                  )}
 
                   {/* Enhanced Lead Capture Section */}
                   <div className="bg-gradient-to-br from-indigo-50 to-purple-50 rounded-xl p-5 border border-indigo-200">
@@ -1067,14 +1513,14 @@ This analysis provides general market guidance. Every search is unique.
           // RESULTS
           // ============================================
           <div className="space-y-6">
-            <div className="bg-white rounded-2xl shadow-xl p-6 md:p-8 border border-slate-200">
+            <div ref={resultsRef} className="bg-white rounded-2xl shadow-xl p-6 md:p-8 border border-slate-200">
               {/* Score */}
               <div className="text-center mb-8">
-                <div className="w-36 h-36 rounded-full flex items-center justify-center mx-auto mb-4 border-4 shadow-lg"
+                <div className="w-40 h-40 rounded-full flex items-center justify-center mx-auto mb-4 border-4 shadow-lg"
                   style={{ backgroundColor: getComplexityColor(results.score).bg, borderColor: '#2814ff' }}>
                   <div className="text-center">
-                    <div className="text-5xl font-bold" style={{ color: getComplexityColor(results.score).text }}>{results.score}</div>
-                    <div className="text-sm font-medium" style={{ color: getComplexityColor(results.score).text }}>out of 10</div>
+                    <div className="text-4xl font-bold leading-tight" style={{ color: getComplexityColor(results.score).text }}>{results.score}</div>
+                    <div className="text-xs font-medium mt-1" style={{ color: getComplexityColor(results.score).text }}>out of 10</div>
                   </div>
                 </div>
                 <div className="inline-block px-5 py-2 rounded-full font-semibold mb-2"
@@ -1087,13 +1533,19 @@ This analysis provides general market guidance. Every search is unique.
               {results.bottomLine && (
                 <div className="bg-slate-50 rounded-xl p-5 mb-6 border-l-4" style={{ borderColor: '#2814ff' }}>
                   <p className="text-slate-800">{results.bottomLine}</p>
+                  {results.aiAnalysisSuccess === false && (
+                    <p className="text-xs text-slate-500 mt-2 flex items-center gap-1">
+                      <Info className="w-3 h-3" />
+                      Results based on market data. AI insights temporarily unavailable.
+                    </p>
+                  )}
                 </div>
               )}
 
               {/* Drivers */}
-              <div className="mb-6">
+              <div data-pdf-section="drivers" className="mb-6">
                 <h4 className="font-semibold text-lg mb-4 flex items-center gap-2" style={{ color: '#2814ff' }}>
-                  <Scale className="w-5 h-5" />Complexity Breakdown
+                  <Layers className="w-5 h-5" />Complexity Breakdown
                 </h4>
                 <div className="space-y-2">
                   {results.drivers?.map((d, i) => (
@@ -1109,7 +1561,7 @@ This analysis provides general market guidance. Every search is unique.
               </div>
 
               {/* Metrics */}
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+              <div data-pdf-section="metrics" className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
                 <div className="bg-emerald-50 rounded-xl p-5 border border-emerald-100">
                   <div className="flex items-center gap-2 mb-2"><DollarSign className="w-5 h-5 text-emerald-600" /><h4 className="font-semibold text-sm text-emerald-800">Salary</h4></div>
                   <p className="text-slate-700">{results.salaryRangeGuidance}</p>
@@ -1128,14 +1580,46 @@ This analysis provides general market guidance. Every search is unique.
                 </div>
               </div>
 
-              {/* Benchmarks */}
+              {/* Sourcing Insight */}
+              {results.sourcingInsight && (
+                <div data-pdf-section="sourcing" className="bg-indigo-50 rounded-xl p-5 mb-6 border border-indigo-100">
+                  <div className="flex items-center gap-2 mb-2">
+                    <Target className="w-5 h-5 text-indigo-600" />
+                    <h4 className="font-semibold text-sm text-indigo-800">Where to Find These Candidates</h4>
+                  </div>
+                  <p className="text-slate-700">{results.sourcingInsight}</p>
+                </div>
+              )}
+
+              {/* Benchmarks - Show adjusted figures if available */}
               {results.benchmark && (
-                <div className="bg-slate-50 rounded-xl p-5 mb-6">
-                  <h4 className="font-semibold mb-3 flex items-center gap-2"><TrendingUp className="w-5 h-5" style={{ color: '#2814ff' }} />Benchmarks: {results.displayTitle}</h4>
+                <div data-pdf-section="benchmarks" className="bg-slate-50 rounded-xl p-5 mb-6">
+                  <h4 className="font-semibold mb-3 flex items-center gap-2">
+                    <TrendingUp className="w-5 h-5" style={{ color: '#2814ff' }} />
+                    Benchmarks: {results.displayTitle}
+                    {results.regionalMultiplier && results.regionalMultiplier !== 1 && (
+                      <span className="text-xs font-normal text-slate-500 ml-2">({results.regionalMultiplier}x regional adjustment)</span>
+                    )}
+                  </h4>
                   <div className="grid grid-cols-3 gap-4 text-center mb-4">
-                    <div><div className="text-2xl font-bold text-slate-900">${Math.round(results.benchmark.p25/1000)}k</div><div className="text-xs text-slate-500">25th</div></div>
-                    <div className="bg-white rounded-lg py-2"><div className="text-2xl font-bold" style={{ color: '#2814ff' }}>${Math.round(results.benchmark.p50/1000)}k</div><div className="text-xs text-slate-500">Median</div></div>
-                    <div><div className="text-2xl font-bold text-slate-900">${Math.round(results.benchmark.p75/1000)}k</div><div className="text-xs text-slate-500">75th</div></div>
+                    <div>
+                      <div className="text-2xl font-bold text-slate-900">
+                        ${Math.round((results.adjustedBenchmark?.p25 || results.benchmark.p25)/1000)}k
+                      </div>
+                      <div className="text-xs text-slate-500">25th</div>
+                    </div>
+                    <div className="bg-white rounded-lg py-2">
+                      <div className="text-2xl font-bold" style={{ color: '#2814ff' }}>
+                        ${Math.round((results.adjustedBenchmark?.p50 || results.benchmark.p50)/1000)}k
+                      </div>
+                      <div className="text-xs text-slate-500">Median</div>
+                    </div>
+                    <div>
+                      <div className="text-2xl font-bold text-slate-900">
+                        ${Math.round((results.adjustedBenchmark?.p75 || results.benchmark.p75)/1000)}k
+                      </div>
+                      <div className="text-xs text-slate-500">75th</div>
+                    </div>
                   </div>
                   <div className="grid grid-cols-4 gap-2 text-xs">
                     {[['Housing', results.benchmark.benefits.housing, Home], ['Vehicle', results.benchmark.benefits.vehicle, Car], ['Health', results.benchmark.benefits.health, Heart], ['Bonus', results.benchmark.benefits.bonus, DollarSign]].map(([label, val, Icon]) => (
@@ -1146,7 +1630,7 @@ This analysis provides general market guidance. Every search is unique.
               )}
 
               {/* Success Factors */}
-              <div className="mb-6">
+              <div data-pdf-section="success-factors" className="mb-6">
                 <h4 className="font-semibold mb-3 flex items-center gap-2" style={{ color: '#2814ff' }}><CheckCircle className="w-5 h-5" />Success Factors</h4>
                 <ul className="space-y-2">
                   {results.keySuccessFactors?.map((f, i) => (
@@ -1159,8 +1643,8 @@ This analysis provides general market guidance. Every search is unique.
               </div>
 
               {results.recommendedAdjustments?.length > 0 && (
-                <div className="mb-6">
-                  <h4 className="font-semibold mb-3 flex items-center gap-2" style={{ color: '#2814ff' }}><Target className="w-5 h-5" />Recommendations</h4>
+                <div data-pdf-section="recommendations" className="mb-6">
+                  <h4 className="font-semibold mb-3 flex items-center gap-2" style={{ color: '#2814ff' }}><Lightbulb className="w-5 h-5" />Recommendations</h4>
                   <ul className="space-y-2">
                     {results.recommendedAdjustments.map((r, i) => (
                       <li key={i} className="flex items-start gap-3 bg-amber-50 rounded-lg p-3 border border-amber-100">
@@ -1173,8 +1657,8 @@ This analysis provides general market guidance. Every search is unique.
               )}
 
               {results.negotiationLeverage && (
-                <div className="mb-6">
-                  <h4 className="font-semibold mb-3 flex items-center gap-2" style={{ color: '#2814ff' }}><Scale className="w-5 h-5" />Negotiation</h4>
+                <div data-pdf-section="negotiation" className="mb-6">
+                  <h4 className="font-semibold mb-3 flex items-center gap-2" style={{ color: '#2814ff' }}><ArrowLeftRight className="w-5 h-5" />Negotiation</h4>
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div className="bg-red-50 rounded-xl p-4 border border-red-100">
                       <h5 className="font-medium text-red-800 mb-2 text-sm">Candidate Advantages</h5>
@@ -1189,8 +1673,18 @@ This analysis provides general market guidance. Every search is unique.
               )}
 
               <div className="flex flex-wrap gap-3 pt-4 border-t border-slate-200">
-                <button onClick={exportToPDF} className="flex items-center gap-2 px-4 py-2 bg-slate-100 hover:bg-slate-200 rounded-lg text-sm font-medium text-slate-700">
-                  <Download className="w-4 h-4" />Export Report
+                <button onClick={exportToPDF} disabled={exportingPDF} className="flex items-center gap-2 px-4 py-2 bg-slate-100 hover:bg-slate-200 rounded-lg text-sm font-medium text-slate-700 disabled:opacity-50 disabled:cursor-not-allowed">
+                  {exportingPDF ? (
+                    <>
+                      <RefreshCw className="w-4 h-4 animate-spin" />
+                      Generating PDF...
+                    </>
+                  ) : (
+                    <>
+                      <Download className="w-4 h-4" />
+                      Export Report
+                    </>
+                  )}
                 </button>
                 <button onClick={runComparison} className="flex items-center gap-2 px-4 py-2 bg-slate-100 hover:bg-slate-200 rounded-lg text-sm font-medium text-slate-700">
                   <RefreshCw className="w-4 h-4" />Compare Scenarios
@@ -1201,36 +1695,95 @@ This analysis provides general market guidance. Every search is unique.
             {compareMode && comparisonResults && (
               <div className="bg-white rounded-2xl shadow-xl p-6 border border-slate-200">
                 <div className="flex justify-between mb-4">
-                  <h4 className="font-semibold text-lg" style={{ color: '#2814ff' }}>Scenario Comparison</h4>
+                  <h4 className="font-semibold text-lg" style={{ color: '#2814ff' }}>Budget Impact Analysis</h4>
                   <button onClick={() => setCompareMode(false)} className="text-slate-400 hover:text-slate-600"><X className="w-5 h-5" /></button>
                 </div>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  <div className="bg-slate-50 rounded-xl p-4">
-                    <h5 className="font-medium mb-2">Current</h5>
-                    <div className="text-3xl font-bold" style={{ color: '#2814ff' }}>{comparisonResults.current.score}/10</div>
-                    <p className="text-sm text-slate-600">{comparisonResults.current.label}</p>
-                  </div>
-                  {comparisonResults.withIncrease && (
-                    <div className="bg-green-50 rounded-xl p-4 border-2 border-green-200">
-                      <h5 className="font-medium mb-2 text-green-800">With Budget: {comparisonResults.nextLabel}</h5>
-                      <div className="text-3xl font-bold text-green-700">{comparisonResults.withIncrease.score}/10</div>
-                      <p className="text-sm text-green-600">{comparisonResults.withIncrease.label}</p>
-                      {comparisonResults.current.score > comparisonResults.withIncrease.score && (
-                        <p className="text-xs font-medium text-green-800 mt-2">✓ {comparisonResults.current.score - comparisonResults.withIncrease.score} points easier</p>
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                  {/* Lower budget scenario */}
+                  {comparisonResults.withDecrease ? (
+                    <div className="bg-red-50 rounded-xl p-4 border border-red-200">
+                      <h5 className="font-medium mb-2 text-red-800 text-sm">If Budget: {comparisonResults.prevLabel}</h5>
+                      <div className="text-2xl font-bold text-red-700">{comparisonResults.withDecrease.score}/10</div>
+                      <p className="text-xs text-red-600">{comparisonResults.withDecrease.label}</p>
+                      {comparisonResults.withDecrease.score > comparisonResults.current.score ? (
+                        <p className="text-xs font-medium text-red-800 mt-2">+{comparisonResults.withDecrease.score - comparisonResults.current.score} points harder</p>
+                      ) : comparisonResults.withDecrease.score === comparisonResults.current.score && (
+                        <p className="text-xs text-red-700 mt-2">Already below market — timeline and location drive score</p>
                       )}
+                    </div>
+                  ) : (
+                    <div className="bg-slate-100 rounded-xl p-4 border border-slate-200">
+                      <h5 className="font-medium mb-2 text-slate-500 text-sm">Lower Budget</h5>
+                      <p className="text-xs text-slate-500">Already at minimum range</p>
+                    </div>
+                  )}
+
+                  {/* Current scenario */}
+                  <div className="bg-indigo-50 rounded-xl p-4 border-2 border-indigo-300">
+                    <h5 className="font-medium mb-2 text-indigo-800 text-sm">Your Budget (Current)</h5>
+                    <div className="text-2xl font-bold" style={{ color: '#2814ff' }}>{comparisonResults.current.score}/10</div>
+                    <p className="text-xs text-indigo-600">{comparisonResults.current.label}</p>
+                  </div>
+
+                  {/* Higher budget scenario */}
+                  {comparisonResults.withIncrease ? (
+                    <div className="bg-green-50 rounded-xl p-4 border border-green-200">
+                      <h5 className="font-medium mb-2 text-green-800 text-sm">If Budget: {comparisonResults.nextLabel}</h5>
+                      <div className="text-2xl font-bold text-green-700">{comparisonResults.withIncrease.score}/10</div>
+                      <p className="text-xs text-green-600">{comparisonResults.withIncrease.label}</p>
+                      {comparisonResults.current.score > comparisonResults.withIncrease.score ? (
+                        <p className="text-xs font-medium text-green-800 mt-2">✓ {comparisonResults.current.score - comparisonResults.withIncrease.score} points easier</p>
+                      ) : comparisonResults.current.score === comparisonResults.withIncrease.score ? (
+                        <p className="text-xs text-amber-700 mt-2 font-medium">≈ No change — see note below</p>
+                      ) : null}
+                    </div>
+                  ) : (
+                    <div className="bg-slate-100 rounded-xl p-4 border border-slate-200">
+                      <h5 className="font-medium mb-2 text-slate-500 text-sm">Higher Budget</h5>
+                      <p className="text-xs text-slate-500">Already at maximum range</p>
                     </div>
                   )}
                 </div>
+                {comparisonResults.withIncrease && comparisonResults.current.score === comparisonResults.withIncrease.score ? (
+                  <div className="bg-amber-50 border border-amber-200 rounded-lg p-3 mt-4">
+                    <p className="text-sm text-amber-800">
+                      <strong>💡 Why no change?</strong> Your budget is already competitive for this role. At this point, complexity is driven by timeline, location, role scarcity, and specialized requirements — not compensation.
+                    </p>
+                  </div>
+                ) : (
+                  <p className="text-xs text-slate-500 mt-4 text-center">
+                    See how budget changes affect your search complexity score
+                  </p>
+                )}
               </div>
             )}
 
-            <div className="bg-gradient-to-r from-indigo-600 via-purple-600 to-indigo-700 rounded-2xl shadow-xl p-8 text-white text-center">
-              <h3 className="text-2xl font-bold mb-3" style={{ fontFamily: "'Playfair Display', serif" }}>Let's Talk About Your Search</h3>
-              <p className="mb-6 text-indigo-100">This analysis gives you the landscape. A conversation gives you a strategy.</p>
-              <a href="https://calendly.com/charbel-talentgurus" target="_blank" rel="noopener noreferrer"
-                className="inline-flex items-center gap-2 bg-white px-8 py-3 rounded-xl font-semibold shadow-lg hover:shadow-xl" style={{ color: '#2814ff' }}>
-                Schedule a Conversation<ArrowRight className="w-5 h-5" />
-              </a>
+            <div className="bg-gradient-to-r from-indigo-600 via-purple-600 to-indigo-700 rounded-2xl shadow-xl p-8 text-white">
+              <div className="text-center mb-6">
+                <p className="text-indigo-200 text-sm uppercase tracking-wider mb-2">This is your initial analysis</p>
+                <h3 className="text-2xl font-bold mb-3" style={{ fontFamily: "'Playfair Display', serif" }}>Get the Complete Picture</h3>
+              </div>
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6 text-sm">
+                <div className="bg-white/10 rounded-lg p-3">
+                  <p className="font-semibold mb-1">Sourcing Strategy</p>
+                  <p className="text-indigo-200 text-xs">Exactly where and how to find qualified candidates</p>
+                </div>
+                <div className="bg-white/10 rounded-lg p-3">
+                  <p className="font-semibold mb-1">Compensation Deep-Dive</p>
+                  <p className="text-indigo-200 text-xs">Benefits, equity, and package structuring</p>
+                </div>
+                <div className="bg-white/10 rounded-lg p-3">
+                  <p className="font-semibold mb-1">Interview Framework</p>
+                  <p className="text-indigo-200 text-xs">Key questions and evaluation criteria</p>
+                </div>
+              </div>
+              <div className="text-center">
+                <a href="https://calendly.com/charbel-talentgurus" target="_blank" rel="noopener noreferrer"
+                  className="inline-flex items-center gap-2 bg-white px-8 py-3 rounded-xl font-semibold shadow-lg hover:shadow-xl" style={{ color: '#2814ff' }}>
+                  Schedule Your Comprehensive Analysis<ArrowRight className="w-5 h-5" />
+                </a>
+                <p className="text-indigo-200 text-xs mt-3">30-minute strategy call • No commitment</p>
+              </div>
             </div>
 
             {/* Trust Signals & Methodology */}
@@ -1265,9 +1818,10 @@ This analysis provides general market guidance. Every search is unique.
         )}
 
         <div className="mt-12 text-center space-y-2">
-          <p className="font-semibold" style={{ color: '#2814ff' }}>Talent Gurus • Finding Exceptional Talent for Family Offices</p>
+          <p className="font-semibold" style={{ color: '#2814ff' }}>Talent Gurus - Finding Exceptional Talent for Family Offices</p>
           <p className="text-slate-500">We find the people you'll rely on for years.</p>
           <a href="https://talent-gurus.com" target="_blank" rel="noopener noreferrer" className="text-xs hover:underline" style={{ color: '#2814ff' }}>talent-gurus.com</a>
+          <p className="text-xs text-slate-400 mt-4">Salary data: {SALARY_DATA_META.lastUpdated} | {commonRoles.length} positions tracked</p>
           <p className="text-xs text-slate-400 mt-4">v{APP_VERSION}</p>
         </div>
       </div>
