@@ -10,7 +10,10 @@ const ALLOWED_ORIGINS = [
 ].filter(Boolean);
 
 function generateEmailHTML(results) {
-  const scoreColor = results.score <= 3 ? '#2814ff' : results.score <= 5 ? '#4d4dff' : results.score <= 7 ? '#b87a85' : '#9e5f6a';
+  const scoreColor = results.score <= 3 ? '#99c1b9' : results.score <= 5 ? '#2814ff' : results.score <= 7 ? '#de9ea9' : '#9e5f6a';
+  const sectionBorder = 'border-left:1px solid #e2e8f0;border-right:1px solid #e2e8f0;';
+  const sectionHeading = (text) => `<h3 style="color:#2814ff;font-size:16px;margin:0 0 16px;font-weight:600;">${text}</h3>`;
+  const divider = `<div style="background-color:#ffffff;padding:0 24px 0;${sectionBorder}"><hr style="border:none;border-top:1px solid #e2e8f0;margin:0;"></div>`;
 
   return `
 <!DOCTYPE html>
@@ -20,109 +23,327 @@ function generateEmailHTML(results) {
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 </head>
 <body style="margin:0;padding:0;background-color:#f8fafc;font-family:'Helvetica Neue',Arial,sans-serif;">
-  <div style="max-width:600px;margin:0 auto;padding:20px;">
+  <div style="max-width:640px;margin:0 auto;padding:20px;">
 
     <!-- Header -->
     <div style="background-color:#2814ff;border-radius:12px 12px 0 0;padding:24px;text-align:center;">
       <h1 style="color:#ffffff;margin:0;font-size:24px;font-weight:bold;">TALENT GURUS</h1>
-      <p style="color:#c7c0ff;margin:8px 0 0;font-size:14px;">Search Complexity Analysis</p>
+      <p style="color:#d2d4ff;margin:8px 0 0;font-size:14px;">Search Complexity Analysis</p>
     </div>
 
     <!-- Score Section -->
-    <div style="background-color:#ffffff;padding:32px 24px;text-align:center;border-left:1px solid #e2e8f0;border-right:1px solid #e2e8f0;">
-      <div style="width:100px;height:100px;border-radius:50%;background-color:${scoreColor}15;border:3px solid ${scoreColor};margin:0 auto 16px;line-height:100px;">
-        <span style="font-size:36px;font-weight:bold;color:${scoreColor};">${results.score}</span>
+    <div style="background-color:#ffffff;padding:32px 24px;text-align:center;${sectionBorder}">
+      <div style="width:110px;height:110px;border-radius:50%;background-color:${scoreColor}15;border:3px solid ${scoreColor};margin:0 auto 16px;line-height:110px;">
+        <span style="font-size:40px;font-weight:bold;color:${scoreColor};">${results.score}</span>
       </div>
-      <h2 style="margin:0 0 4px;color:#1e293b;font-size:20px;">${results.displayTitle}</h2>
-      <p style="margin:0 0 4px;color:#64748b;font-size:14px;">${results.location || ''}</p>
-      <span style="display:inline-block;padding:4px 16px;border-radius:20px;background-color:${scoreColor}15;color:${scoreColor};font-size:13px;font-weight:600;">${results.label} Search</span>
+      <h2 style="margin:0 0 4px;color:#1e293b;font-size:22px;">${results.displayTitle}</h2>
+      <p style="margin:0 0 8px;color:#64748b;font-size:14px;">${results.location || ''}${results.regionalMultiplier && results.regionalMultiplier !== 1 ? ` (${results.regionalMultiplier}x regional adjustment)` : ''}</p>
+      <span style="display:inline-block;padding:6px 20px;border-radius:20px;background-color:${scoreColor}15;color:${scoreColor};font-size:14px;font-weight:600;">${results.label} Search</span>
+      ${results.confidence ? `<p style="margin:8px 0 0;color:#94a3b8;font-size:12px;">Confidence: ${results.confidence}</p>` : ''}
     </div>
 
     <!-- Executive Summary -->
-    <div style="background-color:#ffffff;padding:0 24px 24px;border-left:1px solid #e2e8f0;border-right:1px solid #e2e8f0;">
+    <div style="background-color:#ffffff;padding:16px 24px 24px;${sectionBorder}">
       <div style="border-left:4px solid #2814ff;padding:16px;background-color:#f8fafc;border-radius:0 8px 8px 0;">
         <p style="margin:0;color:#334155;font-size:14px;line-height:1.6;">${results.bottomLine || ''}</p>
       </div>
     </div>
 
-    <!-- Key Metrics -->
-    <div style="background-color:#ffffff;padding:0 24px 24px;border-left:1px solid #e2e8f0;border-right:1px solid #e2e8f0;">
-      <h3 style="color:#2814ff;font-size:16px;margin:0 0 16px;">Key Metrics</h3>
-      <table style="width:100%;border-collapse:collapse;">
-        <tr>
-          <td style="padding:12px;background-color:#f0f7f5;border-radius:8px;vertical-align:top;width:50%;">
-            <strong style="color:#4a776d;font-size:12px;">SALARY GUIDANCE</strong><br>
-            <span style="color:#334155;font-size:13px;">${results.salaryRangeGuidance || 'N/A'}</span>
-          </td>
-          <td style="width:8px;"></td>
-          <td style="padding:12px;background-color:#eeeeff;border-radius:8px;vertical-align:top;width:50%;">
-            <strong style="color:#2814ff;font-size:12px;">TIMELINE</strong><br>
-            <span style="color:#334155;font-size:13px;">${results.estimatedTimeline || 'N/A'}</span>
-          </td>
-        </tr>
-        <tr><td colspan="3" style="height:8px;"></td></tr>
-        <tr>
-          <td style="padding:12px;background-color:#fdf2f4;border-radius:8px;vertical-align:top;">
-            <strong style="color:#9e5f6a;font-size:12px;">MARKET</strong><br>
-            <span style="color:#334155;font-size:13px;">${results.marketCompetitiveness || 'N/A'}</span>
-          </td>
-          <td style="width:8px;"></td>
-          <td style="padding:12px;background-color:#fef8f0;border-radius:8px;vertical-align:top;">
-            <strong style="color:#a47840;font-size:12px;">AVAILABILITY</strong><br>
-            <span style="color:#334155;font-size:13px;"><strong>${results.candidateAvailability || 'N/A'}</strong> — ${results.availabilityReason || ''}</span>
-          </td>
-        </tr>
-      </table>
+    ${divider}
+
+    <!-- Key Metrics - Full Width Cards -->
+    <div style="background-color:#ffffff;padding:20px 24px 24px;${sectionBorder}">
+      ${sectionHeading('Key Metrics')}
+
+      <!-- Salary -->
+      <div style="padding:14px;background-color:#f0f7f5;border-radius:8px;margin-bottom:10px;border-left:4px solid #99c1b9;">
+        <strong style="color:#4a776d;font-size:12px;text-transform:uppercase;letter-spacing:0.5px;">Salary Guidance</strong>
+        <p style="margin:6px 0 0;color:#334155;font-size:13px;line-height:1.5;">${results.salaryRangeGuidance || 'N/A'}</p>
+      </div>
+
+      <!-- Timeline -->
+      <div style="padding:14px;background-color:#eeeeff;border-radius:8px;margin-bottom:10px;border-left:4px solid #2814ff;">
+        <strong style="color:#2814ff;font-size:12px;text-transform:uppercase;letter-spacing:0.5px;">Timeline</strong>
+        <p style="margin:6px 0 0;color:#334155;font-size:13px;line-height:1.5;">${results.estimatedTimeline || 'N/A'}</p>
+      </div>
+
+      <!-- Market -->
+      <div style="padding:14px;background-color:#fdf2f4;border-radius:8px;margin-bottom:10px;border-left:4px solid #de9ea9;">
+        <strong style="color:#9e5f6a;font-size:12px;text-transform:uppercase;letter-spacing:0.5px;">Market Competitiveness</strong>
+        <p style="margin:6px 0 0;color:#334155;font-size:13px;line-height:1.5;">${results.marketCompetitiveness || 'N/A'}</p>
+      </div>
+
+      <!-- Availability -->
+      <div style="padding:14px;background-color:#fef8f0;border-radius:8px;border-left:4px solid #f2d0a9;">
+        <strong style="color:#a47840;font-size:12px;text-transform:uppercase;letter-spacing:0.5px;">Candidate Availability</strong>
+        <p style="margin:6px 0 0;color:#334155;font-size:13px;line-height:1.5;"><strong>${results.candidateAvailability || 'N/A'}</strong> — ${results.availabilityReason || ''}</p>
+      </div>
     </div>
+
+    ${divider}
+
+    <!-- Sourcing Insight -->
+    ${results.sourcingInsight ? `
+    <div style="background-color:#ffffff;padding:20px 24px 24px;${sectionBorder}">
+      ${sectionHeading('Where to Find These Candidates')}
+      <div style="padding:14px;background-color:#eeeeff;border-radius:8px;border:1px solid #d2d4ff;">
+        <p style="margin:0;color:#334155;font-size:13px;line-height:1.5;">${results.sourcingInsight}</p>
+      </div>
+    </div>
+    ${divider}
+    ` : ''}
 
     <!-- Benchmarks -->
     ${results.benchmark ? `
-    <div style="background-color:#ffffff;padding:0 24px 24px;border-left:1px solid #e2e8f0;border-right:1px solid #e2e8f0;">
-      <h3 style="color:#2814ff;font-size:16px;margin:0 0 16px;">Salary Benchmarks</h3>
-      <table style="width:100%;text-align:center;border-collapse:collapse;">
+    <div style="background-color:#ffffff;padding:20px 24px 24px;${sectionBorder}">
+      ${sectionHeading('Salary Benchmarks: ' + results.displayTitle)}
+      <table style="width:100%;text-align:center;border-collapse:collapse;margin-bottom:16px;">
         <tr>
-          <td style="padding:12px;background-color:#f8fafc;border-radius:8px;">
-            <div style="font-size:22px;font-weight:bold;color:#1e293b;">$${Math.round(results.benchmark.p25/1000)}k</div>
+          <td style="padding:14px;background-color:#f8fafc;border-radius:8px;">
+            <div style="font-size:24px;font-weight:bold;color:#1e293b;">$${Math.round(results.benchmark.p25/1000)}k</div>
             <div style="font-size:11px;color:#94a3b8;">25th Percentile</div>
           </td>
           <td style="width:8px;"></td>
-          <td style="padding:12px;background-color:#eef2ff;border-radius:8px;">
-            <div style="font-size:22px;font-weight:bold;color:#2814ff;">$${Math.round(results.benchmark.p50/1000)}k</div>
+          <td style="padding:14px;background-color:#eeeeff;border-radius:8px;">
+            <div style="font-size:24px;font-weight:bold;color:#2814ff;">$${Math.round(results.benchmark.p50/1000)}k</div>
             <div style="font-size:11px;color:#94a3b8;">Median</div>
           </td>
           <td style="width:8px;"></td>
-          <td style="padding:12px;background-color:#f8fafc;border-radius:8px;">
-            <div style="font-size:22px;font-weight:bold;color:#1e293b;">$${Math.round(results.benchmark.p75/1000)}k</div>
+          <td style="padding:14px;background-color:#f8fafc;border-radius:8px;">
+            <div style="font-size:24px;font-weight:bold;color:#1e293b;">$${Math.round(results.benchmark.p75/1000)}k</div>
             <div style="font-size:11px;color:#94a3b8;">75th Percentile</div>
           </td>
         </tr>
       </table>
+      ${results.benchmark.benefits ? `
+      <table style="width:100%;border-collapse:collapse;">
+        <tr>
+          <td style="padding:8px;background-color:#f8fafc;border-radius:6px;text-align:center;width:25%;">
+            <div style="font-size:11px;font-weight:600;color:#334155;">Housing</div>
+            <div style="font-size:11px;color:#64748b;">${results.benchmark.benefits.housing || 'N/A'}</div>
+          </td>
+          <td style="width:4px;"></td>
+          <td style="padding:8px;background-color:#f8fafc;border-radius:6px;text-align:center;width:25%;">
+            <div style="font-size:11px;font-weight:600;color:#334155;">Vehicle</div>
+            <div style="font-size:11px;color:#64748b;">${results.benchmark.benefits.vehicle || 'N/A'}</div>
+          </td>
+          <td style="width:4px;"></td>
+          <td style="padding:8px;background-color:#f8fafc;border-radius:6px;text-align:center;width:25%;">
+            <div style="font-size:11px;font-weight:600;color:#334155;">Health</div>
+            <div style="font-size:11px;color:#64748b;">${results.benchmark.benefits.health || 'N/A'}</div>
+          </td>
+          <td style="width:4px;"></td>
+          <td style="padding:8px;background-color:#f8fafc;border-radius:6px;text-align:center;width:25%;">
+            <div style="font-size:11px;font-weight:600;color:#334155;">Bonus</div>
+            <div style="font-size:11px;color:#64748b;">${results.benchmark.benefits.bonus || 'N/A'}</div>
+          </td>
+        </tr>
+      </table>
+      ` : ''}
     </div>
+    ${divider}
     ` : ''}
 
     <!-- Success Factors -->
     ${results.keySuccessFactors?.length > 0 ? `
-    <div style="background-color:#ffffff;padding:0 24px 24px;border-left:1px solid #e2e8f0;border-right:1px solid #e2e8f0;">
-      <h3 style="color:#2814ff;font-size:16px;margin:0 0 16px;">Key Success Factors</h3>
+    <div style="background-color:#ffffff;padding:20px 24px 24px;${sectionBorder}">
+      ${sectionHeading('Key Success Factors')}
       ${results.keySuccessFactors.map(f => `
         <div style="padding:10px 12px;background-color:#f0f7f5;border-radius:8px;margin-bottom:8px;border:1px solid #c2ddd7;">
-          <span style="color:#4a776d;">✓</span> <span style="color:#334155;font-size:13px;">${f}</span>
+          <span style="color:#5f9488;font-weight:bold;">&#10003;</span> <span style="color:#334155;font-size:13px;">${f}</span>
         </div>
       `).join('')}
     </div>
+    ${divider}
+    ` : ''}
+
+    <!-- Recommendations -->
+    ${results.recommendedAdjustments?.length > 0 ? `
+    <div style="background-color:#ffffff;padding:20px 24px 24px;${sectionBorder}">
+      ${sectionHeading('Recommendations')}
+      ${results.recommendedAdjustments.map(r => `
+        <div style="padding:10px 12px;background-color:#fef8f0;border-radius:8px;margin-bottom:8px;border:1px solid #f2d0a9;">
+          <span style="color:#c4975e;font-weight:bold;">&#10140;</span> <span style="color:#334155;font-size:13px;">${r}</span>
+        </div>
+      `).join('')}
+    </div>
+    ${divider}
+    ` : ''}
+
+    <!-- Red Flag Analysis -->
+    ${results.redFlagAnalysis && results.redFlagAnalysis !== "None - well-positioned search" ? `
+    <div style="background-color:#ffffff;padding:20px 24px 24px;${sectionBorder}">
+      ${sectionHeading('Red Flag Analysis')}
+      <div style="padding:14px;background-color:#fdf2f4;border-radius:8px;border:1px solid #ebc7cd;">
+        <p style="margin:0;color:#334155;font-size:13px;line-height:1.5;">${results.redFlagAnalysis}</p>
+      </div>
+    </div>
+    ${divider}
+    ` : ''}
+
+    <!-- Market Intelligence -->
+    ${results.benchmark?.trends ? `
+    <div style="background-color:#ffffff;padding:20px 24px 24px;${sectionBorder}">
+      ${sectionHeading('Market Intelligence')}
+      <div style="padding:14px;background-color:#f8fafc;border-radius:8px;border:1px solid #e2e8f0;">
+        <p style="margin:0 0 8px;color:#334155;font-size:13px;line-height:1.5;">${results.benchmark.trends}</p>
+        ${results.benchmark.regionalNotes ? `
+        <div style="border-top:1px solid #e2e8f0;padding-top:10px;margin-top:10px;">
+          <p style="margin:0;color:#64748b;font-size:12px;line-height:1.5;"><strong>Regional Notes:</strong> ${results.benchmark.regionalNotes}</p>
+        </div>
+        ` : ''}
+      </div>
+    </div>
+    ${divider}
+    ` : ''}
+
+    <!-- Negotiation Leverage -->
+    ${results.negotiationLeverage ? `
+    <div style="background-color:#ffffff;padding:20px 24px 24px;${sectionBorder}">
+      ${sectionHeading('Negotiation Leverage')}
+      <table style="width:100%;border-collapse:collapse;">
+        <tr>
+          <td style="padding:14px;background-color:#fdf2f4;border-radius:8px;vertical-align:top;width:48%;">
+            <strong style="color:#9e5f6a;font-size:12px;text-transform:uppercase;">Candidate Advantages</strong>
+            ${(results.negotiationLeverage.candidateAdvantages || []).map(a => `
+              <p style="margin:6px 0 0;color:#334155;font-size:12px;line-height:1.4;">&#8226; ${a}</p>
+            `).join('')}
+          </td>
+          <td style="width:4%;"></td>
+          <td style="padding:14px;background-color:#f0f7f5;border-radius:8px;vertical-align:top;width:48%;">
+            <strong style="color:#4a776d;font-size:12px;text-transform:uppercase;">Your Advantages</strong>
+            ${(results.negotiationLeverage.employerAdvantages || []).map(a => `
+              <p style="margin:6px 0 0;color:#334155;font-size:12px;line-height:1.4;">&#8226; ${a}</p>
+            `).join('')}
+          </td>
+        </tr>
+      </table>
+    </div>
+    ${divider}
+    ` : ''}
+
+    <!-- Decision Intelligence -->
+    ${results.decisionIntelligence ? `
+    <div style="background-color:#ffffff;padding:20px 24px 24px;${sectionBorder}">
+      <h3 style="color:#2814ff;font-size:18px;margin:0 0 8px;font-weight:600;">Decision Intelligence</h3>
+      <p style="color:#64748b;font-size:12px;margin:0 0 20px;">Strategic insights to inform your hiring decisions.</p>
+
+      <!-- Trade-Off Scenarios -->
+      ${results.decisionIntelligence.tradeoffScenarios ? `
+      <div style="padding:16px;background-color:#f8fafc;border-radius:8px;margin-bottom:12px;border:1px solid #e2e8f0;">
+        <div style="margin-bottom:10px;">
+          <span style="display:inline-block;padding:3px 8px;background-color:#d2d4ff;border-radius:4px;font-size:11px;color:#2814ff;font-weight:600;">TRADE-OFF SCENARIOS</span>
+        </div>
+        ${(results.decisionIntelligence.tradeoffScenarios.initial || []).map(item => `
+          <p style="margin:0 0 6px;color:#334155;font-size:13px;line-height:1.5;padding-left:12px;border-left:2px solid #a5a8ff;"><span style="color:#2814ff;font-weight:500;">&#8594;</span> ${item}</p>
+        `).join('')}
+        ${results.decisionIntelligence.tradeoffScenarios.completeTeaser ? `
+        <p style="margin:10px 0 0;color:#94a3b8;font-size:11px;font-style:italic;">&#128274; ${results.decisionIntelligence.tradeoffScenarios.completeTeaser}</p>
+        ` : ''}
+      </div>
+      ` : ''}
+
+      <!-- Candidate Psychology -->
+      ${results.decisionIntelligence.candidatePsychology ? `
+      <div style="padding:16px;background-color:#f8fafc;border-radius:8px;margin-bottom:12px;border:1px solid #e2e8f0;">
+        <div style="margin-bottom:10px;">
+          <span style="display:inline-block;padding:3px 8px;background-color:#f5e6e9;border-radius:4px;font-size:11px;color:#9e5f6a;font-weight:600;">CANDIDATE PSYCHOLOGY</span>
+        </div>
+        ${(results.decisionIntelligence.candidatePsychology.initial || []).map(item => `
+          <p style="margin:0 0 6px;color:#334155;font-size:13px;line-height:1.5;padding-left:12px;border-left:2px solid #de9ea9;">&#8226; ${item}</p>
+        `).join('')}
+        ${results.decisionIntelligence.candidatePsychology.completeTeaser ? `
+        <p style="margin:10px 0 0;color:#94a3b8;font-size:11px;font-style:italic;">&#128274; ${results.decisionIntelligence.candidatePsychology.completeTeaser}</p>
+        ` : ''}
+      </div>
+      ` : ''}
+
+      <!-- Probability & Mandate - Side by side -->
+      <table style="width:100%;border-collapse:collapse;margin-bottom:12px;">
+        <tr>
+          ${results.decisionIntelligence.probabilityOfSuccess ? `
+          <td style="padding:16px;background-color:#f8fafc;border-radius:8px;vertical-align:top;width:48%;border:1px solid #e2e8f0;">
+            <div style="margin-bottom:10px;">
+              <span style="display:inline-block;padding:3px 8px;background-color:#d2d4ff;border-radius:4px;font-size:11px;color:#2814ff;font-weight:600;">SUCCESS PROBABILITY</span>
+            </div>
+            <div style="text-align:center;margin:12px 0;">
+              <span style="display:inline-block;padding:8px 20px;border-radius:20px;font-size:14px;font-weight:700;${
+                results.decisionIntelligence.probabilityOfSuccess.initialLabel === 'High'
+                  ? 'background-color:#f0f7f5;color:#4a776d;'
+                  : results.decisionIntelligence.probabilityOfSuccess.initialLabel === 'Moderate'
+                  ? 'background-color:#fef8f0;color:#a47840;'
+                  : 'background-color:#fdf2f4;color:#9e5f6a;'
+              }">${results.decisionIntelligence.probabilityOfSuccess.initialLabel}</span>
+            </div>
+            ${results.decisionIntelligence.probabilityOfSuccess.completeTeaser ? `
+            <p style="margin:8px 0 0;color:#94a3b8;font-size:10px;font-style:italic;">&#128274; ${results.decisionIntelligence.probabilityOfSuccess.completeTeaser}</p>
+            ` : ''}
+          </td>
+          ` : '<td></td>'}
+          <td style="width:4%;"></td>
+          ${results.decisionIntelligence.mandateStrength ? `
+          <td style="padding:16px;background-color:#f8fafc;border-radius:8px;vertical-align:top;width:48%;border:1px solid #e2e8f0;">
+            <div style="margin-bottom:10px;">
+              <span style="display:inline-block;padding:3px 8px;background-color:#f5e6e9;border-radius:4px;font-size:11px;color:#9e5f6a;font-weight:600;">MANDATE STRENGTH</span>
+            </div>
+            <div style="text-align:center;margin:8px 0;">
+              <span style="font-size:32px;font-weight:bold;color:#2814ff;">${
+                typeof results.decisionIntelligence.mandateStrength.initial?.score === 'number'
+                  ? results.decisionIntelligence.mandateStrength.initial.score.toFixed(1)
+                  : results.decisionIntelligence.mandateStrength.initial?.score || 'N/A'
+              }</span>
+              <span style="font-size:14px;color:#94a3b8;"> / 10</span>
+            </div>
+            <p style="margin:4px 0 0;color:#64748b;font-size:12px;text-align:center;">${results.decisionIntelligence.mandateStrength.initial?.rationale || ''}</p>
+            ${results.decisionIntelligence.mandateStrength.completeTeaser ? `
+            <p style="margin:8px 0 0;color:#94a3b8;font-size:10px;font-style:italic;">&#128274; ${results.decisionIntelligence.mandateStrength.completeTeaser}</p>
+            ` : ''}
+          </td>
+          ` : '<td></td>'}
+        </tr>
+      </table>
+
+      <!-- False Signal Warnings -->
+      ${results.decisionIntelligence.falseSignals ? `
+      <div style="padding:16px;background-color:#fef8f0;border-radius:8px;border:1px solid #f2d0a9;">
+        <div style="margin-bottom:10px;">
+          <span style="display:inline-block;padding:3px 8px;background-color:#f2d0a9;border-radius:4px;font-size:11px;color:#a47840;font-weight:600;">&#9888; FALSE SIGNAL WARNINGS</span>
+        </div>
+        ${(results.decisionIntelligence.falseSignals.initial || []).map(item => `
+          <p style="margin:0 0 6px;color:#334155;font-size:13px;line-height:1.5;padding-left:12px;border-left:2px solid #f2d0a9;">&#9888; ${item}</p>
+        `).join('')}
+        ${results.decisionIntelligence.falseSignals.completeTeaser ? `
+        <p style="margin:10px 0 0;color:#a47840;font-size:11px;font-style:italic;">&#128274; ${results.decisionIntelligence.falseSignals.completeTeaser}</p>
+        ` : ''}
+      </div>
+      ` : ''}
+
+      <!-- Unlock CTA -->
+      <div style="margin-top:16px;padding:14px;background-color:#eeeeff;border-radius:8px;text-align:center;border:1px solid #d2d4ff;">
+        <p style="margin:0 0 4px;color:#2814ff;font-size:13px;font-weight:600;">&#128274; Unlock complete decision intelligence analysis</p>
+        <p style="margin:0;color:#64748b;font-size:11px;">Schedule a consultation for the full breakdown</p>
+      </div>
+    </div>
+    ${divider}
     ` : ''}
 
     <!-- Complexity Drivers -->
     ${results.drivers?.length > 0 ? `
-    <div style="background-color:#ffffff;padding:0 24px 24px;border-left:1px solid #e2e8f0;border-right:1px solid #e2e8f0;">
-      <h3 style="color:#2814ff;font-size:16px;margin:0 0 16px;">Complexity Drivers (${results.drivers.reduce((sum, d) => sum + d.points, 0)} points)</h3>
+    <div style="background-color:#ffffff;padding:20px 24px 24px;${sectionBorder}">
+      ${sectionHeading('Complexity Drivers (' + results.drivers.reduce((sum, d) => sum + d.points, 0) + ' points)')}
       ${results.drivers.map(d => `
-        <div style="display:flex;align-items:center;padding:8px 0;border-bottom:1px solid #f1f5f9;">
-          <span style="display:inline-block;width:36px;height:36px;border-radius:50%;background-color:#2814ff;color:#fff;text-align:center;line-height:36px;font-size:12px;font-weight:bold;margin-right:12px;">+${d.points}</span>
-          <div>
-            <strong style="color:#1e293b;font-size:13px;">${d.factor}</strong><br>
-            <span style="color:#64748b;font-size:12px;">${d.rationale}</span>
-          </div>
+        <div style="padding:10px 0;border-bottom:1px solid #f1f5f9;">
+          <table style="width:100%;border-collapse:collapse;">
+            <tr>
+              <td style="width:44px;vertical-align:middle;">
+                <div style="width:36px;height:36px;border-radius:50%;background-color:#2814ff;color:#fff;text-align:center;line-height:36px;font-size:12px;font-weight:bold;">+${d.points}</div>
+              </td>
+              <td style="vertical-align:middle;padding-left:8px;">
+                <strong style="color:#1e293b;font-size:13px;">${d.factor}</strong><br>
+                <span style="color:#64748b;font-size:12px;">${d.rationale}</span>
+              </td>
+            </tr>
+          </table>
         </div>
       `).join('')}
     </div>
@@ -130,10 +351,34 @@ function generateEmailHTML(results) {
 
     <!-- CTA -->
     <div style="background-color:#2814ff;padding:32px 24px;text-align:center;border-radius:0 0 12px 12px;">
-      <h3 style="color:#ffffff;margin:0 0 8px;font-size:18px;">Ready for the Complete Picture?</h3>
-      <p style="color:#c7c0ff;margin:0 0 20px;font-size:13px;">Get sourcing strategies, compensation deep-dives, and interview frameworks.</p>
-      <a href="https://calendly.com/charbel-talentgurus" style="display:inline-block;background-color:#ffffff;color:#2814ff;padding:12px 32px;border-radius:8px;text-decoration:none;font-weight:bold;font-size:14px;">Schedule Your Consultation</a>
-      <p style="color:#c7c0ff;margin:12px 0 0;font-size:11px;">30-minute strategy call • No commitment</p>
+      <h3 style="color:#ffffff;margin:0 0 8px;font-size:20px;">Ready for the Complete Picture?</h3>
+      <p style="color:#d2d4ff;margin:0 0 6px;font-size:13px;">Get sourcing strategies, compensation deep-dives, and interview frameworks.</p>
+      <table style="width:100%;border-collapse:collapse;margin:16px 0;">
+        <tr>
+          <td style="padding:8px;text-align:center;width:33%;">
+            <div style="background-color:rgba(255,255,255,0.1);border-radius:8px;padding:10px 6px;">
+              <strong style="color:#fff;font-size:12px;">Sourcing Strategy</strong>
+              <p style="color:#d2d4ff;font-size:10px;margin:4px 0 0;">Where and how to find candidates</p>
+            </div>
+          </td>
+          <td style="width:6px;"></td>
+          <td style="padding:8px;text-align:center;width:33%;">
+            <div style="background-color:rgba(255,255,255,0.1);border-radius:8px;padding:10px 6px;">
+              <strong style="color:#fff;font-size:12px;">Comp Deep-Dive</strong>
+              <p style="color:#d2d4ff;font-size:10px;margin:4px 0 0;">Benefits, equity, and packaging</p>
+            </div>
+          </td>
+          <td style="width:6px;"></td>
+          <td style="padding:8px;text-align:center;width:33%;">
+            <div style="background-color:rgba(255,255,255,0.1);border-radius:8px;padding:10px 6px;">
+              <strong style="color:#fff;font-size:12px;">Interview Framework</strong>
+              <p style="color:#d2d4ff;font-size:10px;margin:4px 0 0;">Key questions and criteria</p>
+            </div>
+          </td>
+        </tr>
+      </table>
+      <a href="https://calendly.com/charbel-talentgurus" style="display:inline-block;background-color:#ffffff;color:#2814ff;padding:14px 36px;border-radius:8px;text-decoration:none;font-weight:bold;font-size:15px;">Schedule Your Consultation</a>
+      <p style="color:#d2d4ff;margin:12px 0 0;font-size:11px;">30-minute strategy call &#8226; No commitment</p>
     </div>
 
     <!-- Footer -->

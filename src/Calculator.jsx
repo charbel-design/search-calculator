@@ -811,12 +811,21 @@ Return this exact JSON structure:
             availabilityReason: results.availabilityReason,
             keySuccessFactors: results.keySuccessFactors,
             recommendedAdjustments: results.recommendedAdjustments,
+            sourcingInsight: results.sourcingInsight,
+            redFlagAnalysis: results.redFlagAnalysis,
+            negotiationLeverage: results.negotiationLeverage,
+            decisionIntelligence: results.decisionIntelligence,
             benchmark: results.benchmark ? {
               p25: results.adjustedBenchmark?.p25 || results.benchmark.p25,
               p50: results.adjustedBenchmark?.p50 || results.benchmark.p50,
-              p75: results.adjustedBenchmark?.p75 || results.benchmark.p75
+              p75: results.adjustedBenchmark?.p75 || results.benchmark.p75,
+              trends: results.benchmark.trends,
+              regionalNotes: results.benchmark.regionalNotes,
+              benefits: results.benchmark.benefits
             } : null,
-            drivers: results.drivers
+            drivers: results.drivers,
+            regionalMultiplier: results.regionalMultiplier,
+            confidence: results.confidence
           }
         })
       });
@@ -1040,7 +1049,7 @@ This analysis provides general market guidance. Every search is unique.
     if (score <= 3) return { bg: '#d2d4ff', text: '#2814ff' };
     if (score <= 5) return { bg: '#fdf2f4', text: '#2814ff' };
     if (score <= 7) return { bg: '#de9ea9', text: '#2814ff' };
-    return { bg: '#c77d8a', text: '#ffffff' };
+    return { bg: '#2814ff', text: '#ffffff' };
   };
 
   const resetForm = () => {
@@ -1744,12 +1753,12 @@ This analysis provides general market guidance. Every search is unique.
                         <div>
                           <div className="text-xs text-slate-500 mb-1">What-If Score</div>
                           <div className="flex items-center gap-3">
-                            <span className="text-3xl font-bold" style={{ color: getComplexityColor(calculateWhatIfScore.score).text === '#ffffff' ? '#c77d8a' : getComplexityColor(calculateWhatIfScore.score).text }}>
+                            <span className="text-3xl font-bold" style={{ color: getComplexityColor(calculateWhatIfScore.score).text === '#ffffff' ? '#2814ff' : getComplexityColor(calculateWhatIfScore.score).text }}>
                               {calculateWhatIfScore.score}
                             </span>
                             <span className="text-sm text-slate-500">/ 10</span>
                             <span className={`px-2 py-1 rounded-full text-xs font-medium`}
-                              style={{ backgroundColor: getComplexityColor(calculateWhatIfScore.score).bg, color: getComplexityColor(calculateWhatIfScore.score).text === '#ffffff' ? '#c77d8a' : getComplexityColor(calculateWhatIfScore.score).text }}>
+                              style={{ backgroundColor: getComplexityColor(calculateWhatIfScore.score).bg, color: getComplexityColor(calculateWhatIfScore.score).text === '#ffffff' ? '#2814ff' : getComplexityColor(calculateWhatIfScore.score).text }}>
                               {calculateWhatIfScore.label}
                             </span>
                           </div>
