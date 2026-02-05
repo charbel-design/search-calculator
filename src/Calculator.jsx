@@ -873,6 +873,10 @@ Return this exact JSON structure:
           </div>
           <h2 className="text-2xl md:text-3xl font-bold mb-3" style={{ color: '#2814ff', fontFamily: "'Playfair Display', serif" }}>Search Complexity Calculator</h2>
           <p className="text-base text-slate-600 max-w-2xl mx-auto">Understanding what you're up against matters. Get a clear picture in 90 seconds.</p>
+          <a href="/sample-report.pdf" target="_blank" rel="noopener noreferrer"
+            className="inline-flex items-center gap-1 text-sm mt-3 hover:underline" style={{ color: '#2814ff' }}>
+            <Download className="w-4 h-4" />See Sample Report
+          </a>
         </div>
 
         <div className="bg-slate-50 border-l-4 rounded-lg p-4 mb-8 text-sm text-slate-600" style={{ borderColor: '#2814ff' }}>
@@ -1172,9 +1176,17 @@ Return this exact JSON structure:
                   )}
 
                   <div className="border-t border-slate-200 pt-5">
-                    <h4 className="font-medium text-slate-900 mb-3">Optional: Save Results</h4>
-                    <input type="email" name="email" value={formData.email} onChange={handleInputChange}
-                      className="w-full px-4 py-3 border-2 border-slate-200 rounded-xl" placeholder="your@email.com" />
+                    <div className="bg-indigo-50 border border-indigo-100 rounded-xl p-4 mb-4">
+                      <h4 className="font-medium text-slate-900 mb-2">Get Your Full Report + Bonus Insights</h4>
+                      <ul className="text-sm text-slate-600 space-y-1 mb-3">
+                        <li className="flex items-center gap-2"><CheckCircle className="w-4 h-4 text-indigo-600" />PDF report with detailed analysis</li>
+                        <li className="flex items-center gap-2"><CheckCircle className="w-4 h-4 text-indigo-600" />Personalized market brief for your search</li>
+                        <li className="flex items-center gap-2"><CheckCircle className="w-4 h-4 text-indigo-600" />Complimentary 15-min strategy consultation</li>
+                      </ul>
+                      <input type="email" name="email" value={formData.email} onChange={handleInputChange}
+                        className="w-full px-4 py-3 border-2 border-indigo-200 rounded-xl bg-white" placeholder="your@email.com" />
+                      <p className="text-xs text-slate-500 mt-2">No spam. Unsubscribe anytime.</p>
+                    </div>
                   </div>
 
                   <div className="bg-amber-50 border border-amber-200 rounded-xl p-4">
@@ -1483,7 +1495,35 @@ Return this exact JSON structure:
           </div>
         )}
 
-        <div className="mt-12 text-center space-y-2">
+        {/* Methodology Section */}
+        <div className="mt-12 bg-slate-50 rounded-2xl p-6 border border-slate-200">
+          <h4 className="font-semibold text-slate-900 mb-4 text-center">Our Methodology</h4>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-sm">
+            <div className="text-center">
+              <div className="w-10 h-10 rounded-full flex items-center justify-center mx-auto mb-2" style={{ backgroundColor: '#e8e4ff' }}>
+                <TrendingUp className="w-5 h-5" style={{ color: '#2814ff' }} />
+              </div>
+              <h5 className="font-medium text-slate-800 mb-1">Market Data</h5>
+              <p className="text-slate-600 text-xs">Aggregated from 500+ placements, industry surveys, and proprietary network intelligence across UHNW households and family offices.</p>
+            </div>
+            <div className="text-center">
+              <div className="w-10 h-10 rounded-full flex items-center justify-center mx-auto mb-2" style={{ backgroundColor: '#e8e4ff' }}>
+                <Users className="w-5 h-5" style={{ color: '#2814ff' }} />
+              </div>
+              <h5 className="font-medium text-slate-800 mb-1">Expert Review</h5>
+              <p className="text-slate-600 text-xs">All insights are informed by our team's 15+ years placing senior staff for prominent families, with AI assisting—not replacing—human judgment.</p>
+            </div>
+            <div className="text-center">
+              <div className="w-10 h-10 rounded-full flex items-center justify-center mx-auto mb-2" style={{ backgroundColor: '#e8e4ff' }}>
+                <CheckCircle className="w-5 h-5" style={{ color: '#2814ff' }} />
+              </div>
+              <h5 className="font-medium text-slate-800 mb-1">Updated Regularly</h5>
+              <p className="text-slate-600 text-xs">Compensation and availability data refreshed monthly to reflect current market conditions across major metro areas and international markets.</p>
+            </div>
+          </div>
+        </div>
+
+        <div className="mt-8 text-center space-y-2">
           <p className="font-semibold" style={{ color: '#2814ff' }}>Talent Gurus - Finding Exceptional Talent for Family Offices</p>
           <p className="text-slate-500">We find the people you'll rely on for years.</p>
           <a href="https://talent-gurus.com" target="_blank" rel="noopener noreferrer" className="text-xs hover:underline" style={{ color: '#2814ff' }}>talent-gurus.com</a>
