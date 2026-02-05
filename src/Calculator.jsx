@@ -593,6 +593,7 @@ CRITICAL GUARDRAILS FOR DECISION INTELLIGENCE:
 1. COMPLEXITY SCORE (${det.score}/10): Higher = MORE difficult search. Do NOT suggest "improving" or "reaching a higher" complexity score. A score of 9 means the search is extremely challenging.
 2. MANDATE STRENGTH: This is a SEPARATE metric from complexity. Higher mandate strength = STRONGER client position (good). Score reflects budget adequacy, role attractiveness, timeline feasibility, and requirement reasonableness. The teaser should describe what factors strengthen or weaken the mandate, NOT suggest "reaching a higher score."
 3. PROBABILITY OF SUCCESS: Must be logically consistent with complexity score and mandate strength. High complexity + weak mandate = lower probability. Low complexity + strong mandate = higher probability.
+7. NUMERICAL CONSISTENCY: When you cite a statistic (candidate pool size, attrition rate, counter-offer rate, relocation %, etc.), use the SAME number every time it appears in the report. Do not round down in one section and use the full range in another. Pick one representation and stick with it throughout.
 4. TRADE-OFF SCENARIOS: Must use concrete IF/THEN with specific numbers from this search (salary figures, timeline, requirements). Never use generic advice.
 5. FALSE SIGNALS: Must be specific to this role and market. Never use generic hiring warnings.
 6. ALL teasers must describe WHAT the full analysis contains, not suggest improvements to scores.
