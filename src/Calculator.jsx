@@ -1,5 +1,5 @@
 import React, { useState, useMemo, useCallback, useRef, useEffect } from 'react';
-import { TrendingUp, Clock, DollarSign, Target, AlertCircle, CheckCircle, ArrowRight, Info, Download, RefreshCw, Users, Car, Heart, Home, ChevronDown, HelpCircle, Zap, MapPin, Phone, X, Layers, Lightbulb, ArrowLeftRight } from 'lucide-react';
+import { TrendingUp, Clock, DollarSign, Target, AlertCircle, CheckCircle, ArrowRight, Info, Download, RefreshCw, Users, Car, Heart, Home, ChevronDown, HelpCircle, Zap, MapPin, Phone, X, Layers, Lightbulb, ArrowLeftRight, Share2, Mail, Copy, SlidersHorizontal, GitCompare } from 'lucide-react';
 import { jsPDF } from 'jspdf';
 import html2canvas from 'html2canvas';
 import {
@@ -13,86 +13,52 @@ import {
   detectRegion,
   getBenchmark
 } from './salaryData';
-import React, { useState, useMemo, useRef, useEffect } from 'react';
-import { TrendingUp, Clock, DollarSign, Target, AlertCircle, CheckCircle, ArrowRight, Info, Download, RefreshCw, Users, Car, Heart, Home, ChevronDown, HelpCircle, Zap, MapPin, Phone, X, Scale } from 'lucide-react';
 
-// Version indicator - check console to verify deployment version
-const APP_VERSION = "2.0.0-enhanced";
-console.log(`Search Calculator v${APP_VERSION} - Enhanced with PDF export, trust signals, and improved UX`);
+const APP_VERSION = "3.0.0-enhanced";
+console.log(`Search Calculator v${APP_VERSION} - With Role Comparison, Shareable Links, What-If Sliders, Email Reports`);
 
-// jsPDF will be loaded via CDN
-const loadJsPDF = () => {
-  return new Promise((resolve, reject) => {
-    if (window.jspdf) {
-      resolve(window.jspdf.jsPDF);
-      return;
-    }
-    const script = document.createElement('script');
-    script.src = 'https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js';
-    script.onload = () => resolve(window.jspdf.jsPDF);
-    script.onerror = reject;
-    document.head.appendChild(script);
-  });
-};
-
-// ============================================
-// CUSTOM HOOKS
-// ============================================
-
-// Debounce hook to limit re-renders during rapid input
 function useDebounce(value, delay = 150) {
   const [debouncedValue, setDebouncedValue] = useState(value);
-
   useEffect(() => {
     const timer = setTimeout(() => setDebouncedValue(value), delay);
     return () => clearTimeout(timer);
   }, [value, delay]);
-
   return debouncedValue;
 }
 
-// Use the new regional multipliers as REGIONAL_ADJUSTMENTS for backwards compatibility
 const REGIONAL_ADJUSTMENTS = REGIONAL_MULTIPLIERS;
 
-// Generate location suggestions from the regional multipliers
-const LOCATION_SUGGESTIONS = Object.keys(REGIONAL_MULTIPLIERS).filter(
-  loc => !['National_US', 'Midwest_US', 'South_US'].includes(loc)
-).map(loc => loc.replace(/_/g, ' '));
+const LOCATION_SUGGESTIONS = Object.entries(REGIONAL_MULTIPLIERS)
+  .filter(([key]) => !['National_US', 'Midwest_US', 'South_US'].includes(key))
+  .map(([key, data]) => data.label || key);
 
-// ============================================
-// SEASONALITY FACTORS
-// ============================================
-const getSeasonalityFactor = () => {
+function getSeasonalityFactor() {
   const month = new Date().getMonth();
-  if (month >= 9 && month <= 11) return { factor: 1.15, label: "Q4 Holiday Season - Harder to source", description: "Candidates less likely to make moves during holidays" };
-  if (month >= 0 && month <= 2) return { factor: 1.05, label: "Q1 - Moderate activity", description: "New year brings some candidate movement" };
-  if (month >= 3 && month <= 5) return { factor: 0.95, label: "Q2 Spring - Good timing", description: "Active candidate market" };
-  return { factor: 1.0, label: "Q3 Summer - Standard", description: "Normal candidate availability" };
-};
+  if (month >= 9 || month <= 2) {
+    return { factor: month >= 9 && month <= 11 ? 1.15 : 1.05, label: month >= 9 && month <= 11 ? 'Q4 Holiday Season' : 'Q1 New Year' };
+  }
+  if (month >= 3 && month <= 5) {
+    return { factor: 0.95, label: 'Q2 Spring - Peak Hiring' };
+  }
+  return { factor: 1.0, label: 'Q3 Summer' };
+}
 
-// ============================================
-// TOOLTIP COMPONENT
-// ============================================
-const Tooltip = ({ content, children }) => {
-  const [show, setShow] = useState(false);
+function Tooltip({ text, children }) {
+  const [visible, setVisible] = useState(false);
   return (
     <div className="relative inline-block">
-      <div onMouseEnter={() => setShow(true)} onMouseLeave={() => setShow(false)} className="cursor-help">
+      <div onMouseEnter={() => setVisible(true)} onMouseLeave={() => setVisible(false)}>
         {children}
       </div>
-      {show && (
-        <div className="absolute z-50 w-64 p-3 text-xs bg-slate-900 text-white rounded-lg shadow-xl -top-2 left-full ml-2">
-          <div className="absolute w-2 h-2 bg-slate-900 transform rotate-45 -left-1 top-4"></div>
-          {content}
+      {visible && (
+        <div className="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-2 px-2 py-1 bg-gray-800 text-white text-xs rounded whitespace-nowrap z-50">
+          {text}
         </div>
       )}
     </div>
   );
-};
+}
 
-// ============================================
-// MAIN COMPONENT
-// ============================================
 const SearchComplexityCalculator = () => {
   const [step, setStep] = useState(1);
   const [formData, setFormData] = useState({
@@ -111,11 +77,10 @@ const SearchComplexityCalculator = () => {
     languageRequirements: [],
     certifications: [],
     travelRequirement: 'minimal',
-    // Corporate family office fields
     aumRange: '',
     teamSize: ''
   });
-  
+
   const [loading, setLoading] = useState(false);
   const [loadingStep, setLoadingStep] = useState('');
   const [results, setResults] = useState(null);
@@ -128,6 +93,26 @@ const SearchComplexityCalculator = () => {
   const [showLanguages, setShowLanguages] = useState(false);
   const [exportingPDF, setExportingPDF] = useState(false);
 
+  // NEW: Role Comparison Mode
+  const [showRoleComparison, setShowRoleComparison] = useState(false);
+  const [comparisonRoles, setComparisonRoles] = useState([]);
+
+  // NEW: Shareable Results Link
+  const [shareUrl, setShareUrl] = useState('');
+  const [showShareModal, setShowShareModal] = useState(false);
+  const [copiedShare, setCopiedShare] = useState(false);
+
+  // NEW: What-If Scenario Sliders
+  const [whatIfMode, setWhatIfMode] = useState(false);
+  const [whatIfBudget, setWhatIfBudget] = useState('');
+  const [whatIfTimeline, setWhatIfTimeline] = useState('');
+
+  // NEW: Email Report
+  const [showEmailModal, setShowEmailModal] = useState(false);
+  const [emailForReport, setEmailForReport] = useState('');
+  const [sendingEmail, setSendingEmail] = useState(false);
+  const [emailSent, setEmailSent] = useState(false);
+
   const timelineOptions = [
     { value: 'immediate', label: 'Immediate (1-2 months)', points: 22, description: 'Rush search - premium sourcing required' },
     { value: 'standard', label: 'Standard (2-3 months)', points: 14, description: 'Typical search timeline' },
@@ -135,7 +120,6 @@ const SearchComplexityCalculator = () => {
     { value: 'building-pipeline', label: 'Building Pipeline (6+ months)', points: 3, description: 'Strategic talent mapping' }
   ];
 
-  // Budget ranges - different for household vs corporate roles
   const householdBudgetRanges = [
     { value: 'under-80k', label: 'Under $80k', midpoint: 70000 },
     { value: '80k-120k', label: '$80k - $120k', midpoint: 100000 },
@@ -163,17 +147,14 @@ const SearchComplexityCalculator = () => {
     { value: 'ultra-discrete', label: 'Ultra-Discrete', points: 15, description: 'Maximum confidentiality, blind search' }
   ];
 
-  // Language options - slightly different focus for corporate vs household
   const householdLanguageOptions = ['English (Native/Fluent)', 'Spanish', 'French', 'Mandarin', 'Tagalog', 'Portuguese', 'Russian', 'Italian', 'German', 'Polish', 'Vietnamese', 'Korean', 'Japanese', 'Arabic', 'Hindi', 'Greek', 'Thai', 'Swedish', 'Dutch', 'Hebrew'];
   const corporateLanguageOptions = ['English (Native/Fluent)', 'Mandarin', 'Spanish', 'French', 'German', 'Japanese', 'Arabic', 'Portuguese', 'Korean', 'Russian', 'Italian', 'Hindi', 'Dutch', 'Swedish', 'Hebrew', 'Cantonese', 'Swiss German', 'Luxembourgish', 'Singaporean English', 'Thai'];
 
-  // Certification options - very different between corporate and household roles
   const householdCertificationOptions = ['STCW (Maritime)', 'CPR/First Aid', 'Firearms License', 'LEOSA', 'Commercial Driver (CDL)', 'Culinary Degree', 'Security Clearance', 'Child Development (CDA)', 'Sommelier (CMS)', 'WSET Level 3/4', 'Certified Wine Educator', 'Cicerone (Beer)', 'ServSafe', 'ENG1 Medical', 'PEC (Yacht)', 'RYA Yachtmaster', 'Butler Training (Starkey/IICS)', 'Nursing License (RN/LPN)', 'Montessori Certification', 'Private Pilot License', 'Close Protection (SIA)', 'AED/BLS Certified', 'Estate Management Certification'];
   const corporateCertificationOptions = ['CFA (Chartered Financial Analyst)', 'Series 7 (General Securities)', 'Series 65/66 (Investment Adviser)', 'CPA (Certified Public Accountant)', 'CFP (Certified Financial Planner)', 'CAIA (Alternative Investments)', 'CTFA (Trust & Fiduciary)', 'CIMA (Investment Management)', 'MBA', 'JD (Law Degree)', 'PMP (Project Management)', 'CISSP (Cybersecurity)', 'FRM (Financial Risk Manager)', 'CMA (Management Accounting)', 'EA (Enrolled Agent)', 'CEBS (Employee Benefits)', 'ChFC (Chartered Financial Consultant)', 'CLU (Chartered Life Underwriter)', 'AAMS (Asset Management)', 'CPWA (Private Wealth Advisor)'];
 
-  // Short language list for corporate roles (optional, collapsed)
   const corporateLanguageShortList = ['Mandarin', 'Spanish', 'German', 'Japanese', 'Arabic', 'French'];
-  
+
   const travelOptions = [
     { value: 'minimal', label: 'Minimal (Local only)', points: 0 },
     { value: 'occasional', label: 'Occasional (1-2 trips/month)', points: 3 },
@@ -181,38 +162,71 @@ const SearchComplexityCalculator = () => {
     { value: 'heavy-rotation', label: 'Heavy/Rotation (Following principal)', points: 15 }
   ];
 
-  // Get positions grouped by category for the dropdown
   const positionsByCategory = useMemo(() => getPositionsByCategory(), []);
   const commonRoles = useMemo(() => getAllPositionNames(), []);
 
-  // Check if selected position is a corporate family office role
   const isCorporateRole = useMemo(() => {
     if (!formData.positionType) return false;
     const benchmark = getBenchmark(formData.positionType);
-    // Check if category starts with "Family Office -" (C-Suite, Investment, Operations, Support)
     return benchmark?.category?.startsWith('Family Office -');
   }, [formData.positionType]);
 
-  // Ref for the results container (used for PDF export)
   const resultsRef = useRef(null);
 
-  // Clear selections when role category changes (budget ranges, certs, languages differ)
   const prevIsCorporateRole = useRef(isCorporateRole);
   useEffect(() => {
     if (prevIsCorporateRole.current !== isCorporateRole && formData.positionType) {
-      // Role category changed - clear selections that may not exist in new options
       setFormData(prev => ({
         ...prev,
         languageRequirements: [],
         certifications: [],
-        budgetRange: '' // Budget ranges are different for corporate vs household
+        budgetRange: ''
       }));
     }
     prevIsCorporateRole.current = isCorporateRole;
   }, [isCorporateRole, formData.positionType]);
 
-  // Get the appropriate budget ranges based on role type
   const budgetRanges = isCorporateRole ? corporateBudgetRanges : householdBudgetRanges;
+
+  // Parse shared link on mount
+  useEffect(() => {
+    try {
+      const params = new URLSearchParams(window.location.search);
+      const shared = params.get('s');
+      if (shared) {
+        const decoded = JSON.parse(atob(shared));
+        setFormData(prev => ({
+          ...prev,
+          positionType: decoded.p || '',
+          location: decoded.l || '',
+          timeline: decoded.t || '',
+          budgetRange: decoded.b || '',
+          discretionLevel: decoded.d || 'standard',
+          languageRequirements: decoded.lr || [],
+          certifications: decoded.c || [],
+          travelRequirement: decoded.tr || 'minimal',
+          keyRequirements: decoded.kr || 'Shared analysis - see results below',
+          aumRange: decoded.a || '',
+          teamSize: decoded.ts || '',
+          propertiesCount: decoded.pc || '',
+          householdSize: decoded.hs || ''
+        }));
+        // Auto-advance to results after a short delay
+        setTimeout(() => {
+          setStep(5); // Special "shared" step that triggers auto-analysis
+        }, 100);
+      }
+    } catch (e) {
+      // Invalid share link, ignore
+    }
+  }, []);
+
+  // Auto-run analysis when loaded from shared link
+  useEffect(() => {
+    if (step === 5 && formData.positionType) {
+      calculateComplexityFromShare();
+    }
+  }, [step]);
 
   const handleInputChange = (e) => {
     const { name, value, type, checked } = e.target;
@@ -229,7 +243,6 @@ const SearchComplexityCalculator = () => {
     }
   };
 
-  // Debounce location input to reduce autocomplete re-renders
   const debouncedLocation = useDebounce(formData.location, 150);
 
   const filteredLocationSuggestions = useMemo(() => {
@@ -237,20 +250,15 @@ const SearchComplexityCalculator = () => {
     return LOCATION_SUGGESTIONS.filter(loc => loc.toLowerCase().includes(debouncedLocation.toLowerCase())).slice(0, 5);
   }, [debouncedLocation]);
 
-  // Reset highlighted index when suggestions change
   useEffect(() => {
     setHighlightedLocationIndex(-1);
   }, [filteredLocationSuggestions]);
 
-  // Handle keyboard navigation for location dropdown
   const handleLocationKeyDown = (e) => {
     if (!showLocationSuggestions || filteredLocationSuggestions.length === 0) return;
-
     if (e.key === 'ArrowDown') {
       e.preventDefault();
-      setHighlightedLocationIndex(prev =>
-        prev < filteredLocationSuggestions.length - 1 ? prev + 1 : prev
-      );
+      setHighlightedLocationIndex(prev => prev < filteredLocationSuggestions.length - 1 ? prev + 1 : prev);
     } else if (e.key === 'ArrowUp') {
       e.preventDefault();
       setHighlightedLocationIndex(prev => prev > 0 ? prev - 1 : prev);
@@ -265,9 +273,6 @@ const SearchComplexityCalculator = () => {
     }
   };
 
-  // ============================================
-  // VALIDATION WITH RED FLAGS
-  // ============================================
   const validateAndWarn = () => {
     const newWarnings = [];
     const benchmark = BENCHMARKS[formData.positionType];
@@ -277,7 +282,7 @@ const SearchComplexityCalculator = () => {
     if (benchmark && budgetOption && budgetOption.midpoint) {
       const adjustedP25 = benchmark.p25 * (regional?.[1]?.multiplier || 1);
       const adjustedP50 = benchmark.p50 * (regional?.[1]?.multiplier || 1);
-      
+
       if (budgetOption.midpoint < adjustedP25 * 0.85) {
         newWarnings.push({
           type: 'critical',
@@ -285,7 +290,7 @@ const SearchComplexityCalculator = () => {
           suggestion: `Suggested minimum: $${Math.round(adjustedP25/1000)}k`
         });
       }
-      
+
       if (regional?.[1]?.tier === 'ultra-high' && budgetOption.midpoint < adjustedP50) {
         newWarnings.push({
           type: 'warning',
@@ -348,25 +353,25 @@ const SearchComplexityCalculator = () => {
     }
   };
 
-  // ============================================
-  // SCORING ALGORITHM
-  // ============================================
-  const calculateDeterministicScore = (budgetOverride = null) => {
+  const calculateDeterministicScore = (budgetOverride = null, timelineOverride = null) => {
     let points = 0;
     const drivers = [];
     const assumptions = [];
     const redFlags = [];
 
     // Timeline
-    const timelineOption = timelineOptions.find(t => t.value === formData.timeline);
-    points += timelineOption.points;
-    drivers.push({ factor: "Timeline", points: timelineOption.points, rationale: timelineOption.label, tooltip: timelineOption.description });
+    const timelineValue = timelineOverride || formData.timeline;
+    const timelineOption = timelineOptions.find(t => t.value === timelineValue);
+    if (timelineOption) {
+      points += timelineOption.points;
+      drivers.push({ factor: "Timeline", points: timelineOption.points, rationale: timelineOption.label, tooltip: timelineOption.description });
+    }
 
     // Location
     const isFlexible = /(remote|multiple|anywhere)/i.test(formData.location);
     let locationPoints = isFlexible ? 4 : 12;
     let regionalData = null;
-    
+
     for (const [region, data] of Object.entries(REGIONAL_ADJUSTMENTS)) {
       if (formData.location.toLowerCase().includes(region.toLowerCase())) {
         regionalData = { region, ...data };
@@ -382,8 +387,8 @@ const SearchComplexityCalculator = () => {
     const budgetOption = budgetRanges.find(b => b.value === (budgetOverride || formData.budgetRange));
     const benchmark = BENCHMARKS[formData.positionType];
     let budgetPoints = 14;
-
     let budgetRationale = "Unknown";
+
     if (benchmark && budgetOption?.midpoint) {
       const multiplier = regionalData?.multiplier || 1;
       const adjP25 = benchmark.p25 * multiplier;
@@ -404,15 +409,14 @@ const SearchComplexityCalculator = () => {
         budgetRationale = "Below 25th percentile - limits candidate pool";
         redFlags.push("Budget below market");
       }
-
       assumptions.push(`Regional adjustment: ${regionalData?.label || 'Standard'} (${multiplier}x)`);
-    } else if (formData.budgetRange === 'not-sure') {
+    } else if ((budgetOverride || formData.budgetRange) === 'not-sure') {
       budgetRationale = "Budget TBD - needs guidance";
     }
     points += budgetPoints;
     drivers.push({ factor: "Budget", points: budgetPoints, rationale: budgetRationale });
 
-    // Languages (compound)
+    // Languages
     const langCount = formData.languageRequirements.length;
     let langPoints = langCount === 1 ? 5 : langCount === 2 ? 12 : langCount >= 3 ? 20 : 0;
     if (langPoints > 0) {
@@ -450,47 +454,38 @@ const SearchComplexityCalculator = () => {
       drivers.push({ factor: "Timing", points: seasonalPoints, rationale: seasonality.label });
     }
 
-    // Role scarcity
-    const roleMap = { "Chief of Staff": 10, "Security Director": 9, "Yacht Captain": 8, "Private Chef": 7, "Butler": 7, "Estate Manager": 6 };
-    const rolePoints = roleMap[formData.positionType] || 5;
+    // Role scarcity - use benchmark scarcity if available
+    const roleScarcity = benchmark?.scarcity || 5;
+    const rolePoints = Math.round(roleScarcity);
     points += rolePoints;
-    drivers.push({ factor: "Role Scarcity", points: rolePoints, rationale: formData.positionType });
+    drivers.push({ factor: "Role Scarcity", points: rolePoints, rationale: `${formData.positionType} (${roleScarcity}/10)` });
 
     const score = Math.min(10, Math.max(1, Math.round(1 + (points / 120) * 9)));
     const label = score <= 3 ? "Straightforward" : score <= 5 ? "Moderate" : score <= 7 ? "Challenging" : score <= 9 ? "Highly Complex" : "Exceptional";
-    const confidence = formData.budgetRange === 'not-sure' || !benchmark ? "Medium" : "High";
+    const confidence = (budgetOverride || formData.budgetRange) === 'not-sure' || !benchmark ? "Medium" : "High";
 
     return { score, label, points, drivers, confidence, assumptions, redFlags, regionalData, benchmark, seasonality };
   };
 
-  // ============================================
-  // AI ANALYSIS WITH RETRY LOGIC
-  // ============================================
-
-  // Retry helper with exponential backoff
   const fetchWithRetry = async (url, options, maxRetries = 2) => {
     let lastError;
-
     for (let attempt = 0; attempt <= maxRetries; attempt++) {
       try {
-        const response = await fetch(url, options);
-
-        // Don't retry client errors (4xx), only server errors (5xx)
+        const controller = new AbortController();
+        const timeoutId = setTimeout(() => controller.abort(), 45000);
+        const response = await fetch(url, { ...options, signal: controller.signal });
+        clearTimeout(timeoutId);
         if (response.ok || (response.status >= 400 && response.status < 500)) {
           return response;
         }
-
         lastError = new Error(`Server error: ${response.status}`);
       } catch (err) {
         lastError = err;
       }
-
-      // Wait before retrying (exponential backoff: 1s, 2s)
       if (attempt < maxRetries) {
         await new Promise(resolve => setTimeout(resolve, 1000 * Math.pow(2, attempt)));
       }
     }
-
     throw lastError;
   };
 
@@ -503,11 +498,9 @@ const SearchComplexityCalculator = () => {
     const displayTitle = formData.positionType;
     const benchmark = det.benchmark;
 
-    // Get the timeline and budget labels for clearer AI context
     const timelineOption = timelineOptions.find(t => t.value === formData.timeline);
     const budgetOption = budgetRanges.find(b => b.value === formData.budgetRange);
 
-    // Calculate regionally-adjusted salary figures
     const regionalMultiplier = det.regionalData?.multiplier || 1;
     const adjustedBenchmark = benchmark ? {
       p25: Math.round(benchmark.p25 * regionalMultiplier),
@@ -516,18 +509,10 @@ const SearchComplexityCalculator = () => {
     } : null;
 
     try {
-      const roleContext = isCorporateRole ? 'family office executive/investment' : 'UHNW household staff';
-      const prompt = `You are an expert ${roleContext} recruiter. Analyze this search and return detailed, actionable JSON.
-    const ANALYSIS_TIMEOUT = 45000; // 45 seconds timeout
-
-    try {
-      const det = calculateDeterministicScore();
-      const displayTitle = formData.positionType === 'Other' ? formData.customPositionTitle : formData.positionType;
-      const benchmark = det.benchmark;
-
       setLoadingStep('Analyzing market conditions...');
 
-      const prompt = `You are advising a UHNW principal. Be warm, direct. Use "you/your". Never use "staffing".
+      const roleContext = isCorporateRole ? 'family office executive/investment' : 'UHNW household staff';
+      const prompt = `You are an expert ${roleContext} recruiter. Analyze this search and return detailed, actionable JSON.
 
 Position: ${displayTitle}
 Location: ${formData.location}${det.regionalData ? ` (${det.regionalData.label}, ${regionalMultiplier}x cost multiplier)` : ''}
@@ -558,8 +543,8 @@ Be SPECIFIC and ACTIONABLE. Avoid generic advice. Reference the actual role, loc
 
 Return this exact JSON structure:
 {
-  "salaryRangeGuidance": "Specific salary range with reasoning based on ADJUSTED regional figures. Example: '$X-$Y base, targeting the Nth percentile because [specific reason]'",
-  "estimatedTimeline": "Specific timeline with phases. Example: '8-10 weeks: 2 weeks sourcing, 4 weeks interviewing, 2 weeks offer/close'",
+  "salaryRangeGuidance": "Specific salary range with reasoning based on ADJUSTED regional figures",
+  "estimatedTimeline": "Specific timeline with phases",
   "marketCompetitiveness": "Detailed market assessment mentioning specific dynamics in ${formData.location || 'this market'} for this role",
   "keySuccessFactors": ["Be specific - reference actual requirements", "Mention what will differentiate this opportunity", "Include at least one compensation-related factor"],
   "recommendedAdjustments": ["Specific, actionable changes if budget/timeline/requirements need adjustment"] or [],
@@ -574,6 +559,8 @@ Return this exact JSON structure:
   "bottomLine": "3-4 sentence executive summary that's specific to THIS search, not generic advice"
 }`;
 
+      setLoadingStep('Generating personalized insights...');
+
       const response = await fetchWithRetry("/api/analyze", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -584,38 +571,15 @@ Return this exact JSON structure:
         const errorData = await response.json().catch(() => ({}));
         throw new Error(errorData.error || `Analysis failed (${response.status})`);
       }
-      // Create abort controller for timeout
-      const controller = new AbortController();
-      const timeoutId = setTimeout(() => controller.abort(), ANALYSIS_TIMEOUT);
-
-      setLoadingStep('Generating personalized insights...');
-
-      const response = await fetch("/api/analyze", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ prompt }),
-        signal: controller.signal
-      });
-
-      clearTimeout(timeoutId);
-
-      if (!response.ok) throw new Error('Analysis failed');
 
       setLoadingStep('Finalizing your analysis...');
 
       const data = await response.json();
       let text = data.content?.[0]?.text || '';
+      text = text.trim().replace(/^```(?:json)?\s*/gi, '').replace(/\s*```$/gi, '').trim();
 
-      // Clean up response - remove any markdown formatting
-      text = text.trim()
-        .replace(/^```(?:json)?\s*/gi, '')
-        .replace(/\s*```$/gi, '')
-        .trim();
-
-      // Parse and validate JSON
       const ai = JSON.parse(text);
 
-      // Validate required fields exist
       if (!ai.salaryRangeGuidance || !ai.bottomLine) {
         throw new Error('Incomplete response from AI');
       }
@@ -633,15 +597,9 @@ Return this exact JSON structure:
     } catch (err) {
       console.error('AI analysis error:', err.message);
 
-      // Fallback to deterministic results with clear indication
-      // Use regionally-adjusted figures for fallback too
       const fallbackSalary = adjustedBenchmark
         ? `$${Math.round(adjustedBenchmark.p25/1000)}k - $${Math.round(adjustedBenchmark.p75/1000)}k for ${formData.location || 'this market'}`
         : "Contact us for guidance";
-      setResults({ ...det, ...ai, displayTitle, formData: { ...formData } });
-    } catch (err) {
-      const det = calculateDeterministicScore();
-      const isTimeout = err.name === 'AbortError';
 
       setResults({
         ...det,
@@ -679,12 +637,6 @@ Return this exact JSON structure:
         aiAnalysisSuccess: false,
         adjustedBenchmark,
         regionalMultiplier
-        availabilityReason: "Based on complexity factors",
-        bottomLine: isTimeout
-          ? "Analysis timed out, but we've calculated your search complexity. For detailed AI insights, please try again or schedule a consultation."
-          : "Detailed AI analysis unavailable. Results based on our proprietary scoring algorithm.",
-        formData: { ...formData },
-        analysisNote: isTimeout ? 'timeout' : 'fallback'
       });
     }
 
@@ -692,13 +644,68 @@ Return this exact JSON structure:
     setLoadingStep('');
   };
 
+  // Shared link auto-analysis (deterministic only, no AI call)
+  const calculateComplexityFromShare = () => {
+    const det = calculateDeterministicScore();
+    const displayTitle = formData.positionType;
+    const benchmark = det.benchmark;
+    const regionalMultiplier = det.regionalData?.multiplier || 1;
+    const adjustedBenchmark = benchmark ? {
+      p25: Math.round(benchmark.p25 * regionalMultiplier),
+      p50: Math.round(benchmark.p50 * regionalMultiplier),
+      p75: Math.round(benchmark.p75 * regionalMultiplier)
+    } : null;
+
+    const fallbackSalary = adjustedBenchmark
+      ? `$${Math.round(adjustedBenchmark.p25/1000)}k - $${Math.round(adjustedBenchmark.p75/1000)}k for ${formData.location || 'this market'}`
+      : "Contact us for guidance";
+
+    const timelineOption = timelineOptions.find(t => t.value === formData.timeline);
+
+    setResults({
+      ...det,
+      displayTitle,
+      salaryRangeGuidance: fallbackSalary,
+      estimatedTimeline: timelineOption?.label || "See full analysis",
+      marketCompetitiveness: det.score <= 4
+        ? "Favorable conditions for this search"
+        : det.score <= 7
+        ? "Competitive market - strategic approach recommended"
+        : "Challenging search - expect extended timeline",
+      keySuccessFactors: [
+        "Competitive total compensation package",
+        "Clear role definition and expectations",
+        "Efficient interview and decision process"
+      ],
+      recommendedAdjustments: det.redFlags?.length > 0
+        ? det.redFlags.map(flag => `Address: ${flag}`)
+        : [],
+      candidateAvailability: det.score <= 4 ? "Moderate" : det.score <= 7 ? "Limited" : "Rare",
+      availabilityReason: `Based on ${det.drivers?.length || 0} complexity factors analyzed`,
+      sourcingInsight: "Schedule a consultation for detailed sourcing strategies.",
+      negotiationLeverage: {
+        candidateAdvantages: det.score >= 6
+          ? ["Limited candidate pool", "High market demand"]
+          : ["Standard market conditions"],
+        employerAdvantages: ["Growth opportunity"]
+      },
+      bottomLine: "This is a shared analysis based on our scoring algorithm. For AI-powered insights, run a new analysis or schedule a consultation.",
+      formData: { ...formData },
+      aiAnalysisSuccess: false,
+      isSharedResult: true,
+      adjustedBenchmark,
+      regionalMultiplier
+    });
+    setStep(1); // Reset step so the results show properly (results != null triggers results view)
+  };
+
+  // ============================================
+  // BUDGET COMPARISON
+  // ============================================
   const runComparison = () => {
     const current = calculateDeterministicScore();
     const currentIdx = budgetRanges.findIndex(b => b.value === formData.budgetRange);
-
-    // Get next budget (higher) if available
     const nextBudget = currentIdx < budgetRanges.length - 2 ? budgetRanges[currentIdx + 1] : null;
-    // Get previous budget (lower) if available
     const prevBudget = currentIdx > 0 ? budgetRanges[currentIdx - 1] : null;
 
     setComparisonResults({
@@ -711,6 +718,102 @@ Return this exact JSON structure:
     setCompareMode(true);
   };
 
+  // ============================================
+  // NEW: WHAT-IF SCENARIO SCORING
+  // ============================================
+  const calculateWhatIfScore = useMemo(() => {
+    if (!whatIfMode || !results) return null;
+    const budgetVal = whatIfBudget || formData.budgetRange;
+    const timelineVal = whatIfTimeline || formData.timeline;
+    return calculateDeterministicScore(budgetVal, timelineVal);
+  }, [whatIfMode, whatIfBudget, whatIfTimeline, results]);
+
+  // ============================================
+  // NEW: GENERATE SHAREABLE URL
+  // ============================================
+  const generateShareUrl = () => {
+    const shareData = {
+      p: formData.positionType,
+      l: formData.location,
+      t: formData.timeline,
+      b: formData.budgetRange,
+      d: formData.discretionLevel,
+      lr: formData.languageRequirements,
+      c: formData.certifications,
+      tr: formData.travelRequirement,
+      a: formData.aumRange,
+      ts: formData.teamSize,
+      pc: formData.propertiesCount,
+      hs: formData.householdSize,
+      kr: formData.keyRequirements
+    };
+    const encoded = btoa(JSON.stringify(shareData));
+    const url = `${window.location.origin}${window.location.pathname}?s=${encoded}`;
+    setShareUrl(url);
+    setShowShareModal(true);
+    setCopiedShare(false);
+  };
+
+  const copyShareUrl = () => {
+    navigator.clipboard.writeText(shareUrl).then(() => {
+      setCopiedShare(true);
+      setTimeout(() => setCopiedShare(false), 3000);
+    });
+  };
+
+  // ============================================
+  // NEW: EMAIL REPORT
+  // ============================================
+  const handleSendEmail = async () => {
+    if (!emailForReport || !emailForReport.includes('@')) return;
+    setSendingEmail(true);
+    try {
+      const response = await fetch('/api/send-report', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          email: emailForReport,
+          results: {
+            displayTitle: results.displayTitle,
+            score: results.score,
+            label: results.label,
+            location: results.formData?.location,
+            bottomLine: results.bottomLine,
+            salaryRangeGuidance: results.salaryRangeGuidance,
+            estimatedTimeline: results.estimatedTimeline,
+            marketCompetitiveness: results.marketCompetitiveness,
+            candidateAvailability: results.candidateAvailability,
+            availabilityReason: results.availabilityReason,
+            keySuccessFactors: results.keySuccessFactors,
+            recommendedAdjustments: results.recommendedAdjustments,
+            benchmark: results.benchmark ? {
+              p25: results.adjustedBenchmark?.p25 || results.benchmark.p25,
+              p50: results.adjustedBenchmark?.p50 || results.benchmark.p50,
+              p75: results.adjustedBenchmark?.p75 || results.benchmark.p75
+            } : null,
+            drivers: results.drivers
+          }
+        })
+      });
+      if (response.ok) {
+        setEmailSent(true);
+        setTimeout(() => {
+          setShowEmailModal(false);
+          setEmailSent(false);
+        }, 3000);
+      } else {
+        throw new Error('Failed to send email');
+      }
+    } catch (err) {
+      console.error('Email error:', err);
+      alert('Unable to send email. Please try again or download the PDF instead.');
+    }
+    setSendingEmail(false);
+  };
+
+  // ============================================
+  // PDF EXPORT (html2canvas approach)
+  // ============================================
   const exportToPDF = async () => {
     if (!resultsRef.current) {
       alert('Unable to export PDF. Please try again.');
@@ -718,10 +821,8 @@ Return this exact JSON structure:
     }
 
     try {
-      // Show loading state via React state
       setExportingPDF(true);
 
-      // Get section positions BEFORE capturing
       const containerRect = resultsRef.current.getBoundingClientRect();
       const sections = resultsRef.current.querySelectorAll('[data-pdf-section]');
       const sectionPositions = {};
@@ -733,10 +834,8 @@ Return this exact JSON structure:
         };
       });
 
-      // Small delay to ensure DOM updates
       await new Promise(resolve => setTimeout(resolve, 100));
 
-      // Capture the results container as an image
       const canvas = await html2canvas(resultsRef.current, {
         scale: 2,
         useCORS: true,
@@ -744,7 +843,6 @@ Return this exact JSON structure:
         backgroundColor: '#ffffff'
       });
 
-      // Create PDF - A4 dimensions in mm
       const doc = new jsPDF('p', 'mm', 'a4');
       const pageWidth = doc.internal.pageSize.getWidth();
       const pageHeight = doc.internal.pageSize.getHeight();
@@ -752,46 +850,34 @@ Return this exact JSON structure:
       const headerHeight = 25;
       const footerHeight = 15;
 
-      // Calculate dimensions
       const imgWidth = canvas.width;
       const imgHeight = canvas.height;
       const scale = 2;
       const contentWidth = pageWidth - (margin * 2);
 
-      // Convert source pixels to mm
       const pxToMm = (px) => (px / scale) * (contentWidth / (imgWidth / scale));
 
-      // Page content heights in mm
       const firstPageContentMm = pageHeight - headerHeight - footerHeight - 5;
       const otherPageContentMm = pageHeight - footerHeight - 10;
 
-      // Find key section positions for forced page breaks
       const metricsTop = sectionPositions['metrics']?.top || 0;
       const metricsTopPx = metricsTop * scale;
       const successFactorsTop = sectionPositions['success-factors']?.top || 0;
       const successFactorsTopPx = successFactorsTop * scale;
-
-      // Build page slices with forced breaks:
-      // Page 1: Score, Complexity Breakdown (everything before Metrics)
-      // Page 2: Metrics, Sourcing, Benchmarks (everything before Success Factors)
-      // Page 3+: Success Factors, Recommendations, Negotiation
 
       const mmToPx = (mm) => mm * scale * (imgWidth / scale) / contentWidth;
       const otherPageMaxPx = mmToPx(otherPageContentMm);
 
       const slices = [];
 
-      // Page 1: Everything before Metrics
       if (metricsTopPx > 0) {
         slices.push({ start: 0, end: metricsTopPx });
       }
 
-      // Page 2: Metrics until Success Factors
       if (metricsTopPx < successFactorsTopPx) {
         slices.push({ start: metricsTopPx, end: successFactorsTopPx });
       }
 
-      // Page 3+: Success Factors and everything after
       if (successFactorsTopPx < imgHeight) {
         let currentPos = successFactorsTopPx;
         while (currentPos < imgHeight) {
@@ -801,19 +887,18 @@ Return this exact JSON structure:
         }
       }
 
-      // Track content end position on each page for CTA placement
+      if (slices.length === 0) {
+        slices.push({ start: 0, end: imgHeight });
+      }
+
       let lastPageContentEndMm = 0;
 
-      // Render each page
       for (let i = 0; i < slices.length; i++) {
-        if (i > 0) {
-          doc.addPage();
-        }
+        if (i > 0) doc.addPage();
 
         const slice = slices[i];
         const sliceHeightPx = slice.end - slice.start;
 
-        // Add header only on first page
         if (i === 0) {
           doc.setFillColor(40, 20, 255);
           doc.rect(0, 0, pageWidth, headerHeight, 'F');
@@ -826,34 +911,27 @@ Return this exact JSON structure:
           doc.text('Search Complexity Analysis', pageWidth / 2, 18, { align: 'center' });
         }
 
-        // Create canvas for this page's portion
         const pageCanvas = document.createElement('canvas');
         pageCanvas.width = imgWidth;
         pageCanvas.height = sliceHeightPx;
         const pageCtx = pageCanvas.getContext('2d');
-        
-        // Check if context was created successfully
+
         if (!pageCtx) {
-          console.error('Failed to create 2D canvas context for PDF page', i);
           throw new Error('Failed to create canvas context for PDF generation');
         }
-        
+
         pageCtx.drawImage(canvas, 0, slice.start, imgWidth, sliceHeightPx, 0, 0, imgWidth, sliceHeightPx);
 
-        // Calculate destination dimensions
         const destHeight = pxToMm(sliceHeightPx);
         const destY = i === 0 ? headerHeight + 2 : 8;
 
         doc.addImage(pageCanvas.toDataURL('image/png'), 'PNG', margin, destY, contentWidth, destHeight);
-
         lastPageContentEndMm = destY + destHeight;
       }
 
-      // Add CTA after all content
       const ctaHeight = 22;
       const ctaMargin = 8;
 
-      // Check if CTA fits on current page
       if (lastPageContentEndMm + ctaHeight + ctaMargin > pageHeight - footerHeight) {
         doc.addPage();
         lastPageContentEndMm = 15;
@@ -869,11 +947,8 @@ Return this exact JSON structure:
       doc.setFontSize(9);
       doc.setFont('helvetica', 'normal');
       doc.text('Schedule a consultation: calendly.com/charbel-talentgurus', pageWidth / 2, ctaY + 17, { align: 'center' });
-
-      // Add clickable link
       doc.link(margin, ctaY, contentWidth, ctaHeight, { url: 'https://calendly.com/charbel-talentgurus' });
 
-      // Add footers to all pages
       const totalPages = doc.internal.getNumberOfPages();
       for (let i = 1; i <= totalPages; i++) {
         doc.setPage(i);
@@ -883,168 +958,15 @@ Return this exact JSON structure:
         doc.text(`Page ${i} of ${totalPages}`, pageWidth - margin, pageHeight - 6, { align: 'right' });
       }
 
-      // Save
       doc.save(`TG-Analysis-${results.displayTitle.replace(/[^a-zA-Z0-9]/g, '-')}-${new Date().toISOString().split('T')[0]}.pdf`);
-
-      // Reset loading state
       setExportingPDF(false);
     } catch (err) {
       console.error('PDF export error:', err);
-      alert('Unable to export PDF. Please try again or contact support.');
-
-      // Reset loading state on error
       setExportingPDF(false);
-    try {
-      const jsPDF = await loadJsPDF();
-      const doc = new jsPDF();
 
-      const pageWidth = doc.internal.pageSize.getWidth();
-      const margin = 20;
-      const contentWidth = pageWidth - margin * 2;
-      let y = 20;
-
-      // Helper functions
-      const addText = (text, fontSize = 10, isBold = false, color = [0, 0, 0]) => {
-        doc.setFontSize(fontSize);
-        doc.setFont('helvetica', isBold ? 'bold' : 'normal');
-        doc.setTextColor(...color);
-        const lines = doc.splitTextToSize(text, contentWidth);
-        doc.text(lines, margin, y);
-        y += lines.length * (fontSize * 0.5) + 2;
-      };
-
-      const addSection = (title) => {
-        if (y > 250) { doc.addPage(); y = 20; }
-        y += 5;
-        doc.setDrawColor(40, 20, 255);
-        doc.setLineWidth(0.5);
-        doc.line(margin, y, pageWidth - margin, y);
-        y += 8;
-        addText(title, 12, true, [40, 20, 255]);
-        y += 3;
-      };
-
-      // Header
-      doc.setFillColor(40, 20, 255);
-      doc.rect(0, 0, pageWidth, 35, 'F');
-      doc.setFontSize(20);
-      doc.setFont('helvetica', 'bold');
-      doc.setTextColor(255, 255, 255);
-      doc.text('TALENT GURUS', pageWidth / 2, 15, { align: 'center' });
-      doc.setFontSize(12);
-      doc.setFont('helvetica', 'normal');
-      doc.text('Search Complexity Analysis', pageWidth / 2, 25, { align: 'center' });
-      y = 45;
-
-      // Position and Score Summary
-      doc.setFontSize(16);
-      doc.setFont('helvetica', 'bold');
-      doc.setTextColor(0, 0, 0);
-      doc.text(results.displayTitle, margin, y);
-      y += 8;
-      doc.setFontSize(10);
-      doc.setFont('helvetica', 'normal');
-      doc.setTextColor(100, 100, 100);
-      doc.text(`Location: ${results.formData.location} | Generated: ${new Date().toLocaleDateString()}`, margin, y);
-      y += 12;
-
-      // Score Circle (simulated)
-      const scoreColor = results.score <= 3 ? [27, 94, 32] : results.score <= 5 ? [230, 81, 0] : results.score <= 7 ? [191, 54, 12] : [183, 28, 28];
-      doc.setFillColor(...scoreColor);
-      doc.circle(pageWidth / 2, y + 15, 20, 'F');
-      doc.setFontSize(24);
-      doc.setFont('helvetica', 'bold');
-      doc.setTextColor(255, 255, 255);
-      doc.text(`${results.score}`, pageWidth / 2, y + 18, { align: 'center' });
-      doc.setFontSize(8);
-      doc.text('out of 10', pageWidth / 2, y + 25, { align: 'center' });
-      y += 45;
-
-      doc.setTextColor(0, 0, 0);
-      doc.setFontSize(12);
-      doc.setFont('helvetica', 'bold');
-      doc.text(`${results.label} Search`, pageWidth / 2, y, { align: 'center' });
-      y += 15;
-
-      // Executive Summary
-      if (results.bottomLine) {
-        addSection('EXECUTIVE SUMMARY');
-        addText(results.bottomLine, 10, false, [50, 50, 50]);
-      }
-
-      // Key Metrics
-      addSection('KEY METRICS');
-      addText(`Salary Guidance: ${results.salaryRangeGuidance || 'N/A'}`, 10);
-      addText(`Expected Timeline: ${results.estimatedTimeline || 'N/A'}`, 10);
-      addText(`Candidate Availability: ${results.candidateAvailability || 'N/A'} - ${results.availabilityReason || ''}`, 10);
-      addText(`Market Dynamics: ${results.marketCompetitiveness || 'N/A'}`, 10);
-
-      // Benchmarks
-      if (results.benchmark) {
-        addSection(`MARKET BENCHMARKS: ${results.displayTitle.toUpperCase()}`);
-        addText(`25th Percentile: $${results.benchmark.p25.toLocaleString()}`, 10);
-        addText(`Market Median: $${results.benchmark.p50.toLocaleString()}`, 10, true);
-        addText(`75th Percentile: $${results.benchmark.p75.toLocaleString()}`, 10);
-        y += 5;
-        addText('Benefits:', 10, true);
-        addText(`Housing: ${results.benchmark.benefits.housing}`, 9);
-        addText(`Vehicle: ${results.benchmark.benefits.vehicle}`, 9);
-        addText(`Health: ${results.benchmark.benefits.health}`, 9);
-        addText(`Bonus: ${results.benchmark.benefits.bonus}`, 9);
-      }
-
-      // Complexity Drivers
-      addSection(`COMPLEXITY DRIVERS (Total: ${results.points} points)`);
-      results.drivers?.forEach(d => {
-        addText(`[+${d.points}] ${d.factor}: ${d.rationale}`, 9);
-      });
-
-      // Success Factors
-      addSection('KEY SUCCESS FACTORS');
-      results.keySuccessFactors?.forEach(f => {
-        addText(`• ${f}`, 9);
-      });
-
-      // Recommendations
-      if (results.recommendedAdjustments?.length > 0) {
-        addSection('RECOMMENDATIONS');
-        results.recommendedAdjustments.forEach(r => {
-          addText(`→ ${r}`, 9);
-        });
-      }
-
-      // Negotiation Dynamics
-      if (results.negotiationLeverage) {
-        addSection('NEGOTIATION DYNAMICS');
-        addText('Candidate Advantages:', 10, true);
-        results.negotiationLeverage.candidateAdvantages?.forEach(a => addText(`• ${a}`, 9));
-        y += 3;
-        addText('Your Advantages:', 10, true);
-        results.negotiationLeverage.employerAdvantages?.forEach(a => addText(`• ${a}`, 9));
-      }
-
-      // Footer
-      if (y > 240) { doc.addPage(); y = 20; }
-      y = doc.internal.pageSize.getHeight() - 25;
-      doc.setDrawColor(200, 200, 200);
-      doc.line(margin, y, pageWidth - margin, y);
-      y += 8;
-      doc.setFontSize(9);
-      doc.setFont('helvetica', 'bold');
-      doc.setTextColor(40, 20, 255);
-      doc.text('TALENT GURUS', margin, y);
-      doc.setFont('helvetica', 'normal');
-      doc.setTextColor(100, 100, 100);
-      doc.text('Finding Exceptional Talent for Family Offices | talent-gurus.com', margin, y + 5);
-      doc.setFontSize(7);
-      doc.text('This analysis provides general market guidance. Every search is unique.', margin, y + 10);
-
-      // Save
-      doc.save(`Search-Analysis-${results.displayTitle.replace(/\s+/g, '-')}-${new Date().toISOString().split('T')[0]}.pdf`);
-    } catch (err) {
-      // Fallback to text export if PDF fails
-      console.error('PDF generation failed, falling back to text:', err);
-      const content = `
+      // Fallback to text export
+      try {
+        const content = `
 TALENT GURUS - Search Complexity Analysis
 
 Position: ${results.displayTitle}
@@ -1061,41 +983,39 @@ KEY METRICS
 - Candidate Availability: ${results.candidateAvailability || 'N/A'} - ${results.availabilityReason || ''}
 - Market Dynamics: ${results.marketCompetitiveness || 'N/A'}
 
-${results.benchmark ? `MARKET BENCHMARKS
-- 25th Percentile: $${results.benchmark.p25.toLocaleString()}
-- Market Median: $${results.benchmark.p50.toLocaleString()}
-- 75th Percentile: $${results.benchmark.p75.toLocaleString()}` : ''}
-
 COMPLEXITY DRIVERS (Total: ${results.points} points)
 ${results.drivers?.map(d => `[+${d.points}] ${d.factor}: ${d.rationale}`).join('\n') || 'N/A'}
 
 KEY SUCCESS FACTORS
 ${results.keySuccessFactors?.map(f => `- ${f}`).join('\n') || 'N/A'}
 
-${results.recommendedAdjustments?.length > 0 ? `RECOMMENDATIONS\n${results.recommendedAdjustments.map(r => `- ${r}`).join('\n')}` : ''}
-
 TALENT GURUS | talent-gurus.com
 This analysis provides general market guidance. Every search is unique.
-      `.trim();
+        `.trim();
 
-      const blob = new Blob([content], { type: 'text/plain;charset=utf-8' });
-      const url = URL.createObjectURL(blob);
-      const link = document.createElement('a');
-      link.href = url;
-      link.download = `Search-Analysis-${results.displayTitle.replace(/\s+/g, '-')}-${new Date().toISOString().split('T')[0]}.txt`;
-      document.body.appendChild(link);
-      link.click();
-      document.body.removeChild(link);
-      URL.revokeObjectURL(url);
+        const blob = new Blob([content], { type: 'text/plain;charset=utf-8' });
+        const url = URL.createObjectURL(blob);
+        const link = document.createElement('a');
+        link.href = url;
+        link.download = `Search-Analysis-${results.displayTitle.replace(/\s+/g, '-')}-${new Date().toISOString().split('T')[0]}.txt`;
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+        URL.revokeObjectURL(url);
+      } catch (fallbackErr) {
+        alert('Unable to export. Please try again or contact support.');
+      }
     }
   };
 
+  // ============================================
+  // HELPERS
+  // ============================================
   const getComplexityColor = (score) => {
-    // Using brand colors: Indigo #2814ff, Pink #de9ea9
-    if (score <= 3) return { bg: '#e8e4ff', text: '#2814ff' }; // Light indigo bg, indigo text
-    if (score <= 5) return { bg: '#f5e6e9', text: '#2814ff' }; // Light pink bg, indigo text
-    if (score <= 7) return { bg: '#de9ea9', text: '#2814ff' }; // Brand pink bg, indigo text
-    return { bg: '#c77d8a', text: '#ffffff' }; // Darker pink bg, white text
+    if (score <= 3) return { bg: '#e8e4ff', text: '#2814ff' };
+    if (score <= 5) return { bg: '#f5e6e9', text: '#2814ff' };
+    if (score <= 7) return { bg: '#de9ea9', text: '#2814ff' };
+    return { bg: '#c77d8a', text: '#ffffff' };
   };
 
   const resetForm = () => {
@@ -1104,11 +1024,30 @@ This analysis provides general market guidance. Every search is unique.
     setCompareMode(false);
     setComparisonResults(null);
     setWarnings([]);
+    setWhatIfMode(false);
+    setWhatIfBudget('');
+    setWhatIfTimeline('');
+    setShareUrl('');
+    setShowShareModal(false);
+    setShowEmailModal(false);
+    setShowRoleComparison(false);
+    setComparisonRoles([]);
     setFormData({
       positionType: '', location: '', timeline: '', budgetRange: '', keyRequirements: '',
       email: '', emailConsent: false, discretionLevel: 'standard', propertiesCount: '', householdSize: '',
       priorityCallback: false, phone: '', languageRequirements: [], certifications: [], travelRequirement: 'minimal',
       aumRange: '', teamSize: ''
+    });
+    // Clear URL params
+    window.history.replaceState({}, '', window.location.pathname);
+  };
+
+  // NEW: Toggle role for comparison
+  const toggleComparisonRole = (roleName) => {
+    setComparisonRoles(prev => {
+      if (prev.includes(roleName)) return prev.filter(r => r !== roleName);
+      if (prev.length >= 3) return prev;
+      return [...prev, roleName];
     });
   };
 
@@ -1127,19 +1066,162 @@ This analysis provides general market guidance. Every search is unique.
           </div>
           <h2 className="text-2xl md:text-3xl font-bold mb-3" style={{ color: '#2814ff', fontFamily: "'Playfair Display', serif" }}>Search Complexity Calculator</h2>
           <p className="text-base text-slate-600 max-w-2xl mx-auto">Understanding what you're up against matters. Get a clear picture in 90 seconds.</p>
+
+          {/* NEW: Role Comparison Toggle */}
+          {!results && (
+            <button
+              onClick={() => setShowRoleComparison(!showRoleComparison)}
+              className="mt-4 inline-flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium transition-all"
+              style={{ backgroundColor: showRoleComparison ? '#2814ff' : '#e8e4ff', color: showRoleComparison ? '#ffffff' : '#2814ff' }}
+            >
+              <GitCompare className="w-4 h-4" />
+              {showRoleComparison ? 'Back to Calculator' : 'Compare Roles Side-by-Side'}
+            </button>
+          )}
         </div>
 
-        <div className="bg-slate-50 border-l-4 rounded-lg p-4 mb-8 text-sm text-slate-600" style={{ borderColor: '#2814ff' }}>
-          <div className="flex gap-2 mb-2">
-            <Info className="w-5 h-5 flex-shrink-0 mt-0.5" style={{ color: '#2814ff' }} />
-            <div>
-              <p className="mb-2"><strong>Disclaimer:</strong> This calculator provides general market guidance based on aggregated industry data and should not be construed as a guarantee of search outcomes, candidate availability, or compensation accuracy. Every search is unique, and actual results may vary based on market conditions, candidate preferences, and specific role requirements.</p>
-              <p className="text-xs text-slate-500"><strong>AI Disclosure:</strong> Portions of this analysis are generated using AI language models. While we strive for accuracy, AI-generated content may contain errors or inaccuracies. This tool is for informational purposes only and does not constitute professional staffing advice. For personalized guidance, please consult directly with Talent Gurus.</p>
+        {/* NEW: ROLE COMPARISON PANEL */}
+        {showRoleComparison && !results && (
+          <div className="bg-white rounded-2xl shadow-xl p-6 md:p-8 border border-slate-200 mb-8">
+            <div className="flex justify-between items-center mb-6">
+              <h3 className="text-xl font-semibold" style={{ color: '#2814ff' }}>Compare Roles Side-by-Side</h3>
+              <span className="text-sm text-slate-500">{comparisonRoles.length}/3 selected</span>
+            </div>
+
+            <div className="mb-6">
+              <label className="block text-sm font-medium text-slate-700 mb-2">Select up to 3 roles to compare</label>
+              <div className="max-h-64 overflow-y-auto border border-slate-200 rounded-xl p-3 space-y-1">
+                {Object.entries(CATEGORY_GROUPS).map(([groupName, categories]) => (
+                  <div key={groupName}>
+                    <div className="text-xs font-bold text-slate-400 uppercase tracking-wider py-2 px-2">{groupName}</div>
+                    {categories.map(category => (
+                      <div key={category}>
+                        <div className="text-xs font-semibold text-slate-600 py-1 px-2">{category.replace('Family Office - ', '')}</div>
+                        {positionsByCategory[category]?.map(pos => (
+                          <button
+                            key={pos.name}
+                            onClick={() => toggleComparisonRole(pos.name)}
+                            disabled={!comparisonRoles.includes(pos.name) && comparisonRoles.length >= 3}
+                            className={`w-full text-left px-3 py-1.5 rounded text-sm transition-all ${
+                              comparisonRoles.includes(pos.name)
+                                ? 'bg-indigo-100 text-indigo-800 font-medium'
+                                : comparisonRoles.length >= 3
+                                ? 'text-slate-300 cursor-not-allowed'
+                                : 'text-slate-700 hover:bg-slate-50'
+                            }`}
+                          >
+                            {pos.name}
+                            {comparisonRoles.includes(pos.name) && <span className="float-right text-indigo-600">✓</span>}
+                          </button>
+                        ))}
+                      </div>
+                    ))}
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            {comparisonRoles.length >= 2 && (
+              <div className="overflow-x-auto">
+                <table className="w-full text-sm">
+                  <thead>
+                    <tr className="border-b-2 border-slate-200">
+                      <th className="text-left py-3 pr-4 text-slate-500 font-medium">Metric</th>
+                      {comparisonRoles.map(role => (
+                        <th key={role} className="text-center py-3 px-2 font-semibold" style={{ color: '#2814ff' }}>{role}</th>
+                      ))}
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr className="border-b border-slate-100">
+                      <td className="py-3 pr-4 font-medium text-slate-700">Salary (25th)</td>
+                      {comparisonRoles.map(role => {
+                        const b = BENCHMARKS[role];
+                        return <td key={role} className="text-center py-3 px-2">{b ? `$${Math.round(b.p25/1000)}k` : 'N/A'}</td>;
+                      })}
+                    </tr>
+                    <tr className="border-b border-slate-100 bg-indigo-50/50">
+                      <td className="py-3 pr-4 font-medium text-slate-700">Salary (Median)</td>
+                      {comparisonRoles.map(role => {
+                        const b = BENCHMARKS[role];
+                        return <td key={role} className="text-center py-3 px-2 font-semibold" style={{ color: '#2814ff' }}>{b ? `$${Math.round(b.p50/1000)}k` : 'N/A'}</td>;
+                      })}
+                    </tr>
+                    <tr className="border-b border-slate-100">
+                      <td className="py-3 pr-4 font-medium text-slate-700">Salary (75th)</td>
+                      {comparisonRoles.map(role => {
+                        const b = BENCHMARKS[role];
+                        return <td key={role} className="text-center py-3 px-2">{b ? `$${Math.round(b.p75/1000)}k` : 'N/A'}</td>;
+                      })}
+                    </tr>
+                    <tr className="border-b border-slate-100">
+                      <td className="py-3 pr-4 font-medium text-slate-700">Scarcity</td>
+                      {comparisonRoles.map(role => {
+                        const b = BENCHMARKS[role];
+                        const s = b?.scarcity || 5;
+                        return <td key={role} className="text-center py-3 px-2">
+                          <span className={`px-2 py-1 rounded-full text-xs font-medium ${s >= 7 ? 'bg-red-100 text-red-700' : s >= 5 ? 'bg-amber-100 text-amber-700' : 'bg-green-100 text-green-700'}`}>
+                            {s}/10
+                          </span>
+                        </td>;
+                      })}
+                    </tr>
+                    <tr className="border-b border-slate-100">
+                      <td className="py-3 pr-4 font-medium text-slate-700">Housing</td>
+                      {comparisonRoles.map(role => {
+                        const b = BENCHMARKS[role];
+                        return <td key={role} className="text-center py-3 px-2 text-xs">{b?.benefits?.housing || 'N/A'}</td>;
+                      })}
+                    </tr>
+                    <tr className="border-b border-slate-100">
+                      <td className="py-3 pr-4 font-medium text-slate-700">Vehicle</td>
+                      {comparisonRoles.map(role => {
+                        const b = BENCHMARKS[role];
+                        return <td key={role} className="text-center py-3 px-2 text-xs">{b?.benefits?.vehicle || 'N/A'}</td>;
+                      })}
+                    </tr>
+                    <tr className="border-b border-slate-100">
+                      <td className="py-3 pr-4 font-medium text-slate-700">Health</td>
+                      {comparisonRoles.map(role => {
+                        const b = BENCHMARKS[role];
+                        return <td key={role} className="text-center py-3 px-2 text-xs">{b?.benefits?.health || 'N/A'}</td>;
+                      })}
+                    </tr>
+                    <tr>
+                      <td className="py-3 pr-4 font-medium text-slate-700">Bonus</td>
+                      {comparisonRoles.map(role => {
+                        const b = BENCHMARKS[role];
+                        return <td key={role} className="text-center py-3 px-2 text-xs">{b?.benefits?.bonus || 'N/A'}</td>;
+                      })}
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            )}
+
+            {comparisonRoles.length < 2 && (
+              <div className="text-center py-8 text-slate-400">
+                <GitCompare className="w-12 h-12 mx-auto mb-3 opacity-50" />
+                <p>Select at least 2 roles to see the comparison</p>
+              </div>
+            )}
+          </div>
+        )}
+
+        {/* Disclaimer */}
+        {!showRoleComparison && (
+          <div className="bg-slate-50 border-l-4 rounded-lg p-4 mb-8 text-sm text-slate-600" style={{ borderColor: '#2814ff' }}>
+            <div className="flex gap-2 mb-2">
+              <Info className="w-5 h-5 flex-shrink-0 mt-0.5" style={{ color: '#2814ff' }} />
+              <div>
+                <p className="mb-2"><strong>Disclaimer:</strong> This calculator provides general market guidance based on aggregated industry data and should not be construed as a guarantee of search outcomes, candidate availability, or compensation accuracy. Every search is unique, and actual results may vary based on market conditions, candidate preferences, and specific role requirements.</p>
+                <p className="text-xs text-slate-500"><strong>AI Disclosure:</strong> Portions of this analysis are generated using AI language models. While we strive for accuracy, AI-generated content may contain errors or inaccuracies. This tool is for informational purposes only and does not constitute professional staffing advice. For personalized guidance, please consult directly with Talent Gurus.</p>
+              </div>
             </div>
           </div>
-        </div>
+        )}
 
-        {!results ? (
+        {!results && !showRoleComparison ? (
           <>
             {/* Progress */}
             <div className="mb-8">
@@ -1158,13 +1240,12 @@ This analysis provides general market guidance. Every search is unique.
               {step === 1 && (
                 <div className="space-y-6">
                   <h3 className="text-xl font-semibold" style={{ color: '#2814ff' }}>Tell us about the role</h3>
-                  
+
                   <div>
                     <label className="block text-sm font-medium text-slate-700 mb-2">Position Type *</label>
                     <select name="positionType" value={formData.positionType} onChange={handleInputChange}
                       className="w-full px-4 py-3 border-2 border-slate-200 rounded-xl focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200">
                       <option value="">Select a position ({commonRoles.length} roles available)</option>
-                      {/* Family Office - Corporate */}
                       <option disabled className="font-bold bg-slate-100">── FAMILY OFFICE CORPORATE ──</option>
                       {CATEGORY_GROUPS["Family Office - Corporate"].map(category => (
                         <optgroup key={category} label={category.replace('Family Office - ', '')}>
@@ -1173,7 +1254,6 @@ This analysis provides general market guidance. Every search is unique.
                           ))}
                         </optgroup>
                       ))}
-                      {/* Private Service */}
                       <option disabled className="font-bold bg-slate-100">── PRIVATE SERVICE ──</option>
                       {CATEGORY_GROUPS["Private Service"].map(category => (
                         <optgroup key={category} label={category}>
@@ -1283,7 +1363,6 @@ This analysis provides general market guidance. Every search is unique.
                 <div className="space-y-6">
                   <h3 className="text-xl font-semibold" style={{ color: '#2814ff' }}>Key Requirements</h3>
 
-                  {/* Certifications - shown first for both corporate and household */}
                   <div>
                     <label className="block text-sm font-medium text-slate-700 mb-2">
                       {isCorporateRole ? 'Professional Certifications' : 'Certifications'}
@@ -1299,14 +1378,9 @@ This analysis provides general market guidance. Every search is unique.
                     </div>
                   </div>
 
-                  {/* Languages - different display for corporate vs household */}
                   {isCorporateRole ? (
                     <div className="border border-slate-200 rounded-xl p-4 bg-slate-50">
-                      <button
-                        type="button"
-                        onClick={() => setShowLanguages(!showLanguages)}
-                        className="flex items-center justify-between w-full text-left"
-                      >
+                      <button type="button" onClick={() => setShowLanguages(!showLanguages)} className="flex items-center justify-between w-full text-left">
                         <div>
                           <span className="text-sm font-medium text-slate-700">Language Requirements</span>
                           <span className="text-xs text-slate-500 ml-2">(Optional - for international operations)</span>
@@ -1326,9 +1400,7 @@ This analysis provides general market guidance. Every search is unique.
                         </div>
                       )}
                       {formData.languageRequirements.length > 0 && !showLanguages && (
-                        <p className="text-xs text-indigo-600 mt-2">
-                          Selected: {formData.languageRequirements.join(', ')}
-                        </p>
+                        <p className="text-xs text-indigo-600 mt-2">Selected: {formData.languageRequirements.join(', ')}</p>
                       )}
                     </div>
                   ) : (
@@ -1384,7 +1456,6 @@ This analysis provides general market guidance. Every search is unique.
                     </div>
                   </div>
 
-                  {/* Conditional fields based on role type */}
                   {isCorporateRole ? (
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                       <div>
@@ -1437,7 +1508,6 @@ This analysis provides general market guidance. Every search is unique.
                     </div>
                   )}
 
-                  {/* Enhanced Lead Capture Section */}
                   <div className="bg-gradient-to-br from-indigo-50 to-purple-50 rounded-xl p-5 border border-indigo-200">
                     <div className="flex items-start gap-3 mb-4">
                       <div className="w-10 h-10 rounded-full bg-indigo-600 flex items-center justify-center flex-shrink-0">
@@ -1459,7 +1529,6 @@ This analysis provides general market guidance. Every search is unique.
                     </div>
                   </div>
 
-                  {/* Priority Callback - More Prominent */}
                   <div className="bg-gradient-to-r from-amber-50 to-orange-50 border-2 border-amber-300 rounded-xl p-5">
                     <div className="flex items-start gap-3">
                       <div className="w-10 h-10 rounded-full bg-amber-500 flex items-center justify-center flex-shrink-0">
@@ -1494,7 +1563,7 @@ This analysis provides general market guidance. Every search is unique.
                 {step > 1 ? (
                   <button onClick={() => setStep(step - 1)} className="px-5 py-2.5 rounded-xl font-medium text-slate-600 bg-slate-100 hover:bg-slate-200">Back</button>
                 ) : <div />}
-                
+
                 <button onClick={step === 4 ? calculateComplexity : nextStep} disabled={loading}
                   className="text-white px-6 py-3 rounded-xl font-semibold flex items-center gap-2 hover:shadow-lg disabled:opacity-70 transition-all"
                   style={{ backgroundColor: '#2814ff' }}>
@@ -1508,12 +1577,79 @@ This analysis provides general market guidance. Every search is unique.
               </div>
             </div>
           </>
-        ) : (
+        ) : results ? (
           // ============================================
           // RESULTS
           // ============================================
           <div className="space-y-6">
+            {/* Share/Email Modals */}
+            {showShareModal && (
+              <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
+                <div className="bg-white rounded-2xl shadow-2xl p-6 max-w-md w-full">
+                  <div className="flex justify-between items-center mb-4">
+                    <h4 className="font-semibold text-lg" style={{ color: '#2814ff' }}>Share This Analysis</h4>
+                    <button onClick={() => setShowShareModal(false)} className="text-slate-400 hover:text-slate-600"><X className="w-5 h-5" /></button>
+                  </div>
+                  <p className="text-sm text-slate-600 mb-4">Share this link with anyone — they'll see your search parameters and complexity analysis.</p>
+                  <div className="flex gap-2">
+                    <input type="text" readOnly value={shareUrl} className="flex-1 px-3 py-2 border border-slate-200 rounded-lg text-sm bg-slate-50 truncate" />
+                    <button onClick={copyShareUrl} className="px-4 py-2 rounded-lg text-sm font-medium flex items-center gap-2 transition-all"
+                      style={{ backgroundColor: copiedShare ? '#10b981' : '#2814ff', color: '#ffffff' }}>
+                      {copiedShare ? <><CheckCircle className="w-4 h-4" />Copied!</> : <><Copy className="w-4 h-4" />Copy</>}
+                    </button>
+                  </div>
+                  <p className="text-xs text-slate-400 mt-3">Recipients will see deterministic analysis. No AI insights or personal data is shared.</p>
+                </div>
+              </div>
+            )}
+
+            {showEmailModal && (
+              <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
+                <div className="bg-white rounded-2xl shadow-2xl p-6 max-w-md w-full">
+                  <div className="flex justify-between items-center mb-4">
+                    <h4 className="font-semibold text-lg" style={{ color: '#2814ff' }}>Email This Report</h4>
+                    <button onClick={() => { setShowEmailModal(false); setEmailSent(false); }} className="text-slate-400 hover:text-slate-600"><X className="w-5 h-5" /></button>
+                  </div>
+                  {emailSent ? (
+                    <div className="text-center py-6">
+                      <CheckCircle className="w-12 h-12 text-green-500 mx-auto mb-3" />
+                      <p className="font-semibold text-green-700">Report sent!</p>
+                      <p className="text-sm text-slate-500 mt-1">Check your inbox for the analysis report.</p>
+                    </div>
+                  ) : (
+                    <>
+                      <p className="text-sm text-slate-600 mb-4">We'll send a formatted report with your complete analysis.</p>
+                      <input type="email" value={emailForReport} onChange={(e) => setEmailForReport(e.target.value)}
+                        className="w-full px-4 py-3 border-2 border-slate-200 rounded-xl mb-3 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200"
+                        placeholder="your@email.com" />
+                      <button onClick={handleSendEmail} disabled={sendingEmail || !emailForReport.includes('@')}
+                        className="w-full text-white px-4 py-3 rounded-xl font-semibold flex items-center justify-center gap-2 disabled:opacity-50 transition-all"
+                        style={{ backgroundColor: '#2814ff' }}>
+                        {sendingEmail ? (
+                          <><RefreshCw className="w-4 h-4 animate-spin" />Sending...</>
+                        ) : (
+                          <><Mail className="w-4 h-4" />Send Report</>
+                        )}
+                      </button>
+                      <p className="text-xs text-slate-400 mt-2">We'll only use this email to send your report.</p>
+                    </>
+                  )}
+                </div>
+              </div>
+            )}
+
             <div ref={resultsRef} className="bg-white rounded-2xl shadow-xl p-6 md:p-8 border border-slate-200">
+              {/* Shared Result Banner */}
+              {results.isSharedResult && (
+                <div className="bg-indigo-50 rounded-xl p-4 mb-6 flex items-start gap-3 border border-indigo-100">
+                  <Share2 className="w-5 h-5 text-indigo-600 flex-shrink-0 mt-0.5" />
+                  <div>
+                    <p className="text-sm font-medium text-indigo-800">This is a shared analysis</p>
+                    <p className="text-xs text-indigo-600 mt-1">Results are based on our scoring algorithm. For AI-powered insights, start a new analysis.</p>
+                  </div>
+                </div>
+              )}
+
               {/* Score */}
               <div className="text-center mb-8">
                 <div className="w-40 h-40 rounded-full flex items-center justify-center mx-auto mb-4 border-4 shadow-lg"
@@ -1541,6 +1677,73 @@ This analysis provides general market guidance. Every search is unique.
                   )}
                 </div>
               )}
+
+              {/* NEW: WHAT-IF SCENARIO SLIDERS */}
+              <div data-pdf-section="what-if" className="mb-6">
+                <button
+                  onClick={() => { setWhatIfMode(!whatIfMode); setWhatIfBudget(formData.budgetRange); setWhatIfTimeline(formData.timeline); }}
+                  className="flex items-center gap-2 text-sm font-medium mb-3 transition-all"
+                  style={{ color: '#2814ff' }}
+                >
+                  <SlidersHorizontal className="w-4 h-4" />
+                  {whatIfMode ? 'Hide What-If Scenarios' : 'Explore What-If Scenarios'}
+                </button>
+
+                {whatIfMode && (
+                  <div className="bg-gradient-to-br from-indigo-50 to-purple-50 rounded-xl p-5 border border-indigo-200">
+                    <p className="text-sm text-slate-600 mb-4">Adjust parameters to see how they affect your complexity score in real-time.</p>
+
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+                      <div>
+                        <label className="block text-xs font-medium text-slate-600 mb-1">Timeline</label>
+                        <select value={whatIfTimeline} onChange={(e) => setWhatIfTimeline(e.target.value)}
+                          className="w-full px-3 py-2 border border-indigo-200 rounded-lg text-sm bg-white">
+                          {timelineOptions.map(t => (
+                            <option key={t.value} value={t.value}>{t.label}</option>
+                          ))}
+                        </select>
+                      </div>
+                      <div>
+                        <label className="block text-xs font-medium text-slate-600 mb-1">Budget</label>
+                        <select value={whatIfBudget} onChange={(e) => setWhatIfBudget(e.target.value)}
+                          className="w-full px-3 py-2 border border-indigo-200 rounded-lg text-sm bg-white">
+                          {budgetRanges.map(b => (
+                            <option key={b.value} value={b.value}>{b.label}</option>
+                          ))}
+                        </select>
+                      </div>
+                    </div>
+
+                    {calculateWhatIfScore && (
+                      <div className="flex items-center justify-between bg-white rounded-lg p-4 border border-indigo-100">
+                        <div>
+                          <div className="text-xs text-slate-500 mb-1">What-If Score</div>
+                          <div className="flex items-center gap-3">
+                            <span className="text-3xl font-bold" style={{ color: getComplexityColor(calculateWhatIfScore.score).text === '#ffffff' ? '#c77d8a' : getComplexityColor(calculateWhatIfScore.score).text }}>
+                              {calculateWhatIfScore.score}
+                            </span>
+                            <span className="text-sm text-slate-500">/ 10</span>
+                            <span className={`px-2 py-1 rounded-full text-xs font-medium`}
+                              style={{ backgroundColor: getComplexityColor(calculateWhatIfScore.score).bg, color: getComplexityColor(calculateWhatIfScore.score).text === '#ffffff' ? '#c77d8a' : getComplexityColor(calculateWhatIfScore.score).text }}>
+                              {calculateWhatIfScore.label}
+                            </span>
+                          </div>
+                        </div>
+                        <div className="text-right">
+                          <div className="text-xs text-slate-500">vs. Current</div>
+                          {calculateWhatIfScore.score !== results.score ? (
+                            <span className={`text-sm font-semibold ${calculateWhatIfScore.score < results.score ? 'text-green-600' : 'text-red-600'}`}>
+                              {calculateWhatIfScore.score < results.score ? '↓' : '↑'} {Math.abs(calculateWhatIfScore.score - results.score)} point{Math.abs(calculateWhatIfScore.score - results.score) !== 1 ? 's' : ''}
+                            </span>
+                          ) : (
+                            <span className="text-sm text-slate-400">No change</span>
+                          )}
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                )}
+              </div>
 
               {/* Drivers */}
               <div data-pdf-section="drivers" className="mb-6">
@@ -1591,7 +1794,7 @@ This analysis provides general market guidance. Every search is unique.
                 </div>
               )}
 
-              {/* Benchmarks - Show adjusted figures if available */}
+              {/* Benchmarks */}
               {results.benchmark && (
                 <div data-pdf-section="benchmarks" className="bg-slate-50 rounded-xl p-5 mb-6">
                   <h4 className="font-semibold mb-3 flex items-center gap-2">
@@ -1603,21 +1806,15 @@ This analysis provides general market guidance. Every search is unique.
                   </h4>
                   <div className="grid grid-cols-3 gap-4 text-center mb-4">
                     <div>
-                      <div className="text-2xl font-bold text-slate-900">
-                        ${Math.round((results.adjustedBenchmark?.p25 || results.benchmark.p25)/1000)}k
-                      </div>
+                      <div className="text-2xl font-bold text-slate-900">${Math.round((results.adjustedBenchmark?.p25 || results.benchmark.p25)/1000)}k</div>
                       <div className="text-xs text-slate-500">25th</div>
                     </div>
                     <div className="bg-white rounded-lg py-2">
-                      <div className="text-2xl font-bold" style={{ color: '#2814ff' }}>
-                        ${Math.round((results.adjustedBenchmark?.p50 || results.benchmark.p50)/1000)}k
-                      </div>
+                      <div className="text-2xl font-bold" style={{ color: '#2814ff' }}>${Math.round((results.adjustedBenchmark?.p50 || results.benchmark.p50)/1000)}k</div>
                       <div className="text-xs text-slate-500">Median</div>
                     </div>
                     <div>
-                      <div className="text-2xl font-bold text-slate-900">
-                        ${Math.round((results.adjustedBenchmark?.p75 || results.benchmark.p75)/1000)}k
-                      </div>
+                      <div className="text-2xl font-bold text-slate-900">${Math.round((results.adjustedBenchmark?.p75 || results.benchmark.p75)/1000)}k</div>
                       <div className="text-xs text-slate-500">75th</div>
                     </div>
                   </div>
@@ -1672,26 +1869,28 @@ This analysis provides general market guidance. Every search is unique.
                 </div>
               )}
 
+              {/* Action Buttons - Enhanced with new features */}
               <div className="flex flex-wrap gap-3 pt-4 border-t border-slate-200">
-                <button onClick={exportToPDF} disabled={exportingPDF} className="flex items-center gap-2 px-4 py-2 bg-slate-100 hover:bg-slate-200 rounded-lg text-sm font-medium text-slate-700 disabled:opacity-50 disabled:cursor-not-allowed">
-                  {exportingPDF ? (
-                    <>
-                      <RefreshCw className="w-4 h-4 animate-spin" />
-                      Generating PDF...
-                    </>
-                  ) : (
-                    <>
-                      <Download className="w-4 h-4" />
-                      Export Report
-                    </>
-                  )}
+                <button onClick={exportToPDF} disabled={exportingPDF}
+                  className="flex items-center gap-2 px-4 py-2 bg-slate-100 hover:bg-slate-200 rounded-lg text-sm font-medium text-slate-700 disabled:opacity-50 disabled:cursor-not-allowed">
+                  {exportingPDF ? (<><RefreshCw className="w-4 h-4 animate-spin" />Generating PDF...</>) : (<><Download className="w-4 h-4" />Export PDF</>)}
                 </button>
-                <button onClick={runComparison} className="flex items-center gap-2 px-4 py-2 bg-slate-100 hover:bg-slate-200 rounded-lg text-sm font-medium text-slate-700">
-                  <RefreshCw className="w-4 h-4" />Compare Scenarios
+                <button onClick={() => { setEmailForReport(formData.email || ''); setShowEmailModal(true); setEmailSent(false); }}
+                  className="flex items-center gap-2 px-4 py-2 bg-slate-100 hover:bg-slate-200 rounded-lg text-sm font-medium text-slate-700">
+                  <Mail className="w-4 h-4" />Email Report
+                </button>
+                <button onClick={generateShareUrl}
+                  className="flex items-center gap-2 px-4 py-2 bg-slate-100 hover:bg-slate-200 rounded-lg text-sm font-medium text-slate-700">
+                  <Share2 className="w-4 h-4" />Share Link
+                </button>
+                <button onClick={runComparison}
+                  className="flex items-center gap-2 px-4 py-2 bg-slate-100 hover:bg-slate-200 rounded-lg text-sm font-medium text-slate-700">
+                  <RefreshCw className="w-4 h-4" />Compare Budgets
                 </button>
               </div>
             </div>
 
+            {/* Budget Comparison Panel */}
             {compareMode && comparisonResults && (
               <div className="bg-white rounded-2xl shadow-xl p-6 border border-slate-200">
                 <div className="flex justify-between mb-4">
@@ -1699,7 +1898,6 @@ This analysis provides general market guidance. Every search is unique.
                   <button onClick={() => setCompareMode(false)} className="text-slate-400 hover:text-slate-600"><X className="w-5 h-5" /></button>
                 </div>
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                  {/* Lower budget scenario */}
                   {comparisonResults.withDecrease ? (
                     <div className="bg-red-50 rounded-xl p-4 border border-red-200">
                       <h5 className="font-medium mb-2 text-red-800 text-sm">If Budget: {comparisonResults.prevLabel}</h5>
@@ -1718,14 +1916,12 @@ This analysis provides general market guidance. Every search is unique.
                     </div>
                   )}
 
-                  {/* Current scenario */}
                   <div className="bg-indigo-50 rounded-xl p-4 border-2 border-indigo-300">
                     <h5 className="font-medium mb-2 text-indigo-800 text-sm">Your Budget (Current)</h5>
                     <div className="text-2xl font-bold" style={{ color: '#2814ff' }}>{comparisonResults.current.score}/10</div>
                     <p className="text-xs text-indigo-600">{comparisonResults.current.label}</p>
                   </div>
 
-                  {/* Higher budget scenario */}
                   {comparisonResults.withIncrease ? (
                     <div className="bg-green-50 rounded-xl p-4 border border-green-200">
                       <h5 className="font-medium mb-2 text-green-800 text-sm">If Budget: {comparisonResults.nextLabel}</h5>
@@ -1758,6 +1954,7 @@ This analysis provides general market guidance. Every search is unique.
               </div>
             )}
 
+            {/* CTA */}
             <div className="bg-gradient-to-r from-indigo-600 via-purple-600 to-indigo-700 rounded-2xl shadow-xl p-8 text-white">
               <div className="text-center mb-6">
                 <p className="text-indigo-200 text-sm uppercase tracking-wider mb-2">This is your initial analysis</p>
@@ -1815,7 +2012,7 @@ This analysis provides general market guidance. Every search is unique.
 
             <button onClick={resetForm} className="w-full text-center text-sm text-slate-500 hover:text-slate-700 py-4">← Start New Analysis</button>
           </div>
-        )}
+        ) : null}
 
         <div className="mt-12 text-center space-y-2">
           <p className="font-semibold" style={{ color: '#2814ff' }}>Talent Gurus - Finding Exceptional Talent for Family Offices</p>
