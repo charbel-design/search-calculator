@@ -1,5 +1,5 @@
 import React, { useState, useMemo, useCallback, useRef, useEffect } from 'react';
-import { TrendingUp, Clock, DollarSign, Target, AlertCircle, CheckCircle, ArrowRight, Info, RefreshCw, Users, Car, Heart, Home, ChevronDown, HelpCircle, Zap, MapPin, Phone, X, Layers, Lightbulb, ArrowLeftRight, Share2, Mail, Copy, SlidersHorizontal, GitCompare, Brain, Lock, GitBranch, Gauge, BarChart3, AlertTriangle } from 'lucide-react';
+import { TrendingUp, Clock, DollarSign, Target, AlertCircle, CheckCircle, ArrowRight, Info, RefreshCw, Users, Car, Heart, Home, ChevronDown, HelpCircle, Zap, MapPin, Phone, X, Layers, Lightbulb, ArrowLeftRight, Share2, Mail, Copy, SlidersHorizontal, GitCompare, Brain, GitBranch, Gauge, BarChart3, AlertTriangle } from 'lucide-react';
 import {
   BENCHMARKS,
   REGIONAL_MULTIPLIERS,
@@ -1595,6 +1595,19 @@ Return this exact JSON structure:
                 </div>
               )}
 
+              {/* CTA Strip - Right after score for high visibility */}
+              <div className="flex items-center justify-between bg-white rounded-xl p-4 mb-6 border border-brand-100 shadow-sm">
+                <div>
+                  <p className="text-sm font-semibold text-slate-800">Need a tailored search strategy for this role?</p>
+                  <p className="text-xs text-slate-500 mt-0.5">30-minute strategy call · No commitment · Personalized to your search</p>
+                </div>
+                <a href="https://calendly.com/charbel-talentgurus" target="_blank" rel="noopener noreferrer"
+                  className="flex-shrink-0 inline-flex items-center gap-2 px-5 py-2.5 rounded-lg text-sm font-semibold text-white hover:shadow-lg transition-all"
+                  style={{ backgroundColor: '#2814ff' }}>
+                  Book a Call<ArrowRight className="w-4 h-4" />
+                </a>
+              </div>
+
               {/* NEW: WHAT-IF SCENARIO SLIDERS */}
               <div className="mb-6">
                 <button
@@ -1838,7 +1851,7 @@ Return this exact JSON structure:
                           ))}
                         </ul>
                         <div className="border-t border-slate-100 pt-3 flex items-center gap-2">
-                          <Lock className="w-3.5 h-3.5 text-slate-400" />
+                          <ArrowRight className="w-3.5 h-3.5 text-brand-400" />
                           <span className="text-xs text-slate-500">{results.decisionIntelligence.tradeoffScenarios.completeTeaser}</span>
                         </div>
                       </div>
@@ -1862,7 +1875,7 @@ Return this exact JSON structure:
                           ))}
                         </ul>
                         <div className="border-t border-slate-100 pt-3 flex items-center gap-2">
-                          <Lock className="w-3.5 h-3.5 text-slate-400" />
+                          <ArrowRight className="w-3.5 h-3.5 text-brand-400" />
                           <span className="text-xs text-slate-500">{results.decisionIntelligence.candidatePsychology.completeTeaser}</span>
                         </div>
                       </div>
@@ -1891,7 +1904,7 @@ Return this exact JSON structure:
                             </span>
                           </div>
                           <div className="border-t border-slate-100 pt-3 flex items-center gap-2">
-                            <Lock className="w-3.5 h-3.5 text-slate-400" />
+                            <ArrowRight className="w-3.5 h-3.5 text-brand-400" />
                             <span className="text-xs text-slate-500">{results.decisionIntelligence.probabilityOfSuccess.completeTeaser}</span>
                           </div>
                         </div>
@@ -1918,7 +1931,7 @@ Return this exact JSON structure:
                             <p className="text-sm text-slate-600 mt-1">{results.decisionIntelligence.mandateStrength.initial?.rationale}</p>
                           </div>
                           <div className="border-t border-slate-100 pt-3 flex items-center gap-2">
-                            <Lock className="w-3.5 h-3.5 text-slate-400" />
+                            <ArrowRight className="w-3.5 h-3.5 text-brand-400" />
                             <span className="text-xs text-slate-500">{results.decisionIntelligence.mandateStrength.completeTeaser}</span>
                           </div>
                         </div>
@@ -1943,22 +1956,22 @@ Return this exact JSON structure:
                           ))}
                         </ul>
                         <div className="border-t border-b-ocre-200 pt-3 flex items-center gap-2">
-                          <Lock className="w-3.5 h-3.5 text-b-ocre-400" />
+                          <ArrowRight className="w-3.5 h-3.5 text-b-ocre-400" />
                           <span className="text-xs text-b-ocre-500">{results.decisionIntelligence.falseSignals.completeTeaser}</span>
                         </div>
                       </div>
                     )}
                   </div>
 
-                  {/* CTA to unlock complete analysis */}
-                  <div className="mt-4 bg-gradient-to-r from-brand-50 to-b-pink-50 rounded-xl p-4 border border-brand-100">
-                    <div className="flex items-center justify-between flex-wrap gap-3">
-                      <div className="flex items-center gap-2">
-                        <Lock className="w-4 h-4" style={{ color: '#2814ff' }} />
-                        <span className="text-sm font-medium text-slate-700">Unlock complete decision intelligence analysis</span>
+                  {/* CTA to get full analysis with a consultant */}
+                  <div className="mt-6 bg-gradient-to-r from-brand-50 to-b-pink-50 rounded-xl p-5 border border-brand-100">
+                    <div className="flex items-center justify-between flex-wrap gap-4">
+                      <div>
+                        <p className="text-sm font-semibold text-slate-800">Go deeper with a search specialist</p>
+                        <p className="text-xs text-slate-500 mt-1">Get the full decision intelligence breakdown, custom sourcing plan, and offer strategy for this role.</p>
                       </div>
                       <a href="https://calendly.com/charbel-talentgurus" target="_blank" rel="noopener noreferrer"
-                        className="inline-flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-semibold text-white hover:shadow-md transition-shadow"
+                        className="flex-shrink-0 inline-flex items-center gap-2 px-6 py-3 rounded-lg font-semibold text-white hover:shadow-lg transition-all"
                         style={{ backgroundColor: '#2814ff' }}>
                         Schedule Consultation<ArrowRight className="w-4 h-4" />
                       </a>
