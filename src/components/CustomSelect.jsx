@@ -1,5 +1,5 @@
 import React from 'react';
-import { ChevronDown } from 'lucide-react';
+import { ChevronDown, Check } from 'lucide-react';
 
 export function CustomSelect({ value, onChange, options, placeholder, name }) {
   const [open, setOpen] = React.useState(false);
@@ -30,21 +30,24 @@ export function CustomSelect({ value, onChange, options, placeholder, name }) {
   return (
     <div ref={ref} className="relative">
       <button type="button" onClick={() => setOpen(!open)} onKeyDown={handleKeyDown}
-        className="w-full px-4 py-3 border-2 border-slate-200 rounded-xl transition-all duration-200 focus:shadow-md focus:border-brand-500 focus:ring-2 focus:ring-brand-100 text-left flex items-center justify-between bg-white">
+        className={`w-full px-4 py-3 border-2 rounded-xl transition-all duration-200 text-left flex items-center justify-between bg-white text-sm ${
+          open ? 'border-brand-500 ring-2 ring-brand-100 shadow-sm' : 'border-slate-200 hover:border-slate-300'
+        }`}>
         <span className={selected ? 'text-slate-900' : 'text-slate-400'}>{selected ? selected.label : (placeholder || 'Select...')}</span>
-        <ChevronDown className={`w-4 h-4 text-slate-400 transition-transform ${open ? 'rotate-180' : ''}`} />
+        <ChevronDown className={`w-4 h-4 text-slate-400 transition-transform duration-200 ${open ? 'rotate-180' : ''}`} />
       </button>
       {open && (
-        <div className="absolute z-20 w-full mt-1 bg-brand-50 border border-brand-100 rounded-xl shadow-lg max-h-64 overflow-y-auto">
+        <div className="absolute z-20 w-full mt-1 bg-white border border-slate-200 rounded-xl shadow-lg max-h-64 overflow-y-auto custom-scrollbar">
           {options.map((opt, idx) => (
             <button key={opt.value} type="button"
               ref={idx === highlighted ? (el) => el?.scrollIntoView({ block: 'nearest' }) : null}
               onClick={() => { onChange({ target: { name, value: opt.value } }); setOpen(false); }}
               onMouseEnter={() => setHighlighted(idx)}
-              className={`w-full text-left px-4 py-2.5 text-sm ${
-                opt.value === value ? 'font-semibold text-brand-700' : ''
-              } ${idx === highlighted ? 'bg-brand-200 text-brand-700' : 'hover:bg-brand-100 text-slate-700'}`}>
-              {opt.label}
+              className={`w-full text-left px-4 py-2.5 text-sm flex items-center justify-between ${
+                idx === highlighted ? 'bg-brand-50 text-brand-700' : 'hover:bg-slate-50 text-slate-700'
+              } ${opt.value === value ? 'font-medium' : ''}`}>
+              <span>{opt.label}</span>
+              {opt.value === value && <Check className="w-3.5 h-3.5 text-brand-500" />}
             </button>
           ))}
         </div>

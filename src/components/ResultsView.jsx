@@ -142,7 +142,7 @@ THE ENVIRONMENT
 
       {/* Results Container */}
       <div className="space-y-6">
-        <div className="bg-white rounded-2xl shadow-xl p-6 md:p-8 border border-slate-200" aria-live="polite" role="region" aria-label="Analysis results">
+        <div className="bg-white rounded-2xl shadow-lg shadow-slate-200/50 p-5 sm:p-6 md:p-8 border border-slate-100" aria-live="polite" role="region" aria-label="Analysis results">
           {/* Shared Result Banner */}
           {results.isSharedResult && (
             <div className="bg-brand-50 rounded-xl p-4 mb-6 flex items-start gap-3 border border-brand-100 animate-fadeInUp">
@@ -162,30 +162,30 @@ THE ENVIRONMENT
           )}
 
           {/* Score Section - Always Visible (Top) */}
-          <div className="text-center mb-6 animate-fadeInUp">
-            <div className="w-40 h-40 rounded-full flex items-center justify-center mx-auto mb-4 border-4 shadow-lg score-reveal"
+          <div className="text-center mb-8 animate-fadeInUp">
+            <div className="w-36 h-36 rounded-full flex items-center justify-center mx-auto mb-5 border-[3px] shadow-lg score-reveal"
               role="img" aria-label={`Search complexity score: ${results.score} out of 10, ${results.label} search`}
               style={{ backgroundColor: getComplexityColor(results.score).bg, borderColor: '#2814ff' }}>
               <div className="text-center">
-                <div className="text-4xl font-bold leading-tight" style={{ color: getComplexityColor(results.score).text }}>
+                <div className="text-5xl font-bold leading-none" style={{ color: getComplexityColor(results.score).text }}>
                   <ScoreCounter target={results.score} />
                 </div>
-                <div className="text-xs font-medium mt-1" style={{ color: getComplexityColor(results.score).text }}>out of 10</div>
+                <div className="text-[10px] font-medium mt-1.5 uppercase tracking-wider" style={{ color: getComplexityColor(results.score).text, opacity: 0.7 }}>out of 10</div>
               </div>
             </div>
-            <div className="inline-block px-5 py-2 rounded-full font-semibold mb-2 animate-fadeInUp delay-100"
+            <div className="inline-block px-4 py-1.5 rounded-full text-sm font-semibold mb-2 animate-fadeInUp delay-100"
               style={{ backgroundColor: getComplexityColor(results.score).bg, color: getComplexityColor(results.score).text }}>
               {results.label} Search
             </div>
-            <p className="text-sm text-slate-500 animate-fadeInUp delay-200">Confidence: {results.confidence}</p>
+            <p className="text-xs text-slate-400 animate-fadeInUp delay-200">Confidence: {results.confidence}</p>
           </div>
 
           {/* Bottom Line */}
           {results.bottomLine && (
-            <div className="bg-slate-50 rounded-xl p-5 mb-6 border-l-4 animate-fadeInUp delay-200" style={{ borderColor: '#2814ff' }}>
-              <p className="text-slate-800">{results.bottomLine}</p>
+            <div className="bg-slate-50 rounded-xl p-5 mb-6 border-l-[3px] animate-fadeInUp delay-200" style={{ borderColor: '#2814ff' }}>
+              <p className="text-sm text-slate-700 leading-relaxed">{results.bottomLine}</p>
               {results.aiAnalysisSuccess === false && (
-                <p className="text-xs text-slate-500 mt-2 flex items-center gap-1">
+                <p className="text-xs text-slate-400 mt-2 flex items-center gap-1">
                   <Info className="w-3 h-3" />
                   Results based on market data. AI insights temporarily unavailable.
                 </p>
@@ -193,43 +193,48 @@ THE ENVIRONMENT
             </div>
           )}
 
-          {/* Quick Metrics Strip - Unified Single Row */}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-3 mb-6 animate-fadeInUp delay-300">
-            <div className="bg-slate-50 rounded-lg p-4 border border-slate-100">
-              <div className="flex items-center gap-2 mb-2">
-                <DollarSign className="w-4 h-4" style={{ color: '#2814ff' }} />
-                <p className="text-xs text-slate-600 font-medium">Salary</p>
+          {/* Quick Metrics Strip */}
+          <div className="grid grid-cols-3 gap-3 mb-6 animate-fadeInUp delay-300">
+            <div className="rounded-xl p-4 border border-slate-100 bg-white">
+              <div className="flex items-center gap-1.5 mb-1.5">
+                <DollarSign className="w-3.5 h-3.5" style={{ color: '#2814ff' }} />
+                <p className="text-[10px] text-slate-400 font-medium uppercase tracking-wider">Salary</p>
               </div>
-              <p className="text-sm font-semibold text-slate-800">{results.salaryRangeGuidance}</p>
+              <p className="text-xs sm:text-sm font-semibold text-slate-800 leading-snug">{results.salaryRangeGuidance}</p>
             </div>
-            <div className="bg-slate-50 rounded-lg p-4 border border-slate-100">
-              <div className="flex items-center gap-2 mb-2">
-                <Clock className="w-4 h-4" style={{ color: '#2814ff' }} />
-                <p className="text-xs text-slate-600 font-medium">Timeline</p>
+            <div className="rounded-xl p-4 border border-slate-100 bg-white">
+              <div className="flex items-center gap-1.5 mb-1.5">
+                <Clock className="w-3.5 h-3.5" style={{ color: '#2814ff' }} />
+                <p className="text-[10px] text-slate-400 font-medium uppercase tracking-wider">Timeline</p>
               </div>
-              <p className="text-sm font-semibold text-slate-800">{results.estimatedTimeline}</p>
+              <p className="text-xs sm:text-sm font-semibold text-slate-800 leading-snug">{results.estimatedTimeline}</p>
             </div>
-            <div className="bg-slate-50 rounded-lg p-4 border border-slate-100">
-              <div className="flex items-center gap-2 mb-2">
-                <Users className="w-4 h-4" style={{ color: '#2814ff' }} />
-                <p className="text-xs text-slate-600 font-medium">Availability</p>
+            <div className="rounded-xl p-4 border border-slate-100 bg-white">
+              <div className="flex items-center gap-1.5 mb-1.5">
+                <Users className="w-3.5 h-3.5" style={{ color: '#2814ff' }} />
+                <p className="text-[10px] text-slate-400 font-medium uppercase tracking-wider">Availability</p>
               </div>
-              <p className="text-sm font-semibold text-slate-800">{results.candidateAvailability}</p>
+              <p className="text-xs sm:text-sm font-semibold text-slate-800 leading-snug">{results.candidateAvailability}</p>
             </div>
           </div>
 
           {/* What-If Scenarios - Collapsible */}
           <div className="mb-6 animate-fadeInUp delay-400">
-            <div className="bg-gradient-to-br from-brand-50 to-b-pink-50 rounded-xl border border-brand-100 overflow-hidden">
+            <div className="rounded-xl border border-slate-200 overflow-hidden">
               <button
                 onClick={() => setWhatIfMode(!whatIfMode)}
-                className="w-full p-5 flex items-center justify-between hover:bg-brand-50/50 transition-colors"
+                className="w-full p-4 flex items-center justify-between hover:bg-slate-50/50 transition-colors duration-200"
               >
-                <div className="flex items-center gap-2">
-                  <SlidersHorizontal className="w-5 h-5" style={{ color: '#2814ff' }} />
-                  <h4 className="font-semibold text-sm" style={{ color: '#2814ff' }}>Play with the Numbers</h4>
+                <div className="flex items-center gap-3">
+                  <div className="w-8 h-8 rounded-lg flex items-center justify-center" style={{ backgroundColor: '#2814ff10' }}>
+                    <SlidersHorizontal className="w-4 h-4" style={{ color: '#2814ff' }} />
+                  </div>
+                  <div className="text-left">
+                    <h4 className="font-semibold text-sm text-slate-800">Play with the Numbers</h4>
+                    <p className="text-xs text-slate-400">Adjust timeline or budget and see the impact</p>
+                  </div>
                 </div>
-                <ChevronDown className={`w-5 h-5 transition-transform ${whatIfMode ? 'rotate-180' : ''}`} style={{ color: '#2814ff' }} />
+                <ChevronDown className={`w-4 h-4 text-slate-400 transition-transform duration-200 ${whatIfMode ? 'rotate-180' : ''}`} />
               </button>
 
               {whatIfMode && (
@@ -283,10 +288,10 @@ THE ENVIRONMENT
             </div>
           </div>
 
-          {/* Single CTA Button - Primary */}
+          {/* CTA */}
           <div className="flex justify-center mb-6 animate-fadeInUp delay-500">
             <a href="https://calendly.com/charbel-talentgurus" target="_blank" rel="noopener noreferrer"
-              className="inline-flex items-center gap-2 px-6 py-3 rounded-lg text-sm font-semibold text-white hover:shadow-lg transition-all"
+              className="inline-flex items-center gap-2 px-6 py-3 rounded-xl text-sm font-semibold text-white hover:shadow-lg hover:shadow-brand-500/20 transition-all duration-200"
               style={{ backgroundColor: '#2814ff' }}>
               Let's Build Your Strategy<ArrowRight className="w-4 h-4" />
             </a>
@@ -296,18 +301,18 @@ THE ENVIRONMENT
           <div className="mb-6 animate-fadeInUp delay-600">
             <button
               onClick={() => setDeepDiveExpanded(!deepDiveExpanded)}
-              className="w-full p-4 flex items-center justify-between rounded-xl border border-slate-200 hover:bg-slate-50 transition-all group"
+              className="w-full p-4 flex items-center justify-between rounded-xl border border-slate-200 hover:border-slate-300 hover:bg-slate-50/50 transition-all duration-200 group"
             >
               <div className="flex items-center gap-3">
-                <div className="w-8 h-8 rounded-full flex items-center justify-center" style={{ backgroundColor: '#2814ff15' }}>
+                <div className="w-8 h-8 rounded-lg flex items-center justify-center" style={{ backgroundColor: '#2814ff10' }}>
                   <Layers className="w-4 h-4" style={{ color: '#2814ff' }} />
                 </div>
                 <div className="text-left">
-                  <h4 className="font-semibold text-sm text-slate-900">Deep Dive</h4>
-                  <p className="text-xs text-slate-500">Market data, sourcing strategy, decision intelligence, and next steps</p>
+                  <h4 className="font-semibold text-sm text-slate-800">Deep Dive</h4>
+                  <p className="text-xs text-slate-400">Market data, sourcing strategy, decision intelligence</p>
                 </div>
               </div>
-              <ChevronDown className={`w-5 h-5 text-slate-400 transition-transform ${deepDiveExpanded ? 'rotate-180' : ''}`} />
+              <ChevronDown className={`w-4 h-4 text-slate-400 transition-transform duration-200 ${deepDiveExpanded ? 'rotate-180' : ''}`} />
             </button>
           </div>
 
@@ -890,53 +895,53 @@ THE ENVIRONMENT
           )}
 
           {/* Action Buttons Row */}
-          <div className="flex flex-wrap gap-2 pt-6 border-t border-slate-200">
+          <div className="flex flex-wrap gap-2 pt-6 border-t border-slate-100">
             {results.aiAnalysisSuccess !== false && (
               <button onClick={handleGenerateJD} disabled={jdLoading}
-                className="flex items-center gap-2 px-3 py-2 rounded-lg text-xs font-semibold text-white transition-all hover:shadow-md disabled:opacity-50"
+                className="flex items-center gap-2 px-4 py-2.5 rounded-xl text-xs font-semibold text-white transition-all duration-200 hover:shadow-md hover:shadow-brand-500/20 disabled:opacity-50"
                 style={{ backgroundColor: '#2814ff' }}
                 aria-label="Generate a job description based on this analysis">
-                {jdLoading ? <Loader2 className="w-4 h-4 animate-spin" /> : <FileEdit className="w-4 h-4" />}
+                {jdLoading ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : <FileEdit className="w-3.5 h-3.5" />}
                 {jdLoading ? 'Generating...' : jdContent ? 'Regenerate JD' : 'Generate Job Description'}
               </button>
             )}
             <button onClick={() => { setEmailForReport(formData.email || ''); setShowEmailModal(true); setEmailSent(false); }}
-              className="flex items-center gap-2 px-3 py-2 bg-slate-100 hover:bg-slate-200 rounded-lg text-xs font-medium text-slate-700 transition-colors"
+              className="flex items-center gap-2 px-4 py-2.5 bg-slate-50 hover:bg-slate-100 border border-slate-200 rounded-xl text-xs font-medium text-slate-600 transition-all duration-200"
               aria-label="Email the analysis report">
-              <Mail className="w-4 h-4" />Email Report
+              <Mail className="w-3.5 h-3.5" />Email
             </button>
             <button onClick={generateShareUrl}
-              className="flex items-center gap-2 px-3 py-2 bg-slate-100 hover:bg-slate-200 rounded-lg text-xs font-medium text-slate-700 transition-colors"
+              className="flex items-center gap-2 px-4 py-2.5 bg-slate-50 hover:bg-slate-100 border border-slate-200 rounded-xl text-xs font-medium text-slate-600 transition-all duration-200"
               aria-label="Generate a shareable link for this analysis">
-              <Share2 className="w-4 h-4" />Share Link
+              <Share2 className="w-3.5 h-3.5" />Share
             </button>
             <button onClick={runComparison}
-              className="flex items-center gap-2 px-3 py-2 bg-slate-100 hover:bg-slate-200 rounded-lg text-xs font-medium text-slate-700 transition-colors"
+              className="flex items-center gap-2 px-4 py-2.5 bg-slate-50 hover:bg-slate-100 border border-slate-200 rounded-xl text-xs font-medium text-slate-600 transition-all duration-200"
               aria-label="Compare budget impacts and alternatives">
-              <RefreshCw className="w-4 h-4" />Compare Budgets
+              <RefreshCw className="w-3.5 h-3.5" />Compare
             </button>
           </div>
 
           {/* Generated Job Description */}
           {jdContent && (
-            <div className="mt-6 bg-white rounded-xl border border-slate-200 overflow-hidden animate-fadeInUp">
-              <div className="flex items-center justify-between px-5 py-4 border-b border-slate-100">
+            <div className="mt-6 rounded-xl border border-slate-200 overflow-hidden animate-fadeInUp">
+              <div className="flex items-center justify-between px-5 py-3.5 bg-slate-50 border-b border-slate-100">
                 <div className="flex items-center gap-2">
-                  <FileText className="w-5 h-5" style={{ color: '#2814ff' }} />
-                  <h4 className="font-semibold text-sm text-slate-900">Generated Job Description</h4>
+                  <FileText className="w-4 h-4" style={{ color: '#2814ff' }} />
+                  <h4 className="font-semibold text-sm text-slate-800">Generated Job Description</h4>
                 </div>
                 <button onClick={copyJD}
-                  className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium transition-colors"
-                  style={jdCopied ? { backgroundColor: '#dcfce7', color: '#15803d' } : { backgroundColor: '#f1f5f9', color: '#475569' }}>
-                  <ClipboardCopy className="w-3.5 h-3.5" />
+                  className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium transition-all duration-200"
+                  style={jdCopied ? { backgroundColor: '#dcfce7', color: '#15803d' } : { backgroundColor: '#ffffff', color: '#475569', border: '1px solid #e2e8f0' }}>
+                  <ClipboardCopy className="w-3 h-3" />
                   {jdCopied ? 'Copied!' : 'Copy'}
                 </button>
               </div>
-              <div className="px-5 py-4">
+              <div className="px-5 py-5 bg-white">
                 <pre className="whitespace-pre-wrap font-sans text-sm text-slate-700 leading-relaxed">{jdContent}</pre>
               </div>
-              <div className="px-5 py-3 bg-slate-50 border-t border-slate-100">
-                <p className="text-xs text-slate-500">AI-generated based on your search analysis. Review and customize before posting.</p>
+              <div className="px-5 py-2.5 bg-slate-50 border-t border-slate-100">
+                <p className="text-[11px] text-slate-400">AI-generated. Review and customize before posting.</p>
               </div>
             </div>
           )}
@@ -1089,7 +1094,9 @@ THE ENVIRONMENT
           )}
         </div>
 
-        <button onClick={resetForm} className="w-full text-center text-sm text-slate-500 hover:text-slate-700 py-4">← Start New Analysis</button>
+        <button onClick={resetForm} className="w-full text-center text-xs text-slate-400 hover:text-brand-500 py-4 transition-colors duration-200">
+          &larr; Start New Analysis
+        </button>
       </div>
     </>
   );
