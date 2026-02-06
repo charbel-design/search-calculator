@@ -527,19 +527,18 @@ function generateEmailHTML(results) {
     </div>
     ` : ''}
 
-    <!-- What's Next -->
-    ${results.whatsNext ? `
+    <!-- What's Next (always shown with fallback text) -->
     <div style="background-color:#ffffff;padding:20px 24px 24px;${sectionBorder}">
       ${sectionHeading("What's Next")}
       <p style="margin:0 0 16px;font-size:13px;color:#475569;line-height:1.6;">
-        ${e(results.whatsNext.intro || "You've got the data. Here's how we turn it into a successful placement.")}
+        ${e((results.whatsNext && results.whatsNext.intro) || "You've got the data. Here's how we turn it into a successful placement.")}
       </p>
 
       ${[
-        { num: '1', title: 'Discovery Call', duration: '30 min', text: results.whatsNext.discoveryCall || 'We walk through your analysis together, dig into the nuances that data alone can\'t capture, and align on what the right person looks like.' },
-        { num: '2', title: 'Sourcing Strategy', duration: 'Week 1', text: results.whatsNext.sourcingStrategy || 'Based on your role complexity, location, and budget, we build a sourcing plan — which networks to tap and how to position the opportunity.' },
-        { num: '3', title: 'Curated Shortlist', duration: 'Weeks 2–4', text: results.whatsNext.shortlist || 'You receive a vetted shortlist. Each profile includes social due diligence, reference notes, and our honest assessment.' },
-        { num: '4', title: 'Interview & Placement Support', duration: 'Through close', text: results.whatsNext.placementSupport || 'We coordinate interviews, support offer negotiation, and stay involved through the first 90 days.' },
+        { num: '1', title: 'Discovery Call', duration: '30 min', text: (results.whatsNext && results.whatsNext.discoveryCall) || 'We walk through your analysis together, dig into the nuances that data alone can\'t capture, and align on what the right person looks like.' },
+        { num: '2', title: 'Sourcing Strategy', duration: 'Week 1', text: (results.whatsNext && results.whatsNext.sourcingStrategy) || 'Based on your role complexity, location, and budget, we build a sourcing plan — which networks to tap and how to position the opportunity.' },
+        { num: '3', title: 'Curated Shortlist', duration: 'Weeks 2-4', text: (results.whatsNext && results.whatsNext.shortlist) || 'You receive a vetted shortlist. Each profile includes social due diligence, reference notes, and our honest assessment.' },
+        { num: '4', title: 'Interview & Placement Support', duration: 'Through close', text: (results.whatsNext && results.whatsNext.placementSupport) || 'We coordinate interviews, support offer negotiation, and stay involved through the first 90 days.' },
       ].map(step => `
         <table style="width:100%;border-collapse:collapse;margin-bottom:12px;">
           <tr>
@@ -563,7 +562,6 @@ function generateEmailHTML(results) {
       </div>
     </div>
     ${divider}
-    ` : ''}
 
     <!-- CTA -->
     <div style="background-color:#2814ff;padding:32px 24px;text-align:center;border-radius:0 0 12px 12px;">

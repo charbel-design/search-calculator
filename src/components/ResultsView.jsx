@@ -46,6 +46,20 @@ export function ResultsView({
   const [jdLoading, setJdLoading] = useState(false);
   const [jdCopied, setJdCopied] = useState(false);
 
+  // Format JD content: convert **bold** markdown to <strong> HTML, escape other HTML
+  const formatJDContent = (text) => {
+    if (!text) return '';
+    // First escape HTML entities to prevent XSS
+    let safe = text
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;');
+    // Then convert **bold** to <strong>bold</strong>
+    safe = safe.replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>');
+    return safe;
+  };
+
   // JD Generator — lightweight API call using already-computed results
   const handleGenerateJD = async () => {
     if (jdLoading) return;
@@ -938,7 +952,8 @@ THE ENVIRONMENT
                 </button>
               </div>
               <div className="px-5 py-5 bg-white">
-                <pre className="whitespace-pre-wrap font-sans text-sm text-slate-700 leading-relaxed">{jdContent}</pre>
+                <div className="whitespace-pre-wrap font-sans text-sm text-slate-700 leading-relaxed"
+                  dangerouslySetInnerHTML={{ __html: formatJDContent(jdContent) }} />
               </div>
               <div className="px-5 py-2.5 bg-slate-50 border-t border-slate-100">
                 <p className="text-[11px] text-slate-400">AI-generated. Review and customize before posting.</p>
