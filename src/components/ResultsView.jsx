@@ -681,19 +681,34 @@ export function ResultsView({
                             </div>
                             <h5 className="font-semibold text-slate-900">Success Probability</h5>
                           </div>
-                          <div className="mb-4">
-                            <span className={`inline-block px-4 py-2 rounded-full text-sm font-semibold ${
-                              results.decisionIntelligence.probabilityOfSuccess.initialLabel === 'High'
-                                ? 'bg-b-opal-50 text-b-opal-600'
-                                : results.decisionIntelligence.probabilityOfSuccess.initialLabel === 'Moderate'
-                                ? 'bg-b-ocre-50 text-b-ocre-500'
-                                : 'bg-b-pink-50 text-b-pink-500'
-                            }`}>
-                              {results.decisionIntelligence.probabilityOfSuccess.initialLabel}
-                            </span>
-                            {results.decisionIntelligence.probabilityOfSuccess.initialConfidence && (
-                              <p className="text-sm text-slate-600 mt-2">{results.decisionIntelligence.probabilityOfSuccess.initialConfidence}</p>
-                            )}
+                          <div className="mb-3">
+                            <div className="flex items-baseline gap-2">
+                              {(() => {
+                                const conf = results.decisionIntelligence.probabilityOfSuccess.initialConfidence || '';
+                                const pctMatch = conf.match(/(\d+)%/);
+                                const pct = pctMatch ? pctMatch[1] : null;
+                                const rest = pct ? conf.replace(/^\d+%\s*/, '') : conf;
+                                return pct ? (
+                                  <>
+                                    <span className="text-3xl font-bold" style={{ color: '#2814ff' }}>{pct}%</span>
+                                    <span className={`px-2 py-1 rounded-full text-xs font-semibold ${
+                                      results.decisionIntelligence.probabilityOfSuccess.initialLabel === 'High'
+                                        ? 'bg-b-opal-50 text-b-opal-600'
+                                        : results.decisionIntelligence.probabilityOfSuccess.initialLabel === 'Moderate'
+                                        ? 'bg-b-ocre-50 text-b-ocre-500'
+                                        : 'bg-b-pink-50 text-b-pink-500'
+                                    }`}>{results.decisionIntelligence.probabilityOfSuccess.initialLabel}</span>
+                                  </>
+                                ) : (
+                                  <span className="text-3xl font-bold" style={{ color: '#2814ff' }}>{results.decisionIntelligence.probabilityOfSuccess.initialLabel}</span>
+                                );
+                              })()}
+                            </div>
+                            {(() => {
+                              const conf = results.decisionIntelligence.probabilityOfSuccess.initialConfidence || '';
+                              const rest = conf.replace(/^\d+%\s*/, '');
+                              return rest ? <p className="text-sm text-slate-600 mt-1">{rest}</p> : null;
+                            })()}
                           </div>
                           <div className="border-t border-slate-100 pt-3 flex items-center gap-2">
                             <ArrowRight className="w-3.5 h-3.5" style={{ color: '#2814ff' }} />

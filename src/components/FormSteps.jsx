@@ -142,7 +142,7 @@ export function FormSteps({
                 <div className="mt-2 text-xs text-slate-500 space-y-1">
                   <p>Market: ${BENCHMARKS[formData.positionType].p25.toLocaleString()} - ${BENCHMARKS[formData.positionType].p75.toLocaleString()}</p>
                   {BENCHMARKS[formData.positionType].scarcity && (
-                    <p>How easy to find: {BENCHMARKS[formData.positionType].scarcity}/10 {BENCHMARKS[formData.positionType].scarcity >= 7 ? '(Rare talent)' : BENCHMARKS[formData.positionType].scarcity >= 5 ? '(Moderate)' : '(Readily available)'}</p>
+                    <p>Market scarcity: {BENCHMARKS[formData.positionType].scarcity}/10 {BENCHMARKS[formData.positionType].scarcity >= 7 ? '(Hard to find)' : BENCHMARKS[formData.positionType].scarcity >= 5 ? '(Moderate)' : '(Widely available)'}</p>
                   )}
                 </div>
               )}
