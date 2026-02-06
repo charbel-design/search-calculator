@@ -794,7 +794,7 @@ export function ResultsView({
                         icon: Users,
                         title: 'Curated Shortlist',
                         duration: 'Weeks 2–4',
-                        description: 'You receive a vetted shortlist of candidates who match the brief. Each profile includes background verification, cultural fit notes, and our honest assessment.',
+                        description: 'You receive a vetted shortlist of candidates who match the brief. Each profile includes social due diligence, reference notes, and our honest assessment.',
                       },
                       {
                         step: 4,
@@ -830,10 +830,8 @@ export function ResultsView({
                     </h5>
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
                       {[
-                        'Deep candidate psychology profiles',
                         'Compensation negotiation playbook',
-                        'Background & reference verification',
-                        'Cultural fit assessment framework',
+                        'Social due diligence',
                         'Retention risk analysis & 90-day plan',
                         'Market-tested job positioning',
                       ].map((item, i) => (

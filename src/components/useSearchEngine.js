@@ -511,7 +511,7 @@ ${benchmark?.typicalExperience ? `Typical Experience: ${benchmark.typicalExperie
 ${benchmark?.retentionRisk ? `First-Year Attrition Rate: ${Math.round(benchmark.retentionRisk.firstYearAttrition * 100)}% — Top departure reasons: ${benchmark.retentionRisk.topReasons.join(', ')}` : ''}
 ${benchmark?.compensationStructure ? `Comp Structure: Base ${Math.round(benchmark.compensationStructure.basePercent * 100)}% | Bonus ${Math.round(benchmark.compensationStructure.bonusPercent * 100)}% | Benefits ${Math.round(benchmark.compensationStructure.benefitsPercent * 100)}% — Signing bonus offered in ${Math.round(benchmark.compensationStructure.signingBonusFrequency * 100)}% of placements (typical range: $${benchmark.compensationStructure.signingBonusRange})` : ''}
 ${benchmark?.relocationWillingness !== undefined ? `Relocation Willingness: ${Math.round(benchmark.relocationWillingness * 100)}% of candidates open to relocating — ${benchmark.relocationWillingness < 0.35 ? 'severely limits non-local searches' : benchmark.relocationWillingness < 0.50 ? 'meaningfully constrains non-local searches' : 'reasonable mobility for this role'}` : ''}
-${benchmark?.backgroundCheckTimeline ? `Background Check Timeline: ${benchmark.backgroundCheckTimeline} weeks typical vetting period` : ''}
+${benchmark?.backgroundCheckTimeline ? `Due Diligence Timeline: ${benchmark.backgroundCheckTimeline} weeks typical vetting period` : ''}
 
 Your salary recommendation MUST be based on these ADJUSTED figures above, not national averages.
 Your timeline estimate should use the Time to Fill data as a baseline, adjusted for this specific search's complexity.
@@ -521,7 +521,7 @@ Use salary growth rate to flag whether the client's budget will still be competi
 Use the retention risk data to power your red flag analysis — warn about the specific departure reasons for THIS role, not generic advice.
 Use comp structure data to advise on offer packaging — if signing bonuses are common (>40% frequency), recommend one. If bonus percentage is high, flag that base salary alone understates total comp.
 Factor relocation willingness into your candidate pool assessment — if only 30% will relocate and this is a non-local search, the effective pool shrinks dramatically.
-Add background check timeline to your total timeline estimate — for security-cleared or high-profile roles, this adds weeks that clients often forget.
+Factor due diligence timeline into your total timeline estimate — for security-cleared or high-profile roles, vetting adds weeks that clients often forget.
 Your timeline MUST align with the "${timelineOption?.label || formData.timeline}" timeframe the client selected.
 
 Be SPECIFIC and ACTIONABLE. Avoid generic advice. Reference the actual role, location, and requirements in your responses.
