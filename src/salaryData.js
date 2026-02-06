@@ -21,7 +21,9 @@ export const SALARY_DATA_META = {
     { name: "Indeed, ZipRecruiter, Salary.com, PayScale", type: "Market Data", coverage: "Cross-platform salary aggregation (2024-2026)" },
     { name: "Flying Fish & Quay Group Maritime Reports", type: "Industry", coverage: "Superyacht crew and captain salary benchmarks" },
     { name: "Lighthouse Careers & Morgan & Mallet", type: "Industry", coverage: "UHNW household staffing benchmarks" },
-    { name: "KPMG / Egon Zehnder Family Office Reports", type: "Industry", coverage: "C-suite, investment, and operations roles in SFO/MFO" },
+    { name: "Morgan & Mallet Beyond the Butler 2025/26", type: "Industry", coverage: "Private service salary benchmarks across US, UK, Switzerland, UAE, France, Monaco" },
+    { name: "KPMG / Agreus Global Family Office Compensation 2025", type: "Industry", coverage: "UK GBP salary bands for C-suite, investment, and operations roles in SFO/MFO" },
+    { name: "Campden Wealth / RBC: North America Family Office Report 2025", type: "Industry", coverage: "C-suite total compensation by AUM tier, bonus uplift, exec comp cost context" },
     { name: "Regional Cost-of-Living Indices", type: "Government", coverage: "Location-based salary adjustments across 20+ markets" }
   ],
   scoringFactors: [
@@ -114,6 +116,45 @@ export const PREMIUMS = {
 };
 
 // ============================================
+// MARKET ADJUSTMENTS (Morgan & Mallet Beyond the Butler 2025/26)
+// ============================================
+export const MARKET_ADJUSTMENTS = {
+  discretionPremiumPercent: { min: 15, max: 20 },
+  ndaPrevalenceUSPA: 0.77,
+  averageTenureYears: 3,
+  source: "Morgan_Mallet_Beyond_the_Butler_2025_26"
+};
+
+// ============================================
+// FAMILY OFFICE EXEC COMPENSATION CONTEXT
+// Source: Campden Wealth / RBC North America Family Office Report 2025
+// ============================================
+export const FO_EXEC_COMP = {
+  source: "Campden_Wealth_RBC_NA_Family_Office_2025",
+  currency: "USD",
+  units: "annual_total_compensation",
+  totalCompByAUM: {
+    veryLarge: { CEO: 1142000, CIO: 1068000, COO: 464000, CFO: 543000 },
+    large:     { CEO: 750000,  CIO: 750000,  COO: 430000, CFO: 400000 },
+    midsize:   { CEO: 650000,  CIO: null,    COO: 500000, CFO: 413000 },
+    small:     { CEO: 286000,  CIO: 268000,  COO: 208000, CFO: 218000 }
+  },
+  bonusUpliftPctToBase: {
+    veryLarge: { CEO: 66,  CIO: 100, COO: 30,  CFO: 30 },
+    large:     { CEO: 23,  CIO: 35,  COO: 41,  CFO: 60 },
+    midsize:   { CEO: 18,  CIO: null, COO: 0,  CFO: 9 },
+    small:     { CEO: 35,  CIO: -4,  COO: -11, CFO: 23 }
+  },
+  bonusPrevalence: 0.87,
+  smallCEOFamilyVsNonFamily: { familyMember: 256000, nonFamily: 435000 },
+  execCompCost: {
+    assumedExecCount: 3,
+    totalExecCompRange: { smallOffice: 800000, largeOffice: 2700000 },
+    execCompShareOfOpCostsPct: { smallMidsizeMin: 70, large: 27 }
+  }
+};
+
+// ============================================
 // POSITION CATEGORIES
 // ============================================
 // Two main groups: Family Office Corporate and Private Service
@@ -193,7 +234,23 @@ export const BENCHMARKS = {
     retentionRisk: { firstYearAttrition: 0.18, topReasons: ['scope mismatch', 'principal personality', 'governance unclear'] },
     compensationStructure: { basePercent: 0.75, bonusPercent: 0.15, benefitsPercent: 0.1, signingBonusFrequency: 0.4, signingBonusRange: "15k-40k" },
     relocationWillingness: 0.35,
-    backgroundCheckTimeline: 3
+    backgroundCheckTimeline: 3,    sourceBenchmarks: {
+      "KPMG_Agreus_2025_UK_GBP": { bands: ["£72,001–£85,000", "£85,001–£99,000", "£99,001–£132,000", "£158,001–£198,000"] },
+      "Morgan_Mallet_2025_USA_USD": { min: 150000, max: 300000 },
+      "Morgan_Mallet_2025_UK_USD": { min: 118800, max: 237600 },
+      "Morgan_Mallet_2025_Switzerland_USD": { min: 180000, max: 288000 },
+      "Morgan_Mallet_2025_UAE_USD": { min: 130560, max: 244800 },
+      "Morgan_Mallet_2025_SaudiArabia_USD": { min: 80100, max: 160200 },
+      "Morgan_Mallet_2025_France_USD": { min: 50400, max: 67200 },
+      "Morgan_Mallet_2025_Monaco_USD": { min: 100800, max: 168000 },
+      "Morgan_Mallet_2025_Belgium_USD": { min: 100800, max: 179200 }
+    },
+      "Morgan_Mallet_2025_USA_USD": { min: 150000, max: 300000 },
+      "Morgan_Mallet_2025_UK_USD": { min: 118800, max: 237600 },
+      "Morgan_Mallet_2025_Switzerland_USD": { min: 180030, max: 288048 },
+      "Morgan_Mallet_2025_UAE_USD": { min: 244800, max: 244800 },
+      "Morgan_Mallet_2025_Monaco_USD": { min: 168000, max: 168000 }
+    }
   },
   "Family Office Director": {
     category: "Family Office - C-Suite",
@@ -249,7 +306,7 @@ export const BENCHMARKS = {
   },
   "Estate Manager": {
     category: "Estate Leadership",
-    p25: 120000, p50: 160000, p75: 220000,
+    p25: 130000, p50: 170000, p75: 235000,
     benefits: {
       housing: "Usually included on or near estate; often $25k-$40k in value",
       vehicle: "Company car or allowance around $10k-$15k/year",
@@ -271,7 +328,19 @@ export const BENCHMARKS = {
     retentionRisk: { firstYearAttrition: 0.22, topReasons: ['scope creep', 'principal expectations', 'staff management burnout'] },
     compensationStructure: { basePercent: 0.78, bonusPercent: 0.12, benefitsPercent: 0.1, signingBonusFrequency: 0.4, signingBonusRange: "15k-35k" },
     relocationWillingness: 0.35,
-    backgroundCheckTimeline: 3
+    backgroundCheckTimeline: 3,    sourceBenchmarks: {
+      "Morgan_Mallet_2025_USA_USD": { min: 150000, max: 250000 },
+      "Morgan_Mallet_2025_UK_USD": { min: 99000, max: 158400 },
+      "Morgan_Mallet_2025_Switzerland_USD": { min: 132000, max: 180000 },
+      "Morgan_Mallet_2025_UAE_USD": { min: 97920, max: 130560 },
+      "Morgan_Mallet_2025_SaudiArabia_USD": { min: 53400, max: 96120 },
+      "Morgan_Mallet_2025_France_USD": { min: 50400, max: 67200 },
+      "Morgan_Mallet_2025_Monaco_USD": { min: 89600, max: 145600 },
+      "Morgan_Mallet_2025_Belgium_USD": { min: 67200, max: 100800 }
+    },
+      "Morgan_Mallet_2025_Switzerland_USD": { min: 180030, max: 180030 },
+      "Morgan_Mallet_2025_Monaco_USD": { min: 145600, max: 145600 }
+    }
   },
   "Estate Manager (Multi-Property)": {
     category: "Estate Leadership",
@@ -301,7 +370,7 @@ export const BENCHMARKS = {
   },
   "Household Manager": {
     category: "Estate Leadership",
-    p25: 85000, p50: 130000, p75: 170000,
+    p25: 92500, p50: 135000, p75: 175000,
     benefits: {
       housing: "Often included; typical value $20k-$35k",
       vehicle: "Company car or allowance for errands",
@@ -323,7 +392,18 @@ export const BENCHMARKS = {
     retentionRisk: { firstYearAttrition: 0.3, topReasons: ['boundary erosion', 'schedule creep', 'role ambiguity'] },
     compensationStructure: { basePercent: 0.82, bonusPercent: 0.1, benefitsPercent: 0.08, signingBonusFrequency: 0.3, signingBonusRange: "10k-25k" },
     relocationWillingness: 0.38,
-    backgroundCheckTimeline: 3
+    backgroundCheckTimeline: 3,    sourceBenchmarks: {
+      "Morgan_Mallet_2025_USA_USD": { min: 100000, max: 180000 },
+      "Morgan_Mallet_2025_UK_USD": { min: 92400, max: 158400 },
+      "Morgan_Mallet_2025_Switzerland_USD": { min: 120000, max: 168000 },
+      "Morgan_Mallet_2025_UAE_USD": { min: 65280, max: 130560 },
+      "Morgan_Mallet_2025_SaudiArabia_USD": { min: 48060, max: 112140 },
+      "Morgan_Mallet_2025_France_USD": { min: 50400, max: 67200 },
+      "Morgan_Mallet_2025_Monaco_USD": { min: 67200, max: 112000 },
+      "Morgan_Mallet_2025_Belgium_USD": { min: 61600, max: 89600 }
+    },
+      "Morgan_Mallet_2025_UAE_USD": { min: 130560, max: 130560 }
+    }
   },
   "Property Manager": {
     category: "Estate Leadership",
@@ -383,7 +463,7 @@ export const BENCHMARKS = {
   // ==========================================
   "Executive Personal Assistant": {
     category: "Personal & Administrative",
-    p25: 90000, p50: 150000, p75: 220000,
+    p25: 100000, p50: 150000, p75: 235000,
     benefits: {
       housing: "Rarely; may have short-term housing when traveling",
       vehicle: "Mileage reimbursement common; sometimes company car",
@@ -405,11 +485,24 @@ export const BENCHMARKS = {
     retentionRisk: { firstYearAttrition: 0.25, topReasons: ['boundary erosion', 'after-hours demands', 'burnout'] },
     compensationStructure: { basePercent: 0.84, bonusPercent: 0.09, benefitsPercent: 0.07, signingBonusFrequency: 0.3, signingBonusRange: "8k-20k" },
     relocationWillingness: 0.4,
-    backgroundCheckTimeline: 3
+    backgroundCheckTimeline: 3,    sourceBenchmarks: {
+      "KPMG_Agreus_2025_UK_GBP": { bands: ["£60,001–£72,000", "£72,001–£85,000", "£85,001–£99,000"] },
+      "Morgan_Mallet_2025_USA_USD": { min: 120000, max: 250000 },
+      "Morgan_Mallet_2025_UK_USD": { min: 92400, max: 158400 },
+      "Morgan_Mallet_2025_Switzerland_USD": { min: 132000, max: 180000 },
+      "Morgan_Mallet_2025_UAE_USD": { min: 65280, max: 163200 },
+      "Morgan_Mallet_2025_SaudiArabia_USD": { min: 72090, max: 120150 },
+      "Morgan_Mallet_2025_France_USD": { min: 78400, max: 123200 },
+      "Morgan_Mallet_2025_Monaco_USD": { min: 78400, max: 123200 },
+      "Morgan_Mallet_2025_Belgium_USD": { min: 67200, max: 100800 }
+    },
+      "Morgan_Mallet_2025_USA_USD": { min: 120000, max: 250000 },
+      "Morgan_Mallet_2025_UK_USD": { min: 79200, max: 178200 }
+    }
   },
   "Personal Assistant": {
     category: "Personal & Administrative",
-    p25: 65000, p50: 95000, p75: 145000,
+    p25: 72500, p50: 110000, p75: 170000,
     benefits: {
       housing: "Rarely included",
       vehicle: "Mileage reimbursement; occasional vehicle for errands",
@@ -431,7 +524,19 @@ export const BENCHMARKS = {
     retentionRisk: { firstYearAttrition: 0.3, topReasons: ['scope creep', 'lack of boundaries', 'compensation ceiling'] },
     compensationStructure: { basePercent: 0.86, bonusPercent: 0.08, benefitsPercent: 0.06, signingBonusFrequency: 0.22, signingBonusRange: "5k-15k" },
     relocationWillingness: 0.42,
-    backgroundCheckTimeline: 2
+    backgroundCheckTimeline: 2,    sourceBenchmarks: {
+      "Morgan_Mallet_2025_USA_USD": { min: 80000, max: 250000 },
+      "Morgan_Mallet_2025_UK_USD": { min: 79200, max: 178200 },
+      "Morgan_Mallet_2025_Switzerland_USD": { min: 108000, max: 156000 },
+      "Morgan_Mallet_2025_UAE_USD": { min: 81600, max: 244800 },
+      "Morgan_Mallet_2025_SaudiArabia_USD": { min: 19224, max: 32040 },
+      "Morgan_Mallet_2025_France_USD": { min: 50400, max: 67200 },
+      "Morgan_Mallet_2025_Monaco_USD": { min: 78400, max: 112000 },
+      "Morgan_Mallet_2025_Belgium_USD": { min: 78400, max: 134400 }
+    },
+      "Morgan_Mallet_2025_UK_USD": { min: 79200, max: 178200 },
+      "Morgan_Mallet_2025_UAE_USD": { min: 244800, max: 244800 }
+    }
   },
   "Family Assistant": {
     category: "Personal & Administrative",
@@ -569,7 +674,7 @@ export const BENCHMARKS = {
   },
   "Butler (Formal)": {
     category: "Formal Service",
-    p25: 120000, p50: 160000, p75: 220000,
+    p25: 110000, p50: 150000, p75: 200000,
     benefits: {
       housing: "Typically provided on estate, value $30k-$45k",
       vehicle: "Occasional access for errands; not always a dedicated car",
@@ -591,7 +696,18 @@ export const BENCHMARKS = {
     retentionRisk: { firstYearAttrition: 0.22, topReasons: ['cultural adjustment', 'formality fatigue', 'isolation'] },
     compensationStructure: { basePercent: 0.85, bonusPercent: 0.08, benefitsPercent: 0.07, signingBonusFrequency: 0.3, signingBonusRange: "10k-25k" },
     relocationWillingness: 0.55,
-    backgroundCheckTimeline: 3
+    backgroundCheckTimeline: 3,    sourceBenchmarks: {
+      "Morgan_Mallet_2025_USA_USD": { min: 90000, max: 180000 },
+      "Morgan_Mallet_2025_UK_USD": { min: 66000, max: 132000 },
+      "Morgan_Mallet_2025_Switzerland_USD": { min: 132000, max: 156000 },
+      "Morgan_Mallet_2025_UAE_USD": { min: 32640, max: 54400 },
+      "Morgan_Mallet_2025_SaudiArabia_USD": { min: 32040, max: 80100 },
+      "Morgan_Mallet_2025_France_USD": { min: 50400, max: 67200 },
+      "Morgan_Mallet_2025_Monaco_USD": { min: 100800, max: 134400 },
+      "Morgan_Mallet_2025_Belgium_USD": { min: 56000, max: 89600 }
+    },
+      "Morgan_Mallet_2025_Monaco_USD": { min: 134400, max: 134400 }
+    }
   },
   "Butler (American Style)": {
     category: "Formal Service",
@@ -647,7 +763,7 @@ export const BENCHMARKS = {
   },
   "Head Housekeeper": {
     category: "Formal Service",
-    p25: 65000, p50: 100000, p75: 145000,
+    p25: 77500, p50: 110000, p75: 150000,
     benefits: {
       housing: "Often included for live-in roles",
       vehicle: "Not typical",
@@ -669,7 +785,17 @@ export const BENCHMARKS = {
     retentionRisk: { firstYearAttrition: 0.3, topReasons: ['physical demands', 'staff management', 'comp stagnation'] },
     compensationStructure: { basePercent: 0.9, bonusPercent: 0.05, benefitsPercent: 0.05, signingBonusFrequency: 0.15, signingBonusRange: "3k-10k" },
     relocationWillingness: 0.38,
-    backgroundCheckTimeline: 2
+    backgroundCheckTimeline: 2,
+    sourceBenchmarks: {
+      "Morgan_Mallet_2025_USA_USD": { min: 90000, max: 150000 },
+      "Morgan_Mallet_2025_UK_USD": { min: 79200, max: 118800 },
+      "Morgan_Mallet_2025_Switzerland_USD": { min: 114000, max: 144000 },
+      "Morgan_Mallet_2025_UAE_USD": { min: 42432, max: 81600 },
+      "Morgan_Mallet_2025_SaudiArabia_USD": { min: 48060, max: 69420 },
+      "Morgan_Mallet_2025_France_USD": { min: 61600, max: 89600 },
+      "Morgan_Mallet_2025_Monaco_USD": { min: 78400, max: 100800 },
+      "Morgan_Mallet_2025_Belgium_USD": { min: 67200, max: 89600 }
+    }
   },
   "Majordomo": {
     category: "Formal Service",
@@ -703,7 +829,7 @@ export const BENCHMARKS = {
   // ==========================================
   "Private Chef": {
     category: "Culinary",
-    p25: 100000, p50: 150000, p75: 220000,
+    p25: 100000, p50: 150000, p75: 235000,
     benefits: {
       housing: "Often included for live-in; value $25k-$40k",
       vehicle: "Sometimes provided for shopping/errands",
@@ -725,7 +851,18 @@ export const BENCHMARKS = {
     retentionRisk: { firstYearAttrition: 0.25, topReasons: ['dietary restriction fatigue', 'schedule demands', 'creative constraints'] },
     compensationStructure: { basePercent: 0.8, bonusPercent: 0.12, benefitsPercent: 0.08, signingBonusFrequency: 0.4, signingBonusRange: "10k-30k" },
     relocationWillingness: 0.5,
-    backgroundCheckTimeline: 2
+    backgroundCheckTimeline: 2,    sourceBenchmarks: {
+      "Morgan_Mallet_2025_USA_USD": { min: 100000, max: 300000 },
+      "Morgan_Mallet_2025_UK_USD": { min: 105600, max: 264000 },
+      "Morgan_Mallet_2025_Switzerland_USD": { min: 132000, max: 156000 },
+      "Morgan_Mallet_2025_UAE_USD": { min: 48960, max: 97920 },
+      "Morgan_Mallet_2025_SaudiArabia_USD": { min: 48060, max: 133500 },
+      "Morgan_Mallet_2025_France_USD": { min: 50400, max: 67200 },
+      "Morgan_Mallet_2025_Monaco_USD": { min: 100800, max: 123200 },
+      "Morgan_Mallet_2025_Belgium_USD": { min: 89600, max: 134400 }
+    },
+      "Morgan_Mallet_2025_UK_USD": { min: 105600, max: 264000 }
+    }
   },
   "Private Chef (Traveling)": {
     category: "Culinary",
@@ -755,7 +892,7 @@ export const BENCHMARKS = {
   },
   "Sous Chef (Private)": {
     category: "Culinary",
-    p25: 75000, p50: 110000, p75: 155000,
+    p25: 72500, p50: 100000, p75: 140000,
     benefits: {
       housing: "Often included in estate housing",
       vehicle: "Occasionally provided",
@@ -777,7 +914,17 @@ export const BENCHMARKS = {
     retentionRisk: { firstYearAttrition: 0.3, topReasons: ['career progression limits', 'comp vs restaurant', 'recognition gap'] },
     compensationStructure: { basePercent: 0.85, bonusPercent: 0.08, benefitsPercent: 0.07, signingBonusFrequency: 0.25, signingBonusRange: "5k-15k" },
     relocationWillingness: 0.45,
-    backgroundCheckTimeline: 2
+    backgroundCheckTimeline: 2,
+    sourceBenchmarks: {
+      "Morgan_Mallet_2025_USA_USD": { min: 70000, max: 120000 },
+      "Morgan_Mallet_2025_UK_USD": { min: 52800, max: 92400 },
+      "Morgan_Mallet_2025_Switzerland_USD": { min: 96000, max: 144000 },
+      "Morgan_Mallet_2025_UAE_USD": { min: 32640, max: 65280 },
+      "Morgan_Mallet_2025_SaudiArabia_USD": { min: 48060, max: 64080 },
+      "Morgan_Mallet_2025_France_USD": { min: 50400, max: 78400 },
+      "Morgan_Mallet_2025_Monaco_USD": { min: 78400, max: 106400 },
+      "Morgan_Mallet_2025_Belgium_USD": { min: 50400, max: 67200 }
+    }
   },
   "Personal Chef (Part-time)": {
     category: "Culinary",
@@ -859,7 +1006,7 @@ export const BENCHMARKS = {
   },
   "Laundress / Wardrobe Manager": {
     category: "Formal Service",
-    p25: 55000, p50: 85000, p75: 130000,
+    p25: 57500, p50: 82500, p75: 115000,
     benefits: {
       housing: "Often provided on or near estate",
       vehicle: "Not typical",
@@ -881,11 +1028,21 @@ export const BENCHMARKS = {
     retentionRisk: { firstYearAttrition: 0.35, topReasons: ['repetitiveness', 'physical strain', 'comp ceiling'] },
     compensationStructure: { basePercent: 0.92, bonusPercent: 0.04, benefitsPercent: 0.04, signingBonusFrequency: 0.1, signingBonusRange: "2k-8k" },
     relocationWillingness: 0.35,
-    backgroundCheckTimeline: 2
+    backgroundCheckTimeline: 2,
+    sourceBenchmarks: {
+      "Morgan_Mallet_2025_USA_USD": { min: 60000, max: 100000 },
+      "Morgan_Mallet_2025_UK_USD": { min: 72600, max: 118800 },
+      "Morgan_Mallet_2025_Switzerland_USD": { min: 66000, max: 84000 },
+      "Morgan_Mallet_2025_UAE_USD": { min: 32640, max: 48960 },
+      "Morgan_Mallet_2025_SaudiArabia_USD": { min: 32040, max: 48060 },
+      "Morgan_Mallet_2025_France_USD": { min: 50400, max: 67200 },
+      "Morgan_Mallet_2025_Monaco_USD": { min: 50400, max: 72800 },
+      "Morgan_Mallet_2025_Belgium_USD": { min: 44800, max: 61600 }
+    }
   },
   "Household Couple": {
     category: "Formal Service",
-    p25: 130000, p50: 210000, p75: 300000,
+    p25: 120000, p50: 190000, p75: 275000,
     benefits: {
       housing: "Included; typically a cottage or apartment worth $30k-$50k+",
       vehicle: "Usually one vehicle provided",
@@ -907,7 +1064,17 @@ export const BENCHMARKS = {
     retentionRisk: { firstYearAttrition: 0.22, topReasons: ['relationship strain', 'boundary erosion', 'isolation'] },
     compensationStructure: { basePercent: 0.85, bonusPercent: 0.08, benefitsPercent: 0.07, signingBonusFrequency: 0.3, signingBonusRange: "8k-20k" },
     relocationWillingness: 0.55,
-    backgroundCheckTimeline: 3
+    backgroundCheckTimeline: 3,
+    sourceBenchmarks: {
+      "Morgan_Mallet_2025_USA_USD": { min: 100000, max: 250000 },
+      "Morgan_Mallet_2025_UK_USD": { min: 92400, max: 158400 },
+      "Morgan_Mallet_2025_Switzerland_USD": { min: 144000, max: 192000 },
+      "Morgan_Mallet_2025_UAE_USD": { min: 26112, max: 48960 },
+      "Morgan_Mallet_2025_SaudiArabia_USD": { min: 57672, max: 80100 },
+      "Morgan_Mallet_2025_France_USD": { min: 50400, max: 67200 },
+      "Morgan_Mallet_2025_Monaco_USD": { min: 89600, max: 128800 },
+      "Morgan_Mallet_2025_Belgium_USD": { min: 89600, max: 123200 }
+    }
   },
 
   // ==========================================
@@ -915,7 +1082,7 @@ export const BENCHMARKS = {
   // ==========================================
   "Nanny (Live-in)": {
     category: "Childcare & Education",
-    p25: 70000, p50: 105000, p75: 160000,
+    p25: 67500, p50: 97500, p75: 140000,
     benefits: {
       housing: "Included; typical value $25k-$35k",
       vehicle: "Sometimes dedicated car; often mileage reimbursement",
@@ -937,11 +1104,21 @@ export const BENCHMARKS = {
     retentionRisk: { firstYearAttrition: 0.28, topReasons: ['boundary erosion', 'child aging out', 'family dynamics'] },
     compensationStructure: { basePercent: 0.82, bonusPercent: 0.1, benefitsPercent: 0.08, signingBonusFrequency: 0.3, signingBonusRange: "5k-15k" },
     relocationWillingness: 0.55,
-    backgroundCheckTimeline: 3
+    backgroundCheckTimeline: 3,
+    sourceBenchmarks: {
+      "Morgan_Mallet_2025_USA_USD": { min: 60000, max: 120000 },
+      "Morgan_Mallet_2025_UK_USD": { min: 66000, max: 105600 },
+      "Morgan_Mallet_2025_Switzerland_USD": { min: 96000, max: 144000 },
+      "Morgan_Mallet_2025_UAE_USD": { min: 58752, max: 81600 },
+      "Morgan_Mallet_2025_SaudiArabia_USD": { min: 66750, max: 90780 },
+      "Morgan_Mallet_2025_France_USD": { min: 50400, max: 67200 },
+      "Morgan_Mallet_2025_Monaco_USD": { min: 58240, max: 63840 },
+      "Morgan_Mallet_2025_Belgium_USD": { min: 50400, max: 67200 }
+    }
   },
   "Nanny (Multiple Children)": {
     category: "Childcare & Education",
-    p25: 85000, p50: 130000, p75: 195000,
+    p25: 82500, p50: 115000, p75: 160000,
     benefits: {
       housing: "Included",
       vehicle: "Frequently has car access for school/activities",
@@ -963,11 +1140,21 @@ export const BENCHMARKS = {
     retentionRisk: { firstYearAttrition: 0.25, topReasons: ['burnout from multiple children', 'schedule demands', 'family expectations'] },
     compensationStructure: { basePercent: 0.84, bonusPercent: 0.09, benefitsPercent: 0.07, signingBonusFrequency: 0.28, signingBonusRange: "5k-12k" },
     relocationWillingness: 0.48,
-    backgroundCheckTimeline: 3
+    backgroundCheckTimeline: 3,
+    sourceBenchmarks: {
+      "Morgan_Mallet_2025_USA_USD": { min: 80000, max: 120000 },
+      "Morgan_Mallet_2025_UK_USD": { min: 59400, max: 92400 },
+      "Morgan_Mallet_2025_Switzerland_USD": { min: 84000, max: 108000 },
+      "Morgan_Mallet_2025_UAE_USD": { min: 26112, max: 39168 },
+      "Morgan_Mallet_2025_SaudiArabia_USD": { min: 32040, max: 76896 },
+      "Morgan_Mallet_2025_France_USD": { min: 50400, max: 67200 },
+      "Morgan_Mallet_2025_Monaco_USD": { min: 50400, max: 78400 },
+      "Morgan_Mallet_2025_Belgium_USD": { min: 44800, max: 61600 }
+    }
   },
   "Nanny (Live-out)": {
     category: "Childcare & Education",
-    p25: 65000, p50: 95000, p75: 150000,
+    p25: 67500, p50: 100000, p75: 150000,
     benefits: {
       housing: "Not included",
       vehicle: "Mileage reimbursement; sometimes car for work hours",
@@ -989,11 +1176,21 @@ export const BENCHMARKS = {
     retentionRisk: { firstYearAttrition: 0.22, topReasons: ['commute fatigue', 'schedule changes', 'family boundary issues'] },
     compensationStructure: { basePercent: 0.85, bonusPercent: 0.08, benefitsPercent: 0.07, signingBonusFrequency: 0.25, signingBonusRange: "3k-10k" },
     relocationWillingness: 0.4,
-    backgroundCheckTimeline: 3
+    backgroundCheckTimeline: 3,
+    sourceBenchmarks: {
+      "Morgan_Mallet_2025_USA_USD": { min: 70000, max: 150000 },
+      "Morgan_Mallet_2025_UK_USD": { min: 72600, max: 145200 },
+      "Morgan_Mallet_2025_Switzerland_USD": { min: 84000, max: 132000 },
+      "Morgan_Mallet_2025_UAE_USD": { min: 81600, max: 163200 },
+      "Morgan_Mallet_2025_SaudiArabia_USD": { min: 66750, max: 106800 },
+      "Morgan_Mallet_2025_France_USD": { min: 67200, max: 100800 },
+      "Morgan_Mallet_2025_Monaco_USD": { min: 78400, max: 112000 },
+      "Morgan_Mallet_2025_Belgium_USD": { min: 50400, max: 67200 }
+    }
   },
   "Newborn Care Specialist": {
     category: "Childcare & Education",
-    p25: 80000, p50: 130000, p75: 190000,
+    p25: 85000, p50: 125000, p75: 170000,
     benefits: {
       housing: "Included during term; may have dedicated room/nursery suite",
       vehicle: "Sometimes provided or reimbursed",
@@ -1015,11 +1212,23 @@ export const BENCHMARKS = {
     retentionRisk: { firstYearAttrition: 0.3, topReasons: ['role expiration as infant ages', 'sleep deprivation', 'family attachment conflicts'] },
     compensationStructure: { basePercent: 0.88, bonusPercent: 0.06, benefitsPercent: 0.06, signingBonusFrequency: 0.2, signingBonusRange: "3k-10k" },
     relocationWillingness: 0.52,
-    backgroundCheckTimeline: 3
+    backgroundCheckTimeline: 3,    sourceBenchmarks: {
+      "Morgan_Mallet_2025_USA_USD": { min: 90000, max: 150000 },
+      "Morgan_Mallet_2025_UK_USD": { min: 105600, max: 165000 },
+      "Morgan_Mallet_2025_Switzerland_USD": { min: 114000, max: 186000 },
+      "Morgan_Mallet_2025_UAE_USD": { min: 65280, max: 114240 },
+      "Morgan_Mallet_2025_SaudiArabia_USD": { min: 48060, max: 80100 },
+      "Morgan_Mallet_2025_France_USD": { min: 106400, max: 145600 },
+      "Morgan_Mallet_2025_Monaco_USD": { min: 112000, max: 145600 },
+      "Morgan_Mallet_2025_Belgium_USD": { min: 95200, max: 117600 }
+    },
+      "Morgan_Mallet_2025_Switzerland_USD": { min: 186031, max: 186031 },
+      "Morgan_Mallet_2025_France_USD": { min: 145600, max: 145600 }
+    }
   },
   "Governess": {
     category: "Childcare & Education",
-    p25: 100000, p50: 160000, p75: 250000,
+    p25: 90000, p50: 130000, p75: 190000,
     benefits: {
       housing: "Typically live-in with dedicated room or apartment",
       vehicle: "Often access to vehicle for educational outings",
@@ -1041,7 +1250,17 @@ export const BENCHMARKS = {
     retentionRisk: { firstYearAttrition: 0.2, topReasons: ['educational philosophy conflicts', 'isolation', 'family expectations'] },
     compensationStructure: { basePercent: 0.83, bonusPercent: 0.1, benefitsPercent: 0.07, signingBonusFrequency: 0.28, signingBonusRange: "5k-15k" },
     relocationWillingness: 0.5,
-    backgroundCheckTimeline: 3
+    backgroundCheckTimeline: 3,
+    sourceBenchmarks: {
+      "Morgan_Mallet_2025_USA_USD": { min: 70000, max: 130000 },
+      "Morgan_Mallet_2025_UK_USD": { min: 72600, max: 132000 },
+      "Morgan_Mallet_2025_Switzerland_USD": { min: 108000, max: 156000 },
+      "Morgan_Mallet_2025_UAE_USD": { min: 48960, max: 81600 },
+      "Morgan_Mallet_2025_SaudiArabia_USD": { min: 66750, max: 90780 },
+      "Morgan_Mallet_2025_France_USD": { min: 50400, max: 67200 },
+      "Morgan_Mallet_2025_Monaco_USD": { min: 89600, max: 134400 },
+      "Morgan_Mallet_2025_Belgium_USD": { min: 50400, max: 78400 }
+    }
   },
   "Tutor Coordinator": {
     category: "Childcare & Education",
@@ -1127,7 +1346,7 @@ export const BENCHMARKS = {
   },
   "Executive Protection Agent": {
     category: "Security",
-    p25: 85000, p50: 130000, p75: 190000,
+    p25: 87500, p50: 125000, p75: 170000,
     benefits: {
       housing: "Rarely permanent, but covered during travel",
       vehicle: "Often assigned to specific high-end or armored vehicle",
@@ -1149,7 +1368,17 @@ export const BENCHMARKS = {
     retentionRisk: { firstYearAttrition: 0.18, topReasons: ['travel fatigue', 'relationship strain', 'better government offer'] },
     compensationStructure: { basePercent: 0.75, bonusPercent: 0.15, benefitsPercent: 0.1, signingBonusFrequency: 0.38, signingBonusRange: "10k-30k" },
     relocationWillingness: 0.6,
-    backgroundCheckTimeline: 6
+    backgroundCheckTimeline: 6,    sourceBenchmarks: {
+      "Morgan_Mallet_2025_USA_USD": { min: 90000, max: 150000 },
+      "Morgan_Mallet_2025_UK_USD": { min: 72600, max: 132000 },
+      "Morgan_Mallet_2025_Switzerland_USD": { min: 84000, max: 132000 },
+      "Morgan_Mallet_2025_UAE_USD": { min: 32640, max: 65280 },
+      "Morgan_Mallet_2025_SaudiArabia_USD": { min: 32040, max: 53400 },
+      "Morgan_Mallet_2025_France_USD": { min: 50400, max: 67200 },
+      "Morgan_Mallet_2025_Monaco_USD": { min: 44800, max: 72800 },
+      "Morgan_Mallet_2025_Belgium_USD": { min: 50400, max: 72800 }
+    }
+    }
   },
   "Residential Security Officer": {
     category: "Security",
@@ -1261,7 +1490,7 @@ export const BENCHMARKS = {
   // ==========================================
   "Personal Driver / Chauffeur": {
     category: "Transportation",
-    p25: 75000, p50: 110000, p75: 160000,
+    p25: 77500, p50: 110000, p75: 145000,
     benefits: {
       housing: "Not included",
       vehicle: "Principal's vehicle; driver responsible for care and scheduling",
@@ -1283,7 +1512,17 @@ export const BENCHMARKS = {
     retentionRisk: { firstYearAttrition: 0.15, topReasons: ['better corporate offers', 'scope creep', 'regulatory pressure'] },
     compensationStructure: { basePercent: 0.72, bonusPercent: 0.16, benefitsPercent: 0.12, signingBonusFrequency: 0.45, signingBonusRange: "20k-50k" },
     relocationWillingness: 0.45,
-    backgroundCheckTimeline: 5
+    backgroundCheckTimeline: 5,
+    sourceBenchmarks: {
+      "Morgan_Mallet_2025_USA_USD": { min: 80000, max: 130000 },
+      "Morgan_Mallet_2025_UK_USD": { min: 66000, max: 118800 },
+      "Morgan_Mallet_2025_Switzerland_USD": { min: 108000, max: 144000 },
+      "Morgan_Mallet_2025_UAE_USD": { min: 38080, max: 62560 },
+      "Morgan_Mallet_2025_SaudiArabia_USD": { min: 22428, max: 38448 },
+      "Morgan_Mallet_2025_France_USD": { min: 50400, max: 67200 },
+      "Morgan_Mallet_2025_Monaco_USD": { min: 67200, max: 100800 },
+      "Morgan_Mallet_2025_Belgium_USD": { min: 50400, max: 67200 }
+    }
   },
   "Long-haul Driver": {
     category: "Transportation",
@@ -1395,7 +1634,7 @@ export const BENCHMARKS = {
   // ==========================================
   "Grounds Manager": {
     category: "Grounds & Outdoor",
-    p25: 70000, p50: 105000, p75: 155000,
+    p25: 67500, p50: 95000, p75: 130000,
     benefits: {
       housing: "Often provided on large estates (~$20k-$30k value)",
       vehicle: "Estate vehicle or allowance",
@@ -1417,11 +1656,21 @@ export const BENCHMARKS = {
     retentionRisk: { firstYearAttrition: 0.28, topReasons: ['schedule unpredictability', 'lifestyle impact', 'comp vs commercial'] },
     compensationStructure: { basePercent: 0.82, bonusPercent: 0.1, benefitsPercent: 0.08, signingBonusFrequency: 0.25, signingBonusRange: "5k-15k" },
     relocationWillingness: 0.55,
-    backgroundCheckTimeline: 3
+    backgroundCheckTimeline: 3,
+    sourceBenchmarks: {
+      "Morgan_Mallet_2025_USA_USD": { min: 60000, max: 110000 },
+      "Morgan_Mallet_2025_UK_USD": { min: 52800, max: 79200 },
+      "Morgan_Mallet_2025_Switzerland_USD": { min: 84000, max: 114000 },
+      "Morgan_Mallet_2025_UAE_USD": { min: 27200, max: 38080 },
+      "Morgan_Mallet_2025_SaudiArabia_USD": { min: 26700, max: 37380 },
+      "Morgan_Mallet_2025_France_USD": { min: 39200, max: 61600 },
+      "Morgan_Mallet_2025_Monaco_USD": { min: 50400, max: 72800 },
+      "Morgan_Mallet_2025_Belgium_USD": { min: 44800, max: 61600 }
+    }
   },
   "Head Gardener": {
     category: "Grounds & Outdoor",
-    p25: 65000, p50: 100000, p75: 145000,
+    p25: 67500, p50: 92500, p75: 120000,
     benefits: {
       housing: "Often included, especially on rural or resort estates",
       vehicle: "Estate vehicle for grounds duties",
@@ -1443,7 +1692,17 @@ export const BENCHMARKS = {
     retentionRisk: { firstYearAttrition: 0.18, topReasons: ['creative constraints', 'budget limits', 'seasonal pressure'] },
     compensationStructure: { basePercent: 0.88, bonusPercent: 0.06, benefitsPercent: 0.06, signingBonusFrequency: 0.15, signingBonusRange: "3k-10k" },
     relocationWillingness: 0.3,
-    backgroundCheckTimeline: 2
+    backgroundCheckTimeline: 2,
+    sourceBenchmarks: {
+      "Morgan_Mallet_2025_USA_USD": { min: 70000, max: 100000 },
+      "Morgan_Mallet_2025_UK_USD": { min: 85800, max: 118800 },
+      "Morgan_Mallet_2025_Switzerland_USD": { min: 96000, max: 132000 },
+      "Morgan_Mallet_2025_UAE_USD": { min: 32640, max: 48960 },
+      "Morgan_Mallet_2025_SaudiArabia_USD": { min: 26700, max: 42720 },
+      "Morgan_Mallet_2025_France_USD": { min: 67200, max: 100800 },
+      "Morgan_Mallet_2025_Monaco_USD": { min: 61600, max: 89600 },
+      "Morgan_Mallet_2025_Belgium_USD": { min: 50400, max: 72800 }
+    }
   },
   "Maintenance Manager": {
     category: "Grounds & Outdoor",
@@ -1767,7 +2026,7 @@ export const BENCHMARKS = {
   },
   "Elder Care Manager": {
     category: "Healthcare & Wellness",
-    p25: 70000, p50: 110000, p75: 160000,
+    p25: 65000, p50: 95000, p75: 130000,
     benefits: {
       housing: "Sometimes for live-in oversight",
       vehicle: "Mileage reimbursement",
@@ -1789,11 +2048,21 @@ export const BENCHMARKS = {
     retentionRisk: { firstYearAttrition: 0.28, topReasons: ['administrative overload', 'guest complaints', 'schedule demands'] },
     compensationStructure: { basePercent: 0.75, bonusPercent: 0.15, benefitsPercent: 0.1, signingBonusFrequency: 0.35, signingBonusRange: "8k-20k" },
     relocationWillingness: 0.8,
-    backgroundCheckTimeline: 3
+    backgroundCheckTimeline: 3,
+    sourceBenchmarks: {
+      "Morgan_Mallet_2025_USA_USD": { min: 60000, max: 100000 },
+      "Morgan_Mallet_2025_UK_USD": { min: 52800, max: 85800 },
+      "Morgan_Mallet_2025_Switzerland_USD": { min: 84000, max: 144000 },
+      "Morgan_Mallet_2025_UAE_USD": { min: 26112, max: 39168 },
+      "Morgan_Mallet_2025_SaudiArabia_USD": { min: 32040, max: 48060 },
+      "Morgan_Mallet_2025_France_USD": { min: 50400, max: 67200 },
+      "Morgan_Mallet_2025_Monaco_USD": { min: 67200, max: 100800 },
+      "Morgan_Mallet_2025_Belgium_USD": { min: 44800, max: 61600 }
+    }
   },
   "Personal Trainer (Dedicated)": {
     category: "Healthcare & Wellness",
-    p25: 65000, p50: 105000, p75: 160000,
+    p25: 72500, p50: 100000, p75: 140000,
     benefits: {
       housing: "Often provided, especially on resort estates or yachts",
       vehicle: "Occasionally provided or reimbursed",
@@ -1815,7 +2084,17 @@ export const BENCHMARKS = {
     retentionRisk: { firstYearAttrition: 0.28, topReasons: ['administrative overload', 'guest complaints', 'schedule demands'] },
     compensationStructure: { basePercent: 0.75, bonusPercent: 0.15, benefitsPercent: 0.1, signingBonusFrequency: 0.35, signingBonusRange: "8k-20k" },
     relocationWillingness: 0.8,
-    backgroundCheckTimeline: 3
+    backgroundCheckTimeline: 3,
+    sourceBenchmarks: {
+      "Morgan_Mallet_2025_USA_USD": { min: 80000, max: 120000 },
+      "Morgan_Mallet_2025_UK_USD": { min: 79200, max: 118800 },
+      "Morgan_Mallet_2025_Switzerland_USD": { min: 96000, max: 144000 },
+      "Morgan_Mallet_2025_UAE_USD": { min: 68000, max: 108800 },
+      "Morgan_Mallet_2025_SaudiArabia_USD": { min: 34710, max: 42720 },
+      "Morgan_Mallet_2025_France_USD": { min: 67200, max: 112000 },
+      "Morgan_Mallet_2025_Monaco_USD": { min: 72800, max: 145600 },
+      "Morgan_Mallet_2025_Belgium_USD": { min: 56000, max: 78400 }
+    }
   },
   "Wellness Coordinator": {
     category: "Healthcare & Wellness",
@@ -2119,7 +2398,7 @@ export const BENCHMARKS = {
   // PERSONAL & ADMINISTRATIVE (Additional)
   "Concierge Manager": {
     category: "Personal & Administrative",
-    p25: 75000, p50: 115000, p75: 170000,
+    p25: 75000, p50: 105000, p75: 145000,
     benefits: {
       housing: "Rarely included",
       vehicle: "Mileage reimbursement or car for errands",
@@ -2141,7 +2420,17 @@ export const BENCHMARKS = {
     retentionRisk: { firstYearAttrition: 0.28, topReasons: ['availability expectations', 'scope creep', 'burnout'] },
     compensationStructure: { basePercent: 0.84, bonusPercent: 0.09, benefitsPercent: 0.07, signingBonusFrequency: 0.22, signingBonusRange: "5k-15k" },
     relocationWillingness: 0.38,
-    backgroundCheckTimeline: 2
+    backgroundCheckTimeline: 2,
+    sourceBenchmarks: {
+      "Morgan_Mallet_2025_USA_USD": { min: 70000, max: 120000 },
+      "Morgan_Mallet_2025_UK_USD": { min: 52800, max: 79200 },
+      "Morgan_Mallet_2025_Switzerland_USD": { min: 84000, max: 114000 },
+      "Morgan_Mallet_2025_UAE_USD": { min: 32640, max: 48960 },
+      "Morgan_Mallet_2025_SaudiArabia_USD": { min: 32040, max: 48060 },
+      "Morgan_Mallet_2025_France_USD": { min: 50400, max: 78400 },
+      "Morgan_Mallet_2025_Monaco_USD": { min: 61600, max: 89600 },
+      "Morgan_Mallet_2025_Belgium_USD": { min: 50400, max: 67200 }
+    }
   },
   "Scheduler / Calendar Manager": {
     category: "Personal & Administrative",
@@ -2173,7 +2462,7 @@ export const BENCHMARKS = {
   // FORMAL SERVICE (Additional)
   "Housekeeper": {
     category: "Formal Service",
-    p25: 45000, p50: 65000, p75: 95000,
+    p25: 67500, p50: 92500, p75: 125000,
     benefits: {
       housing: "Often included for live-in",
       vehicle: "Not typical",
@@ -2195,7 +2484,17 @@ export const BENCHMARKS = {
     retentionRisk: { firstYearAttrition: 0.35, topReasons: ['physical demands', 'comp stagnation', 'schedule demands'] },
     compensationStructure: { basePercent: 0.92, bonusPercent: 0.04, benefitsPercent: 0.04, signingBonusFrequency: 0.1, signingBonusRange: "2k-6k" },
     relocationWillingness: 0.4,
-    backgroundCheckTimeline: 2
+    backgroundCheckTimeline: 2,    sourceBenchmarks: {
+      "Morgan_Mallet_2025_USA_USD": { min: 90000, max: 160000 },
+      "Morgan_Mallet_2025_UK_USD": { min: 66000, max: 105600 },
+      "Morgan_Mallet_2025_Switzerland_USD": { min: 96000, max: 144000 },
+      "Morgan_Mallet_2025_UAE_USD": { min: 48960, max: 81600 },
+      "Morgan_Mallet_2025_SaudiArabia_USD": { min: 80100, max: 120150 },
+      "Morgan_Mallet_2025_France_USD": { min: 50400, max: 67200 },
+      "Morgan_Mallet_2025_Monaco_USD": { min: 50400, max: 61600 },
+      "Morgan_Mallet_2025_Belgium_USD": { min: 50400, max: 67200 }
+    }
+    }
   },
   "Florist (Private)": {
     category: "Formal Service",
@@ -2225,7 +2524,7 @@ export const BENCHMARKS = {
   },
   "Valet": {
     category: "Formal Service",
-    p25: 55000, p50: 85000, p75: 130000,
+    p25: 55000, p50: 77500, p75: 110000,
     benefits: {
       housing: "Usually included",
       vehicle: "Not typical",
@@ -2247,11 +2546,21 @@ export const BENCHMARKS = {
     retentionRisk: { firstYearAttrition: 0.3, topReasons: ['availability demands', 'physical strain', 'comp ceiling'] },
     compensationStructure: { basePercent: 0.9, bonusPercent: 0.05, benefitsPercent: 0.05, signingBonusFrequency: 0.12, signingBonusRange: "2k-8k" },
     relocationWillingness: 0.42,
-    backgroundCheckTimeline: 2
+    backgroundCheckTimeline: 2,
+    sourceBenchmarks: {
+      "Morgan_Mallet_2025_USA_USD": { min: 55000, max: 90000 },
+      "Morgan_Mallet_2025_UK_USD": { min: 52800, max: 79200 },
+      "Morgan_Mallet_2025_Switzerland_USD": { min: 66000, max: 84000 },
+      "Morgan_Mallet_2025_UAE_USD": { min: 26112, max: 39168 },
+      "Morgan_Mallet_2025_SaudiArabia_USD": { min: 22428, max: 38448 },
+      "Morgan_Mallet_2025_France_USD": { min: 50400, max: 67200 },
+      "Morgan_Mallet_2025_Monaco_USD": { min: 39200, max: 61600 },
+      "Morgan_Mallet_2025_Belgium_USD": { min: 39200, max: 56000 }
+    }
   },
   "Cook": {
     category: "Culinary",
-    p25: 55000, p50: 80000, p75: 120000,
+    p25: 62500, p50: 87500, p75: 125000,
     benefits: {
       housing: "Often included for live-in",
       vehicle: "Sometimes for shopping",
@@ -2273,7 +2582,17 @@ export const BENCHMARKS = {
     retentionRisk: { firstYearAttrition: 0.35, topReasons: ['comp ceiling', 'scope creep', 'lack of creative autonomy'] },
     compensationStructure: { basePercent: 0.9, bonusPercent: 0.05, benefitsPercent: 0.05, signingBonusFrequency: 0.1, signingBonusRange: "2k-8k" },
     relocationWillingness: 0.38,
-    backgroundCheckTimeline: 2
+    backgroundCheckTimeline: 2,
+    sourceBenchmarks: {
+      "Morgan_Mallet_2025_USA_USD": { min: 95000, max: 130000 },
+      "Morgan_Mallet_2025_UK_USD": { min: 52800, max: 72600 },
+      "Morgan_Mallet_2025_Switzerland_USD": { min: 96000, max: 120000 },
+      "Morgan_Mallet_2025_UAE_USD": { min: 26112, max: 32640 },
+      "Morgan_Mallet_2025_SaudiArabia_USD": { min: 19224, max: 38448 },
+      "Morgan_Mallet_2025_France_USD": { min: 50400, max: 67200 },
+      "Morgan_Mallet_2025_Monaco_USD": { min: 61600, max: 84000 },
+      "Morgan_Mallet_2025_Belgium_USD": { min: 39200, max: 56000 }
+    }
   },
 
   // GROUNDS & MAINTENANCE (Additional)
@@ -2521,7 +2840,7 @@ export const BENCHMARKS = {
   },
   "Companion": {
     category: "Healthcare & Wellness",
-    p25: 50000, p50: 75000, p75: 115000,
+    p25: 55000, p50: 77500, p75: 110000,
     benefits: {
       housing: "Often included for live-in",
       vehicle: "Mileage reimbursement or car for outings",
@@ -2543,11 +2862,21 @@ export const BENCHMARKS = {
     retentionRisk: { firstYearAttrition: 0.15, topReasons: ['schedule demands', 'regulatory burden', 'airline offers'] },
     compensationStructure: { basePercent: 0.75, bonusPercent: 0.15, benefitsPercent: 0.1, signingBonusFrequency: 0.5, signingBonusRange: "20k-50k" },
     relocationWillingness: 0.48,
-    backgroundCheckTimeline: 4
+    backgroundCheckTimeline: 4,
+    sourceBenchmarks: {
+      "Morgan_Mallet_2025_USA_USD": { min: 60000, max: 100000 },
+      "Morgan_Mallet_2025_UK_USD": { min: 52800, max: 85800 },
+      "Morgan_Mallet_2025_Switzerland_USD": { min: 66000, max: 90000 },
+      "Morgan_Mallet_2025_UAE_USD": { min: 26112, max: 39168 },
+      "Morgan_Mallet_2025_SaudiArabia_USD": { min: 32040, max: 48060 },
+      "Morgan_Mallet_2025_France_USD": { min: 50400, max: 67200 },
+      "Morgan_Mallet_2025_Monaco_USD": { min: 39200, max: 61600 },
+      "Morgan_Mallet_2025_Belgium_USD": { min: 44800, max: 61600 }
+    }
   },
   "Pet Care Specialist": {
     category: "Healthcare & Wellness",
-    p25: 45000, p50: 70000, p75: 110000,
+    p25: 52500, p50: 77500, p75: 115000,
     benefits: {
       housing: "Sometimes included",
       vehicle: "Vehicle or allowance for pet transport",
@@ -2569,7 +2898,17 @@ export const BENCHMARKS = {
     retentionRisk: { firstYearAttrition: 0.15, topReasons: ['schedule demands', 'regulatory burden', 'airline offers'] },
     compensationStructure: { basePercent: 0.75, bonusPercent: 0.15, benefitsPercent: 0.1, signingBonusFrequency: 0.5, signingBonusRange: "20k-50k" },
     relocationWillingness: 0.48,
-    backgroundCheckTimeline: 4
+    backgroundCheckTimeline: 4,
+    sourceBenchmarks: {
+      "Morgan_Mallet_2025_USA_USD": { min: 60000, max: 120000 },
+      "Morgan_Mallet_2025_UK_USD": { min: 59400, max: 99000 },
+      "Morgan_Mallet_2025_Switzerland_USD": { min: 60000, max: 102000 },
+      "Morgan_Mallet_2025_UAE_USD": { min: 27200, max: 48960 },
+      "Morgan_Mallet_2025_SaudiArabia_USD": { min: 24030, max: 40050 },
+      "Morgan_Mallet_2025_France_USD": { min: 39200, max: 61600 },
+      "Morgan_Mallet_2025_Monaco_USD": { min: 56000, max: 84000 },
+      "Morgan_Mallet_2025_Belgium_USD": { min: 44800, max: 61600 }
+    }
   },
 
   // HOSPITALITY & EVENTS (Additional)
@@ -2708,7 +3047,13 @@ export const BENCHMARKS = {
     retentionRisk: { firstYearAttrition: 0.14, topReasons: ['governance conflicts', 'family dynamics', 'strategic disagreement'] },
     compensationStructure: { basePercent: 0.6, bonusPercent: 0.25, benefitsPercent: 0.15, signingBonusFrequency: 0.7, signingBonusRange: "100k-200k" },
     relocationWillingness: 0.52,
-    backgroundCheckTimeline: 5
+    backgroundCheckTimeline: 5,
+    sourceBenchmarks: {
+      "KPMG_Agreus_2025_UK_GBP": { bands: ["£132,001–£158,000", "£158,001–£198,000", "£198,001–£264,000", "£264,001–£330,000", "£330,001–£396,000", "£396,001–£500,000", "£500,001–£625,000", "£625,001–£750,000", "£1,000,000+"] },
+      "Campden_RBC_2025_TotalComp": { veryLarge: 1142000, large: 750000, midsize: 650000, small: 286000 },
+      "Campden_RBC_2025_BonusPct": { veryLarge: 66, large: 23, midsize: 18, small: 35 },
+      "Campden_RBC_2025_SmallCEO": { familyMember: 256000, nonFamily: 435000 }
+    }
   },
   "Family Office COO": {
     category: "Family Office - C-Suite",
@@ -2734,7 +3079,12 @@ export const BENCHMARKS = {
     retentionRisk: { firstYearAttrition: 0.15, topReasons: ['operational friction', 'family expectations', 'talent wars'] },
     compensationStructure: { basePercent: 0.62, bonusPercent: 0.23, benefitsPercent: 0.15, signingBonusFrequency: 0.6, signingBonusRange: "60k-120k" },
     relocationWillingness: 0.48,
-    backgroundCheckTimeline: 4
+    backgroundCheckTimeline: 4,
+    sourceBenchmarks: {
+      "KPMG_Agreus_2025_UK_GBP": { bands: ["£85,001–£99,000", "£99,001–£132,000", "£158,001–£198,000"] },
+      "Campden_RBC_2025_TotalComp": { veryLarge: 464000, large: 430000, midsize: 500000, small: 208000 },
+      "Campden_RBC_2025_BonusPct": { veryLarge: 30, large: 41, midsize: 0, small: -11 }
+    }
   },
   "Family Office CIO": {
     category: "Family Office - C-Suite",
@@ -2760,7 +3110,12 @@ export const BENCHMARKS = {
     retentionRisk: { firstYearAttrition: 0.13, topReasons: ['investment mandate changes', 'risk tolerance mismatch', 'comp vs hedge fund'] },
     compensationStructure: { basePercent: 0.58, bonusPercent: 0.27, benefitsPercent: 0.15, signingBonusFrequency: 0.65, signingBonusRange: "80k-175k" },
     relocationWillingness: 0.5,
-    backgroundCheckTimeline: 4
+    backgroundCheckTimeline: 4,
+    sourceBenchmarks: {
+      "KPMG_Agreus_2025_UK_GBP": { bands: ["£99,001–£132,000", "£158,001–£198,000", "£198,001–£264,000", "£264,001–£330,000", "£330,001–£396,000", "£500,001–£625,000"] },
+      "Campden_RBC_2025_TotalComp": { veryLarge: 1068000, large: 750000, midsize: null, small: 268000 },
+      "Campden_RBC_2025_BonusPct": { veryLarge: 100, large: 35, midsize: null, small: -4 }
+    }
   },
   "Family Office CFO": {
     category: "Family Office - C-Suite",
@@ -2786,7 +3141,12 @@ export const BENCHMARKS = {
     retentionRisk: { firstYearAttrition: 0.14, topReasons: ['governance disagreements', 'reporting complexity', 'compliance burden'] },
     compensationStructure: { basePercent: 0.63, bonusPercent: 0.22, benefitsPercent: 0.15, signingBonusFrequency: 0.6, signingBonusRange: "60k-130k" },
     relocationWillingness: 0.47,
-    backgroundCheckTimeline: 5
+    backgroundCheckTimeline: 5,
+    sourceBenchmarks: {
+      "KPMG_Agreus_2025_UK_GBP": { bands: ["£99,001–£132,000", "£132,001–£158,000", "£158,001–£198,000", "£198,001–£264,000"] },
+      "Campden_RBC_2025_TotalComp": { veryLarge: 543000, large: 400000, midsize: 413000, small: 218000 },
+      "Campden_RBC_2025_BonusPct": { veryLarge: 30, large: 60, midsize: 9, small: 23 }
+    }
   },
   "Family Office General Counsel": {
     category: "Family Office - C-Suite",
@@ -2812,7 +3172,10 @@ export const BENCHMARKS = {
     retentionRisk: { firstYearAttrition: 0.11, topReasons: ['conflict of interest concerns', 'family politics', 'better firm offers'] },
     compensationStructure: { basePercent: 0.65, bonusPercent: 0.2, benefitsPercent: 0.15, signingBonusFrequency: 0.55, signingBonusRange: "50k-120k" },
     relocationWillingness: 0.45,
-    backgroundCheckTimeline: 5
+    backgroundCheckTimeline: 5,    sourceBenchmarks: {
+      "KPMG_Agreus_2025_UK_GBP": { bands: ["£158,001–£198,000", "£198,001–£264,000"] }
+    }
+    }
   },
   "Director of Tax": {
     category: "Family Office - Operations & Finance",
@@ -2968,7 +3331,10 @@ export const BENCHMARKS = {
     retentionRisk: { firstYearAttrition: 0.11, topReasons: ['conflict of interest concerns', 'family politics', 'better firm offers'] },
     compensationStructure: { basePercent: 0.65, bonusPercent: 0.2, benefitsPercent: 0.15, signingBonusFrequency: 0.55, signingBonusRange: "50k-120k" },
     relocationWillingness: 0.45,
-    backgroundCheckTimeline: 5
+    backgroundCheckTimeline: 5,    sourceBenchmarks: {
+      "KPMG_Agreus_2025_UK_GBP": { bands: ["£60,001–£72,000", "£85,001–£99,000", "£99,001–£132,000", "£132,001–£158,000", "£198,001–£264,000", "£264,001–£330,000", "£330,001–£396,000"] }
+    }
+    }
   },
   "Senior Investment Analyst": {
     category: "Family Office - Investment",
@@ -3020,7 +3386,10 @@ export const BENCHMARKS = {
     retentionRisk: { firstYearAttrition: 0.22, topReasons: ['career progression limits', 'comp below market', 'scope too narrow'] },
     compensationStructure: { basePercent: 0.65, bonusPercent: 0.22, benefitsPercent: 0.13, signingBonusFrequency: 0.4, signingBonusRange: "20k-50k" },
     relocationWillingness: 0.42,
-    backgroundCheckTimeline: 3
+    backgroundCheckTimeline: 3,    sourceBenchmarks: {
+      "KPMG_Agreus_2025_UK_GBP": { bands: ["£72,001–£85,000", "£85,001–£99,000", "£99,001–£132,000"] }
+    }
+    }
   },
   "Controller": {
     category: "Family Office - Operations & Finance",
@@ -3046,7 +3415,10 @@ export const BENCHMARKS = {
     retentionRisk: { firstYearAttrition: 0.22, topReasons: ['career progression limits', 'comp below market', 'scope too narrow'] },
     compensationStructure: { basePercent: 0.65, bonusPercent: 0.22, benefitsPercent: 0.13, signingBonusFrequency: 0.4, signingBonusRange: "20k-50k" },
     relocationWillingness: 0.42,
-    backgroundCheckTimeline: 3
+    backgroundCheckTimeline: 3,    sourceBenchmarks: {
+      "KPMG_Agreus_2025_UK_GBP": { bands: ["£85,001–£99,000", "£99,001–£132,000", "£132,001–£158,000", "£158,001–£198,000", "£198,001–£264,000"] }
+    }
+    }
   },
   "Operations Manager": {
     category: "Family Office - Operations & Finance",
@@ -3072,7 +3444,10 @@ export const BENCHMARKS = {
     retentionRisk: { firstYearAttrition: 0.22, topReasons: ['career progression limits', 'comp below market', 'scope too narrow'] },
     compensationStructure: { basePercent: 0.65, bonusPercent: 0.22, benefitsPercent: 0.13, signingBonusFrequency: 0.4, signingBonusRange: "20k-50k" },
     relocationWillingness: 0.42,
-    backgroundCheckTimeline: 3
+    backgroundCheckTimeline: 3,    sourceBenchmarks: {
+      "KPMG_Agreus_2025_UK_GBP": { bands: ["£85,001–£99,000", "£99,001–£132,000", "£132,001–£158,000"] }
+    }
+    }
   },
   "Risk & Compliance Manager": {
     category: "Family Office - Operations & Finance",
