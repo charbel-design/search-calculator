@@ -156,10 +156,10 @@ export function useSearchEngine() {
     }
   }, []);
 
-  // Auto-run analysis when loaded from shared link
+  // Auto-run full AI analysis when loaded from shared link
   useEffect(() => {
     if (step === 5 && formData.positionType) {
-      calculateComplexityFromShare();
+      calculateComplexity();
     }
   }, [step]);
 
