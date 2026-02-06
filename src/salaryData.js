@@ -2866,7 +2866,7 @@ export const BENCHMARKS = {
     relocationWillingness: 0.45,
     backgroundCheckTimeline: 5
   },
-  "Chief Information Officer": {
+  "Chief Investment Officer": {
     category: "Family Office - Operations & Finance",
     p25: 200000, p50: 300000, p75: 450000,
     benefits: {
