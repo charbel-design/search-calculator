@@ -470,6 +470,9 @@ export function useSearchEngine() {
       p75: Math.round(benchmark.p75 * regionalMultiplier)
     } : null;
 
+    // Deliberate pauses so user sees each loading step progress
+    await new Promise(r => setTimeout(r, 1200));
+
     try {
       setLoadingStep(2);
 
@@ -584,6 +587,7 @@ ${benchmark?.regionalNotes ? `Regional Notes: ${benchmark.regionalNotes}` : ''}
   }
 }`;
 
+      await new Promise(r => setTimeout(r, 1200));
       setLoadingStep(3);
 
       const response = await fetchWithRetry("/api/analyze", {
@@ -665,6 +669,9 @@ ${benchmark?.regionalNotes ? `Regional Notes: ${benchmark.regionalNotes}` : ''}
       });
     }
 
+    // Show all 4 steps complete before hiding
+    setLoadingStep(5);
+    await new Promise(r => setTimeout(r, 800));
     setLoading(false);
     setLoadingStep(0);
   };
