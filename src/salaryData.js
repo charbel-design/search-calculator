@@ -245,12 +245,6 @@ export const BENCHMARKS = {
       "Morgan_Mallet_2025_Monaco_USD": { min: 100800, max: 168000 },
       "Morgan_Mallet_2025_Belgium_USD": { min: 100800, max: 179200 }
     },
-      "Morgan_Mallet_2025_USA_USD": { min: 150000, max: 300000 },
-      "Morgan_Mallet_2025_UK_USD": { min: 118800, max: 237600 },
-      "Morgan_Mallet_2025_Switzerland_USD": { min: 180030, max: 288048 },
-      "Morgan_Mallet_2025_UAE_USD": { min: 244800, max: 244800 },
-      "Morgan_Mallet_2025_Monaco_USD": { min: 168000, max: 168000 }
-    }
   },
   "Family Office Director": {
     category: "Family Office - C-Suite",
@@ -360,9 +354,6 @@ export const BENCHMARKS = {
       "Morgan_Mallet_2025_Monaco_USD": { min: 89600, max: 145600 },
       "Morgan_Mallet_2025_Belgium_USD": { min: 67200, max: 100800 }
     },
-      "Morgan_Mallet_2025_Switzerland_USD": { min: 180030, max: 180030 },
-      "Morgan_Mallet_2025_Monaco_USD": { min: 145600, max: 145600 }
-    }
   },
   "Estate Manager (Multi-Property)": {
     category: "Estate Leadership",
@@ -435,8 +426,6 @@ export const BENCHMARKS = {
       "Morgan_Mallet_2025_Monaco_USD": { min: 67200, max: 112000 },
       "Morgan_Mallet_2025_Belgium_USD": { min: 61600, max: 89600 }
     },
-      "Morgan_Mallet_2025_UAE_USD": { min: 130560, max: 130560 }
-    }
   },
   "Property Manager": {
     category: "Estate Leadership",
@@ -551,9 +540,6 @@ export const BENCHMARKS = {
       "Morgan_Mallet_2025_Monaco_USD": { min: 78400, max: 123200 },
       "Morgan_Mallet_2025_Belgium_USD": { min: 67200, max: 100800 }
     },
-      "Morgan_Mallet_2025_USA_USD": { min: 120000, max: 250000 },
-      "Morgan_Mallet_2025_UK_USD": { min: 79200, max: 178200 }
-    }
   },
   "Personal Assistant": {
     category: "Personal & Administrative",
@@ -589,9 +575,6 @@ export const BENCHMARKS = {
       "Morgan_Mallet_2025_Monaco_USD": { min: 78400, max: 112000 },
       "Morgan_Mallet_2025_Belgium_USD": { min: 78400, max: 134400 }
     },
-      "Morgan_Mallet_2025_UK_USD": { min: 79200, max: 178200 },
-      "Morgan_Mallet_2025_UAE_USD": { min: 244800, max: 244800 }
-    }
   },
   "Family Assistant": {
     category: "Personal & Administrative",
@@ -816,8 +799,6 @@ export const BENCHMARKS = {
       "Morgan_Mallet_2025_Monaco_USD": { min: 100800, max: 134400 },
       "Morgan_Mallet_2025_Belgium_USD": { min: 56000, max: 89600 }
     },
-      "Morgan_Mallet_2025_Monaco_USD": { min: 134400, max: 134400 }
-    }
   },
   "Butler (American Style)": {
     category: "Formal Service",
@@ -1004,8 +985,6 @@ export const BENCHMARKS = {
       "Morgan_Mallet_2025_Monaco_USD": { min: 100800, max: 123200 },
       "Morgan_Mallet_2025_Belgium_USD": { min: 89600, max: 134400 }
     },
-      "Morgan_Mallet_2025_UK_USD": { min: 105600, max: 264000 }
-    }
   },
   "Private Chef (Traveling)": {
     category: "Culinary",
@@ -1409,9 +1388,6 @@ export const BENCHMARKS = {
       "Morgan_Mallet_2025_Monaco_USD": { min: 112000, max: 145600 },
       "Morgan_Mallet_2025_Belgium_USD": { min: 95200, max: 117600 }
     },
-      "Morgan_Mallet_2025_Switzerland_USD": { min: 186031, max: 186031 },
-      "Morgan_Mallet_2025_France_USD": { min: 145600, max: 145600 }
-    }
   },
   "Governess": {
     category: "Childcare & Education",
