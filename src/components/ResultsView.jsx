@@ -145,7 +145,7 @@ export function ResultsView({
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
                 <div>
                   <label className="block text-xs font-medium text-slate-600 mb-1">Timeline</label>
-                  <select value={whatIfTimeline} onChange={(e) => setWhatIfTimeline(e.target.value)}
+                  <select value={whatIfTimeline || formData.timeline} onChange={(e) => setWhatIfTimeline(e.target.value)}
                     className="w-full px-3 py-2 border border-brand-100 rounded-lg text-sm bg-white">
                     {timelineOptions.map(t => (
                       <option key={t.value} value={t.value}>{t.label}</option>
@@ -154,7 +154,7 @@ export function ResultsView({
                 </div>
                 <div>
                   <label className="block text-xs font-medium text-slate-600 mb-1">Budget</label>
-                  <select value={whatIfBudget} onChange={(e) => setWhatIfBudget(e.target.value)}
+                  <select value={whatIfBudget || formData.budgetRange} onChange={(e) => setWhatIfBudget(e.target.value)}
                     className="w-full px-3 py-2 border border-brand-100 rounded-lg text-sm bg-white">
                     {budgetRanges.map(b => (
                       <option key={b.value} value={b.value}>{b.label}</option>

@@ -736,13 +736,13 @@ Return this exact JSON structure:
     setCompareMode(true);
   };
 
-  // What-If scenarios
+  // What-If scenarios — always compute when results exist (What-If is always visible)
   const calculateWhatIfScore = useMemo(() => {
-    if (!whatIfMode || !results) return null;
+    if (!results) return null;
     const budgetVal = whatIfBudget || formData.budgetRange;
     const timelineVal = whatIfTimeline || formData.timeline;
     return calculateDeterministicScore(budgetVal, timelineVal);
-  }, [whatIfMode, whatIfBudget, whatIfTimeline, results]);
+  }, [whatIfBudget, whatIfTimeline, results]);
 
   // Share URL generation
   const generateShareUrl = () => {
