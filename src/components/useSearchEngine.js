@@ -510,7 +510,7 @@ ${benchmark?.turnover ? `Tenure: ${benchmark.turnover.avgTenure} yrs avg | Turno
 ${benchmark?.demandTrend ? `Demand: ${benchmark.demandTrend.direction} (${benchmark.demandTrend.yoyChange >= 0 ? '+' : ''}${Math.round(benchmark.demandTrend.yoyChange * 100)}% YoY)` : ''}
 ${benchmark?.offerAcceptanceRate ? `Offer Acceptance: ${Math.round(benchmark.offerAcceptanceRate * 100)}% (expect ~${(1 / benchmark.offerAcceptanceRate).toFixed(1)} candidates per placement)` : ''}
 ${benchmark?.counterOfferRate ? `Counter-Offer Rate: ${Math.round(benchmark.counterOfferRate * 100)}%` : ''}
-${benchmark?.sourcingChannels ? `Sourcing Mix: Referral ${Math.round(benchmark.sourcingChannels.referral * 100)}% | Agency ${Math.round(benchmark.sourcingChannels.agency * 100)}% | Direct ${Math.round(benchmark.sourcingChannels.direct * 100)}% | Internal ${Math.round(benchmark.sourcingChannels.internal * 100)}%` : ''}
+${benchmark?.sourcingChannels ? `Sourcing Mix: Referral ${Math.round(benchmark.sourcingChannels.referral * 100)}% | Search Firm like TG ${Math.round(benchmark.sourcingChannels.agency * 100)}% | Direct Outreach ${Math.round(benchmark.sourcingChannels.direct * 100)}% | Internal ${Math.round(benchmark.sourcingChannels.internal * 100)}%` : ''}
 ${benchmark?.salaryGrowthRate ? `Salary Growth: ${Math.round(benchmark.salaryGrowthRate * 100)}% YoY` : ''}
 ${benchmark?.typicalExperience ? `Experience: ${benchmark.typicalExperience.min}–${benchmark.typicalExperience.typical} years typical` : ''}
 ${benchmark?.retentionRisk ? `First-Year Attrition: ${Math.round(benchmark.retentionRisk.firstYearAttrition * 100)}% — reasons: ${benchmark.retentionRisk.topReasons.join(', ')}` : ''}
