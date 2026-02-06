@@ -473,8 +473,9 @@ export function useSearchEngine() {
     try {
       setLoadingStep(2);
 
-      const prompt = `Analyze this search and return detailed, actionable JSON.
+      const prompt = `You are analyzing a specific UHNW search for a Talent Gurus client. Return detailed, actionable JSON.
 
+=== SEARCH PARAMETERS ===
 Position: ${displayTitle}
 Location: ${formData.location}${det.regionalData ? ` (${det.regionalData.label}, ${regionalMultiplier}x cost multiplier)` : ''}
 Client Timeline: ${timelineOption?.label || formData.timeline}
@@ -488,93 +489,90 @@ ${isCorporateRole && formData.aumRange ? `AUM Range: ${formData.aumRange}` : ''}
 ${isCorporateRole && formData.teamSize ? `Team Size: ${formData.teamSize}` : ''}
 ${!isCorporateRole && formData.propertiesCount ? `Properties: ${formData.propertiesCount}` : ''}
 ${!isCorporateRole && formData.householdSize ? `Household Size: ${formData.householdSize}` : ''}
+Computed Complexity Score: ${det.score}/10 (${det.label})
 
-Computed Score: ${det.score}/10 (${det.label})
-
-CRITICAL - Use these REGIONALLY-ADJUSTED salary figures for ${formData.location || 'this market'}:
-${adjustedBenchmark ? `- 25th Percentile: $${adjustedBenchmark.p25.toLocaleString()}
-- Median (50th): $${adjustedBenchmark.p50.toLocaleString()}
-- 75th Percentile: $${adjustedBenchmark.p75.toLocaleString()}` : 'No benchmark available - provide general guidance'}
-${benchmark?.benefits ? `Benefits Package: Housing: ${benchmark.benefits.housing} | Vehicle: ${benchmark.benefits.vehicle} | Health: ${benchmark.benefits.health} | Bonus: ${benchmark.benefits.bonus}` : ''}
-${benchmark?.trends ? `Market Trends: ${benchmark.trends}` : ''}
-${benchmark?.regionalNotes ? `Regional Notes: ${benchmark.regionalNotes}` : ''}
+=== MARKET DATA (use these exact figures) ===
+${adjustedBenchmark ? `Regionally-Adjusted Salary for ${formData.location || 'this market'}:
+  25th Percentile: $${adjustedBenchmark.p25.toLocaleString()}
+  Median (50th): $${adjustedBenchmark.p50.toLocaleString()}
+  75th Percentile: $${adjustedBenchmark.p75.toLocaleString()}` : 'No benchmark available — provide best-estimate guidance and flag the uncertainty.'}
+${benchmark?.benefits ? `Benefits: Housing: ${benchmark.benefits.housing} | Vehicle: ${benchmark.benefits.vehicle} | Health: ${benchmark.benefits.health} | Bonus: ${benchmark.benefits.bonus}` : ''}
 ${benchmark?.scarcity ? `Role Scarcity: ${benchmark.scarcity}/10` : ''}
-${benchmark?.timeToFill ? `Typical Time to Fill: ${benchmark.timeToFill} weeks` : ''}
-${benchmark?.candidatePoolSize ? `Estimated National Candidate Pool: ${benchmark.candidatePoolSize}` : ''}
-${benchmark?.turnover ? `Avg Tenure in Role: ${benchmark.turnover.avgTenure} years | Annual Turnover: ${Math.round(benchmark.turnover.annualTurnover * 100)}%` : ''}
-${benchmark?.demandTrend ? `Demand Trend: ${benchmark.demandTrend.direction} (${benchmark.demandTrend.yoyChange >= 0 ? '+' : ''}${Math.round(benchmark.demandTrend.yoyChange * 100)}% YoY)` : ''}
-${benchmark?.offerAcceptanceRate ? `Offer Acceptance Rate: ${Math.round(benchmark.offerAcceptanceRate * 100)}% (expect ~${(1 / benchmark.offerAcceptanceRate).toFixed(1)} candidates per placement)` : ''}
-${benchmark?.counterOfferRate ? `Counter-Offer Rate: ${Math.round(benchmark.counterOfferRate * 100)}% of candidates receive counteroffers from current employers` : ''}
+${benchmark?.timeToFill ? `Time to Fill: ${benchmark.timeToFill} weeks (baseline — adjust for this search's complexity)` : ''}
+${benchmark?.candidatePoolSize ? `National Candidate Pool: ${benchmark.candidatePoolSize}` : ''}
+${benchmark?.turnover ? `Tenure: ${benchmark.turnover.avgTenure} yrs avg | Turnover: ${Math.round(benchmark.turnover.annualTurnover * 100)}%/yr` : ''}
+${benchmark?.demandTrend ? `Demand: ${benchmark.demandTrend.direction} (${benchmark.demandTrend.yoyChange >= 0 ? '+' : ''}${Math.round(benchmark.demandTrend.yoyChange * 100)}% YoY)` : ''}
+${benchmark?.offerAcceptanceRate ? `Offer Acceptance: ${Math.round(benchmark.offerAcceptanceRate * 100)}% (expect ~${(1 / benchmark.offerAcceptanceRate).toFixed(1)} candidates per placement)` : ''}
+${benchmark?.counterOfferRate ? `Counter-Offer Rate: ${Math.round(benchmark.counterOfferRate * 100)}%` : ''}
 ${benchmark?.sourcingChannels ? `Sourcing Mix: Referral ${Math.round(benchmark.sourcingChannels.referral * 100)}% | Agency ${Math.round(benchmark.sourcingChannels.agency * 100)}% | Direct ${Math.round(benchmark.sourcingChannels.direct * 100)}% | Internal ${Math.round(benchmark.sourcingChannels.internal * 100)}%` : ''}
-${benchmark?.salaryGrowthRate ? `Salary Growth: ${Math.round(benchmark.salaryGrowthRate * 100)}% YoY — benchmarks may shift ${Math.round(benchmark.salaryGrowthRate * 100 / 2)}% over a 6-month search` : ''}
-${benchmark?.typicalExperience ? `Typical Experience: ${benchmark.typicalExperience.min}-${benchmark.typicalExperience.typical} years` : ''}
-${benchmark?.retentionRisk ? `First-Year Attrition Rate: ${Math.round(benchmark.retentionRisk.firstYearAttrition * 100)}% — Top departure reasons: ${benchmark.retentionRisk.topReasons.join(', ')}` : ''}
-${benchmark?.compensationStructure ? `Comp Structure: Base ${Math.round(benchmark.compensationStructure.basePercent * 100)}% | Bonus ${Math.round(benchmark.compensationStructure.bonusPercent * 100)}% | Benefits ${Math.round(benchmark.compensationStructure.benefitsPercent * 100)}% — Signing bonus offered in ${Math.round(benchmark.compensationStructure.signingBonusFrequency * 100)}% of placements (typical range: $${benchmark.compensationStructure.signingBonusRange})` : ''}
-${benchmark?.relocationWillingness !== undefined ? `Relocation Willingness: ${Math.round(benchmark.relocationWillingness * 100)}% of candidates open to relocating — ${benchmark.relocationWillingness < 0.35 ? 'severely limits non-local searches' : benchmark.relocationWillingness < 0.50 ? 'meaningfully constrains non-local searches' : 'reasonable mobility for this role'}` : ''}
-${benchmark?.backgroundCheckTimeline ? `Due Diligence Timeline: ${benchmark.backgroundCheckTimeline} weeks typical vetting period` : ''}
+${benchmark?.salaryGrowthRate ? `Salary Growth: ${Math.round(benchmark.salaryGrowthRate * 100)}% YoY` : ''}
+${benchmark?.typicalExperience ? `Experience: ${benchmark.typicalExperience.min}–${benchmark.typicalExperience.typical} years typical` : ''}
+${benchmark?.retentionRisk ? `First-Year Attrition: ${Math.round(benchmark.retentionRisk.firstYearAttrition * 100)}% — reasons: ${benchmark.retentionRisk.topReasons.join(', ')}` : ''}
+${benchmark?.compensationStructure ? `Comp Split: Base ${Math.round(benchmark.compensationStructure.basePercent * 100)}% | Bonus ${Math.round(benchmark.compensationStructure.bonusPercent * 100)}% | Benefits ${Math.round(benchmark.compensationStructure.benefitsPercent * 100)}% — Signing bonus in ${Math.round(benchmark.compensationStructure.signingBonusFrequency * 100)}% of placements ($${benchmark.compensationStructure.signingBonusRange})` : ''}
+${benchmark?.relocationWillingness !== undefined ? `Relocation: ${Math.round(benchmark.relocationWillingness * 100)}% willing — ${benchmark.relocationWillingness < 0.35 ? 'severely limits non-local searches' : benchmark.relocationWillingness < 0.50 ? 'meaningfully constrains non-local searches' : 'reasonable mobility'}` : ''}
+${benchmark?.backgroundCheckTimeline ? `Due Diligence: ${benchmark.backgroundCheckTimeline} weeks typical vetting` : ''}
+${benchmark?.trends ? `Market Context: ${benchmark.trends}` : ''}
+${benchmark?.regionalNotes ? `Regional Notes: ${benchmark.regionalNotes}` : ''}
 
-Your salary recommendation MUST be based on these ADJUSTED figures above, not national averages.
-Your timeline estimate should use the Time to Fill data as a baseline, adjusted for this specific search's complexity.
-Use the offer acceptance rate and counter-offer rate to inform timeline padding and negotiation strategy.
-Reference the sourcing channel data in your sourcingInsight — tell the client WHERE successful placements actually come from.
-Use salary growth rate to flag whether the client's budget will still be competitive if the search extends.
-Use the retention risk data to power your red flag analysis — warn about the specific departure reasons for THIS role, not generic advice.
-Use comp structure data to advise on offer packaging — if signing bonuses are common (>40% frequency), recommend one. If bonus percentage is high, flag that base salary alone understates total comp.
-Factor relocation willingness into your candidate pool assessment — if only 30% will relocate and this is a non-local search, the effective pool shrinks dramatically.
-Factor due diligence timeline into your total timeline estimate — for security-cleared or high-profile roles, vetting adds weeks that clients often forget.
-Your timeline MUST align with the "${timelineOption?.label || formData.timeline}" timeframe the client selected.
+=== HOW TO USE THE DATA ===
+1. SALARY: Base your range on the adjusted percentiles above, factored for this client's budget position. State the range as "$Xk–$Yk base + Z% bonus" — never say "competitive" or "market-rate."
+2. TIMELINE: Start from Time to Fill as baseline. Add weeks for: complexity factors, due diligence (${benchmark?.backgroundCheckTimeline || 2}w), counter-offer risk (${benchmark?.counterOfferRate ? Math.round(benchmark.counterOfferRate * 100) + '%' : '~25%'} of candidates get countered). Break into phases: sourcing → interviews → offer → start.
+3. SOURCING: Reference the sourcing channel percentages. Tell the client WHERE placements actually come from for this role — not "use multiple channels."
+4. RETENTION: Use the attrition rate and departure reasons to power your red flags. Warn about THIS role's specific risks, not generic turnover advice.
+5. COMPENSATION: If signing bonuses are common (>40% frequency), recommend one. If bonus % is high, flag that base salary alone understates total comp. Use comp structure to advise on offer packaging.
+6. CANDIDATE POOL: ${benchmark?.relocationWillingness !== undefined ? `Only ${Math.round(benchmark.relocationWillingness * 100)}% will relocate.` : ''} ${benchmark?.candidatePoolSize ? `Pool is ~${benchmark.candidatePoolSize}.` : ''} Factor languages, certs, and discretion requirements as multiplicative filters that shrink the pool.
+7. SALARY DRIFT: ${benchmark?.salaryGrowthRate ? `At ${Math.round(benchmark.salaryGrowthRate * 100)}% YoY growth, benchmarks shift ~${Math.round(benchmark.salaryGrowthRate * 100 / 2)}% over a 6-month search.` : ''} Flag if the budget risks becoming uncompetitive mid-search.
 
-Be SPECIFIC and ACTIONABLE. Avoid generic advice. Reference the actual role, location, and requirements in your responses.
+=== GUARDRAILS ===
+1. COMPLEXITY SCORE is ${det.score}/10. Higher = harder search. Never suggest "improving" or "reaching" a complexity score. A 9 means extremely challenging — that's a fact, not a goal.
+2. MANDATE STRENGTH is separate from complexity. Higher = stronger client position (good). Reflects budget adequacy, role attractiveness, timeline feasibility, requirement reasonableness.
+3. PROBABILITY OF SUCCESS must be logically consistent: high complexity + weak mandate = lower probability. Low complexity + strong mandate = higher probability. The percentage must be defensible.
+4. TRADE-OFF SCENARIOS must use concrete IF/THEN with real numbers from this search. Bad: "If you increase budget, you'll attract better candidates." Good: "If you move from $180k to $220k (75th percentile), your candidate pool roughly doubles and fill time drops by 3–4 weeks."
+5. FALSE SIGNALS must be specific to ${displayTitle} in ${formData.location || 'this market'}. Bad: "Don't be fooled by impressive resumes." Good: "Candidates from corporate ${isCorporateRole ? 'asset management' : 'hospitality'} backgrounds may interview well but struggle with the ${isCorporateRole ? 'principal-relationship intensity of a family office' : 'lack of structure in a private household'}."
+6. CANDIDATE PSYCHOLOGY must reveal what candidates in THIS role actually care about. What makes them leave a current position? What makes them decline an offer? What's the unspoken dealbreaker?
+7. ALL completeTeaser fields describe WHAT the full paid analysis contains. Never suggest score improvements in teasers.
+8. NUMERICAL CONSISTENCY: Every statistic (pool size, rates, percentages) must appear identically wherever cited. No rounding differently between sections.
 
-CRITICAL GUARDRAILS FOR DECISION INTELLIGENCE:
-1. COMPLEXITY SCORE (${det.score}/10): Higher = MORE difficult search. Do NOT suggest "improving" or "reaching a higher" complexity score. A score of 9 means the search is extremely challenging.
-2. MANDATE STRENGTH: This is a SEPARATE metric from complexity. Higher mandate strength = STRONGER client position (good). Score reflects budget adequacy, role attractiveness, timeline feasibility, and requirement reasonableness. The teaser should describe what factors strengthen or weaken the mandate, NOT suggest "reaching a higher score."
-3. PROBABILITY OF SUCCESS: Must be logically consistent with complexity score and mandate strength. High complexity + weak mandate = lower probability. Low complexity + strong mandate = higher probability.
-7. NUMERICAL CONSISTENCY: When you cite a statistic (candidate pool size, attrition rate, counter-offer rate, relocation %, etc.), use the SAME number every time it appears in the report. Do not round down in one section and use the full range in another. Pick one representation and stick with it throughout.
-4. TRADE-OFF SCENARIOS: Must use concrete IF/THEN with specific numbers from this search (salary figures, timeline, requirements). Never use generic advice.
-5. FALSE SIGNALS: Must be specific to this role and market. Never use generic hiring warnings.
-6. ALL teasers must describe WHAT the full analysis contains, not suggest improvements to scores.
-
-Return this exact JSON structure:
+=== RETURN THIS JSON ===
 {
-  "salaryRangeGuidance": "Specific salary range with reasoning based on ADJUSTED regional figures",
-  "estimatedTimeline": "Specific timeline with phases",
-  "marketCompetitiveness": "Detailed market assessment mentioning specific dynamics in ${formData.location || 'this market'} for this role",
-  "keySuccessFactors": ["Be specific - reference actual requirements", "Mention what will differentiate this opportunity", "Include at least one compensation-related factor"],
-  "recommendedAdjustments": ["Specific, actionable changes if budget/timeline/requirements need adjustment"] or [],
+  "salaryRangeGuidance": "$Xk–$Yk base + bonus structure. 1–2 sentences on why, referencing the adjusted percentiles and how the client's budget compares.",
+  "estimatedTimeline": "X–Y weeks total. Break into phases: sourcing (Xw), interviews (Yw), offer/negotiation (Zw), due diligence (Zw). Factor the client's ${timelineOption?.label || formData.timeline} timeframe.",
+  "marketCompetitiveness": "2–3 sentences about the specific dynamics of hiring a ${displayTitle} in ${formData.location || 'this market'} right now. Reference demand trends, pool size, and what's driving competition.",
+  "keySuccessFactors": ["Factor 1 specific to this search — what will actually make or break it", "Factor 2 — reference a requirement, the location, or the comp", "Factor 3 — what will differentiate this opportunity to candidates"],
+  "recommendedAdjustments": ["Concrete change with expected impact, e.g. 'Adding $20k to base (reaching 75th percentile) would expand your pool by ~40%'"] or [],
   "candidateAvailability": "Abundant|Moderate|Limited|Rare",
-  "availabilityReason": "Specific explanation referencing the role requirements and market",
-  "sourcingInsight": "Where these candidates typically come from and how to reach them",
+  "availabilityReason": "Why — reference pool size, filters applied (languages, certs, location), and what's shrinking availability.",
+  "sourcingInsight": "Where these candidates actually come from. Reference the sourcing channel data. Name specific networks, associations, or approaches that work for ${displayTitle} roles.",
   "negotiationLeverage": {
-    "candidateAdvantages": ["Specific leverage points candidates have"],
-    "employerAdvantages": ["Specific advantages the employer can use"]
+    "candidateAdvantages": ["Specific leverage points — e.g. 'Only 800 qualified candidates nationally gives them significant negotiating power'"],
+    "employerAdvantages": ["Specific advantages — e.g. 'Palm Beach location with no state income tax is a $15k–$25k effective raise for candidates relocating from NY/CA'"]
   },
-  "redFlagAnalysis": "Any concerns about the search parameters, or 'None - well-positioned search'",
-  "bottomLine": "3-4 sentence executive summary that's specific to THIS search, not generic advice",
+  "redFlagAnalysis": "Specific concerns about THIS search. Reference the data — retention risks, budget gaps, timeline tension. Or 'None — this search is well-positioned' if genuinely clean.",
+  "bottomLine": "3–4 sentences. Lead with the headline verdict. Then the one thing the client most needs to know. Then the recommended action. Be direct — this is the first thing they read.",
   "decisionIntelligence": {
     "tradeoffScenarios": {
-      "initial": ["IF [condition] THEN [outcome] - high-level trade-off bullet 1", "IF [condition] THEN [outcome] - high-level trade-off bullet 2", "IF [condition] THEN [outcome] - optional third bullet"],
-      "completeTeaser": "Full scenario modeling with quantified impact analysis and recommended decision paths"
+      "initial": ["IF [specific change with $$ or weeks] THEN [quantified outcome]. Max 2 sentences.", "IF [second trade-off] THEN [outcome].", "IF [third trade-off, optional] THEN [outcome]."],
+      "completeTeaser": "What the full analysis covers: scenario modeling with quantified impact across budget, timeline, and requirements"
     },
     "candidatePsychology": {
-      "initial": ["Sharp psychological insight about candidate motivations", "What candidates in this role truly prioritize", "Hidden concerns candidates may not voice"],
-      "completeTeaser": "Role-specific positioning language and objection-handling frameworks"
+      "initial": ["What actually motivates candidates for this specific role — not generic 'career growth'", "The unspoken concern or dealbreaker candidates won't tell you in an interview", "What makes top candidates leave their current position — the real trigger, not the stated reason"],
+      "completeTeaser": "What the full analysis covers: role-specific positioning language, objection-handling frameworks, and interview question design"
     },
     "probabilityOfSuccess": {
       "initialLabel": "Low|Moderate|High",
-      "initialConfidence": "X% estimated fill probability within stated timeline",
-      "completeTeaser": "Probability delta analysis showing how adjusting budget, timeline, or requirements impacts fill probability"
+      "initialConfidence": "X% estimated fill probability within the ${timelineOption?.label || formData.timeline} timeline — 1 sentence on the primary factor driving this number",
+      "completeTeaser": "What the full analysis covers: probability deltas showing how adjusting budget, timeline, or requirements shifts the fill probability"
     },
     "mandateStrength": {
       "initial": {
-        "score": "1.0-10.0 composite score (higher = stronger mandate, meaning better-positioned search)",
-        "rationale": "One sentence explaining what strengthens or weakens this mandate (budget adequacy, timeline feasibility, requirement reasonableness, role attractiveness)"
+        "score": 7.5,
+        "rationale": "One sentence: what's strong and what's weak about this mandate. Reference specific numbers."
       },
-      "completeTeaser": "Factor-by-factor breakdown across 12 mandate dimensions with specific action items to strengthen the client's position"
+      "completeTeaser": "What the full analysis covers: 12-dimension mandate assessment with specific action items to strengthen the client's position"
     },
     "falseSignals": {
-      "initial": ["Warning about misleading indicator 1", "Warning about misleading indicator 2", "Warning about misleading indicator 3"],
-      "completeTeaser": "Screening protocols and verification frameworks for each signal"
+      "initial": ["Specific misleading signal for ${displayTitle} searches — what looks good but isn't", "Second false signal specific to ${formData.location || 'this market'} or this role type", "Third signal — something the client might misread during the process"],
+      "completeTeaser": "What the full analysis covers: screening protocols and verification frameworks for each signal"
     }
   }
 }`;
