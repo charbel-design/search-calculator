@@ -8,7 +8,7 @@ export function FormSteps({
   step, setStep, formData, setFormData, loading, loadingStep, error, setError,
   warnings, positionSearch, setPositionSearch, showPositionSuggestions, setShowPositionSuggestions,
   highlightedPositionIndex, setHighlightedPositionIndex, filteredPositions,
-  showLocationSuggestions, setShowLocationSuggestions, highlightedLocationIndex,
+  showLocationSuggestions, setShowLocationSuggestions, highlightedLocationIndex, setHighlightedLocationIndex,
   filteredLocationSuggestions, handleInputChange, handleLocationKeyDown, handleMultiSelect,
   validateAndWarn, validateStep, nextStep, calculateComplexity,
   isCorporateRole, budgetRanges, timelineOptions, discretionLevels,

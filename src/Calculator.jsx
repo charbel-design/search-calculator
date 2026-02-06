@@ -42,6 +42,8 @@ const SearchIntelligenceEngine = () => {
             filteredPositions={engine.filteredPositions}
             showLocationSuggestions={engine.showLocationSuggestions}
             setShowLocationSuggestions={engine.setShowLocationSuggestions}
+            highlightedLocationIndex={engine.highlightedLocationIndex}
+            setHighlightedLocationIndex={engine.setHighlightedLocationIndex}
             filteredLocationSuggestions={engine.filteredLocationSuggestions}
             handleInputChange={engine.handleInputChange}
             handleLocationKeyDown={engine.handleLocationKeyDown}
