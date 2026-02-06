@@ -1,0 +1,396 @@
+import React from 'react';
+import {
+  MapPin, Clock, DollarSign, Target, AlertCircle, CheckCircle, ArrowRight, Info, Zap, ChevronDown, Mail, Phone
+} from 'lucide-react';
+import { BENCHMARKS } from '../salaryData';
+
+export function FormSteps({
+  step, setStep, formData, setFormData, loading, loadingStep, error, setError,
+  warnings, positionSearch, setPositionSearch, showPositionSuggestions, setShowPositionSuggestions,
+  highlightedPositionIndex, setHighlightedPositionIndex, filteredPositions,
+  showLocationSuggestions, setShowLocationSuggestions, highlightedLocationIndex,
+  filteredLocationSuggestions, handleInputChange, handleLocationKeyDown, handleMultiSelect,
+  validateAndWarn, validateStep, nextStep, calculateComplexity,
+  isCorporateRole, budgetRanges, timelineOptions, discretionLevels,
+  householdLanguageOptions, corporateLanguageOptions, householdCertificationOptions,
+  corporateCertificationOptions, travelOptions, corporateLanguageShortList,
+  showLanguages, setShowLanguages, commonRoles
+}) {
+  return (
+    <>
+      {/* Progress */}
+      <div className="mb-8">
+        <div className="flex justify-between text-xs text-slate-500 mb-2">
+          {['Role & Location', 'Budget & Timeline', 'Requirements', 'Analysis'].map((label, i) => (
+            <span key={i} className={step >= i + 1 ? 'font-semibold text-brand-500' : ''}>{label}</span>
+          ))}
+        </div>
+        <div className="w-full bg-slate-200 rounded-full h-2">
+          <div className="h-2 rounded-full transition-all" style={{ width: `${(step / 4) * 100}%`, backgroundColor: '#2814ff' }} />
+        </div>
+      </div>
+
+      <div className="bg-white rounded-2xl shadow-xl p-6 md:p-8 border border-slate-200" aria-label="Search parameters form">
+        {/* Step 1 */}
+        {step === 1 && (
+          <div className="space-y-6">
+            <h3 className="text-xl font-semibold" style={{ color: '#2814ff' }}>Tell us about the role</h3>
+
+            <div>
+              <label className="block text-sm font-medium text-slate-700 mb-2">Position Type *</label>
+              <div className="relative">
+                <input type="text"
+                  value={formData.positionType ? formData.positionType : positionSearch}
+                  onChange={(e) => { setPositionSearch(e.target.value); setFormData({ ...formData, positionType: '' }); setShowPositionSuggestions(true); setHighlightedPositionIndex(-1); }}
+                  onFocus={() => { setShowPositionSuggestions(true); if (formData.positionType) { setPositionSearch(''); setFormData({ ...formData, positionType: '' }); } }}
+                  onBlur={() => setTimeout(() => { setShowPositionSuggestions(false); setHighlightedPositionIndex(-1); }, 200)}
+                  onKeyDown={(e) => {
+                    if (e.key === 'ArrowDown') { e.preventDefault(); setHighlightedPositionIndex(prev => prev < filteredPositions.length - 1 ? prev + 1 : prev); }
+                    else if (e.key === 'ArrowUp') { e.preventDefault(); setHighlightedPositionIndex(prev => prev > 0 ? prev - 1 : prev); }
+                    else if (e.key === 'Enter' && highlightedPositionIndex >= 0) { e.preventDefault(); const selected = filteredPositions[highlightedPositionIndex]; setFormData({ ...formData, positionType: selected }); setPositionSearch(''); setShowPositionSuggestions(false); setHighlightedPositionIndex(-1); }
+                    else if (e.key === 'Escape') { setShowPositionSuggestions(false); setHighlightedPositionIndex(-1); }
+                  }}
+                  className="w-full px-4 py-3 border-2 border-slate-200 rounded-xl focus:border-brand-500 focus:ring-2 focus:ring-brand-100"
+                  placeholder={`Search ${commonRoles.length} roles... (e.g., Estate Manager, Private Chef)`}
+                />
+                {formData.positionType && (
+                  <button type="button" onClick={() => { setFormData({ ...formData, positionType: '' }); setPositionSearch(''); }}
+                    className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600">
+                    <span className="text-lg">×</span>
+                  </button>
+                )}
+                {showPositionSuggestions && filteredPositions.length > 0 && (
+                  <div className="absolute z-20 w-full mt-1 bg-white border border-slate-200 rounded-xl shadow-lg max-h-64 overflow-y-auto">
+                    {filteredPositions.map((role, idx) => (
+                      <button key={role} type="button"
+                        onClick={() => { setFormData({ ...formData, positionType: role }); setPositionSearch(''); setShowPositionSuggestions(false); setHighlightedPositionIndex(-1); }}
+                        onMouseEnter={() => setHighlightedPositionIndex(idx)}
+                        className={`w-full text-left px-4 py-2.5 text-sm border-b border-slate-50 ${idx === highlightedPositionIndex ? 'bg-brand-100 text-brand-700' : 'hover:bg-brand-50 text-slate-700'}`}>
+                        {role}
+                        {BENCHMARKS[role] && <span className="text-xs text-slate-400 ml-2">${BENCHMARKS[role].p50.toLocaleString()}</span>}
+                      </button>
+                    ))}
+                  </div>
+                )}
+                {showPositionSuggestions && positionSearch && filteredPositions.length === 0 && (
+                  <div className="absolute z-20 w-full mt-1 bg-white border border-slate-200 rounded-xl shadow-lg p-4 text-center text-sm text-slate-500">
+                    No roles match "{positionSearch}"
+                  </div>
+                )}
+              </div>
+              {formData.positionType && BENCHMARKS[formData.positionType] && (
+                <div className="mt-2 text-xs text-slate-500 space-y-1">
+                  <p>Market: ${BENCHMARKS[formData.positionType].p25.toLocaleString()} - ${BENCHMARKS[formData.positionType].p75.toLocaleString()}</p>
+                  {BENCHMARKS[formData.positionType].scarcity && (
+                    <p>Talent Scarcity: {BENCHMARKS[formData.positionType].scarcity}/10 {BENCHMARKS[formData.positionType].scarcity >= 7 ? '(Hard to find)' : BENCHMARKS[formData.positionType].scarcity >= 5 ? '(Moderate)' : '(Accessible)'}</p>
+                  )}
+                </div>
+              )}
+            </div>
+
+            <div className="relative">
+              <label className="block text-sm font-medium text-slate-700 mb-2">Primary Location *</label>
+              <div className="relative">
+                <MapPin className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400" />
+                <input type="text" name="location" value={formData.location} onChange={handleInputChange}
+                  onFocus={() => setShowLocationSuggestions(true)}
+                  onBlur={() => setTimeout(() => { setShowLocationSuggestions(false); setHighlightedLocationIndex(-1); }, 200)}
+                  onKeyDown={handleLocationKeyDown}
+                  className="w-full pl-10 pr-4 py-3 border-2 border-slate-200 rounded-xl" placeholder="e.g., Palm Beach, FL or Monaco" />
+              </div>
+              {showLocationSuggestions && filteredLocationSuggestions.length > 0 && (
+                <div className="absolute z-10 w-full mt-1 bg-white border border-slate-200 rounded-xl shadow-lg overflow-hidden">
+                  {filteredLocationSuggestions.map((loc, idx) => (
+                    <button key={idx} type="button"
+                      onClick={() => { setFormData({ ...formData, location: loc }); setShowLocationSuggestions(false); setHighlightedLocationIndex(-1); }}
+                      onMouseEnter={() => setHighlightedLocationIndex(idx)}
+                      className={`w-full text-left px-4 py-2.5 text-sm flex items-center justify-between ${idx === highlightedLocationIndex ? 'bg-brand-100 text-brand-700' : 'hover:bg-brand-50'}`}>
+                      <span>{loc}</span>
+                    </button>
+                  ))}
+                </div>
+              )}
+            </div>
+
+            <div>
+              <label className="block text-sm font-medium text-slate-700 mb-2">Discretion Level</label>
+              <select name="discretionLevel" value={formData.discretionLevel} onChange={handleInputChange}
+                className="w-full px-4 py-3 border-2 border-slate-200 rounded-xl">
+                {discretionLevels.map(d => <option key={d.value} value={d.value}>{d.label} — {d.description}</option>)}
+              </select>
+            </div>
+          </div>
+        )}
+
+        {/* Step 2 */}
+        {step === 2 && (
+          <div className="space-y-6">
+            <h3 className="text-xl font-semibold" style={{ color: '#2814ff' }}>Budget & Timeline</h3>
+
+            <div>
+              <label className="block text-sm font-medium text-slate-700 mb-2">Timeline *</label>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                {timelineOptions.map(opt => (
+                  <button key={opt.value} type="button" onClick={() => setFormData({ ...formData, timeline: opt.value })}
+                    className={`p-4 border-2 rounded-xl text-left transition-all relative ${formData.timeline === opt.value ? 'border-brand-500 bg-brand-100 shadow-md ring-2 ring-brand-100' : 'border-slate-200 hover:border-slate-300 hover:bg-slate-50'}`}>
+                    {formData.timeline === opt.value && (
+                      <div className="absolute -top-2 -right-2 w-6 h-6 rounded-full bg-brand-500 flex items-center justify-center shadow-md">
+                        <CheckCircle className="w-4 h-4 text-white" />
+                      </div>
+                    )}
+                    <div className="flex justify-between items-center">
+                      <span className={`font-medium text-sm ${formData.timeline === opt.value ? 'text-brand-700' : 'text-slate-700'}`}>{opt.label}</span>
+                      <Clock className={`w-4 h-4 ${formData.timeline === opt.value ? 'text-brand-500' : 'text-slate-400'}`} />
+                    </div>
+                    <p className={`text-xs mt-1 ${formData.timeline === opt.value ? 'text-brand-500' : 'text-slate-500'}`}>{opt.description}</p>
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            <div>
+              <label className="block text-sm font-medium text-slate-700 mb-2">Budget Range *</label>
+              <select name="budgetRange" value={formData.budgetRange} onChange={handleInputChange}
+                className="w-full px-4 py-3 border-2 border-slate-200 rounded-xl">
+                <option value="">Select budget range</option>
+                {budgetRanges.map(b => <option key={b.value} value={b.value}>{b.label}</option>)}
+              </select>
+            </div>
+
+            {warnings.length > 0 && (
+              <div className="space-y-3">
+                {warnings.map((w, i) => (
+                  <div key={i} className={`p-4 rounded-xl flex items-start gap-3 ${w.type === 'critical' ? 'bg-b-pink-50 border border-b-pink-200' : w.type === 'warning' ? 'bg-b-ocre-50 border border-b-ocre-200' : 'bg-brand-50 border border-brand-100'}`}>
+                    <AlertCircle className={`w-5 h-5 flex-shrink-0 mt-0.5 ${w.type === 'critical' ? 'text-b-pink-500' : w.type === 'warning' ? 'text-b-ocre-500' : 'text-brand-500'}`} />
+                    <div>
+                      <p className={`text-sm font-medium ${w.type === 'critical' ? 'text-b-pink-600' : w.type === 'warning' ? 'text-b-ocre-500' : 'text-brand-600'}`}>{w.message}</p>
+                      {w.suggestion && <p className="text-xs mt-1 text-slate-600">💡 {w.suggestion}</p>}
+                    </div>
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
+        )}
+
+        {/* Step 3 */}
+        {step === 3 && (
+          <div className="space-y-6">
+            <h3 className="text-xl font-semibold" style={{ color: '#2814ff' }}>Key Requirements</h3>
+
+            <div>
+              <label className="block text-sm font-medium text-slate-700 mb-2">
+                {isCorporateRole ? 'Professional Certifications' : 'Certifications'}
+                {isCorporateRole && <span className="text-xs text-slate-500 ml-2">(Finance/Investment)</span>}
+              </label>
+              <div className="flex flex-wrap gap-2">
+                {(isCorporateRole ? corporateCertificationOptions : householdCertificationOptions).map(cert => (
+                  <button key={cert} type="button" onClick={() => handleMultiSelect('certifications', cert)}
+                    className={`px-3 py-1.5 rounded-full text-sm ${formData.certifications.includes(cert) ? 'bg-brand-500 text-white' : 'bg-slate-100 text-slate-700 hover:bg-slate-200'}`}>
+                    {cert}
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            {isCorporateRole ? (
+              <div className="border border-slate-200 rounded-xl p-4 bg-slate-50">
+                <button type="button" onClick={() => setShowLanguages(!showLanguages)} className="flex items-center justify-between w-full text-left">
+                  <div>
+                    <span className="text-sm font-medium text-slate-700">Language Requirements</span>
+                    <span className="text-xs text-slate-500 ml-2">(Optional - for international operations)</span>
+                  </div>
+                  <ChevronDown className={`w-5 h-5 text-slate-400 transition-transform ${showLanguages ? 'rotate-180' : ''}`} />
+                </button>
+                {showLanguages && (
+                  <div className="mt-3 pt-3 border-t border-slate-200">
+                    <div className="flex flex-wrap gap-2">
+                      {corporateLanguageShortList.map(lang => (
+                        <button key={lang} type="button" onClick={() => handleMultiSelect('languageRequirements', lang)}
+                          className={`px-3 py-1.5 rounded-full text-sm ${formData.languageRequirements.includes(lang) ? 'bg-brand-500 text-white' : 'bg-slate-100 text-slate-700 hover:bg-slate-200'}`}>
+                          {lang}
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+                )}
+                {formData.languageRequirements.length > 0 && !showLanguages && (
+                  <p className="text-xs text-brand-500 mt-2">Selected: {formData.languageRequirements.join(', ')}</p>
+                )}
+              </div>
+            ) : (
+              <div>
+                <label className="block text-sm font-medium text-slate-700 mb-2">Language Requirements</label>
+                <div className="flex flex-wrap gap-2">
+                  {householdLanguageOptions.map(lang => (
+                    <button key={lang} type="button" onClick={() => handleMultiSelect('languageRequirements', lang)}
+                      className={`px-3 py-1.5 rounded-full text-sm ${formData.languageRequirements.includes(lang) ? 'bg-brand-500 text-white' : 'bg-slate-100 text-slate-700 hover:bg-slate-200'}`}>
+                      {lang}
+                    </button>
+                  ))}
+                </div>
+              </div>
+            )}
+
+            <div>
+              <label className="block text-sm font-medium text-slate-700 mb-2">Travel Requirements</label>
+              <select name="travelRequirement" value={formData.travelRequirement} onChange={handleInputChange}
+                className="w-full px-4 py-3 border-2 border-slate-200 rounded-xl">
+                {travelOptions.map(t => <option key={t.value} value={t.value}>{t.label}</option>)}
+              </select>
+            </div>
+
+            <div>
+              <label className="block text-sm font-medium text-slate-700 mb-2">Additional Requirements *</label>
+              <textarea name="keyRequirements" value={formData.keyRequirements} onChange={handleInputChange} rows={4}
+                className="w-full px-4 py-3 border-2 border-slate-200 rounded-xl" placeholder="Describe specific experience, skills..." />
+              <p className={`text-xs mt-1 ${formData.keyRequirements.length >= 25 ? 'text-b-opal-500' : 'text-slate-500'}`}>
+                {formData.keyRequirements.length} chars {formData.keyRequirements.length < 25 ? `(${25 - formData.keyRequirements.length} more needed)` : '✓'}
+              </p>
+            </div>
+          </div>
+        )}
+
+        {/* Step 4 */}
+        {step === 4 && (
+          <div className="space-y-6">
+            <h3 className="text-xl font-semibold" style={{ color: '#2814ff' }}>Get Your Analysis</h3>
+
+            <div className="bg-brand-50 rounded-xl p-5 border border-brand-100 flex gap-3">
+              <Zap className="w-6 h-6 flex-shrink-0" style={{ color: '#2814ff' }} />
+              <div>
+                <h4 className="font-semibold text-slate-900 mb-1">Your analysis is almost ready</h4>
+                <p className="text-sm text-slate-600">In a few seconds, you'll receive a detailed complexity score, market analysis, and recommendations.</p>
+                <h4 className="font-semibold text-slate-900 mb-1">Your personalized analysis includes:</h4>
+                <ul className="text-sm text-slate-600 space-y-1 mt-2">
+                  <li className="flex items-center gap-2"><CheckCircle className="w-4 h-4 text-brand-500" />Search complexity score & market positioning</li>
+                  <li className="flex items-center gap-2"><CheckCircle className="w-4 h-4 text-brand-500" />Salary benchmarks for your location</li>
+                  <li className="flex items-center gap-2"><CheckCircle className="w-4 h-4 text-brand-500" />Candidate availability & timeline estimates</li>
+                  <li className="flex items-center gap-2"><CheckCircle className="w-4 h-4 text-brand-500" />Negotiation leverage insights</li>
+                </ul>
+              </div>
+            </div>
+
+            {isCorporateRole ? (
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                  <label className="block text-sm font-medium text-slate-700 mb-2">Assets Under Management (AUM)</label>
+                  <select name="aumRange" value={formData.aumRange} onChange={handleInputChange}
+                    className="w-full px-4 py-3 border-2 border-slate-200 rounded-xl">
+                    <option value="">Select...</option>
+                    <option value="under-100M">Under $100M</option>
+                    <option value="100M-300M">$100M - $300M</option>
+                    <option value="300M-500M">$300M - $500M</option>
+                    <option value="500M-1B">$500M - $1B</option>
+                    <option value="1B-plus">$1B+</option>
+                  </select>
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-slate-700 mb-2">Team Size (Direct Reports)</label>
+                  <select name="teamSize" value={formData.teamSize} onChange={handleInputChange}
+                    className="w-full px-4 py-3 border-2 border-slate-200 rounded-xl">
+                    <option value="">Select...</option>
+                    <option value="0">Individual contributor</option>
+                    <option value="1-3">1-3 reports</option>
+                    <option value="4-10">4-10 reports</option>
+                    <option value="10-plus">10+ reports</option>
+                  </select>
+                </div>
+              </div>
+            ) : (
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                  <label className="block text-sm font-medium text-slate-700 mb-2">Properties to Staff</label>
+                  <select name="propertiesCount" value={formData.propertiesCount} onChange={handleInputChange}
+                    className="w-full px-4 py-3 border-2 border-slate-200 rounded-xl">
+                    <option value="">Select...</option>
+                    <option value="1">1</option>
+                    <option value="2-3">2-3</option>
+                    <option value="4-6">4-6</option>
+                    <option value="7+">7+</option>
+                  </select>
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-slate-700 mb-2">Household Size</label>
+                  <select name="householdSize" value={formData.householdSize} onChange={handleInputChange}
+                    className="w-full px-4 py-3 border-2 border-slate-200 rounded-xl">
+                    <option value="">Select...</option>
+                    <option value="1-2">1-2</option>
+                    <option value="3-5">3-5 (family)</option>
+                    <option value="6+">6+ (extended)</option>
+                  </select>
+                </div>
+              </div>
+            )}
+
+            <div className="bg-gradient-to-br from-brand-50 to-b-pink-50 rounded-xl p-5 border border-brand-100">
+              <div className="flex items-start gap-3 mb-4">
+                <div className="w-10 h-10 rounded-full bg-brand-500 flex items-center justify-center flex-shrink-0">
+                  <Mail className="w-5 h-5 text-white" />
+                </div>
+                <div>
+                  <h4 className="font-semibold text-slate-900">Get Your Full Report</h4>
+                  <p className="text-sm text-slate-600 mt-1">Receive a detailed analysis by email you can reference and share with decision-makers.</p>
+                </div>
+              </div>
+              <div className="space-y-3">
+                <input type="email" name="email" value={formData.email} onChange={handleInputChange}
+                  className="w-full px-4 py-3 border-2 border-brand-100 rounded-xl focus:border-brand-500 focus:ring-2 focus:ring-brand-100 bg-white"
+                  placeholder="your@email.com" />
+                <p className="text-xs text-slate-500 flex items-center gap-1">
+                  <Info className="w-3 h-3" />
+                  Your information stays private. We'll only use it to send your analysis and relevant insights.
+                </p>
+              </div>
+            </div>
+
+            <div className="bg-gradient-to-r from-b-ocre-50 to-b-ocre-50 border-2 border-b-ocre-200 rounded-xl p-5">
+              <div className="flex items-start gap-3">
+                <div className="w-10 h-10 rounded-full bg-b-ocre-300 flex items-center justify-center flex-shrink-0">
+                  <Phone className="w-5 h-5 text-white" />
+                </div>
+                <div className="flex-1">
+                  <label className="flex items-center gap-2 cursor-pointer">
+                    <input type="checkbox" name="priorityCallback" checked={formData.priorityCallback} onChange={handleInputChange}
+                      className="w-5 h-5 rounded border-b-ocre-300 text-b-ocre-500 focus:ring-b-ocre-300" />
+                    <span className="font-semibold text-b-ocre-600">Request a Consultation (No Obligation)</span>
+                  </label>
+                  <p className="text-sm text-b-ocre-500 mt-2">Speak with a specialist within 24 hours. Get strategic advice tailored to your specific search.</p>
+                  {formData.priorityCallback && (
+                    <input type="tel" name="phone" value={formData.phone} onChange={handleInputChange}
+                      className="mt-3 w-full px-4 py-3 border-2 border-b-ocre-200 rounded-xl bg-white focus:border-b-ocre-300 focus:ring-2 focus:ring-b-ocre-200"
+                      placeholder="Best phone number to reach you" />
+                  )}
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {error && (
+          <div className="mt-4 p-4 rounded-xl flex items-center bg-b-pink-50 border border-b-pink-200">
+            <AlertCircle className="w-5 h-5 mr-2 text-b-pink-500" />
+            <p className="text-sm font-medium text-b-pink-600">{error}</p>
+          </div>
+        )}
+
+        <div className="mt-8 flex justify-between items-center">
+          {step > 1 ? (
+            <button onClick={() => setStep(step - 1)} className="px-5 py-2.5 rounded-xl font-medium text-slate-600 bg-slate-100 hover:bg-slate-200">Back</button>
+          ) : <div />}
+
+          <button onClick={step === 4 ? calculateComplexity : nextStep} disabled={loading}
+            className="text-white px-6 py-3 rounded-xl font-semibold flex items-center gap-2 hover:shadow-lg disabled:opacity-70 transition-all"
+            style={{ backgroundColor: '#2814ff' }}>
+            {loading ? (
+              <div className="flex items-center gap-2" role="status" aria-label="Analyzing your search parameters">
+                <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-white" aria-hidden="true"></div>
+                <span className="animate-pulse">{loadingStep || 'Analyzing...'}</span>
+              </div>
+            ) : step === 4 ? (<><Target className="w-5 h-5" />Get Analysis</>) : (<>Continue<ArrowRight className="w-5 h-5" /></>)}
+          </button>
+        </div>
+      </div>
+    </>
+  );
+}
