@@ -276,7 +276,18 @@ export const BENCHMARKS = {
     retentionRisk: { firstYearAttrition: 0.12, topReasons: ['family politics', 'mandate scope changes', 'comp structure disputes'] },
     compensationStructure: { basePercent: 0.62, bonusPercent: 0.23, benefitsPercent: 0.15, signingBonusFrequency: 0.65, signingBonusRange: "75k-150k" },
     relocationWillingness: 0.5,
-    backgroundCheckTimeline: 5
+    backgroundCheckTimeline: 5,
+    sourceBenchmarks: {
+      "derivedFrom": "M&M Estate Manager — FO director variant (premium)",
+      "Morgan_Mallet_2025_USA_USD": { min: 150000, max: 250000 },
+      "Morgan_Mallet_2025_UK_USD": { min: 99000, max: 158400 },
+      "Morgan_Mallet_2025_Switzerland_USD": { min: 132000, max: 180000 },
+      "Morgan_Mallet_2025_UAE_USD": { min: 97920, max: 130560 },
+      "Morgan_Mallet_2025_SaudiArabia_USD": { min: 53400, max: 96120 },
+      "Morgan_Mallet_2025_France_USD": { min: 50400, max: 67200 },
+      "Morgan_Mallet_2025_Monaco_USD": { min: 89600, max: 145600 },
+      "Morgan_Mallet_2025_Belgium_USD": { min: 67200, max: 100800 },
+    }
   },
   "Family Office Manager": {
     category: "Family Office - Operations & Finance",
@@ -302,7 +313,18 @@ export const BENCHMARKS = {
     retentionRisk: { firstYearAttrition: 0.16, topReasons: ['role ambiguity', 'family interference', 'career ceiling'] },
     compensationStructure: { basePercent: 0.72, bonusPercent: 0.16, benefitsPercent: 0.12, signingBonusFrequency: 0.35, signingBonusRange: "20k-50k" },
     relocationWillingness: 0.38,
-    backgroundCheckTimeline: 3
+    backgroundCheckTimeline: 3,
+    sourceBenchmarks: {
+      "derivedFrom": "M&M Household Manager (Corporate) — FO operations variant",
+      "Morgan_Mallet_2025_USA_USD": { min: 100000, max: 180000 },
+      "Morgan_Mallet_2025_UK_USD": { min: 92400, max: 158400 },
+      "Morgan_Mallet_2025_Switzerland_USD": { min: 120000, max: 168000 },
+      "Morgan_Mallet_2025_UAE_USD": { min: 65280, max: 130560 },
+      "Morgan_Mallet_2025_SaudiArabia_USD": { min: 48060, max: 112140 },
+      "Morgan_Mallet_2025_France_USD": { min: 39200, max: 67200 },
+      "Morgan_Mallet_2025_Monaco_USD": { min: 67200, max: 123200 },
+      "Morgan_Mallet_2025_Belgium_USD": { min: 50400, max: 89600 },
+    }
   },
   "Estate Manager": {
     category: "Estate Leadership",
@@ -366,7 +388,18 @@ export const BENCHMARKS = {
     retentionRisk: { firstYearAttrition: 0.28, topReasons: ['travel fatigue', 'property isolation', 'scope mismatch'] },
     compensationStructure: { basePercent: 0.75, bonusPercent: 0.15, benefitsPercent: 0.1, signingBonusFrequency: 0.45, signingBonusRange: "20k-45k" },
     relocationWillingness: 0.32,
-    backgroundCheckTimeline: 3
+    backgroundCheckTimeline: 3,
+    sourceBenchmarks: {
+      "derivedFrom": "M&M Estate Manager — multi-property variant (premium)",
+      "Morgan_Mallet_2025_USA_USD": { min: 150000, max: 250000 },
+      "Morgan_Mallet_2025_UK_USD": { min: 99000, max: 158400 },
+      "Morgan_Mallet_2025_Switzerland_USD": { min: 132000, max: 180000 },
+      "Morgan_Mallet_2025_UAE_USD": { min: 97920, max: 130560 },
+      "Morgan_Mallet_2025_SaudiArabia_USD": { min: 53400, max: 96120 },
+      "Morgan_Mallet_2025_France_USD": { min: 50400, max: 67200 },
+      "Morgan_Mallet_2025_Monaco_USD": { min: 89600, max: 145600 },
+      "Morgan_Mallet_2025_Belgium_USD": { min: 67200, max: 100800 },
+    }
   },
   "Household Manager": {
     category: "Estate Leadership",
@@ -429,7 +462,18 @@ export const BENCHMARKS = {
     retentionRisk: { firstYearAttrition: 0.2, topReasons: ['seasonal isolation', 'scope expansion', 'principal access issues'] },
     compensationStructure: { basePercent: 0.8, bonusPercent: 0.12, benefitsPercent: 0.08, signingBonusFrequency: 0.3, signingBonusRange: "10k-25k" },
     relocationWillingness: 0.3,
-    backgroundCheckTimeline: 2
+    backgroundCheckTimeline: 2,
+    sourceBenchmarks: {
+      "derivedFrom": "M&M Property Manager",
+      "Morgan_Mallet_2025_USA_USD": { min: 70000, max: 150000 },
+      "Morgan_Mallet_2025_UK_USD": { min: 59400, max: 105600 },
+      "Morgan_Mallet_2025_Switzerland_USD": { min: 84000, max: 144000 },
+      "Morgan_Mallet_2025_UAE_USD": { min: 48960, max: 97920 },
+      "Morgan_Mallet_2025_SaudiArabia_USD": { min: 37380, max: 80100 },
+      "Morgan_Mallet_2025_France_USD": { min: 33600, max: 61600 },
+      "Morgan_Mallet_2025_Monaco_USD": { min: 61600, max: 112000 },
+      "Morgan_Mallet_2025_Belgium_USD": { min: 44800, max: 78400 },
+    }
   },
   "Director of Residences": {
     category: "Estate Leadership",
@@ -455,7 +499,18 @@ export const BENCHMARKS = {
     retentionRisk: { firstYearAttrition: 0.25, topReasons: ['travel demands', 'multi-stakeholder conflict', 'comp misalignment'] },
     compensationStructure: { basePercent: 0.75, bonusPercent: 0.15, benefitsPercent: 0.1, signingBonusFrequency: 0.42, signingBonusRange: "20k-40k" },
     relocationWillingness: 0.33,
-    backgroundCheckTimeline: 3
+    backgroundCheckTimeline: 3,
+    sourceBenchmarks: {
+      "derivedFrom": "M&M Estate Manager — multi-unit elevated variant",
+      "Morgan_Mallet_2025_USA_USD": { min: 150000, max: 250000 },
+      "Morgan_Mallet_2025_UK_USD": { min: 99000, max: 158400 },
+      "Morgan_Mallet_2025_Switzerland_USD": { min: 132000, max: 180000 },
+      "Morgan_Mallet_2025_UAE_USD": { min: 97920, max: 130560 },
+      "Morgan_Mallet_2025_SaudiArabia_USD": { min: 53400, max: 96120 },
+      "Morgan_Mallet_2025_France_USD": { min: 50400, max: 67200 },
+      "Morgan_Mallet_2025_Monaco_USD": { min: 89600, max: 145600 },
+      "Morgan_Mallet_2025_Belgium_USD": { min: 67200, max: 100800 },
+    }
   },
 
   // ==========================================
@@ -562,7 +617,18 @@ export const BENCHMARKS = {
     retentionRisk: { firstYearAttrition: 0.28, topReasons: ['role ambiguity', 'family dynamics', 'schedule unpredictability'] },
     compensationStructure: { basePercent: 0.85, bonusPercent: 0.08, benefitsPercent: 0.07, signingBonusFrequency: 0.22, signingBonusRange: "5k-12k" },
     relocationWillingness: 0.4,
-    backgroundCheckTimeline: 2
+    backgroundCheckTimeline: 2,
+    sourceBenchmarks: {
+      "derivedFrom": "M&M Personal Assistant — family-focused variant",
+      "Morgan_Mallet_2025_USA_USD": { min: 60000, max: 150000 },
+      "Morgan_Mallet_2025_UK_USD": { min: 46200, max: 92400 },
+      "Morgan_Mallet_2025_Switzerland_USD": { min: 72000, max: 132000 },
+      "Morgan_Mallet_2025_UAE_USD": { min: 32640, max: 81600 },
+      "Morgan_Mallet_2025_SaudiArabia_USD": { min: 26700, max: 64080 },
+      "Morgan_Mallet_2025_France_USD": { min: 28000, max: 50400 },
+      "Morgan_Mallet_2025_Monaco_USD": { min: 50400, max: 100800 },
+      "Morgan_Mallet_2025_Belgium_USD": { min: 33600, max: 67200 },
+    }
   },
   "Lifestyle Manager": {
     category: "Personal & Administrative",
@@ -588,7 +654,18 @@ export const BENCHMARKS = {
     retentionRisk: { firstYearAttrition: 0.32, topReasons: ['task overload', 'unrealistic expectations', 'principal personality'] },
     compensationStructure: { basePercent: 0.82, bonusPercent: 0.1, benefitsPercent: 0.08, signingBonusFrequency: 0.28, signingBonusRange: "8k-20k" },
     relocationWillingness: 0.38,
-    backgroundCheckTimeline: 2
+    backgroundCheckTimeline: 2,
+    sourceBenchmarks: {
+      "derivedFrom": "M&M Personal Assistant — expanded lifestyle scope",
+      "Morgan_Mallet_2025_USA_USD": { min: 60000, max: 150000 },
+      "Morgan_Mallet_2025_UK_USD": { min: 46200, max: 92400 },
+      "Morgan_Mallet_2025_Switzerland_USD": { min: 72000, max: 132000 },
+      "Morgan_Mallet_2025_UAE_USD": { min: 32640, max: 81600 },
+      "Morgan_Mallet_2025_SaudiArabia_USD": { min: 26700, max: 64080 },
+      "Morgan_Mallet_2025_France_USD": { min: 28000, max: 50400 },
+      "Morgan_Mallet_2025_Monaco_USD": { min: 50400, max: 100800 },
+      "Morgan_Mallet_2025_Belgium_USD": { min: 33600, max: 67200 },
+    }
   },
   "Travel Coordinator": {
     category: "Personal & Administrative",
@@ -614,7 +691,18 @@ export const BENCHMARKS = {
     retentionRisk: { firstYearAttrition: 0.24, topReasons: ['last-minute changes', 'travel fatigue', 'schedule chaos'] },
     compensationStructure: { basePercent: 0.84, bonusPercent: 0.09, benefitsPercent: 0.07, signingBonusFrequency: 0.25, signingBonusRange: "5k-15k" },
     relocationWillingness: 0.45,
-    backgroundCheckTimeline: 2
+    backgroundCheckTimeline: 2,
+    sourceBenchmarks: {
+      "derivedFrom": "M&M Social Secretary/Events — travel coordination variant",
+      "Morgan_Mallet_2025_USA_USD": { min: 60000, max: 150000 },
+      "Morgan_Mallet_2025_UK_USD": { min: 46200, max: 105600 },
+      "Morgan_Mallet_2025_Switzerland_USD": { min: 72000, max: 144000 },
+      "Morgan_Mallet_2025_UAE_USD": { min: 32640, max: 97920 },
+      "Morgan_Mallet_2025_SaudiArabia_USD": { min: 26700, max: 80100 },
+      "Morgan_Mallet_2025_France_USD": { min: 28000, max: 56000 },
+      "Morgan_Mallet_2025_Monaco_USD": { min: 50400, max: 112000 },
+      "Morgan_Mallet_2025_Belgium_USD": { min: 33600, max: 78400 },
+    }
   },
   "Social Secretary": {
     category: "Personal & Administrative",
@@ -640,7 +728,18 @@ export const BENCHMARKS = {
     retentionRisk: { firstYearAttrition: 0.2, topReasons: ['event pressure', 'social politics', 'seasonal burnout'] },
     compensationStructure: { basePercent: 0.85, bonusPercent: 0.08, benefitsPercent: 0.07, signingBonusFrequency: 0.22, signingBonusRange: "5k-15k" },
     relocationWillingness: 0.35,
-    backgroundCheckTimeline: 2
+    backgroundCheckTimeline: 2,
+    sourceBenchmarks: {
+      "derivedFrom": "M&M Social Secretary/Events",
+      "Morgan_Mallet_2025_USA_USD": { min: 60000, max: 150000 },
+      "Morgan_Mallet_2025_UK_USD": { min: 46200, max: 105600 },
+      "Morgan_Mallet_2025_Switzerland_USD": { min: 72000, max: 144000 },
+      "Morgan_Mallet_2025_UAE_USD": { min: 32640, max: 97920 },
+      "Morgan_Mallet_2025_SaudiArabia_USD": { min: 26700, max: 80100 },
+      "Morgan_Mallet_2025_France_USD": { min: 28000, max: 56000 },
+      "Morgan_Mallet_2025_Monaco_USD": { min: 50400, max: 112000 },
+      "Morgan_Mallet_2025_Belgium_USD": { min: 33600, max: 78400 },
+    }
   },
 
   // ==========================================
@@ -670,7 +769,18 @@ export const BENCHMARKS = {
     retentionRisk: { firstYearAttrition: 0.28, topReasons: ['staff conflicts', 'principal expectations', 'role overlap with estate manager'] },
     compensationStructure: { basePercent: 0.82, bonusPercent: 0.1, benefitsPercent: 0.08, signingBonusFrequency: 0.28, signingBonusRange: "8k-20k" },
     relocationWillingness: 0.42,
-    backgroundCheckTimeline: 2
+    backgroundCheckTimeline: 2,
+    sourceBenchmarks: {
+      "derivedFrom": "M&M Butler — administrative/management variant",
+      "Morgan_Mallet_2025_USA_USD": { min: 90000, max: 250000 },
+      "Morgan_Mallet_2025_UK_USD": { min: 79200, max: 184800 },
+      "Morgan_Mallet_2025_Switzerland_USD": { min: 132000, max: 240000 },
+      "Morgan_Mallet_2025_UAE_USD": { min: 65280, max: 163200 },
+      "Morgan_Mallet_2025_SaudiArabia_USD": { min: 48060, max: 128160 },
+      "Morgan_Mallet_2025_France_USD": { min: 39200, max: 78400 },
+      "Morgan_Mallet_2025_Monaco_USD": { min: 78400, max: 168000 },
+      "Morgan_Mallet_2025_Belgium_USD": { min: 56000, max: 112000 },
+    }
   },
   "Butler (Formal)": {
     category: "Formal Service",
@@ -733,7 +843,18 @@ export const BENCHMARKS = {
     retentionRisk: { firstYearAttrition: 0.25, topReasons: ['scope ambiguity', 'casual boundary erosion', 'comp ceiling'] },
     compensationStructure: { basePercent: 0.85, bonusPercent: 0.08, benefitsPercent: 0.07, signingBonusFrequency: 0.25, signingBonusRange: "8k-20k" },
     relocationWillingness: 0.48,
-    backgroundCheckTimeline: 2
+    backgroundCheckTimeline: 2,
+    sourceBenchmarks: {
+      "derivedFrom": "M&M Butler — American informal style variant",
+      "Morgan_Mallet_2025_USA_USD": { min: 90000, max: 250000 },
+      "Morgan_Mallet_2025_UK_USD": { min: 79200, max: 184800 },
+      "Morgan_Mallet_2025_Switzerland_USD": { min: 132000, max: 240000 },
+      "Morgan_Mallet_2025_UAE_USD": { min: 65280, max: 163200 },
+      "Morgan_Mallet_2025_SaudiArabia_USD": { min: 48060, max: 128160 },
+      "Morgan_Mallet_2025_France_USD": { min: 39200, max: 78400 },
+      "Morgan_Mallet_2025_Monaco_USD": { min: 78400, max: 168000 },
+      "Morgan_Mallet_2025_Belgium_USD": { min: 56000, max: 112000 },
+    }
   },
   "Executive Housekeeper": {
     category: "Formal Service",
@@ -759,7 +880,18 @@ export const BENCHMARKS = {
     retentionRisk: { firstYearAttrition: 0.2, topReasons: ['physical demands', 'team turnover', 'standards pressure'] },
     compensationStructure: { basePercent: 0.88, bonusPercent: 0.06, benefitsPercent: 0.06, signingBonusFrequency: 0.2, signingBonusRange: "5k-12k" },
     relocationWillingness: 0.4,
-    backgroundCheckTimeline: 2
+    backgroundCheckTimeline: 2,
+    sourceBenchmarks: {
+      "derivedFrom": "M&M Housekeeper — executive/supervisory variant",
+      "Morgan_Mallet_2025_USA_USD": { min: 90000, max: 160000 },
+      "Morgan_Mallet_2025_UK_USD": { min: 39600, max: 79200 },
+      "Morgan_Mallet_2025_Switzerland_USD": { min: 60000, max: 108000 },
+      "Morgan_Mallet_2025_UAE_USD": { min: 16320, max: 48960 },
+      "Morgan_Mallet_2025_SaudiArabia_USD": { min: 10680, max: 37380 },
+      "Morgan_Mallet_2025_France_USD": { min: 22400, max: 39200 },
+      "Morgan_Mallet_2025_Monaco_USD": { min: 39200, max: 67200 },
+      "Morgan_Mallet_2025_Belgium_USD": { min: 28000, max: 50400 },
+    }
   },
   "Head Housekeeper": {
     category: "Formal Service",
@@ -821,7 +953,18 @@ export const BENCHMARKS = {
     retentionRisk: { firstYearAttrition: 0.18, topReasons: ['cultural fit', 'family politics', 'scope evolution'] },
     compensationStructure: { basePercent: 0.82, bonusPercent: 0.1, benefitsPercent: 0.08, signingBonusFrequency: 0.32, signingBonusRange: "10k-25k" },
     relocationWillingness: 0.52,
-    backgroundCheckTimeline: 3
+    backgroundCheckTimeline: 3,
+    sourceBenchmarks: {
+      "derivedFrom": "M&M Butler — large estate head of staff variant",
+      "Morgan_Mallet_2025_USA_USD": { min: 90000, max: 250000 },
+      "Morgan_Mallet_2025_UK_USD": { min: 79200, max: 184800 },
+      "Morgan_Mallet_2025_Switzerland_USD": { min: 132000, max: 240000 },
+      "Morgan_Mallet_2025_UAE_USD": { min: 65280, max: 163200 },
+      "Morgan_Mallet_2025_SaudiArabia_USD": { min: 48060, max: 128160 },
+      "Morgan_Mallet_2025_France_USD": { min: 39200, max: 78400 },
+      "Morgan_Mallet_2025_Monaco_USD": { min: 78400, max: 168000 },
+      "Morgan_Mallet_2025_Belgium_USD": { min: 56000, max: 112000 },
+    }
   },
 
   // ==========================================
@@ -888,7 +1031,18 @@ export const BENCHMARKS = {
     retentionRisk: { firstYearAttrition: 0.32, topReasons: ['travel fatigue', 'kitchen limitations', 'lifestyle disruption'] },
     compensationStructure: { basePercent: 0.78, bonusPercent: 0.14, benefitsPercent: 0.08, signingBonusFrequency: 0.45, signingBonusRange: "15k-35k" },
     relocationWillingness: 0.6,
-    backgroundCheckTimeline: 2
+    backgroundCheckTimeline: 2,
+    sourceBenchmarks: {
+      "derivedFrom": "M&M Chef — traveling/rotational variant (premium)",
+      "Morgan_Mallet_2025_USA_USD": { min: 80000, max: 300000 },
+      "Morgan_Mallet_2025_UK_USD": { min: 79200, max: 198000 },
+      "Morgan_Mallet_2025_Switzerland_USD": { min: 108000, max: 240000 },
+      "Morgan_Mallet_2025_UAE_USD": { min: 65280, max: 195840 },
+      "Morgan_Mallet_2025_SaudiArabia_USD": { min: 48060, max: 160200 },
+      "Morgan_Mallet_2025_France_USD": { min: 44800, max: 89600 },
+      "Morgan_Mallet_2025_Monaco_USD": { min: 78400, max: 168000 },
+      "Morgan_Mallet_2025_Belgium_USD": { min: 56000, max: 112000 },
+    }
   },
   "Sous Chef (Private)": {
     category: "Culinary",
@@ -950,7 +1104,18 @@ export const BENCHMARKS = {
     retentionRisk: { firstYearAttrition: 0.22, topReasons: ['scheduling conflicts', 'scope creep to full-time', 'comp instability'] },
     compensationStructure: { basePercent: 0.88, bonusPercent: 0.06, benefitsPercent: 0.06, signingBonusFrequency: 0.15, signingBonusRange: "3k-10k" },
     relocationWillingness: 0.35,
-    backgroundCheckTimeline: 2
+    backgroundCheckTimeline: 2,
+    sourceBenchmarks: {
+      "derivedFrom": "M&M Chef — part-time/flexible variant",
+      "Morgan_Mallet_2025_USA_USD": { min: 80000, max: 300000 },
+      "Morgan_Mallet_2025_UK_USD": { min: 79200, max: 198000 },
+      "Morgan_Mallet_2025_Switzerland_USD": { min: 108000, max: 240000 },
+      "Morgan_Mallet_2025_UAE_USD": { min: 65280, max: 195840 },
+      "Morgan_Mallet_2025_SaudiArabia_USD": { min: 48060, max: 160200 },
+      "Morgan_Mallet_2025_France_USD": { min: 44800, max: 89600 },
+      "Morgan_Mallet_2025_Monaco_USD": { min: 78400, max: 168000 },
+      "Morgan_Mallet_2025_Belgium_USD": { min: 56000, max: 112000 },
+    }
   },
   "Sommelier (Private)": {
     category: "Culinary",
@@ -976,7 +1141,18 @@ export const BENCHMARKS = {
     retentionRisk: { firstYearAttrition: 0.28, topReasons: ['role underutilization', 'budget constraints', 'career stagnation'] },
     compensationStructure: { basePercent: 0.82, bonusPercent: 0.1, benefitsPercent: 0.08, signingBonusFrequency: 0.25, signingBonusRange: "5k-15k" },
     relocationWillingness: 0.42,
-    backgroundCheckTimeline: 2
+    backgroundCheckTimeline: 2,
+    sourceBenchmarks: {
+      "derivedFrom": "M&M Wine Specialist/Sommelier",
+      "Morgan_Mallet_2025_USA_USD": { min: 70000, max: 150000 },
+      "Morgan_Mallet_2025_UK_USD": { min: 52800, max: 105600 },
+      "Morgan_Mallet_2025_Switzerland_USD": { min: 84000, max: 144000 },
+      "Morgan_Mallet_2025_UAE_USD": { min: 48960, max: 97920 },
+      "Morgan_Mallet_2025_SaudiArabia_USD": { min: 37380, max: 80100 },
+      "Morgan_Mallet_2025_France_USD": { min: 39200, max: 72800 },
+      "Morgan_Mallet_2025_Monaco_USD": { min: 61600, max: 123200 },
+      "Morgan_Mallet_2025_Belgium_USD": { min: 44800, max: 89600 },
+    }
   },
   "Pastry Chef (Private)": {
     category: "Culinary",
@@ -1002,7 +1178,18 @@ export const BENCHMARKS = {
     retentionRisk: { firstYearAttrition: 0.3, topReasons: ['role narrowness', 'demand inconsistency', 'career growth limits'] },
     compensationStructure: { basePercent: 0.85, bonusPercent: 0.08, benefitsPercent: 0.07, signingBonusFrequency: 0.2, signingBonusRange: "5k-12k" },
     relocationWillingness: 0.4,
-    backgroundCheckTimeline: 2
+    backgroundCheckTimeline: 2,
+    sourceBenchmarks: {
+      "derivedFrom": "M&M Chef — pastry specialty variant",
+      "Morgan_Mallet_2025_USA_USD": { min: 80000, max: 300000 },
+      "Morgan_Mallet_2025_UK_USD": { min: 79200, max: 198000 },
+      "Morgan_Mallet_2025_Switzerland_USD": { min: 108000, max: 240000 },
+      "Morgan_Mallet_2025_UAE_USD": { min: 65280, max: 195840 },
+      "Morgan_Mallet_2025_SaudiArabia_USD": { min: 48060, max: 160200 },
+      "Morgan_Mallet_2025_France_USD": { min: 44800, max: 89600 },
+      "Morgan_Mallet_2025_Monaco_USD": { min: 78400, max: 168000 },
+      "Morgan_Mallet_2025_Belgium_USD": { min: 56000, max: 112000 },
+    }
   },
   "Laundress / Wardrobe Manager": {
     category: "Formal Service",
@@ -1286,7 +1473,18 @@ export const BENCHMARKS = {
     retentionRisk: { firstYearAttrition: 0.18, topReasons: ['academic pressure', 'parent interference', 'scheduling complexity'] },
     compensationStructure: { basePercent: 0.85, bonusPercent: 0.08, benefitsPercent: 0.07, signingBonusFrequency: 0.2, signingBonusRange: "3k-10k" },
     relocationWillingness: 0.35,
-    backgroundCheckTimeline: 3
+    backgroundCheckTimeline: 3,
+    sourceBenchmarks: {
+      "derivedFrom": "M&M Private Tutor — coordinator/manager variant",
+      "Morgan_Mallet_2025_USA_USD": { min: 70000, max: 200000 },
+      "Morgan_Mallet_2025_UK_USD": { min: 59400, max: 132000 },
+      "Morgan_Mallet_2025_Switzerland_USD": { min: 84000, max: 168000 },
+      "Morgan_Mallet_2025_UAE_USD": { min: 48960, max: 130560 },
+      "Morgan_Mallet_2025_SaudiArabia_USD": { min: 37380, max: 106800 },
+      "Morgan_Mallet_2025_France_USD": { min: 33600, max: 67200 },
+      "Morgan_Mallet_2025_Monaco_USD": { min: 61600, max: 134400 },
+      "Morgan_Mallet_2025_Belgium_USD": { min: 44800, max: 89600 },
+    }
   },
   "Family Educator": {
     category: "Childcare & Education",
@@ -1312,7 +1510,18 @@ export const BENCHMARKS = {
     retentionRisk: { firstYearAttrition: 0.22, topReasons: ['curriculum disagreements', 'family philosophy conflicts', 'scope creep'] },
     compensationStructure: { basePercent: 0.84, bonusPercent: 0.09, benefitsPercent: 0.07, signingBonusFrequency: 0.22, signingBonusRange: "5k-12k" },
     relocationWillingness: 0.38,
-    backgroundCheckTimeline: 3
+    backgroundCheckTimeline: 3,
+    sourceBenchmarks: {
+      "derivedFrom": "M&M Private Tutor — full curriculum variant",
+      "Morgan_Mallet_2025_USA_USD": { min: 70000, max: 200000 },
+      "Morgan_Mallet_2025_UK_USD": { min: 59400, max: 132000 },
+      "Morgan_Mallet_2025_Switzerland_USD": { min: 84000, max: 168000 },
+      "Morgan_Mallet_2025_UAE_USD": { min: 48960, max: 130560 },
+      "Morgan_Mallet_2025_SaudiArabia_USD": { min: 37380, max: 106800 },
+      "Morgan_Mallet_2025_France_USD": { min: 33600, max: 67200 },
+      "Morgan_Mallet_2025_Monaco_USD": { min: 61600, max: 134400 },
+      "Morgan_Mallet_2025_Belgium_USD": { min: 44800, max: 89600 },
+    }
   },
 
   // ==========================================
@@ -1342,7 +1551,18 @@ export const BENCHMARKS = {
     retentionRisk: { firstYearAttrition: 0.14, topReasons: ['liability concerns', 'threat level changes', 'budget disputes'] },
     compensationStructure: { basePercent: 0.72, bonusPercent: 0.16, benefitsPercent: 0.12, signingBonusFrequency: 0.45, signingBonusRange: "20k-50k" },
     relocationWillingness: 0.55,
-    backgroundCheckTimeline: 6
+    backgroundCheckTimeline: 6,
+    sourceBenchmarks: {
+      "derivedFrom": "M&M Security/Close Protection — director level (premium)",
+      "Morgan_Mallet_2025_USA_USD": { min: 90000, max: 150000 },
+      "Morgan_Mallet_2025_UK_USD": { min: 92400, max: 158400 },
+      "Morgan_Mallet_2025_Switzerland_USD": { min: 120000, max: 180000 },
+      "Morgan_Mallet_2025_UAE_USD": { min: 65280, max: 130560 },
+      "Morgan_Mallet_2025_SaudiArabia_USD": { min: 48060, max: 106800 },
+      "Morgan_Mallet_2025_France_USD": { min: 44800, max: 78400 },
+      "Morgan_Mallet_2025_Monaco_USD": { min: 78400, max: 145600 },
+      "Morgan_Mallet_2025_Belgium_USD": { min: 56000, max: 100800 },
+    }
   },
   "Executive Protection Agent": {
     category: "Security",
@@ -1404,7 +1624,18 @@ export const BENCHMARKS = {
     retentionRisk: { firstYearAttrition: 0.18, topReasons: ['travel fatigue', 'relationship strain', 'better government offer'] },
     compensationStructure: { basePercent: 0.75, bonusPercent: 0.15, benefitsPercent: 0.1, signingBonusFrequency: 0.38, signingBonusRange: "10k-30k" },
     relocationWillingness: 0.6,
-    backgroundCheckTimeline: 6
+    backgroundCheckTimeline: 6,
+    sourceBenchmarks: {
+      "derivedFrom": "M&M Security/Close Protection — residential entry level",
+      "Morgan_Mallet_2025_USA_USD": { min: 90000, max: 150000 },
+      "Morgan_Mallet_2025_UK_USD": { min: 92400, max: 158400 },
+      "Morgan_Mallet_2025_Switzerland_USD": { min: 120000, max: 180000 },
+      "Morgan_Mallet_2025_UAE_USD": { min: 65280, max: 130560 },
+      "Morgan_Mallet_2025_SaudiArabia_USD": { min: 48060, max: 106800 },
+      "Morgan_Mallet_2025_France_USD": { min: 44800, max: 78400 },
+      "Morgan_Mallet_2025_Monaco_USD": { min: 78400, max: 145600 },
+      "Morgan_Mallet_2025_Belgium_USD": { min: 56000, max: 100800 },
+    }
   },
   "Security Driver": {
     category: "Security",
@@ -1430,7 +1661,18 @@ export const BENCHMARKS = {
     retentionRisk: { firstYearAttrition: 0.18, topReasons: ['travel fatigue', 'relationship strain', 'better government offer'] },
     compensationStructure: { basePercent: 0.75, bonusPercent: 0.15, benefitsPercent: 0.1, signingBonusFrequency: 0.38, signingBonusRange: "10k-30k" },
     relocationWillingness: 0.6,
-    backgroundCheckTimeline: 6
+    backgroundCheckTimeline: 6,
+    sourceBenchmarks: {
+      "derivedFrom": "M&M Chauffeur + Security hybrid",
+      "Morgan_Mallet_2025_USA_USD": { min: 60000, max: 120000 },
+      "Morgan_Mallet_2025_UK_USD": { min: 52800, max: 92400 },
+      "Morgan_Mallet_2025_Switzerland_USD": { min: 72000, max: 108000 },
+      "Morgan_Mallet_2025_UAE_USD": { min: 32640, max: 65280 },
+      "Morgan_Mallet_2025_SaudiArabia_USD": { min: 26700, max: 53400 },
+      "Morgan_Mallet_2025_France_USD": { min: 33600, max: 50400 },
+      "Morgan_Mallet_2025_Monaco_USD": { min: 50400, max: 89600 },
+      "Morgan_Mallet_2025_Belgium_USD": { min: 39200, max: 67200 },
+    }
   },
   "Travel Security Specialist": {
     category: "Security",
@@ -1456,7 +1698,18 @@ export const BENCHMARKS = {
     retentionRisk: { firstYearAttrition: 0.18, topReasons: ['travel fatigue', 'relationship strain', 'better government offer'] },
     compensationStructure: { basePercent: 0.75, bonusPercent: 0.15, benefitsPercent: 0.1, signingBonusFrequency: 0.38, signingBonusRange: "10k-30k" },
     relocationWillingness: 0.6,
-    backgroundCheckTimeline: 6
+    backgroundCheckTimeline: 6,
+    sourceBenchmarks: {
+      "derivedFrom": "M&M Security/Close Protection — travel specialist",
+      "Morgan_Mallet_2025_USA_USD": { min: 90000, max: 150000 },
+      "Morgan_Mallet_2025_UK_USD": { min: 92400, max: 158400 },
+      "Morgan_Mallet_2025_Switzerland_USD": { min: 120000, max: 180000 },
+      "Morgan_Mallet_2025_UAE_USD": { min: 65280, max: 130560 },
+      "Morgan_Mallet_2025_SaudiArabia_USD": { min: 48060, max: 106800 },
+      "Morgan_Mallet_2025_France_USD": { min: 44800, max: 78400 },
+      "Morgan_Mallet_2025_Monaco_USD": { min: 78400, max: 145600 },
+      "Morgan_Mallet_2025_Belgium_USD": { min: 56000, max: 100800 },
+    }
   },
   "Cybersecurity Manager": {
     category: "Security",
@@ -1482,7 +1735,18 @@ export const BENCHMARKS = {
     retentionRisk: { firstYearAttrition: 0.15, topReasons: ['better corporate offers', 'scope creep', 'regulatory pressure'] },
     compensationStructure: { basePercent: 0.72, bonusPercent: 0.16, benefitsPercent: 0.12, signingBonusFrequency: 0.45, signingBonusRange: "20k-50k" },
     relocationWillingness: 0.45,
-    backgroundCheckTimeline: 5
+    backgroundCheckTimeline: 5,
+    sourceBenchmarks: {
+      "derivedFrom": "M&M Technical/Smart Home — cybersecurity variant",
+      "Morgan_Mallet_2025_USA_USD": { min: 80000, max: 180000 },
+      "Morgan_Mallet_2025_UK_USD": { min: 59400, max: 132000 },
+      "Morgan_Mallet_2025_Switzerland_USD": { min: 96000, max: 180000 },
+      "Morgan_Mallet_2025_UAE_USD": { min: 48960, max: 130560 },
+      "Morgan_Mallet_2025_SaudiArabia_USD": { min: 37380, max: 106800 },
+      "Morgan_Mallet_2025_France_USD": { min: 39200, max: 78400 },
+      "Morgan_Mallet_2025_Monaco_USD": { min: 72800, max: 145600 },
+      "Morgan_Mallet_2025_Belgium_USD": { min: 50400, max: 100800 },
+    }
   },
 
   // ==========================================
@@ -1548,7 +1812,18 @@ export const BENCHMARKS = {
     retentionRisk: { firstYearAttrition: 0.15, topReasons: ['better corporate offers', 'scope creep', 'regulatory pressure'] },
     compensationStructure: { basePercent: 0.72, bonusPercent: 0.16, benefitsPercent: 0.12, signingBonusFrequency: 0.45, signingBonusRange: "20k-50k" },
     relocationWillingness: 0.45,
-    backgroundCheckTimeline: 5
+    backgroundCheckTimeline: 5,
+    sourceBenchmarks: {
+      "derivedFrom": "M&M Chauffeur — long-distance travel variant",
+      "Morgan_Mallet_2025_USA_USD": { min: 60000, max: 120000 },
+      "Morgan_Mallet_2025_UK_USD": { min: 52800, max: 92400 },
+      "Morgan_Mallet_2025_Switzerland_USD": { min: 72000, max: 108000 },
+      "Morgan_Mallet_2025_UAE_USD": { min: 32640, max: 65280 },
+      "Morgan_Mallet_2025_SaudiArabia_USD": { min: 26700, max: 53400 },
+      "Morgan_Mallet_2025_France_USD": { min: 33600, max: 50400 },
+      "Morgan_Mallet_2025_Monaco_USD": { min: 50400, max: 89600 },
+      "Morgan_Mallet_2025_Belgium_USD": { min: 39200, max: 67200 },
+    }
   },
   "Driver (Car Collector)": {
     category: "Transportation",
@@ -1574,7 +1849,18 @@ export const BENCHMARKS = {
     retentionRisk: { firstYearAttrition: 0.15, topReasons: ['better corporate offers', 'scope creep', 'regulatory pressure'] },
     compensationStructure: { basePercent: 0.72, bonusPercent: 0.16, benefitsPercent: 0.12, signingBonusFrequency: 0.45, signingBonusRange: "20k-50k" },
     relocationWillingness: 0.45,
-    backgroundCheckTimeline: 5
+    backgroundCheckTimeline: 5,
+    sourceBenchmarks: {
+      "derivedFrom": "M&M Chauffeur — specialty vehicle variant (premium)",
+      "Morgan_Mallet_2025_USA_USD": { min: 60000, max: 120000 },
+      "Morgan_Mallet_2025_UK_USD": { min: 52800, max: 92400 },
+      "Morgan_Mallet_2025_Switzerland_USD": { min: 72000, max: 108000 },
+      "Morgan_Mallet_2025_UAE_USD": { min: 32640, max: 65280 },
+      "Morgan_Mallet_2025_SaudiArabia_USD": { min: 26700, max: 53400 },
+      "Morgan_Mallet_2025_France_USD": { min: 33600, max: 50400 },
+      "Morgan_Mallet_2025_Monaco_USD": { min: 50400, max: 89600 },
+      "Morgan_Mallet_2025_Belgium_USD": { min: 39200, max: 67200 },
+    }
   },
   "Aviation Coordinator": {
     category: "Transportation",
@@ -1600,7 +1886,18 @@ export const BENCHMARKS = {
     retentionRisk: { firstYearAttrition: 0.18, topReasons: ['regulatory complexity', 'scheduling chaos', 'vendor management'] },
     compensationStructure: { basePercent: 0.8, bonusPercent: 0.12, benefitsPercent: 0.08, signingBonusFrequency: 0.3, signingBonusRange: "10k-25k" },
     relocationWillingness: 0.4,
-    backgroundCheckTimeline: 3
+    backgroundCheckTimeline: 3,
+    sourceBenchmarks: {
+      "derivedFrom": "M&M Private Flight Attendant — aviation coordination variant",
+      "Morgan_Mallet_2025_USA_USD": { min: 80000, max: 150000 },
+      "Morgan_Mallet_2025_UK_USD": { min: 59400, max: 118800 },
+      "Morgan_Mallet_2025_Switzerland_USD": { min: 84000, max: 156000 },
+      "Morgan_Mallet_2025_UAE_USD": { min: 48960, max: 97920 },
+      "Morgan_Mallet_2025_SaudiArabia_USD": { min: 37380, max: 80100 },
+      "Morgan_Mallet_2025_France_USD": { min: 39200, max: 72800 },
+      "Morgan_Mallet_2025_Monaco_USD": { min: 61600, max: 123200 },
+      "Morgan_Mallet_2025_Belgium_USD": { min: 44800, max: 89600 },
+    }
   },
   "Flight Attendant (Private)": {
     category: "Transportation",
@@ -1626,7 +1923,18 @@ export const BENCHMARKS = {
     retentionRisk: { firstYearAttrition: 0.28, topReasons: ['schedule unpredictability', 'lifestyle impact', 'comp vs commercial'] },
     compensationStructure: { basePercent: 0.82, bonusPercent: 0.1, benefitsPercent: 0.08, signingBonusFrequency: 0.25, signingBonusRange: "5k-15k" },
     relocationWillingness: 0.55,
-    backgroundCheckTimeline: 3
+    backgroundCheckTimeline: 3,
+    sourceBenchmarks: {
+      "derivedFrom": "M&M Private Flight Attendant",
+      "Morgan_Mallet_2025_USA_USD": { min: 80000, max: 150000 },
+      "Morgan_Mallet_2025_UK_USD": { min: 59400, max: 118800 },
+      "Morgan_Mallet_2025_Switzerland_USD": { min: 84000, max: 156000 },
+      "Morgan_Mallet_2025_UAE_USD": { min: 48960, max: 97920 },
+      "Morgan_Mallet_2025_SaudiArabia_USD": { min: 37380, max: 80100 },
+      "Morgan_Mallet_2025_France_USD": { min: 39200, max: 72800 },
+      "Morgan_Mallet_2025_Monaco_USD": { min: 61600, max: 123200 },
+      "Morgan_Mallet_2025_Belgium_USD": { min: 44800, max: 89600 },
+    }
   },
 
   // ==========================================
@@ -1728,7 +2036,18 @@ export const BENCHMARKS = {
     retentionRisk: { firstYearAttrition: 0.18, topReasons: ['creative constraints', 'budget limits', 'seasonal pressure'] },
     compensationStructure: { basePercent: 0.88, bonusPercent: 0.06, benefitsPercent: 0.06, signingBonusFrequency: 0.15, signingBonusRange: "3k-10k" },
     relocationWillingness: 0.3,
-    backgroundCheckTimeline: 2
+    backgroundCheckTimeline: 2,
+    sourceBenchmarks: {
+      "derivedFrom": "M&M Gardener/Groundskeeper — maintenance management variant",
+      "Morgan_Mallet_2025_USA_USD": { min: 50000, max: 100000 },
+      "Morgan_Mallet_2025_UK_USD": { min: 33000, max: 66000 },
+      "Morgan_Mallet_2025_Switzerland_USD": { min: 60000, max: 96000 },
+      "Morgan_Mallet_2025_UAE_USD": { min: 16320, max: 48960 },
+      "Morgan_Mallet_2025_SaudiArabia_USD": { min: 10680, max: 37380 },
+      "Morgan_Mallet_2025_France_USD": { min: 22400, max: 44800 },
+      "Morgan_Mallet_2025_Monaco_USD": { min: 39200, max: 67200 },
+      "Morgan_Mallet_2025_Belgium_USD": { min: 28000, max: 50400 },
+    }
   },
   "Pool Manager": {
     category: "Grounds & Outdoor",
@@ -1754,7 +2073,18 @@ export const BENCHMARKS = {
     retentionRisk: { firstYearAttrition: 0.18, topReasons: ['creative constraints', 'budget limits', 'seasonal pressure'] },
     compensationStructure: { basePercent: 0.88, bonusPercent: 0.06, benefitsPercent: 0.06, signingBonusFrequency: 0.15, signingBonusRange: "3k-10k" },
     relocationWillingness: 0.3,
-    backgroundCheckTimeline: 2
+    backgroundCheckTimeline: 2,
+    sourceBenchmarks: {
+      "derivedFrom": "M&M Gardener/Groundskeeper — aquatics specialty variant",
+      "Morgan_Mallet_2025_USA_USD": { min: 50000, max: 100000 },
+      "Morgan_Mallet_2025_UK_USD": { min: 33000, max: 66000 },
+      "Morgan_Mallet_2025_Switzerland_USD": { min: 60000, max: 96000 },
+      "Morgan_Mallet_2025_UAE_USD": { min: 16320, max: 48960 },
+      "Morgan_Mallet_2025_SaudiArabia_USD": { min: 10680, max: 37380 },
+      "Morgan_Mallet_2025_France_USD": { min: 22400, max: 44800 },
+      "Morgan_Mallet_2025_Monaco_USD": { min: 39200, max: 67200 },
+      "Morgan_Mallet_2025_Belgium_USD": { min: 28000, max: 50400 },
+    }
   },
   "Facilities Director": {
     category: "Grounds & Outdoor",
@@ -1780,7 +2110,18 @@ export const BENCHMARKS = {
     retentionRisk: { firstYearAttrition: 0.18, topReasons: ['creative constraints', 'budget limits', 'seasonal pressure'] },
     compensationStructure: { basePercent: 0.88, bonusPercent: 0.06, benefitsPercent: 0.06, signingBonusFrequency: 0.15, signingBonusRange: "3k-10k" },
     relocationWillingness: 0.3,
-    backgroundCheckTimeline: 2
+    backgroundCheckTimeline: 2,
+    sourceBenchmarks: {
+      "derivedFrom": "M&M Property Manager — facilities director variant",
+      "Morgan_Mallet_2025_USA_USD": { min: 70000, max: 150000 },
+      "Morgan_Mallet_2025_UK_USD": { min: 59400, max: 105600 },
+      "Morgan_Mallet_2025_Switzerland_USD": { min: 84000, max: 144000 },
+      "Morgan_Mallet_2025_UAE_USD": { min: 48960, max: 97920 },
+      "Morgan_Mallet_2025_SaudiArabia_USD": { min: 37380, max: 80100 },
+      "Morgan_Mallet_2025_France_USD": { min: 33600, max: 61600 },
+      "Morgan_Mallet_2025_Monaco_USD": { min: 61600, max: 112000 },
+      "Morgan_Mallet_2025_Belgium_USD": { min: 44800, max: 78400 },
+    }
   },
 
   // ==========================================
@@ -2022,7 +2363,18 @@ export const BENCHMARKS = {
     retentionRisk: { firstYearAttrition: 0.28, topReasons: ['administrative overload', 'guest complaints', 'schedule demands'] },
     compensationStructure: { basePercent: 0.75, bonusPercent: 0.15, benefitsPercent: 0.1, signingBonusFrequency: 0.35, signingBonusRange: "8k-20k" },
     relocationWillingness: 0.8,
-    backgroundCheckTimeline: 3
+    backgroundCheckTimeline: 3,
+    sourceBenchmarks: {
+      "derivedFrom": "M&M Private Nurse",
+      "Morgan_Mallet_2025_USA_USD": { min: 80000, max: 180000 },
+      "Morgan_Mallet_2025_UK_USD": { min: 59400, max: 132000 },
+      "Morgan_Mallet_2025_Switzerland_USD": { min: 96000, max: 180000 },
+      "Morgan_Mallet_2025_UAE_USD": { min: 48960, max: 130560 },
+      "Morgan_Mallet_2025_SaudiArabia_USD": { min: 37380, max: 106800 },
+      "Morgan_Mallet_2025_France_USD": { min: 39200, max: 72800 },
+      "Morgan_Mallet_2025_Monaco_USD": { min: 72800, max: 145600 },
+      "Morgan_Mallet_2025_Belgium_USD": { min: 50400, max: 100800 },
+    }
   },
   "Elder Care Manager": {
     category: "Healthcare & Wellness",
@@ -2120,7 +2472,18 @@ export const BENCHMARKS = {
     retentionRisk: { firstYearAttrition: 0.28, topReasons: ['administrative overload', 'guest complaints', 'schedule demands'] },
     compensationStructure: { basePercent: 0.75, bonusPercent: 0.15, benefitsPercent: 0.1, signingBonusFrequency: 0.35, signingBonusRange: "8k-20k" },
     relocationWillingness: 0.8,
-    backgroundCheckTimeline: 3
+    backgroundCheckTimeline: 3,
+    sourceBenchmarks: {
+      "derivedFrom": "M&M Personal Trainer — holistic wellness variant",
+      "Morgan_Mallet_2025_USA_USD": { min: 60000, max: 150000 },
+      "Morgan_Mallet_2025_UK_USD": { min: 46200, max: 92400 },
+      "Morgan_Mallet_2025_Switzerland_USD": { min: 72000, max: 132000 },
+      "Morgan_Mallet_2025_UAE_USD": { min: 32640, max: 97920 },
+      "Morgan_Mallet_2025_SaudiArabia_USD": { min: 26700, max: 80100 },
+      "Morgan_Mallet_2025_France_USD": { min: 28000, max: 56000 },
+      "Morgan_Mallet_2025_Monaco_USD": { min: 50400, max: 112000 },
+      "Morgan_Mallet_2025_Belgium_USD": { min: 33600, max: 67200 },
+    }
   },
   "Medical Concierge": {
     category: "Healthcare & Wellness",
@@ -2146,7 +2509,18 @@ export const BENCHMARKS = {
     retentionRisk: { firstYearAttrition: 0.28, topReasons: ['administrative overload', 'guest complaints', 'schedule demands'] },
     compensationStructure: { basePercent: 0.75, bonusPercent: 0.15, benefitsPercent: 0.1, signingBonusFrequency: 0.35, signingBonusRange: "8k-20k" },
     relocationWillingness: 0.8,
-    backgroundCheckTimeline: 3
+    backgroundCheckTimeline: 3,
+    sourceBenchmarks: {
+      "derivedFrom": "M&M Private Nurse — medical concierge variant (premium)",
+      "Morgan_Mallet_2025_USA_USD": { min: 80000, max: 180000 },
+      "Morgan_Mallet_2025_UK_USD": { min: 59400, max: 132000 },
+      "Morgan_Mallet_2025_Switzerland_USD": { min: 96000, max: 180000 },
+      "Morgan_Mallet_2025_UAE_USD": { min: 48960, max: 130560 },
+      "Morgan_Mallet_2025_SaudiArabia_USD": { min: 37380, max: 106800 },
+      "Morgan_Mallet_2025_France_USD": { min: 39200, max: 72800 },
+      "Morgan_Mallet_2025_Monaco_USD": { min: 72800, max: 145600 },
+      "Morgan_Mallet_2025_Belgium_USD": { min: 50400, max: 100800 },
+    }
   },
 
   // ==========================================
@@ -2176,7 +2550,18 @@ export const BENCHMARKS = {
     retentionRisk: { firstYearAttrition: 0.28, topReasons: ['administrative overload', 'guest complaints', 'schedule demands'] },
     compensationStructure: { basePercent: 0.75, bonusPercent: 0.15, benefitsPercent: 0.1, signingBonusFrequency: 0.35, signingBonusRange: "8k-20k" },
     relocationWillingness: 0.8,
-    backgroundCheckTimeline: 3
+    backgroundCheckTimeline: 3,
+    sourceBenchmarks: {
+      "derivedFrom": "M&M Social Secretary/Events — guest services variant",
+      "Morgan_Mallet_2025_USA_USD": { min: 60000, max: 150000 },
+      "Morgan_Mallet_2025_UK_USD": { min: 46200, max: 105600 },
+      "Morgan_Mallet_2025_Switzerland_USD": { min: 72000, max: 144000 },
+      "Morgan_Mallet_2025_UAE_USD": { min: 32640, max: 97920 },
+      "Morgan_Mallet_2025_SaudiArabia_USD": { min: 26700, max: 80100 },
+      "Morgan_Mallet_2025_France_USD": { min: 28000, max: 56000 },
+      "Morgan_Mallet_2025_Monaco_USD": { min: 50400, max: 112000 },
+      "Morgan_Mallet_2025_Belgium_USD": { min: 33600, max: 78400 },
+    }
   },
   "Event Manager (Private)": {
     category: "Hospitality & Collections",
@@ -2202,7 +2587,18 @@ export const BENCHMARKS = {
     retentionRisk: { firstYearAttrition: 0.28, topReasons: ['administrative overload', 'guest complaints', 'schedule demands'] },
     compensationStructure: { basePercent: 0.75, bonusPercent: 0.15, benefitsPercent: 0.1, signingBonusFrequency: 0.35, signingBonusRange: "8k-20k" },
     relocationWillingness: 0.8,
-    backgroundCheckTimeline: 3
+    backgroundCheckTimeline: 3,
+    sourceBenchmarks: {
+      "derivedFrom": "M&M Social Secretary/Events — event management variant",
+      "Morgan_Mallet_2025_USA_USD": { min: 60000, max: 150000 },
+      "Morgan_Mallet_2025_UK_USD": { min: 46200, max: 105600 },
+      "Morgan_Mallet_2025_Switzerland_USD": { min: 72000, max: 144000 },
+      "Morgan_Mallet_2025_UAE_USD": { min: 32640, max: 97920 },
+      "Morgan_Mallet_2025_SaudiArabia_USD": { min: 26700, max: 80100 },
+      "Morgan_Mallet_2025_France_USD": { min: 28000, max: 56000 },
+      "Morgan_Mallet_2025_Monaco_USD": { min: 50400, max: 112000 },
+      "Morgan_Mallet_2025_Belgium_USD": { min: 33600, max: 78400 },
+    }
   },
   "Catering Manager": {
     category: "Hospitality & Collections",
@@ -2228,7 +2624,18 @@ export const BENCHMARKS = {
     retentionRisk: { firstYearAttrition: 0.28, topReasons: ['administrative overload', 'guest complaints', 'schedule demands'] },
     compensationStructure: { basePercent: 0.75, bonusPercent: 0.15, benefitsPercent: 0.1, signingBonusFrequency: 0.35, signingBonusRange: "8k-20k" },
     relocationWillingness: 0.8,
-    backgroundCheckTimeline: 3
+    backgroundCheckTimeline: 3,
+    sourceBenchmarks: {
+      "derivedFrom": "M&M Social Secretary/Events — catering variant",
+      "Morgan_Mallet_2025_USA_USD": { min: 60000, max: 150000 },
+      "Morgan_Mallet_2025_UK_USD": { min: 46200, max: 105600 },
+      "Morgan_Mallet_2025_Switzerland_USD": { min: 72000, max: 144000 },
+      "Morgan_Mallet_2025_UAE_USD": { min: 32640, max: 97920 },
+      "Morgan_Mallet_2025_SaudiArabia_USD": { min: 26700, max: 80100 },
+      "Morgan_Mallet_2025_France_USD": { min: 28000, max: 56000 },
+      "Morgan_Mallet_2025_Monaco_USD": { min: 50400, max: 112000 },
+      "Morgan_Mallet_2025_Belgium_USD": { min: 33600, max: 78400 },
+    }
   },
   "Wine Cellar Manager": {
     category: "Hospitality & Collections",
@@ -2254,7 +2661,18 @@ export const BENCHMARKS = {
     retentionRisk: { firstYearAttrition: 0.28, topReasons: ['administrative overload', 'guest complaints', 'schedule demands'] },
     compensationStructure: { basePercent: 0.75, bonusPercent: 0.15, benefitsPercent: 0.1, signingBonusFrequency: 0.35, signingBonusRange: "8k-20k" },
     relocationWillingness: 0.8,
-    backgroundCheckTimeline: 3
+    backgroundCheckTimeline: 3,
+    sourceBenchmarks: {
+      "derivedFrom": "M&M Wine Specialist/Sommelier — cellar management variant",
+      "Morgan_Mallet_2025_USA_USD": { min: 70000, max: 150000 },
+      "Morgan_Mallet_2025_UK_USD": { min: 52800, max: 105600 },
+      "Morgan_Mallet_2025_Switzerland_USD": { min: 84000, max: 144000 },
+      "Morgan_Mallet_2025_UAE_USD": { min: 48960, max: 97920 },
+      "Morgan_Mallet_2025_SaudiArabia_USD": { min: 37380, max: 80100 },
+      "Morgan_Mallet_2025_France_USD": { min: 39200, max: 72800 },
+      "Morgan_Mallet_2025_Monaco_USD": { min: 61600, max: 123200 },
+      "Morgan_Mallet_2025_Belgium_USD": { min: 44800, max: 89600 },
+    }
   },
 
   // ==========================================
@@ -2286,7 +2704,18 @@ export const BENCHMARKS = {
     retentionRisk: { firstYearAttrition: 0.25, topReasons: ['au pair turnover management', 'family conflicts', 'cultural mediation fatigue'] },
     compensationStructure: { basePercent: 0.86, bonusPercent: 0.07, benefitsPercent: 0.07, signingBonusFrequency: 0.18, signingBonusRange: "3k-8k" },
     relocationWillingness: 0.3,
-    backgroundCheckTimeline: 2
+    backgroundCheckTimeline: 2,
+    sourceBenchmarks: {
+      "derivedFrom": "M&M Nanny — au pair management variant",
+      "Morgan_Mallet_2025_USA_USD": { min: 60000, max: 200000 },
+      "Morgan_Mallet_2025_UK_USD": { min: 52800, max: 118800 },
+      "Morgan_Mallet_2025_Switzerland_USD": { min: 72000, max: 132000 },
+      "Morgan_Mallet_2025_UAE_USD": { min: 32640, max: 97920 },
+      "Morgan_Mallet_2025_SaudiArabia_USD": { min: 26700, max: 80100 },
+      "Morgan_Mallet_2025_France_USD": { min: 28000, max: 50400 },
+      "Morgan_Mallet_2025_Monaco_USD": { min: 50400, max: 100800 },
+      "Morgan_Mallet_2025_Belgium_USD": { min: 33600, max: 67200 },
+    }
   },
   "Night Nanny": {
     category: "Childcare & Education",
@@ -2312,7 +2741,18 @@ export const BENCHMARKS = {
     retentionRisk: { firstYearAttrition: 0.35, topReasons: ['sleep disruption', 'health impact', 'role duration limits'] },
     compensationStructure: { basePercent: 0.88, bonusPercent: 0.06, benefitsPercent: 0.06, signingBonusFrequency: 0.18, signingBonusRange: "3k-8k" },
     relocationWillingness: 0.48,
-    backgroundCheckTimeline: 3
+    backgroundCheckTimeline: 3,
+    sourceBenchmarks: {
+      "derivedFrom": "M&M Night Nurse — overnight childcare variant",
+      "Morgan_Mallet_2025_USA_USD": { min: 70000, max: 150000 },
+      "Morgan_Mallet_2025_UK_USD": { min: 52800, max: 105600 },
+      "Morgan_Mallet_2025_Switzerland_USD": { min: 72000, max: 132000 },
+      "Morgan_Mallet_2025_UAE_USD": { min: 32640, max: 81600 },
+      "Morgan_Mallet_2025_SaudiArabia_USD": { min: 26700, max: 64080 },
+      "Morgan_Mallet_2025_France_USD": { min: 33600, max: 61600 },
+      "Morgan_Mallet_2025_Monaco_USD": { min: 56000, max: 100800 },
+      "Morgan_Mallet_2025_Belgium_USD": { min: 39200, max: 72800 },
+    }
   },
 
   // FAMILY OFFICE - INVESTMENT (Additional)
@@ -2366,7 +2806,18 @@ export const BENCHMARKS = {
     retentionRisk: { firstYearAttrition: 0.32, topReasons: ['isolation', 'seasonal instability', 'cultural adjustment'] },
     compensationStructure: { basePercent: 0.82, bonusPercent: 0.1, benefitsPercent: 0.08, signingBonusFrequency: 0.25, signingBonusRange: "8k-20k" },
     relocationWillingness: 0.45,
-    backgroundCheckTimeline: 2
+    backgroundCheckTimeline: 2,
+    sourceBenchmarks: {
+      "derivedFrom": "M&M Property Manager — villa/vacation property variant",
+      "Morgan_Mallet_2025_USA_USD": { min: 70000, max: 150000 },
+      "Morgan_Mallet_2025_UK_USD": { min: 59400, max: 105600 },
+      "Morgan_Mallet_2025_Switzerland_USD": { min: 84000, max: 144000 },
+      "Morgan_Mallet_2025_UAE_USD": { min: 48960, max: 97920 },
+      "Morgan_Mallet_2025_SaudiArabia_USD": { min: 37380, max: 80100 },
+      "Morgan_Mallet_2025_France_USD": { min: 33600, max: 61600 },
+      "Morgan_Mallet_2025_Monaco_USD": { min: 61600, max: 112000 },
+      "Morgan_Mallet_2025_Belgium_USD": { min: 44800, max: 78400 },
+    }
   },
   "Caretaker": {
     category: "Estate Leadership",
@@ -2392,7 +2843,18 @@ export const BENCHMARKS = {
     retentionRisk: { firstYearAttrition: 0.18, topReasons: ['isolation', 'scope creep', 'compensation stagnation'] },
     compensationStructure: { basePercent: 0.9, bonusPercent: 0.05, benefitsPercent: 0.05, signingBonusFrequency: 0.12, signingBonusRange: "3k-8k" },
     relocationWillingness: 0.28,
-    backgroundCheckTimeline: 2
+    backgroundCheckTimeline: 2,
+    sourceBenchmarks: {
+      "derivedFrom": "M&M Gardener/Groundskeeper — basic property caretaking variant",
+      "Morgan_Mallet_2025_USA_USD": { min: 50000, max: 100000 },
+      "Morgan_Mallet_2025_UK_USD": { min: 33000, max: 66000 },
+      "Morgan_Mallet_2025_Switzerland_USD": { min: 60000, max: 96000 },
+      "Morgan_Mallet_2025_UAE_USD": { min: 16320, max: 48960 },
+      "Morgan_Mallet_2025_SaudiArabia_USD": { min: 10680, max: 37380 },
+      "Morgan_Mallet_2025_France_USD": { min: 22400, max: 44800 },
+      "Morgan_Mallet_2025_Monaco_USD": { min: 39200, max: 67200 },
+      "Morgan_Mallet_2025_Belgium_USD": { min: 28000, max: 50400 },
+    }
   },
 
   // PERSONAL & ADMINISTRATIVE (Additional)
@@ -2456,7 +2918,18 @@ export const BENCHMARKS = {
     retentionRisk: { firstYearAttrition: 0.26, topReasons: ['schedule chaos', 'blame absorption', 'role undervaluation'] },
     compensationStructure: { basePercent: 0.88, bonusPercent: 0.06, benefitsPercent: 0.06, signingBonusFrequency: 0.18, signingBonusRange: "3k-10k" },
     relocationWillingness: 0.35,
-    backgroundCheckTimeline: 2
+    backgroundCheckTimeline: 2,
+    sourceBenchmarks: {
+      "derivedFrom": "M&M Personal Assistant — scheduling specialty",
+      "Morgan_Mallet_2025_USA_USD": { min: 60000, max: 150000 },
+      "Morgan_Mallet_2025_UK_USD": { min: 46200, max: 92400 },
+      "Morgan_Mallet_2025_Switzerland_USD": { min: 72000, max: 132000 },
+      "Morgan_Mallet_2025_UAE_USD": { min: 32640, max: 81600 },
+      "Morgan_Mallet_2025_SaudiArabia_USD": { min: 26700, max: 64080 },
+      "Morgan_Mallet_2025_France_USD": { min: 28000, max: 50400 },
+      "Morgan_Mallet_2025_Monaco_USD": { min: 50400, max: 100800 },
+      "Morgan_Mallet_2025_Belgium_USD": { min: 33600, max: 67200 },
+    }
   },
 
   // FORMAL SERVICE (Additional)
@@ -2520,7 +2993,18 @@ export const BENCHMARKS = {
     retentionRisk: { firstYearAttrition: 0.28, topReasons: ['principal standards pressure', 'cultural fit issues', 'schedule demands'] },
     compensationStructure: { basePercent: 0.78, bonusPercent: 0.13, benefitsPercent: 0.09, signingBonusFrequency: 0.35, signingBonusRange: "8k-18k" },
     relocationWillingness: 0.5,
-    backgroundCheckTimeline: 3
+    backgroundCheckTimeline: 3,
+    sourceBenchmarks: {
+      "derivedFrom": "M&M Laundress/Wardrobe — household aesthetics variant",
+      "Morgan_Mallet_2025_USA_USD": { min: 50000, max: 90000 },
+      "Morgan_Mallet_2025_UK_USD": { min: 33000, max: 59400 },
+      "Morgan_Mallet_2025_Switzerland_USD": { min: 48000, max: 84000 },
+      "Morgan_Mallet_2025_UAE_USD": { min: 16320, max: 32640 },
+      "Morgan_Mallet_2025_SaudiArabia_USD": { min: 10680, max: 26700 },
+      "Morgan_Mallet_2025_France_USD": { min: 22400, max: 39200 },
+      "Morgan_Mallet_2025_Monaco_USD": { min: 39200, max: 67200 },
+      "Morgan_Mallet_2025_Belgium_USD": { min: 22400, max: 44800 },
+    }
   },
   "Valet": {
     category: "Formal Service",
@@ -2620,7 +3104,18 @@ export const BENCHMARKS = {
     retentionRisk: { firstYearAttrition: 0.35, topReasons: ['comp ceiling', 'scope creep', 'lack of creative autonomy'] },
     compensationStructure: { basePercent: 0.9, bonusPercent: 0.05, benefitsPercent: 0.05, signingBonusFrequency: 0.1, signingBonusRange: "2k-8k" },
     relocationWillingness: 0.38,
-    backgroundCheckTimeline: 2
+    backgroundCheckTimeline: 2,
+    sourceBenchmarks: {
+      "derivedFrom": "M&M Gardener/Groundskeeper — landscaping variant",
+      "Morgan_Mallet_2025_USA_USD": { min: 50000, max: 100000 },
+      "Morgan_Mallet_2025_UK_USD": { min: 33000, max: 66000 },
+      "Morgan_Mallet_2025_Switzerland_USD": { min: 60000, max: 96000 },
+      "Morgan_Mallet_2025_UAE_USD": { min: 16320, max: 48960 },
+      "Morgan_Mallet_2025_SaudiArabia_USD": { min: 10680, max: 37380 },
+      "Morgan_Mallet_2025_France_USD": { min: 22400, max: 44800 },
+      "Morgan_Mallet_2025_Monaco_USD": { min: 39200, max: 67200 },
+      "Morgan_Mallet_2025_Belgium_USD": { min: 28000, max: 50400 },
+    }
   },
   "Dock Master": {
     category: "Grounds & Outdoor",
@@ -2646,7 +3141,18 @@ export const BENCHMARKS = {
     retentionRisk: { firstYearAttrition: 0.35, topReasons: ['comp ceiling', 'scope creep', 'lack of creative autonomy'] },
     compensationStructure: { basePercent: 0.9, bonusPercent: 0.05, benefitsPercent: 0.05, signingBonusFrequency: 0.1, signingBonusRange: "2k-8k" },
     relocationWillingness: 0.38,
-    backgroundCheckTimeline: 2
+    backgroundCheckTimeline: 2,
+    sourceBenchmarks: {
+      "derivedFrom": "M&M Gardener/Groundskeeper — waterfront specialty variant",
+      "Morgan_Mallet_2025_USA_USD": { min: 50000, max: 100000 },
+      "Morgan_Mallet_2025_UK_USD": { min: 33000, max: 66000 },
+      "Morgan_Mallet_2025_Switzerland_USD": { min: 60000, max: 96000 },
+      "Morgan_Mallet_2025_UAE_USD": { min: 16320, max: 48960 },
+      "Morgan_Mallet_2025_SaudiArabia_USD": { min: 10680, max: 37380 },
+      "Morgan_Mallet_2025_France_USD": { min: 22400, max: 44800 },
+      "Morgan_Mallet_2025_Monaco_USD": { min: 39200, max: 67200 },
+      "Morgan_Mallet_2025_Belgium_USD": { min: 28000, max: 50400 },
+    }
   },
 
   // MARITIME / YACHT (Additional)
@@ -2754,7 +3260,18 @@ export const BENCHMARKS = {
     retentionRisk: { firstYearAttrition: 0.35, topReasons: ['comp ceiling', 'scope creep', 'lack of creative autonomy'] },
     compensationStructure: { basePercent: 0.9, bonusPercent: 0.05, benefitsPercent: 0.05, signingBonusFrequency: 0.1, signingBonusRange: "2k-8k" },
     relocationWillingness: 0.38,
-    backgroundCheckTimeline: 2
+    backgroundCheckTimeline: 2,
+    sourceBenchmarks: {
+      "derivedFrom": "M&M Technical/Smart Home — director level",
+      "Morgan_Mallet_2025_USA_USD": { min: 80000, max: 180000 },
+      "Morgan_Mallet_2025_UK_USD": { min: 59400, max: 132000 },
+      "Morgan_Mallet_2025_Switzerland_USD": { min: 96000, max: 180000 },
+      "Morgan_Mallet_2025_UAE_USD": { min: 48960, max: 130560 },
+      "Morgan_Mallet_2025_SaudiArabia_USD": { min: 37380, max: 106800 },
+      "Morgan_Mallet_2025_France_USD": { min: 39200, max: 78400 },
+      "Morgan_Mallet_2025_Monaco_USD": { min: 72800, max: 145600 },
+      "Morgan_Mallet_2025_Belgium_USD": { min: 50400, max: 100800 },
+    }
   },
   "IT Manager (Private)": {
     category: "Security",
@@ -2780,7 +3297,18 @@ export const BENCHMARKS = {
     retentionRisk: { firstYearAttrition: 0.35, topReasons: ['comp ceiling', 'scope creep', 'lack of creative autonomy'] },
     compensationStructure: { basePercent: 0.9, bonusPercent: 0.05, benefitsPercent: 0.05, signingBonusFrequency: 0.1, signingBonusRange: "2k-8k" },
     relocationWillingness: 0.38,
-    backgroundCheckTimeline: 2
+    backgroundCheckTimeline: 2,
+    sourceBenchmarks: {
+      "derivedFrom": "M&M Technical/Smart Home — IT management variant",
+      "Morgan_Mallet_2025_USA_USD": { min: 80000, max: 180000 },
+      "Morgan_Mallet_2025_UK_USD": { min: 59400, max: 132000 },
+      "Morgan_Mallet_2025_Switzerland_USD": { min: 96000, max: 180000 },
+      "Morgan_Mallet_2025_UAE_USD": { min: 48960, max: 130560 },
+      "Morgan_Mallet_2025_SaudiArabia_USD": { min: 37380, max: 106800 },
+      "Morgan_Mallet_2025_France_USD": { min: 39200, max: 78400 },
+      "Morgan_Mallet_2025_Monaco_USD": { min: 72800, max: 145600 },
+      "Morgan_Mallet_2025_Belgium_USD": { min: 50400, max: 100800 },
+    }
   },
 
   // DRIVERS & TRANSPORTATION (Additional)
@@ -2808,7 +3336,18 @@ export const BENCHMARKS = {
     retentionRisk: { firstYearAttrition: 0.15, topReasons: ['schedule demands', 'regulatory burden', 'airline offers'] },
     compensationStructure: { basePercent: 0.75, bonusPercent: 0.15, benefitsPercent: 0.1, signingBonusFrequency: 0.5, signingBonusRange: "20k-50k" },
     relocationWillingness: 0.48,
-    backgroundCheckTimeline: 4
+    backgroundCheckTimeline: 4,
+    sourceBenchmarks: {
+      "derivedFrom": "M&M Private Flight Attendant — pilot variant (premium)",
+      "Morgan_Mallet_2025_USA_USD": { min: 80000, max: 150000 },
+      "Morgan_Mallet_2025_UK_USD": { min: 59400, max: 118800 },
+      "Morgan_Mallet_2025_Switzerland_USD": { min: 84000, max: 156000 },
+      "Morgan_Mallet_2025_UAE_USD": { min: 48960, max: 97920 },
+      "Morgan_Mallet_2025_SaudiArabia_USD": { min: 37380, max: 80100 },
+      "Morgan_Mallet_2025_France_USD": { min: 39200, max: 72800 },
+      "Morgan_Mallet_2025_Monaco_USD": { min: 61600, max: 123200 },
+      "Morgan_Mallet_2025_Belgium_USD": { min: 44800, max: 89600 },
+    }
   },
 
   // HEALTHCARE & WELLNESS (Additional)
@@ -2836,7 +3375,18 @@ export const BENCHMARKS = {
     retentionRisk: { firstYearAttrition: 0.15, topReasons: ['schedule demands', 'regulatory burden', 'airline offers'] },
     compensationStructure: { basePercent: 0.75, bonusPercent: 0.15, benefitsPercent: 0.1, signingBonusFrequency: 0.5, signingBonusRange: "20k-50k" },
     relocationWillingness: 0.48,
-    backgroundCheckTimeline: 4
+    backgroundCheckTimeline: 4,
+    sourceBenchmarks: {
+      "derivedFrom": "M&M Personal Trainer — spa/wellness management variant",
+      "Morgan_Mallet_2025_USA_USD": { min: 60000, max: 150000 },
+      "Morgan_Mallet_2025_UK_USD": { min: 46200, max: 92400 },
+      "Morgan_Mallet_2025_Switzerland_USD": { min: 72000, max: 132000 },
+      "Morgan_Mallet_2025_UAE_USD": { min: 32640, max: 97920 },
+      "Morgan_Mallet_2025_SaudiArabia_USD": { min: 26700, max: 80100 },
+      "Morgan_Mallet_2025_France_USD": { min: 28000, max: 56000 },
+      "Morgan_Mallet_2025_Monaco_USD": { min: 50400, max: 112000 },
+      "Morgan_Mallet_2025_Belgium_USD": { min: 33600, max: 67200 },
+    }
   },
   "Companion": {
     category: "Healthcare & Wellness",
@@ -2936,7 +3486,18 @@ export const BENCHMARKS = {
     retentionRisk: { firstYearAttrition: 0.15, topReasons: ['schedule demands', 'regulatory burden', 'airline offers'] },
     compensationStructure: { basePercent: 0.75, bonusPercent: 0.15, benefitsPercent: 0.1, signingBonusFrequency: 0.5, signingBonusRange: "20k-50k" },
     relocationWillingness: 0.48,
-    backgroundCheckTimeline: 4
+    backgroundCheckTimeline: 4,
+    sourceBenchmarks: {
+      "derivedFrom": "M&M Art Curator/Collection Manager — general collections",
+      "Morgan_Mallet_2025_USA_USD": { min: 70000, max: 200000 },
+      "Morgan_Mallet_2025_UK_USD": { min: 59400, max: 145200 },
+      "Morgan_Mallet_2025_Switzerland_USD": { min: 96000, max: 192000 },
+      "Morgan_Mallet_2025_UAE_USD": { min: 48960, max: 130560 },
+      "Morgan_Mallet_2025_SaudiArabia_USD": { min: 37380, max: 106800 },
+      "Morgan_Mallet_2025_France_USD": { min: 39200, max: 89600 },
+      "Morgan_Mallet_2025_Monaco_USD": { min: 67200, max: 156800 },
+      "Morgan_Mallet_2025_Belgium_USD": { min: 50400, max: 112000 },
+    }
   },
   "Art Collection Manager": {
     category: "Hospitality & Collections",
@@ -2962,7 +3523,18 @@ export const BENCHMARKS = {
     retentionRisk: { firstYearAttrition: 0.15, topReasons: ['schedule demands', 'regulatory burden', 'airline offers'] },
     compensationStructure: { basePercent: 0.75, bonusPercent: 0.15, benefitsPercent: 0.1, signingBonusFrequency: 0.5, signingBonusRange: "20k-50k" },
     relocationWillingness: 0.48,
-    backgroundCheckTimeline: 4
+    backgroundCheckTimeline: 4,
+    sourceBenchmarks: {
+      "derivedFrom": "M&M Art Curator/Collection Manager",
+      "Morgan_Mallet_2025_USA_USD": { min: 70000, max: 200000 },
+      "Morgan_Mallet_2025_UK_USD": { min: 59400, max: 145200 },
+      "Morgan_Mallet_2025_Switzerland_USD": { min: 96000, max: 192000 },
+      "Morgan_Mallet_2025_UAE_USD": { min: 48960, max: 130560 },
+      "Morgan_Mallet_2025_SaudiArabia_USD": { min: 37380, max: 106800 },
+      "Morgan_Mallet_2025_France_USD": { min: 39200, max: 89600 },
+      "Morgan_Mallet_2025_Monaco_USD": { min: 67200, max: 156800 },
+      "Morgan_Mallet_2025_Belgium_USD": { min: 50400, max: 112000 },
+    }
   },
   "Gallery Manager (Private)": {
     category: "Hospitality & Collections",
@@ -2988,7 +3560,18 @@ export const BENCHMARKS = {
     retentionRisk: { firstYearAttrition: 0.15, topReasons: ['schedule demands', 'regulatory burden', 'airline offers'] },
     compensationStructure: { basePercent: 0.75, bonusPercent: 0.15, benefitsPercent: 0.1, signingBonusFrequency: 0.5, signingBonusRange: "20k-50k" },
     relocationWillingness: 0.48,
-    backgroundCheckTimeline: 4
+    backgroundCheckTimeline: 4,
+    sourceBenchmarks: {
+      "derivedFrom": "M&M Art Curator/Collection Manager — gallery variant",
+      "Morgan_Mallet_2025_USA_USD": { min: 70000, max: 200000 },
+      "Morgan_Mallet_2025_UK_USD": { min: 59400, max: 145200 },
+      "Morgan_Mallet_2025_Switzerland_USD": { min: 96000, max: 192000 },
+      "Morgan_Mallet_2025_UAE_USD": { min: 48960, max: 130560 },
+      "Morgan_Mallet_2025_SaudiArabia_USD": { min: 37380, max: 106800 },
+      "Morgan_Mallet_2025_France_USD": { min: 39200, max: 89600 },
+      "Morgan_Mallet_2025_Monaco_USD": { min: 67200, max: 156800 },
+      "Morgan_Mallet_2025_Belgium_USD": { min: 50400, max: 112000 },
+    }
   },
 
   // GROUNDS & MAINTENANCE (Additional)
@@ -3016,7 +3599,18 @@ export const BENCHMARKS = {
     retentionRisk: { firstYearAttrition: 0.15, topReasons: ['schedule demands', 'regulatory burden', 'airline offers'] },
     compensationStructure: { basePercent: 0.75, bonusPercent: 0.15, benefitsPercent: 0.1, signingBonusFrequency: 0.5, signingBonusRange: "20k-50k" },
     relocationWillingness: 0.48,
-    backgroundCheckTimeline: 4
+    backgroundCheckTimeline: 4,
+    sourceBenchmarks: {
+      "derivedFrom": "M&M Gardener/Groundskeeper — equestrian specialty variant",
+      "Morgan_Mallet_2025_USA_USD": { min: 50000, max: 100000 },
+      "Morgan_Mallet_2025_UK_USD": { min: 33000, max: 66000 },
+      "Morgan_Mallet_2025_Switzerland_USD": { min: 60000, max: 96000 },
+      "Morgan_Mallet_2025_UAE_USD": { min: 16320, max: 48960 },
+      "Morgan_Mallet_2025_SaudiArabia_USD": { min: 10680, max: 37380 },
+      "Morgan_Mallet_2025_France_USD": { min: 22400, max: 44800 },
+      "Morgan_Mallet_2025_Monaco_USD": { min: 39200, max: 67200 },
+      "Morgan_Mallet_2025_Belgium_USD": { min: 28000, max: 50400 },
+    }
   },
 
   // ==========================================
