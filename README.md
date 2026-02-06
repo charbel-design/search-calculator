@@ -1,4 +1,4 @@
-# Search Complexity Calculator - Deployment Guide
+# Search Intelligence Engine - Deployment Guide
 
 ## Quick Deploy to Vercel (10 minutes)
 
