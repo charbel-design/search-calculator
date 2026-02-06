@@ -6,6 +6,7 @@ import {
 } from 'lucide-react';
 import { ShareModal, EmailModal } from './Modals';
 import { getComplexityColor } from './constants';
+import { CustomSelect } from './CustomSelect';
 import { SALARY_DATA_META } from '../salaryData';
 
 function ScoreCounter({ target, duration = 1000 }) {
@@ -154,21 +155,15 @@ export function ResultsView({
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
                 <div>
                   <label className="block text-xs font-medium text-slate-600 mb-1">Timeline</label>
-                  <select value={whatIfTimeline || formData.timeline} onChange={(e) => setWhatIfTimeline(e.target.value)}
-                    className="w-full px-3 py-2 border border-brand-100 rounded-lg text-sm bg-white">
-                    {timelineOptions.map(t => (
-                      <option key={t.value} value={t.value}>{t.label}</option>
-                    ))}
-                  </select>
+                  <CustomSelect name="whatIfTimeline" value={whatIfTimeline || formData.timeline}
+                    onChange={(e) => setWhatIfTimeline(e.target.value)}
+                    options={timelineOptions} placeholder="Select timeline" />
                 </div>
                 <div>
                   <label className="block text-xs font-medium text-slate-600 mb-1">Budget</label>
-                  <select value={whatIfBudget || formData.budgetRange} onChange={(e) => setWhatIfBudget(e.target.value)}
-                    className="w-full px-3 py-2 border border-brand-100 rounded-lg text-sm bg-white">
-                    {budgetRanges.map(b => (
-                      <option key={b.value} value={b.value}>{b.label}</option>
-                    ))}
-                  </select>
+                  <CustomSelect name="whatIfBudget" value={whatIfBudget || formData.budgetRange}
+                    onChange={(e) => setWhatIfBudget(e.target.value)}
+                    options={budgetRanges} placeholder="Select budget range" />
                 </div>
               </div>
 
