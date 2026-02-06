@@ -14,7 +14,7 @@ const ALLOWED_ORIGINS = [
   'https://search-calculator.vercel.app',
   'https://talent-gurus.com',
   'https://www.talent-gurus.com',
-  'https://search-complexity-calculator.vercel.app',
+  'https://search-intelligence-engine.vercel.app',
   process.env.ALLOWED_ORIGIN // Custom domain via env var
 ].filter(Boolean);
 

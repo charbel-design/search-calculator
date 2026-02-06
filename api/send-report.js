@@ -5,7 +5,7 @@ const ALLOWED_ORIGINS = [
   'https://search-calculator.vercel.app',
   'https://talent-gurus.com',
   'https://www.talent-gurus.com',
-  'https://search-complexity-calculator.vercel.app',
+  'https://search-intelligence-engine.vercel.app',
   process.env.ALLOWED_ORIGIN
 ].filter(Boolean);
 
@@ -28,7 +28,7 @@ function generateEmailHTML(results) {
     <!-- Header -->
     <div style="background-color:#2814ff;border-radius:12px 12px 0 0;padding:24px;text-align:center;">
       <h1 style="color:#ffffff;margin:0;font-size:24px;font-weight:bold;">TALENT GURUS</h1>
-      <p style="color:#d2d4ff;margin:8px 0 0;font-size:14px;">Search Complexity Analysis</p>
+      <p style="color:#d2d4ff;margin:8px 0 0;font-size:14px;">Search Intelligence Report</p>
     </div>
 
     <!-- Score Section -->

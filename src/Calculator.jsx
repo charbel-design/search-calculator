@@ -59,7 +59,7 @@ function Tooltip({ text, children }) {
   );
 }
 
-const SearchComplexityCalculator = () => {
+const SearchIntelligenceEngine = () => {
   const [step, setStep] = useState(1);
   const [formData, setFormData] = useState({
     positionType: '',
@@ -1009,7 +1009,7 @@ Return this exact JSON structure:
           doc.text('TALENT GURUS', pageWidth / 2, 10, { align: 'center' });
           doc.setFontSize(10);
           doc.setFont('helvetica', 'normal');
-          doc.text('Search Complexity Analysis', pageWidth / 2, 18, { align: 'center' });
+          doc.text('Search Intelligence Report', pageWidth / 2, 18, { align: 'center' });
         }
 
         const pageCanvas = document.createElement('canvas');
@@ -1068,7 +1068,7 @@ Return this exact JSON structure:
       // Fallback to text export
       try {
         const content = `
-TALENT GURUS - Search Complexity Analysis
+TALENT GURUS - Search Intelligence Report
 
 Position: ${results.displayTitle}
 Location: ${results.formData.location}
@@ -1165,8 +1165,8 @@ This analysis provides general market guidance. Every search is unique.
               <span className="text-white text-2xl md:text-3xl font-bold tracking-wide" style={{ fontFamily: "'Playfair Display', serif" }}>talent gurus</span>
             </div>
           </div>
-          <h2 className="text-2xl md:text-3xl font-bold mb-3" style={{ color: '#2814ff', fontFamily: "'Playfair Display', serif" }}>Search Complexity Calculator</h2>
-          <p className="text-base text-slate-600 max-w-2xl mx-auto">Understanding what you're up against matters. Get a clear picture in 90 seconds.</p>
+          <h2 className="text-2xl md:text-3xl font-bold mb-3" style={{ color: '#2814ff', fontFamily: "'Playfair Display', serif" }}>Search Intelligence Engine</h2>
+          <p className="text-base text-slate-600 max-w-2xl mx-auto">Salary benchmarks, sourcing strategy, and market intelligence — in 90 seconds.</p>
 
           {/* NEW: Role Comparison Toggle */}
           {!results && (
@@ -1315,7 +1315,7 @@ This analysis provides general market guidance. Every search is unique.
             <div className="flex gap-2 mb-2">
               <Info className="w-5 h-5 flex-shrink-0 mt-0.5" style={{ color: '#2814ff' }} />
               <div>
-                <p className="mb-2"><strong>Disclaimer:</strong> This calculator provides general market guidance based on aggregated industry data and should not be construed as a guarantee of search outcomes, candidate availability, or compensation accuracy. Every search is unique, and actual results may vary based on market conditions, candidate preferences, and specific role requirements.</p>
+                <p className="mb-2"><strong>Disclaimer:</strong> This tool provides market intelligence based on aggregated industry data and should not be construed as a guarantee of search outcomes, candidate availability, or compensation accuracy. Every search is unique, and actual results may vary based on market conditions, candidate preferences, and specific role requirements.</p>
                 <p className="text-xs text-slate-500"><strong>AI Disclosure:</strong> Portions of this analysis are generated using AI language models. While we strive for accuracy, AI-generated content may contain errors or inaccuracies. This tool is for informational purposes only and does not constitute professional staffing advice. For personalized guidance, please consult directly with Talent Gurus.</p>
               </div>
             </div>
@@ -2300,4 +2300,4 @@ This analysis provides general market guidance. Every search is unique.
   );
 };
 
-export default SearchComplexityCalculator;
+export default SearchIntelligenceEngine;
