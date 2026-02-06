@@ -1574,7 +1574,6 @@ export const BENCHMARKS = {
       "Morgan_Mallet_2025_Monaco_USD": { min: 44800, max: 72800 },
       "Morgan_Mallet_2025_Belgium_USD": { min: 50400, max: 72800 }
     }
-    }
   },
   "Residential Security Officer": {
     category: "Security",
@@ -2943,7 +2942,6 @@ export const BENCHMARKS = {
       "Morgan_Mallet_2025_Monaco_USD": { min: 50400, max: 61600 },
       "Morgan_Mallet_2025_Belgium_USD": { min: 50400, max: 67200 }
     }
-    }
   },
   "Florist (Private)": {
     category: "Formal Service",
@@ -3745,7 +3743,6 @@ export const BENCHMARKS = {
     backgroundCheckTimeline: 5,    sourceBenchmarks: {
       "KPMG_Agreus_2025_UK_GBP": { bands: ["£158,001–£198,000", "£198,001–£264,000"] }
     }
-    }
   },
   "Director of Tax": {
     category: "Family Office - Operations & Finance",
@@ -3904,7 +3901,6 @@ export const BENCHMARKS = {
     backgroundCheckTimeline: 5,    sourceBenchmarks: {
       "KPMG_Agreus_2025_UK_GBP": { bands: ["£60,001–£72,000", "£85,001–£99,000", "£99,001–£132,000", "£132,001–£158,000", "£198,001–£264,000", "£264,001–£330,000", "£330,001–£396,000"] }
     }
-    }
   },
   "Senior Investment Analyst": {
     category: "Family Office - Investment",
@@ -3959,7 +3955,6 @@ export const BENCHMARKS = {
     backgroundCheckTimeline: 3,    sourceBenchmarks: {
       "KPMG_Agreus_2025_UK_GBP": { bands: ["£72,001–£85,000", "£85,001–£99,000", "£99,001–£132,000"] }
     }
-    }
   },
   "Controller": {
     category: "Family Office - Operations & Finance",
@@ -3988,7 +3983,6 @@ export const BENCHMARKS = {
     backgroundCheckTimeline: 3,    sourceBenchmarks: {
       "KPMG_Agreus_2025_UK_GBP": { bands: ["£85,001–£99,000", "£99,001–£132,000", "£132,001–£158,000", "£158,001–£198,000", "£198,001–£264,000"] }
     }
-    }
   },
   "Operations Manager": {
     category: "Family Office - Operations & Finance",
@@ -4016,7 +4010,6 @@ export const BENCHMARKS = {
     relocationWillingness: 0.42,
     backgroundCheckTimeline: 3,    sourceBenchmarks: {
       "KPMG_Agreus_2025_UK_GBP": { bands: ["£85,001–£99,000", "£99,001–£132,000", "£132,001–£158,000"] }
-    }
     }
   },
   "Risk & Compliance Manager": {
