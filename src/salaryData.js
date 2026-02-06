@@ -17,7 +17,7 @@ export const SALARY_DATA_META = {
   version: "2.0",
   sources: [
     { name: "Bureau of Labor Statistics (BLS)", type: "Government", coverage: "National compensation benchmarks" },
-    { name: "Talent Gurus Placement Data", type: "Proprietary", coverage: "5,000+ completed searches across UHNW households and family offices" },
+    { name: "Talent Gurus Placement Data", type: "Proprietary", coverage: "Completed searches across UHNW households and family offices" },
     { name: "Indeed, ZipRecruiter, Salary.com, PayScale", type: "Market Data", coverage: "Cross-platform salary aggregation (2024-2026)" },
     { name: "Flying Fish & Quay Group Maritime Reports", type: "Industry", coverage: "Superyacht crew and captain salary benchmarks" },
     { name: "Lighthouse Careers & Morgan & Mallet", type: "Industry", coverage: "UHNW household staffing benchmarks" },

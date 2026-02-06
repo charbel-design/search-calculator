@@ -517,7 +517,7 @@ function generateEmailHTML(results) {
     <div style="background-color:#f8fafc;padding:20px 24px;border-radius:8px;margin:0 0 16px;">
       <p style="margin:0 0 8px;font-size:10px;font-weight:bold;color:#64748b;text-transform:uppercase;letter-spacing:0.5px;">Data Sources</p>
       <p style="margin:0;font-size:10px;color:#94a3b8;line-height:1.6;">
-        Bureau of Labor Statistics (BLS) &#8226; Talent Gurus Placement Data (5,000+ searches) &#8226; Indeed, ZipRecruiter, Salary.com, PayScale &#8226; Flying Fish &amp; Quay Group Maritime Reports &#8226; Lighthouse Careers &amp; Morgan &amp; Mallet &#8226; KPMG / Egon Zehnder Family Office Reports &#8226; Regional Cost-of-Living Indices
+        Bureau of Labor Statistics (BLS) &#8226; Talent Gurus Placement Data &#8226; Indeed, ZipRecruiter, Salary.com, PayScale &#8226; Flying Fish &amp; Quay Group Maritime Reports &#8226; Lighthouse Careers &amp; Morgan &amp; Mallet &#8226; KPMG / Egon Zehnder Family Office Reports &#8226; Regional Cost-of-Living Indices
       </p>
       <p style="margin:8px 0 0;font-size:10px;color:#94a3b8;">Complexity scoring weighs 10 factors: timeline, location, budget, languages, travel, certifications, discretion, seasonality, role scarcity, and market demand.</p>
     </div>
