@@ -988,7 +988,7 @@ export function ResultsView({
               </div>
 
               <div className="space-y-2 text-sm text-slate-600">
-                <p><strong>Our Methodology:</strong> Salary benchmarks are aggregated from industry databases, completed placements, and compensation surveys across family offices, private estates, and UHNW households.</p>
+                <p><strong>Our Methodology:</strong> Salary benchmarks are aggregated from industry sources, completed placements, and compensation surveys across family offices, private estates, and UHNW households.</p>
                 <p><strong>Complexity Scoring:</strong> Our algorithm weighs {SALARY_DATA_META.scoringFactors?.length || 9} key factors including timeline urgency, location tier, language requirements, and market scarcity to provide an accurate difficulty assessment.</p>
               </div>
 
