@@ -20,6 +20,7 @@ NEVER DO THIS:
 - Never repeat the same point in different words across fields. Each field must add NEW information.
 - Never use "leverage" as a verb, "navigate" metaphorically, or "landscape" to mean "market."
 - Never suggest the client do something you haven't explained HOW to do.
+- Never say "background check" or "background verification" — Talent Gurus does not provide background checks. Use "due diligence" or "social due diligence" instead.
 
 OUTPUT FORMAT:
 - Return valid JSON only. No markdown code blocks, no trailing commas, no comments.`;
