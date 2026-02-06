@@ -53,7 +53,7 @@ export function useSearchEngine() {
   });
 
   const [loading, setLoading] = useState(false);
-  const [loadingStep, setLoadingStep] = useState('');
+  const [loadingStep, setLoadingStep] = useState(0);
   const [results, setResults] = useState(null);
   const [error, setError] = useState(null);
   const [warnings, setWarnings] = useState([]);
@@ -453,7 +453,7 @@ export function useSearchEngine() {
   // AI Analysis
   const calculateComplexity = async () => {
     setLoading(true);
-    setLoadingStep('Calculating complexity factors...');
+    setLoadingStep(1);
     setError(null);
 
     const det = calculateDeterministicScore();
@@ -471,7 +471,7 @@ export function useSearchEngine() {
     } : null;
 
     try {
-      setLoadingStep('Analyzing market conditions...');
+      setLoadingStep(2);
 
       const prompt = `Analyze this search and return detailed, actionable JSON.
 
@@ -579,7 +579,7 @@ Return this exact JSON structure:
   }
 }`;
 
-      setLoadingStep('Generating personalized insights...');
+      setLoadingStep(3);
 
       const response = await fetchWithRetry("/api/analyze", {
         method: "POST",
@@ -592,7 +592,7 @@ Return this exact JSON structure:
         throw new Error(errorData.error || `Analysis failed (${response.status})`);
       }
 
-      setLoadingStep('Finalizing your analysis...');
+      setLoadingStep(4);
 
       const data = await response.json();
       let text = data.content?.[0]?.text || '';
@@ -661,7 +661,7 @@ Return this exact JSON structure:
     }
 
     setLoading(false);
-    setLoadingStep('');
+    setLoadingStep(0);
   };
 
   // Shared link analysis

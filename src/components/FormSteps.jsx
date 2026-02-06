@@ -18,6 +18,23 @@ export function FormSteps({
 }) {
   const [showAllCerts, setShowAllCerts] = React.useState(false);
   const [showAllLangs, setShowAllLangs] = React.useState(false);
+
+  // Live elapsed timer for loading overlay
+  const [elapsed, setElapsed] = React.useState(0);
+  React.useEffect(() => {
+    if (!loading) { setElapsed(0); return; }
+    const start = Date.now();
+    const timer = setInterval(() => setElapsed(Math.floor((Date.now() - start) / 1000)), 1000);
+    return () => clearInterval(timer);
+  }, [loading]);
+
+  const loadingLabels = [
+    'Calculating complexity factors',
+    'Analyzing market conditions',
+    'Generating personalized insights',
+    'Finalizing your analysis'
+  ];
+
   return (
     <>
       {/* Progress */}
@@ -48,29 +65,29 @@ export function FormSteps({
             <div className="text-center animate-fadeInUp max-w-sm">
               <div className="w-16 h-16 rounded-full border-4 border-slate-200 border-t-brand-500 animate-spin mx-auto mb-6"></div>
               <div className="space-y-3">
-                {[
-                  '1. Calculating complexity factors...',
-                  '2. Analyzing market conditions...',
-                  '3. Generating personalized insights...',
-                  '4. Finalizing your analysis...'
-                ].map((step, i) => (
-                  <div key={i} className="flex items-center gap-2">
-                    <div className={`w-5 h-5 rounded-full flex items-center justify-center text-xs font-bold transition-all ${
-                      loadingStep && i < loadingStep ? 'bg-brand-500 text-white' :
-                      loadingStep && i === loadingStep - 1 ? 'bg-brand-500 text-white ring-2 ring-brand-200' :
-                      'bg-slate-200 text-slate-400'
-                    }`}>
-                      {loadingStep && i < loadingStep ? '✓' : i + 1}
+                {loadingLabels.map((label, i) => {
+                  const stepNum = i + 1;
+                  const done = loadingStep > stepNum;
+                  const active = loadingStep === stepNum;
+                  return (
+                    <div key={i} className="flex items-center gap-2">
+                      <div className={`w-5 h-5 rounded-full flex items-center justify-center text-xs font-bold transition-all duration-300 ${
+                        done ? 'bg-brand-500 text-white' :
+                        active ? 'bg-brand-500 text-white ring-2 ring-brand-200' :
+                        'bg-slate-200 text-slate-400'
+                      }`}>
+                        {done ? '✓' : stepNum}
+                      </div>
+                      <span className={`text-sm transition-colors duration-300 ${
+                        done ? 'text-slate-400 line-through' :
+                        active ? 'font-semibold text-brand-500' :
+                        'text-slate-400'
+                      }`}>{label}{active ? '...' : ''}</span>
                     </div>
-                    <span className={`text-sm transition-colors ${
-                      loadingStep && i < loadingStep ? 'text-slate-600 line-through' :
-                      loadingStep && i === loadingStep - 1 ? 'font-semibold text-brand-500' :
-                      'text-slate-500'
-                    }`}>{step}</span>
-                  </div>
-                ))}
+                  );
+                })}
               </div>
-              <p className="text-sm text-slate-500 mt-4">This takes about 10 seconds</p>
+              <p className="text-sm text-slate-400 mt-5 tabular-nums">{elapsed}s elapsed</p>
             </div>
           </div>
         )}
