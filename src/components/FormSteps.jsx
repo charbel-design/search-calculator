@@ -1,6 +1,6 @@
 import React from 'react';
 import {
-  MapPin, Clock, DollarSign, Target, AlertCircle, CheckCircle, ArrowRight, Info, Zap, ChevronDown, Mail, Phone
+  MapPin, Clock, DollarSign, Target, AlertCircle, CheckCircle, ArrowRight, Info, Zap, ChevronDown
 } from 'lucide-react';
 import { BENCHMARKS } from '../salaryData';
 
@@ -391,47 +391,6 @@ export function FormSteps({
               </div>
             )}
 
-            <div className="bg-gradient-to-br from-brand-50 to-b-pink-50 rounded-xl p-5 border border-brand-100">
-              <div className="flex items-start gap-3 mb-4">
-                <div className="w-10 h-10 rounded-full bg-brand-500 flex items-center justify-center flex-shrink-0">
-                  <Mail className="w-5 h-5 text-white" />
-                </div>
-                <div>
-                  <h4 className="font-semibold text-slate-900">Want this in your inbox?</h4>
-                  <p className="text-sm text-slate-600 mt-1">We'll send you a clean report you can share with your team or keep for reference.</p>
-                </div>
-              </div>
-              <div className="space-y-3">
-                <input type="email" name="email" value={formData.email} onChange={handleInputChange}
-                  className="w-full px-4 py-3 border-2 border-brand-100 rounded-xl focus:border-brand-500 focus:ring-2 focus:ring-brand-100 bg-white transition-all duration-200 focus:shadow-md"
-                  placeholder="your@email.com" />
-                <p className="text-xs text-slate-500 flex items-center gap-1">
-                  <Info className="w-3 h-3" />
-                  Your information stays private. We'll only use it to send your analysis and relevant insights.
-                </p>
-              </div>
-            </div>
-
-            <div className="bg-gradient-to-r from-b-ocre-50 to-b-ocre-50 border-2 border-b-ocre-200 rounded-xl p-5">
-              <div className="flex items-start gap-3">
-                <div className="w-10 h-10 rounded-full bg-b-ocre-300 flex items-center justify-center flex-shrink-0">
-                  <Phone className="w-5 h-5 text-white" />
-                </div>
-                <div className="flex-1">
-                  <label className="flex items-center gap-2 cursor-pointer">
-                    <input type="checkbox" name="priorityCallback" checked={formData.priorityCallback} onChange={handleInputChange}
-                      className="w-5 h-5 rounded border-b-ocre-300 text-b-ocre-500 focus:ring-b-ocre-300" />
-                    <span className="font-semibold text-b-ocre-600">Let's talk (no strings attached)</span>
-                  </label>
-                  <p className="text-sm text-b-ocre-500 mt-2">Chat with one of us within 24 hours. We'll give you honest, tailored advice for your search.</p>
-                  {formData.priorityCallback && (
-                    <input type="tel" name="phone" value={formData.phone} onChange={handleInputChange}
-                      className="mt-3 w-full px-4 py-3 border-2 border-b-ocre-200 rounded-xl bg-white focus:border-b-ocre-300 focus:ring-2 focus:ring-b-ocre-200 transition-all duration-200 focus:shadow-md"
-                      placeholder="Best phone number to reach you" />
-                  )}
-                </div>
-              </div>
-            </div>
           </div>
         )}
 

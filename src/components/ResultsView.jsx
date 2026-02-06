@@ -109,37 +109,46 @@ export function ResultsView({
           )}
 
           {/* Quick Metrics Strip - Unified Single Row */}
-          <div className="grid grid-cols-3 gap-3 mb-6 animate-fadeInUp delay-300">
-            <div className="bg-slate-50 rounded-lg p-3 border border-slate-100">
-              <div className="flex items-center gap-2 mb-1">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-3 mb-6 animate-fadeInUp delay-300">
+            <div className="bg-slate-50 rounded-lg p-4 border border-slate-100">
+              <div className="flex items-center gap-2 mb-2">
                 <DollarSign className="w-4 h-4" style={{ color: '#2814ff' }} />
                 <p className="text-xs text-slate-600 font-medium">Salary</p>
               </div>
-              <p className="text-sm font-semibold text-slate-800 line-clamp-2">{results.salaryRangeGuidance}</p>
+              <p className="text-sm font-semibold text-slate-800">{results.salaryRangeGuidance}</p>
             </div>
-            <div className="bg-slate-50 rounded-lg p-3 border border-slate-100">
-              <div className="flex items-center gap-2 mb-1">
+            <div className="bg-slate-50 rounded-lg p-4 border border-slate-100">
+              <div className="flex items-center gap-2 mb-2">
                 <Clock className="w-4 h-4" style={{ color: '#2814ff' }} />
                 <p className="text-xs text-slate-600 font-medium">Timeline</p>
               </div>
-              <p className="text-sm font-semibold text-slate-800 line-clamp-2">{results.estimatedTimeline}</p>
+              <p className="text-sm font-semibold text-slate-800">{results.estimatedTimeline}</p>
             </div>
-            <div className="bg-slate-50 rounded-lg p-3 border border-slate-100">
-              <div className="flex items-center gap-2 mb-1">
+            <div className="bg-slate-50 rounded-lg p-4 border border-slate-100">
+              <div className="flex items-center gap-2 mb-2">
                 <Users className="w-4 h-4" style={{ color: '#2814ff' }} />
                 <p className="text-xs text-slate-600 font-medium">Availability</p>
               </div>
-              <p className="text-sm font-semibold text-slate-800 line-clamp-2">{results.candidateAvailability}</p>
+              <p className="text-sm font-semibold text-slate-800">{results.candidateAvailability}</p>
             </div>
           </div>
 
-          {/* What-If Scenarios - PROMOTED Always Visible */}
+          {/* What-If Scenarios - Collapsible */}
           <div className="mb-6 animate-fadeInUp delay-400">
-            <div className="bg-gradient-to-br from-brand-50 to-b-pink-50 rounded-xl p-5 border border-brand-100">
-              <div className="flex items-center gap-2 mb-4">
-                <SlidersHorizontal className="w-5 h-5" style={{ color: '#2814ff' }} />
-                <h4 className="font-semibold text-sm" style={{ color: '#2814ff' }}>Play with the Numbers</h4>
-              </div>
+            <div className="bg-gradient-to-br from-brand-50 to-b-pink-50 rounded-xl border border-brand-100 overflow-hidden">
+              <button
+                onClick={() => setWhatIfMode(!whatIfMode)}
+                className="w-full p-5 flex items-center justify-between hover:bg-brand-50/50 transition-colors"
+              >
+                <div className="flex items-center gap-2">
+                  <SlidersHorizontal className="w-5 h-5" style={{ color: '#2814ff' }} />
+                  <h4 className="font-semibold text-sm" style={{ color: '#2814ff' }}>Play with the Numbers</h4>
+                </div>
+                <ChevronDown className={`w-5 h-5 transition-transform ${whatIfMode ? 'rotate-180' : ''}`} style={{ color: '#2814ff' }} />
+              </button>
+
+              {whatIfMode && (
+              <div className="px-5 pb-5">
               <p className="text-sm text-slate-600 mb-4">Curious how a different timeline or budget changes things? Try it out.</p>
 
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
@@ -189,6 +198,8 @@ export function ResultsView({
                     )}
                   </div>
                 </div>
+              )}
+              </div>
               )}
             </div>
           </div>
@@ -429,9 +440,8 @@ export function ResultsView({
 
                       {/* Row 3: Compact Stats */}
                       {(results.benchmark.salaryGrowthRate !== undefined ||
-                        results.benchmark.typicalExperience !== undefined ||
-                        results.benchmark.backgroundCheckTimeline !== undefined) && (
-                        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                        results.benchmark.typicalExperience !== undefined) && (
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                           {results.benchmark.salaryGrowthRate !== undefined && (
                             <div className="bg-slate-50 rounded-xl p-4 border border-slate-100 text-center">
                               <p className="text-xs text-slate-500 mb-1 uppercase tracking-widest font-medium">Salary Growth YoY</p>
@@ -449,15 +459,6 @@ export function ResultsView({
                               {results.benchmark.typicalExperience.min && (
                                 <p className="text-xs text-slate-500 mt-1">{results.benchmark.typicalExperience.min}+ years min</p>
                               )}
-                            </div>
-                          )}
-                          {results.benchmark.backgroundCheckTimeline !== undefined && (
-                            <div className="bg-slate-50 rounded-xl p-4 border border-slate-100 text-center">
-                              <p className="text-xs text-slate-500 mb-1 uppercase tracking-widest font-medium">Background Check</p>
-                              <p className="text-3xl font-bold" style={{ color: '#2814ff' }}>
-                                {results.benchmark.backgroundCheckTimeline}w
-                              </p>
-                              <p className="text-xs text-slate-500 mt-1">timeline</p>
                             </div>
                           )}
                         </div>
@@ -683,13 +684,16 @@ export function ResultsView({
                           <div className="mb-4">
                             <span className={`inline-block px-4 py-2 rounded-full text-sm font-semibold ${
                               results.decisionIntelligence.probabilityOfSuccess.initialLabel === 'High'
-                                ? 'bg-slate-200 text-slate-700'
+                                ? 'bg-b-opal-50 text-b-opal-600'
                                 : results.decisionIntelligence.probabilityOfSuccess.initialLabel === 'Moderate'
-                                ? 'bg-slate-200 text-slate-700'
-                                : 'bg-slate-200 text-slate-700'
+                                ? 'bg-b-ocre-50 text-b-ocre-500'
+                                : 'bg-b-pink-50 text-b-pink-500'
                             }`}>
                               {results.decisionIntelligence.probabilityOfSuccess.initialLabel}
                             </span>
+                            {results.decisionIntelligence.probabilityOfSuccess.initialConfidence && (
+                              <p className="text-sm text-slate-600 mt-2">{results.decisionIntelligence.probabilityOfSuccess.initialConfidence}</p>
+                            )}
                           </div>
                           <div className="border-t border-slate-100 pt-3 flex items-center gap-2">
                             <ArrowRight className="w-3.5 h-3.5" style={{ color: '#2814ff' }} />
