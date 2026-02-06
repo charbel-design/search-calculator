@@ -28,7 +28,7 @@ const REGIONAL_ADJUSTMENTS = REGIONAL_MULTIPLIERS;
 
 const LOCATION_SUGGESTIONS = Object.entries(REGIONAL_MULTIPLIERS)
   .filter(([key]) => !['National_US', 'Midwest_US', 'South_US'].includes(key))
-  .map(([key, data]) => data.label || key);
+  .map(([key, data]) => data.display || key);
 
 function getSeasonalityFactor() {
   const month = new Date().getMonth();
@@ -100,6 +100,9 @@ const SearchIntelligenceEngine = () => {
   const [warnings, setWarnings] = useState([]);
   const [showLocationSuggestions, setShowLocationSuggestions] = useState(false);
   const [highlightedLocationIndex, setHighlightedLocationIndex] = useState(-1);
+  const [positionSearch, setPositionSearch] = useState('');
+  const [showPositionSuggestions, setShowPositionSuggestions] = useState(false);
+  const [highlightedPositionIndex, setHighlightedPositionIndex] = useState(-1);
   const [compareMode, setCompareMode] = useState(false);
   const [comparisonResults, setComparisonResults] = useState(null);
   const [showLanguages, setShowLanguages] = useState(false);
@@ -174,6 +177,12 @@ const SearchIntelligenceEngine = () => {
 
   const positionsByCategory = useMemo(() => getPositionsByCategory(), []);
   const commonRoles = useMemo(() => getAllPositionNames(), []);
+
+  const filteredPositions = useMemo(() => {
+    if (!positionSearch.trim()) return commonRoles;
+    const q = positionSearch.toLowerCase();
+    return commonRoles.filter(role => role.toLowerCase().includes(q));
+  }, [positionSearch, commonRoles]);
 
   const isCorporateRole = useMemo(() => {
     if (!formData.positionType) return false;
@@ -401,22 +410,28 @@ const SearchIntelligenceEngine = () => {
 
     if (benchmark && budgetOption?.midpoint) {
       const multiplier = regionalData?.multiplier || 1;
-      const adjP25 = benchmark.p25 * multiplier;
       const adjP50 = benchmark.p50 * multiplier;
       const adjP75 = benchmark.p75 * multiplier;
+      const ratio = budgetOption.midpoint / adjP50;
 
-      if (budgetOption.midpoint >= adjP75) {
-        budgetPoints = 4;
+      if (ratio >= 1.5) {
+        budgetPoints = 0;
+        budgetRationale = "Well above 75th percentile - premium offer";
+      } else if (ratio >= 1.2) {
+        budgetPoints = 5;
         budgetRationale = "Above 75th percentile - highly competitive";
-      } else if (budgetOption.midpoint >= adjP50) {
-        budgetPoints = 10;
+      } else if (ratio >= 1.0) {
+        budgetPoints = 12;
         budgetRationale = "At or above median - competitive";
-      } else if (budgetOption.midpoint >= adjP25) {
-        budgetPoints = 18;
-        budgetRationale = "Below median (25th-50th percentile)";
+      } else if (ratio >= 0.85) {
+        budgetPoints = 20;
+        budgetRationale = "Slightly below median - may limit pool";
+      } else if (ratio >= 0.7) {
+        budgetPoints = 28;
+        budgetRationale = "Below market - significant constraint";
       } else {
-        budgetPoints = 25;
-        budgetRationale = "Below 25th percentile - limits candidate pool";
+        budgetPoints = 35;
+        budgetRationale = "Well below market - major red flag";
         redFlags.push("Budget below market");
       }
       assumptions.push(`Regional adjustment: ${regionalData?.label || 'Standard'} (${multiplier}x)`);
@@ -937,6 +952,7 @@ Return this exact JSON structure:
   const resetForm = () => {
     setResults(null);
     setStep(1);
+    setPositionSearch('');
     setCompareMode(false);
     setComparisonResults(null);
     setWarnings([]);
@@ -1159,26 +1175,46 @@ Return this exact JSON structure:
 
                   <div>
                     <label className="block text-sm font-medium text-slate-700 mb-2">Position Type *</label>
-                    <select name="positionType" value={formData.positionType} onChange={handleInputChange}
-                      className="w-full px-4 py-3 border-2 border-slate-200 rounded-xl focus:border-brand-500 focus:ring-2 focus:ring-brand-100">
-                      <option value="">Select a position ({commonRoles.length} roles available)</option>
-                      <option disabled className="font-bold bg-slate-100">── FAMILY OFFICE CORPORATE ──</option>
-                      {CATEGORY_GROUPS["Family Office - Corporate"].map(category => (
-                        <optgroup key={category} label={category.replace('Family Office - ', '')}>
-                          {positionsByCategory[category]?.map(pos => (
-                            <option key={pos.name} value={pos.name}>{pos.name}</option>
+                    <div className="relative">
+                      <input type="text"
+                        value={formData.positionType ? formData.positionType : positionSearch}
+                        onChange={(e) => { setPositionSearch(e.target.value); setFormData({ ...formData, positionType: '' }); setShowPositionSuggestions(true); setHighlightedPositionIndex(-1); }}
+                        onFocus={() => { setShowPositionSuggestions(true); if (formData.positionType) { setPositionSearch(''); setFormData({ ...formData, positionType: '' }); } }}
+                        onBlur={() => setTimeout(() => { setShowPositionSuggestions(false); setHighlightedPositionIndex(-1); }, 200)}
+                        onKeyDown={(e) => {
+                          if (e.key === 'ArrowDown') { e.preventDefault(); setHighlightedPositionIndex(prev => prev < filteredPositions.length - 1 ? prev + 1 : prev); }
+                          else if (e.key === 'ArrowUp') { e.preventDefault(); setHighlightedPositionIndex(prev => prev > 0 ? prev - 1 : prev); }
+                          else if (e.key === 'Enter' && highlightedPositionIndex >= 0) { e.preventDefault(); const selected = filteredPositions[highlightedPositionIndex]; setFormData({ ...formData, positionType: selected }); setPositionSearch(''); setShowPositionSuggestions(false); setHighlightedPositionIndex(-1); }
+                          else if (e.key === 'Escape') { setShowPositionSuggestions(false); setHighlightedPositionIndex(-1); }
+                        }}
+                        className="w-full px-4 py-3 border-2 border-slate-200 rounded-xl focus:border-brand-500 focus:ring-2 focus:ring-brand-100"
+                        placeholder={`Search ${commonRoles.length} roles... (e.g., Estate Manager, Private Chef)`}
+                      />
+                      {formData.positionType && (
+                        <button type="button" onClick={() => { setFormData({ ...formData, positionType: '' }); setPositionSearch(''); }}
+                          className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600">
+                          <span className="text-lg">×</span>
+                        </button>
+                      )}
+                      {showPositionSuggestions && filteredPositions.length > 0 && (
+                        <div className="absolute z-20 w-full mt-1 bg-white border border-slate-200 rounded-xl shadow-lg max-h-64 overflow-y-auto">
+                          {filteredPositions.map((role, idx) => (
+                            <button key={role} type="button"
+                              onClick={() => { setFormData({ ...formData, positionType: role }); setPositionSearch(''); setShowPositionSuggestions(false); setHighlightedPositionIndex(-1); }}
+                              onMouseEnter={() => setHighlightedPositionIndex(idx)}
+                              className={`w-full text-left px-4 py-2.5 text-sm border-b border-slate-50 ${idx === highlightedPositionIndex ? 'bg-brand-100 text-brand-700' : 'hover:bg-brand-50 text-slate-700'}`}>
+                              {role}
+                              {BENCHMARKS[role] && <span className="text-xs text-slate-400 ml-2">${BENCHMARKS[role].p50.toLocaleString()}</span>}
+                            </button>
                           ))}
-                        </optgroup>
-                      ))}
-                      <option disabled className="font-bold bg-slate-100">── PRIVATE SERVICE ──</option>
-                      {CATEGORY_GROUPS["Private Service"].map(category => (
-                        <optgroup key={category} label={category}>
-                          {positionsByCategory[category]?.map(pos => (
-                            <option key={pos.name} value={pos.name}>{pos.name}</option>
-                          ))}
-                        </optgroup>
-                      ))}
-                    </select>
+                        </div>
+                      )}
+                      {showPositionSuggestions && positionSearch && filteredPositions.length === 0 && (
+                        <div className="absolute z-20 w-full mt-1 bg-white border border-slate-200 rounded-xl shadow-lg p-4 text-center text-sm text-slate-500">
+                          No roles match "{positionSearch}"
+                        </div>
+                      )}
+                    </div>
                     {formData.positionType && BENCHMARKS[formData.positionType] && (
                       <div className="mt-2 text-xs text-slate-500 space-y-1">
                         <p>Market: ${BENCHMARKS[formData.positionType].p25.toLocaleString()} - ${BENCHMARKS[formData.positionType].p75.toLocaleString()}</p>
@@ -1197,7 +1233,7 @@ Return this exact JSON structure:
                         onFocus={() => setShowLocationSuggestions(true)}
                         onBlur={() => setTimeout(() => { setShowLocationSuggestions(false); setHighlightedLocationIndex(-1); }, 200)}
                         onKeyDown={handleLocationKeyDown}
-                        className="w-full pl-10 pr-4 py-3 border-2 border-slate-200 rounded-xl" placeholder="e.g., Palm Beach, Monaco" />
+                        className="w-full pl-10 pr-4 py-3 border-2 border-slate-200 rounded-xl" placeholder="e.g., Palm Beach, FL or Monaco" />
                     </div>
                     {showLocationSuggestions && filteredLocationSuggestions.length > 0 && (
                       <div className="absolute z-10 w-full mt-1 bg-white border border-slate-200 rounded-xl shadow-lg overflow-hidden">
@@ -1205,8 +1241,9 @@ Return this exact JSON structure:
                           <button key={idx} type="button"
                             onClick={() => { setFormData({ ...formData, location: loc }); setShowLocationSuggestions(false); setHighlightedLocationIndex(-1); }}
                             onMouseEnter={() => setHighlightedLocationIndex(idx)}
-                            className={`w-full text-left px-4 py-2 text-sm ${idx === highlightedLocationIndex ? 'bg-brand-100 text-brand-700' : 'hover:bg-brand-50'}`}>
-                            {loc} {REGIONAL_ADJUSTMENTS[loc] && <span className="text-slate-500 ml-2">({REGIONAL_ADJUSTMENTS[loc].label})</span>}
+                            className={`w-full text-left px-4 py-2.5 text-sm flex items-center justify-between ${idx === highlightedLocationIndex ? 'bg-brand-100 text-brand-700' : 'hover:bg-brand-50'}`}>
+                            <span>{loc}</span>
+                            {(() => { const entry = Object.values(REGIONAL_ADJUSTMENTS).find(d => d.display === loc); return entry && (entry.tier === 'high' || entry.tier === 'ultra-high') ? <span className="text-xs px-2 py-0.5 rounded-full bg-brand-100 text-brand-600 font-medium">Premium</span> : null; })()}
                           </button>
                         ))}
                       </div>

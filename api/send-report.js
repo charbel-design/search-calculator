@@ -370,7 +370,7 @@ function generateEmailHTML(results) {
           <p style="margin:0 0 6px;color:#334155;font-size:13px;line-height:1.5;padding-left:12px;border-left:2px solid #a5a8ff;"><span style="color:#2814ff;font-weight:500;">&#8594;</span> ${item}</p>
         `).join('')}
         ${results.decisionIntelligence.tradeoffScenarios.completeTeaser ? `
-        <p style="margin:10px 0 0;color:#94a3b8;font-size:11px;font-style:italic;">&#128274; ${results.decisionIntelligence.tradeoffScenarios.completeTeaser}</p>
+        <p style="margin:10px 0 0;color:#94a3b8;font-size:11px;font-style:italic;">&#8594; ${results.decisionIntelligence.tradeoffScenarios.completeTeaser}</p>
         ` : ''}
       </div>
       ` : ''}
@@ -385,7 +385,7 @@ function generateEmailHTML(results) {
           <p style="margin:0 0 6px;color:#334155;font-size:13px;line-height:1.5;padding-left:12px;border-left:2px solid #de9ea9;">&#8226; ${item}</p>
         `).join('')}
         ${results.decisionIntelligence.candidatePsychology.completeTeaser ? `
-        <p style="margin:10px 0 0;color:#94a3b8;font-size:11px;font-style:italic;">&#128274; ${results.decisionIntelligence.candidatePsychology.completeTeaser}</p>
+        <p style="margin:10px 0 0;color:#94a3b8;font-size:11px;font-style:italic;">&#8594; ${results.decisionIntelligence.candidatePsychology.completeTeaser}</p>
         ` : ''}
       </div>
       ` : ''}
@@ -408,7 +408,7 @@ function generateEmailHTML(results) {
               }">${results.decisionIntelligence.probabilityOfSuccess.initialLabel}</span>
             </div>
             ${results.decisionIntelligence.probabilityOfSuccess.completeTeaser ? `
-            <p style="margin:8px 0 0;color:#94a3b8;font-size:10px;font-style:italic;">&#128274; ${results.decisionIntelligence.probabilityOfSuccess.completeTeaser}</p>
+            <p style="margin:8px 0 0;color:#94a3b8;font-size:10px;font-style:italic;">&#8594; ${results.decisionIntelligence.probabilityOfSuccess.completeTeaser}</p>
             ` : ''}
           </td>
           ` : '<td></td>'}
@@ -428,7 +428,7 @@ function generateEmailHTML(results) {
             </div>
             <p style="margin:4px 0 0;color:#64748b;font-size:12px;text-align:center;">${results.decisionIntelligence.mandateStrength.initial?.rationale || ''}</p>
             ${results.decisionIntelligence.mandateStrength.completeTeaser ? `
-            <p style="margin:8px 0 0;color:#94a3b8;font-size:10px;font-style:italic;">&#128274; ${results.decisionIntelligence.mandateStrength.completeTeaser}</p>
+            <p style="margin:8px 0 0;color:#94a3b8;font-size:10px;font-style:italic;">&#8594; ${results.decisionIntelligence.mandateStrength.completeTeaser}</p>
             ` : ''}
           </td>
           ` : '<td></td>'}
@@ -445,15 +445,15 @@ function generateEmailHTML(results) {
           <p style="margin:0 0 6px;color:#334155;font-size:13px;line-height:1.5;padding-left:12px;border-left:2px solid #f2d0a9;">&#9888; ${item}</p>
         `).join('')}
         ${results.decisionIntelligence.falseSignals.completeTeaser ? `
-        <p style="margin:10px 0 0;color:#a47840;font-size:11px;font-style:italic;">&#128274; ${results.decisionIntelligence.falseSignals.completeTeaser}</p>
+        <p style="margin:10px 0 0;color:#a47840;font-size:11px;font-style:italic;">&#8594; ${results.decisionIntelligence.falseSignals.completeTeaser}</p>
         ` : ''}
       </div>
       ` : ''}
 
       <!-- Unlock CTA -->
       <div style="margin-top:16px;padding:14px;background-color:#eeeeff;border-radius:8px;text-align:center;border:1px solid #d2d4ff;">
-        <p style="margin:0 0 4px;color:#2814ff;font-size:13px;font-weight:600;">&#128274; Unlock complete decision intelligence analysis</p>
-        <p style="margin:0;color:#64748b;font-size:11px;">Schedule a consultation for the full breakdown</p>
+        <p style="margin:0 0 4px;color:#2814ff;font-size:13px;font-weight:600;">&#8594; Go deeper with a search specialist</p>
+        <p style="margin:0;color:#64748b;font-size:11px;">Get the full decision intelligence breakdown, custom sourcing plan, and offer strategy for this role.</p>
       </div>
     </div>
     ${divider}
