@@ -23,7 +23,9 @@ function generateEmailHTML(results) {
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 </head>
 <body style="margin:0;padding:0;background-color:#f8fafc;font-family:'Helvetica Neue',Arial,sans-serif;">
-  <div style="max-width:640px;margin:0 auto;padding:20px;">
+  <table role="presentation" cellpadding="0" cellspacing="0" width="100%" style="background-color:#f8fafc;">
+    <tr><td align="center" style="padding:20px;">
+      <table role="presentation" cellpadding="0" cellspacing="0" width="640" style="max-width:640px;width:100%;">
 
     <!-- Header -->
     <div style="background-color:#2814ff;border-radius:12px 12px 0 0;padding:24px;text-align:center;">
@@ -206,7 +208,7 @@ function generateEmailHTML(results) {
           <td style="padding:12px;background-color:#eeeeff;border-radius:8px;text-align:center;width:48%;">
             <div style="font-size:28px;font-weight:bold;color:#2814ff;">${Math.round(results.benchmark.offerAcceptanceRate * 100)}%</div>
             <div style="font-size:11px;color:#64748b;margin-top:4px;">Offer Acceptance Rate</div>
-            <div style="font-size:10px;color:#94a3b8;">~${(1 / results.benchmark.offerAcceptanceRate).toFixed(1)} candidates per placement</div>
+            <div style="font-size:10px;color:#94a3b8;">~${results.benchmark.offerAcceptanceRate > 0 ? (1 / results.benchmark.offerAcceptanceRate).toFixed(1) : '—'} candidates per placement</div>
           </td>
           <td style="width:4%;"></td>
           <td style="padding:12px;background-color:#fdf2f4;border-radius:8px;text-align:center;width:48%;">
@@ -291,7 +293,7 @@ function generateEmailHTML(results) {
       <div style="padding:14px;background-color:#fef8f0;border-radius:8px;border:1px solid #f2d0a9;margin-bottom:12px;">
         <strong style="color:#a47840;font-size:12px;text-transform:uppercase;letter-spacing:0.5px;">Top Departure Risks</strong>
         <div style="margin-top:8px;">
-          ${results.benchmark.retentionRisk.topReasons.map((reason, i) => `
+          ${(results.benchmark.retentionRisk.topReasons || []).map((reason, i) => `
             <div style="display:inline-block;padding:5px 12px;background-color:#fff;border:1px solid #e2e8f0;border-radius:16px;margin:3px 4px;font-size:12px;color:#475569;">
               ${reason}
             </div>
@@ -516,7 +518,9 @@ function generateEmailHTML(results) {
       <p style="margin:0 0 4px;">TALENT GURUS | <a href="https://talent-gurus.com" style="color:#2814ff;text-decoration:none;">talent-gurus.com</a></p>
       <p style="margin:0;">AI-assisted analysis for informational purposes only. Every search is unique.</p>
     </div>
-  </div>
+      </table>
+    </td></tr>
+  </table>
 </body>
 </html>`;
 }

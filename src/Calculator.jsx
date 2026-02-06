@@ -1,7 +1,5 @@
 import React, { useState, useMemo, useCallback, useRef, useEffect } from 'react';
-import { TrendingUp, Clock, DollarSign, Target, AlertCircle, CheckCircle, ArrowRight, Info, Download, RefreshCw, Users, Car, Heart, Home, ChevronDown, HelpCircle, Zap, MapPin, Phone, X, Layers, Lightbulb, ArrowLeftRight, Share2, Mail, Copy, SlidersHorizontal, GitCompare, Brain, Lock, GitBranch, Gauge, BarChart3, AlertTriangle } from 'lucide-react';
-import { jsPDF } from 'jspdf';
-import html2canvas from 'html2canvas';
+import { TrendingUp, Clock, DollarSign, Target, AlertCircle, CheckCircle, ArrowRight, Info, RefreshCw, Users, Car, Heart, Home, ChevronDown, HelpCircle, Zap, MapPin, Phone, X, Layers, Lightbulb, ArrowLeftRight, Share2, Mail, Copy, SlidersHorizontal, GitCompare, Brain, Lock, GitBranch, Gauge, BarChart3, AlertTriangle } from 'lucide-react';
 import {
   BENCHMARKS,
   REGIONAL_MULTIPLIERS,
@@ -59,6 +57,20 @@ function Tooltip({ text, children }) {
   );
 }
 
+// Sanitize free-text input before feeding into AI prompt
+const sanitizeForPrompt = (text) => {
+  if (!text) return '';
+  return text
+    .replace(/ignore\s+(all\s+)?(previous|prior|above)\s+(instructions?|prompts?|rules?)/gi, '[filtered]')
+    .replace(/you\s+are\s+now/gi, '[filtered]')
+    .replace(/system\s*:?\s*prompt/gi, '[filtered]')
+    .replace(/\bdo\s+not\s+follow\b/gi, '[filtered]')
+    .replace(/\boverride\b/gi, '[filtered]')
+    .replace(/\breturn\s+only\b/gi, '[filtered]')
+    .replace(/\bforget\s+(everything|all|your)\b/gi, '[filtered]')
+    .slice(0, 500); // Hard cap at 500 chars
+};
+
 const SearchIntelligenceEngine = () => {
   const [step, setStep] = useState(1);
   const [formData, setFormData] = useState({
@@ -91,8 +103,6 @@ const SearchIntelligenceEngine = () => {
   const [compareMode, setCompareMode] = useState(false);
   const [comparisonResults, setComparisonResults] = useState(null);
   const [showLanguages, setShowLanguages] = useState(false);
-  const [exportingPDF, setExportingPDF] = useState(false);
-
   // NEW: Role Comparison Mode
   const [showRoleComparison, setShowRoleComparison] = useState(false);
   const [comparisonRoles, setComparisonRoles] = useState([]);
@@ -545,7 +555,7 @@ Position: ${displayTitle}
 Location: ${formData.location}${det.regionalData ? ` (${det.regionalData.label}, ${regionalMultiplier}x cost multiplier)` : ''}
 Client Timeline: ${timelineOption?.label || formData.timeline}
 Client Budget: ${budgetOption?.label || formData.budgetRange}
-Requirements: ${formData.keyRequirements}
+Requirements: ${sanitizeForPrompt(formData.keyRequirements)}
 Languages: ${formData.languageRequirements.join(', ') || 'None specified'}
 Certifications: ${formData.certifications.join(', ') || 'None specified'}
 Travel: ${formData.travelRequirement}
@@ -561,6 +571,9 @@ CRITICAL - Use these REGIONALLY-ADJUSTED salary figures for ${formData.location 
 ${adjustedBenchmark ? `- 25th Percentile: $${adjustedBenchmark.p25.toLocaleString()}
 - Median (50th): $${adjustedBenchmark.p50.toLocaleString()}
 - 75th Percentile: $${adjustedBenchmark.p75.toLocaleString()}` : 'No benchmark available - provide general guidance'}
+${benchmark?.benefits ? `Benefits Package: Housing: ${benchmark.benefits.housing} | Vehicle: ${benchmark.benefits.vehicle} | Health: ${benchmark.benefits.health} | Bonus: ${benchmark.benefits.bonus}` : ''}
+${benchmark?.trends ? `Market Trends: ${benchmark.trends}` : ''}
+${benchmark?.regionalNotes ? `Regional Notes: ${benchmark.regionalNotes}` : ''}
 ${benchmark?.scarcity ? `Role Scarcity: ${benchmark.scarcity}/10` : ''}
 ${benchmark?.timeToFill ? `Typical Time to Fill: ${benchmark.timeToFill} weeks` : ''}
 ${benchmark?.candidatePoolSize ? `Estimated National Candidate Pool: ${benchmark.candidatePoolSize}` : ''}
@@ -907,206 +920,9 @@ Return this exact JSON structure:
       }
     } catch (err) {
       console.error('Email error:', err);
-      alert('Unable to send email. Please try again or download the PDF instead.');
+      alert('Unable to send email. Please try again.');
     }
     setSendingEmail(false);
-  };
-
-  // ============================================
-  // PDF EXPORT (html2canvas approach)
-  // ============================================
-  const exportToPDF = async () => {
-    if (!resultsRef.current) {
-      alert('Unable to export PDF. Please try again.');
-      return;
-    }
-
-    try {
-      setExportingPDF(true);
-
-      const containerRect = resultsRef.current.getBoundingClientRect();
-      const sections = resultsRef.current.querySelectorAll('[data-pdf-section]');
-      const sectionPositions = {};
-      sections.forEach(section => {
-        const rect = section.getBoundingClientRect();
-        sectionPositions[section.getAttribute('data-pdf-section')] = {
-          top: rect.top - containerRect.top,
-          bottom: rect.bottom - containerRect.top
-        };
-      });
-
-      await new Promise(resolve => setTimeout(resolve, 100));
-
-      const canvas = await html2canvas(resultsRef.current, {
-        scale: 2,
-        useCORS: true,
-        logging: false,
-        backgroundColor: '#ffffff'
-      });
-
-      const doc = new jsPDF('p', 'mm', 'a4');
-      const pageWidth = doc.internal.pageSize.getWidth();
-      const pageHeight = doc.internal.pageSize.getHeight();
-      const margin = 10;
-      const headerHeight = 25;
-      const footerHeight = 15;
-
-      const imgWidth = canvas.width;
-      const imgHeight = canvas.height;
-      const scale = 2;
-      const contentWidth = pageWidth - (margin * 2);
-
-      const pxToMm = (px) => (px / scale) * (contentWidth / (imgWidth / scale));
-
-      const firstPageContentMm = pageHeight - headerHeight - footerHeight - 5;
-      const otherPageContentMm = pageHeight - footerHeight - 10;
-
-      const metricsTop = sectionPositions['metrics']?.top || 0;
-      const metricsTopPx = metricsTop * scale;
-      const successFactorsTop = sectionPositions['success-factors']?.top || 0;
-      const successFactorsTopPx = successFactorsTop * scale;
-
-      const mmToPx = (mm) => mm * scale * (imgWidth / scale) / contentWidth;
-      const otherPageMaxPx = mmToPx(otherPageContentMm);
-
-      const slices = [];
-
-      if (metricsTopPx > 0) {
-        slices.push({ start: 0, end: metricsTopPx });
-      }
-
-      if (metricsTopPx < successFactorsTopPx) {
-        slices.push({ start: metricsTopPx, end: successFactorsTopPx });
-      }
-
-      if (successFactorsTopPx < imgHeight) {
-        let currentPos = successFactorsTopPx;
-        while (currentPos < imgHeight) {
-          const pageEnd = Math.min(currentPos + otherPageMaxPx, imgHeight);
-          slices.push({ start: currentPos, end: pageEnd });
-          currentPos = pageEnd;
-        }
-      }
-
-      if (slices.length === 0) {
-        slices.push({ start: 0, end: imgHeight });
-      }
-
-      let lastPageContentEndMm = 0;
-
-      for (let i = 0; i < slices.length; i++) {
-        if (i > 0) doc.addPage();
-
-        const slice = slices[i];
-        const sliceHeightPx = slice.end - slice.start;
-
-        if (i === 0) {
-          doc.setFillColor(40, 20, 255);
-          doc.rect(0, 0, pageWidth, headerHeight, 'F');
-          doc.setTextColor(255, 255, 255);
-          doc.setFontSize(14);
-          doc.setFont('helvetica', 'bold');
-          doc.text('TALENT GURUS', pageWidth / 2, 10, { align: 'center' });
-          doc.setFontSize(10);
-          doc.setFont('helvetica', 'normal');
-          doc.text('Search Intelligence Report', pageWidth / 2, 18, { align: 'center' });
-        }
-
-        const pageCanvas = document.createElement('canvas');
-        pageCanvas.width = imgWidth;
-        pageCanvas.height = sliceHeightPx;
-        const pageCtx = pageCanvas.getContext('2d');
-
-        if (!pageCtx) {
-          throw new Error('Failed to create canvas context for PDF generation');
-        }
-
-        pageCtx.drawImage(canvas, 0, slice.start, imgWidth, sliceHeightPx, 0, 0, imgWidth, sliceHeightPx);
-
-        const destHeight = pxToMm(sliceHeightPx);
-        const destY = i === 0 ? headerHeight + 2 : 8;
-
-        doc.addImage(pageCanvas.toDataURL('image/png'), 'PNG', margin, destY, contentWidth, destHeight);
-        lastPageContentEndMm = destY + destHeight;
-      }
-
-      const ctaHeight = 22;
-      const ctaMargin = 8;
-
-      if (lastPageContentEndMm + ctaHeight + ctaMargin > pageHeight - footerHeight) {
-        doc.addPage();
-        lastPageContentEndMm = 15;
-      }
-
-      const ctaY = lastPageContentEndMm + ctaMargin;
-      doc.setFillColor(40, 20, 255);
-      doc.roundedRect(margin, ctaY, contentWidth, ctaHeight, 2, 2, 'F');
-      doc.setTextColor(255, 255, 255);
-      doc.setFontSize(11);
-      doc.setFont('helvetica', 'bold');
-      doc.text('Ready for a comprehensive analysis?', pageWidth / 2, ctaY + 9, { align: 'center' });
-      doc.setFontSize(9);
-      doc.setFont('helvetica', 'normal');
-      doc.text('Schedule a consultation: calendly.com/charbel-talentgurus', pageWidth / 2, ctaY + 17, { align: 'center' });
-      doc.link(margin, ctaY, contentWidth, ctaHeight, { url: 'https://calendly.com/charbel-talentgurus' });
-
-      const totalPages = doc.internal.getNumberOfPages();
-      for (let i = 1; i <= totalPages; i++) {
-        doc.setPage(i);
-        doc.setFontSize(8);
-        doc.setTextColor(130, 130, 130);
-        doc.text('TALENT GURUS | talent-gurus.com | AI-assisted analysis for informational purposes only.', pageWidth / 2, pageHeight - 6, { align: 'center' });
-        doc.text(`Page ${i} of ${totalPages}`, pageWidth - margin, pageHeight - 6, { align: 'right' });
-      }
-
-      doc.save(`TG-Analysis-${results.displayTitle.replace(/[^a-zA-Z0-9]/g, '-')}-${new Date().toISOString().split('T')[0]}.pdf`);
-      setExportingPDF(false);
-    } catch (err) {
-      console.error('PDF export error:', err);
-      setExportingPDF(false);
-
-      // Fallback to text export
-      try {
-        const content = `
-TALENT GURUS - Search Intelligence Report
-
-Position: ${results.displayTitle}
-Location: ${results.formData.location}
-Score: ${results.score}/10 - ${results.label}
-Generated: ${new Date().toLocaleDateString()}
-
-EXECUTIVE SUMMARY
-${results.bottomLine || 'N/A'}
-
-KEY METRICS
-- Salary Guidance: ${results.salaryRangeGuidance || 'N/A'}
-- Expected Timeline: ${results.estimatedTimeline || 'N/A'}
-- Candidate Availability: ${results.candidateAvailability || 'N/A'} - ${results.availabilityReason || ''}
-- Market Dynamics: ${results.marketCompetitiveness || 'N/A'}
-
-COMPLEXITY DRIVERS (Total: ${results.points} points)
-${results.drivers?.map(d => `[+${d.points}] ${d.factor}: ${d.rationale}`).join('\n') || 'N/A'}
-
-KEY SUCCESS FACTORS
-${results.keySuccessFactors?.map(f => `- ${f}`).join('\n') || 'N/A'}
-
-TALENT GURUS | talent-gurus.com
-This analysis provides general market guidance. Every search is unique.
-        `.trim();
-
-        const blob = new Blob([content], { type: 'text/plain;charset=utf-8' });
-        const url = URL.createObjectURL(blob);
-        const link = document.createElement('a');
-        link.href = url;
-        link.download = `Search-Analysis-${results.displayTitle.replace(/\s+/g, '-')}-${new Date().toISOString().split('T')[0]}.txt`;
-        document.body.appendChild(link);
-        link.click();
-        document.body.removeChild(link);
-        URL.revokeObjectURL(url);
-      } catch (fallbackErr) {
-        alert('Unable to export. Please try again or contact support.');
-      }
-    }
   };
 
   // ============================================
@@ -1780,7 +1596,7 @@ This analysis provides general market guidance. Every search is unique.
               )}
 
               {/* NEW: WHAT-IF SCENARIO SLIDERS */}
-              <div data-pdf-section="what-if" className="mb-6">
+              <div className="mb-6">
                 <button
                   onClick={() => { setWhatIfMode(!whatIfMode); setWhatIfBudget(formData.budgetRange); setWhatIfTimeline(formData.timeline); }}
                   className="flex items-center gap-2 text-sm font-medium mb-3 transition-all"
@@ -1847,7 +1663,7 @@ This analysis provides general market guidance. Every search is unique.
               </div>
 
               {/* Drivers */}
-              <div data-pdf-section="drivers" className="mb-6">
+              <div className="mb-6">
                 <h4 className="font-semibold text-lg mb-4 flex items-center gap-2" style={{ color: '#2814ff' }}>
                   <Layers className="w-5 h-5" />Complexity Breakdown
                 </h4>
@@ -1865,7 +1681,7 @@ This analysis provides general market guidance. Every search is unique.
               </div>
 
               {/* Metrics */}
-              <div data-pdf-section="metrics" className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
                 <div className="bg-b-opal-50 rounded-xl p-5 border border-b-opal-100">
                   <div className="flex items-center gap-2 mb-2"><DollarSign className="w-5 h-5 text-b-opal-500" /><h4 className="font-semibold text-sm text-b-opal-600">Salary</h4></div>
                   <p className="text-slate-700">{results.salaryRangeGuidance}</p>
@@ -1886,7 +1702,7 @@ This analysis provides general market guidance. Every search is unique.
 
               {/* Sourcing Insight */}
               {results.sourcingInsight && (
-                <div data-pdf-section="sourcing" className="bg-brand-50 rounded-xl p-5 mb-6 border border-brand-100">
+                <div className="bg-brand-50 rounded-xl p-5 mb-6 border border-brand-100">
                   <div className="flex items-center gap-2 mb-2">
                     <Target className="w-5 h-5 text-brand-500" />
                     <h4 className="font-semibold text-sm text-brand-600">Where to Find These Candidates</h4>
@@ -1897,7 +1713,7 @@ This analysis provides general market guidance. Every search is unique.
 
               {/* Benchmarks */}
               {results.benchmark && (
-                <div data-pdf-section="benchmarks" className="bg-slate-50 rounded-xl p-5 mb-6">
+                <div className="bg-slate-50 rounded-xl p-5 mb-6">
                   <h4 className="font-semibold mb-3 flex items-center gap-2">
                     <TrendingUp className="w-5 h-5" style={{ color: '#2814ff' }} />
                     Benchmarks: {results.displayTitle}
@@ -1928,7 +1744,7 @@ This analysis provides general market guidance. Every search is unique.
               )}
 
               {/* Success Factors */}
-              <div data-pdf-section="success-factors" className="mb-6">
+              <div className="mb-6">
                 <h4 className="font-semibold mb-3 flex items-center gap-2" style={{ color: '#2814ff' }}><CheckCircle className="w-5 h-5" />Success Factors</h4>
                 <ul className="space-y-2">
                   {results.keySuccessFactors?.map((f, i) => (
@@ -1941,7 +1757,7 @@ This analysis provides general market guidance. Every search is unique.
               </div>
 
               {results.recommendedAdjustments?.length > 0 && (
-                <div data-pdf-section="recommendations" className="mb-6">
+                <div className="mb-6">
                   <h4 className="font-semibold mb-3 flex items-center gap-2" style={{ color: '#2814ff' }}><Lightbulb className="w-5 h-5" />Recommendations</h4>
                   <ul className="space-y-2">
                     {results.recommendedAdjustments.map((r, i) => (
@@ -1956,7 +1772,7 @@ This analysis provides general market guidance. Every search is unique.
 
               {/* Red Flag Analysis */}
               {results.redFlagAnalysis && results.redFlagAnalysis !== "None - well-positioned search" && (
-                <div data-pdf-section="red-flags" className="mb-6">
+                <div className="mb-6">
                   <h4 className="font-semibold mb-3 flex items-center gap-2" style={{ color: '#2814ff' }}><AlertCircle className="w-5 h-5" />Red Flag Analysis</h4>
                   <div className="bg-b-pink-50 rounded-xl p-4 border border-b-pink-200">
                     <p className="text-slate-700">{results.redFlagAnalysis}</p>
@@ -1966,7 +1782,7 @@ This analysis provides general market guidance. Every search is unique.
 
               {/* Market Intelligence */}
               {results.benchmark?.trends && (
-                <div data-pdf-section="market-intelligence" className="mb-6">
+                <div className="mb-6">
                   <h4 className="font-semibold mb-3 flex items-center gap-2" style={{ color: '#2814ff' }}><TrendingUp className="w-5 h-5" />Market Intelligence</h4>
                   <div className="bg-gradient-to-br from-slate-50 to-brand-50 rounded-xl p-5 border border-slate-200">
                     <p className="text-slate-700 mb-3">{results.benchmark.trends}</p>
@@ -1980,7 +1796,7 @@ This analysis provides general market guidance. Every search is unique.
               )}
 
               {results.negotiationLeverage && (
-                <div data-pdf-section="negotiation" className="mb-6">
+                <div className="mb-6">
                   <h4 className="font-semibold mb-3 flex items-center gap-2" style={{ color: '#2814ff' }}><ArrowLeftRight className="w-5 h-5" />Negotiation</h4>
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div className="bg-b-pink-50 rounded-xl p-4 border border-b-pink-100">
@@ -1997,7 +1813,7 @@ This analysis provides general market guidance. Every search is unique.
 
               {/* Decision Intelligence Section */}
               {results.decisionIntelligence && (
-                <div data-pdf-section="decision-intelligence" className="mb-6">
+                <div className="mb-6">
                   <h4 className="font-semibold text-lg mb-4 flex items-center gap-2" style={{ color: '#2814ff' }}>
                     <Brain className="w-5 h-5" />Decision Intelligence
                   </h4>
