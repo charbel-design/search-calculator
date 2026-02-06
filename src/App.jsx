@@ -60,6 +60,23 @@ class ErrorBoundary extends React.Component {
             >
               We hit an unexpected error. Your data is safe.
             </p>
+            {this.state.error && (
+              <p
+                style={{
+                  color: '#999999',
+                  fontSize: '12px',
+                  margin: '0 0 24px 0',
+                  fontFamily: 'monospace',
+                  backgroundColor: '#f5f5f5',
+                  padding: '8px 12px',
+                  borderRadius: '4px',
+                  textAlign: 'left',
+                  wordBreak: 'break-word',
+                }}
+              >
+                {this.state.error.toString()}
+              </p>
+            )}
             <div
               style={{
                 display: 'flex',
@@ -116,7 +133,7 @@ class ErrorBoundary extends React.Component {
       )
     }
 
-    return <Calculator />
+    return this.props.children
   }
 }
 
