@@ -543,46 +543,52 @@ ${benchmark?.regionalNotes ? `Regional Notes: ${benchmark.regionalNotes}` : ''}
 10. FIELD UNIQUENESS: Each JSON field must contribute NEW information. If you made a point in bottomLine, don't restate it in redFlagAnalysis or keySuccessFactors. Cross-reference instead ("As reflected in the timeline above...").
 11. ASSESS MANDATE BEFORE PROBABILITY: Determine mandate strength first (how strong is the client's position?), then derive probability of success from the combination of mandate strength and complexity score.
 
+=== VOICE GUIDANCE ===
+- salaryRangeGuidance: Sound like you've placed 100 people at this range. Confident, matter-of-fact. "You're at the 65th percentile, which is exactly right for this market."
+- bottomLine: Advisor-to-principal. Sentence 1 = verdict ("This hire is feasible / This budget won't work"). Sentence 2 = the one thing they're probably underestimating. Sentence 3 = recommended next action.
+- redFlagAnalysis: Name the actual problem, explain its impact, give options. "Your 4-week timeline conflicts with the 12-week average — either compress due diligence (risky) or extend to 7 weeks (realistic)."
+- candidatePsychology: Insider reveal. Tell them what candidates think when they're off the call. Be specific to THIS role. ${isCorporateRole ? 'For FO roles: candidates care about investment mandate clarity, decision-making authority, and whether they report to a principal or a committee. Golden handcuffs (unvested equity, deferred comp) are the real retention lever — not salary.' : 'For household roles: candidates care about family stability, work-life boundaries, and whether the principal respects their time off. Housing-as-comp is the golden handcuff. They fear scope creep more than low pay.'}
+
 === RETURN THIS JSON ===
 {
-  "salaryRangeGuidance": "$Xk–$Yk base + bonus structure. 1–2 sentences on why, referencing the adjusted percentiles and how the client's budget compares.",
+  "salaryRangeGuidance": "$Xk–$Yk base + bonus structure. 1–2 sentences on why, referencing the adjusted percentiles and how the client's budget compares.${isCorporateRole && formData.aumRange ? ' Factor AUM range into comp expectations.' : ''}",
   "estimatedTimeline": "X–Y weeks total. Break into phases: sourcing (Xw), interviews (Yw), offer/negotiation (Zw), due diligence (Zw). Factor the client's ${timelineOption?.label || formData.timeline} timeframe.",
-  "marketCompetitiveness": "2–3 sentences about the specific dynamics of hiring a ${displayTitle} in ${formData.location || 'this market'} right now. Reference demand trends, pool size, and what's driving competition.",
-  "keySuccessFactors": ["Factor 1 specific to this search — what will actually make or break it", "Factor 2 — reference a requirement, the location, or the comp", "Factor 3 — what will differentiate this opportunity to candidates"],
-  "recommendedAdjustments": ["Concrete change with expected impact, e.g. 'Adding $20k to base (reaching 75th percentile) would expand your pool by ~40%'. Return 1–3 items, or empty array [] if search is well-positioned."],
-  "candidateAvailability": "Abundant|Moderate|Limited|Rare",
+  "marketCompetitiveness": "2–3 sentences: Is this market easier or harder than 12 months ago? Why? What's driving competition for ${displayTitle} in ${formData.location || 'this market'}? Conclude with: 'This is a [favorable/challenging] market for this hire.'",
+  "keySuccessFactors": ["The single barrier that would cause this search to fail if unaddressed", "The requirement or constraint that most shrinks the candidate pool", "What tells you a candidate actually wants THIS role, not just any ${displayTitle} role"],
+  "recommendedAdjustments": ["Concrete IF/THEN: 'Adding $20k to base (reaching 75th percentile) would expand your pool by ~40%'. Return 1–3 items, or empty array [] if search is well-positioned."],
+  "candidateAvailability": "Exactly one of: Abundant, Moderate, Limited, Rare",
   "availabilityReason": "Why — reference pool size, filters applied (languages, certs, location), and what's shrinking availability.",
-  "sourcingInsight": "Where these candidates actually come from. Reference the sourcing channel data. Name specific networks, associations, or approaches that work for ${displayTitle} roles.",
+  "sourcingInsight": "Where these candidates actually come from. Reference sourcing channel data. Name specific networks or associations for ${displayTitle} roles. Which channels are primary, which are a waste of time?",
   "negotiationLeverage": {
-    "candidateAdvantages": ["Specific leverage points — e.g. 'Only 800 qualified candidates nationally gives them significant negotiating power'"],
-    "employerAdvantages": ["Specific advantages — e.g. 'Palm Beach location with no state income tax is a $15k–$25k effective raise for candidates relocating from NY/CA'"]
+    "candidateAdvantages": ["What gives candidates power — scarcity, competing offers, golden handcuffs at current role. State the leverage + dollar impact."],
+    "employerAdvantages": ["What gives you power — geography, opportunity, lifestyle. State the advantage + impact: e.g., 'No state income tax = $20k–$28k effective raise vs. NYC competitors.'"]
   },
-  "redFlagAnalysis": "Specific concerns about THIS search. Reference the data — retention risks, budget gaps, timeline tension. Or 'None — this search is well-positioned' if genuinely clean.",
-  "bottomLine": "3–4 sentences. Lead with the headline verdict. Then the one thing the client most needs to know. Then the recommended action. Be direct — this is the first thing they read.",
+  "redFlagAnalysis": "Name the problem, explain impact, give options. Or 'None — this search is well-positioned' if genuinely clean. Never cushion.",
+  "bottomLine": "3–4 sentences. Sentence 1: declarative verdict ('This is doable' or 'Timeline and budget are misaligned'). Sentence 2: the one thing the client is probably underestimating. Sentence 3: what to do next. Use 'you/your' — this is the first thing they read.",
   "decisionIntelligence": {
     "tradeoffScenarios": {
       "initial": ["IF [specific change with $$ or weeks] THEN [quantified outcome]. Max 2 sentences.", "IF [second trade-off] THEN [outcome].", "IF [third trade-off, optional] THEN [outcome]."],
-      "completeTeaser": "What the full analysis covers: scenario modeling with quantified impact across budget, timeline, and requirements"
+      "completeTeaser": "Your analysis identified ${det.score >= 7 ? 'several high-impact levers' : 'key optimization opportunities'} — the full assessment models how each budget/timeline/requirement change shifts your fill probability and candidate quality for this ${displayTitle} search."
     },
     "candidatePsychology": {
-      "initial": ["What actually motivates candidates for this specific role — not generic 'career growth'", "The unspoken concern or dealbreaker candidates won't tell you in an interview", "What makes top candidates leave their current position — the real trigger, not the stated reason"],
-      "completeTeaser": "What the full analysis covers: role-specific positioning language, objection-handling frameworks, and interview question design"
+      "initial": ["What actually motivates ${displayTitle} candidates to move — the real trigger, not 'career growth'", "The unspoken concern candidates won't voice in interviews — what kills offers before they're made", "What makes top candidates leave their current position — the specific friction point, not generic dissatisfaction"],
+      "completeTeaser": "For ${displayTitle} searches in ${formData.location || 'this market'}, the full analysis includes positioning language that addresses these specific motivators, plus objection-handling frameworks for the counter-offer conversation."
     },
     "probabilityOfSuccess": {
-      "initialLabel": "Low | Moderate | High — pick exactly one. Low = <35% fill probability, Moderate = 35–65%, High = >65%. Return just the word.",
-      "initialConfidence": "X% estimated fill probability within the ${timelineOption?.label || formData.timeline} timeline — 1 sentence on the primary factor driving this number. The % MUST match the label range and be consistent with mandate strength.",
-      "completeTeaser": "What the full analysis covers: probability deltas showing how adjusting budget, timeline, or requirements shifts the fill probability"
+      "initialLabel": "Exactly one of: Low, Moderate, High",
+      "initialConfidence": "X% fill probability within the ${timelineOption?.label || formData.timeline} timeline — 1 sentence on the primary factor driving this number. The % MUST match the label (Low <35%, Moderate 35–65%, High >65%) and be consistent with mandate strength.",
+      "completeTeaser": "The full analysis maps exactly which single adjustment (budget, timeline, or requirements) has the highest probability impact for this specific ${displayTitle} search — typically worth 15–25 percentage points."
     },
     "mandateStrength": {
       "initial": {
-        "score": "NUMBER from 1.0–10.0. Derive from: budget vs. market rate, timeline feasibility, requirement reasonableness, role attractiveness. Do NOT default to 7–8 — a below-market budget with a tight timeline could be a 4; a generous budget with flexible timeline could be a 9.",
+        "score": "NUMBER from 1.0–10.0. Derive from: budget vs. market rate, timeline feasibility, requirement reasonableness, role attractiveness. Do NOT default to 7–8 — a below-market budget with tight timeline could be a 4; generous budget with flexible timeline could be a 9.",
         "rationale": "One sentence: what's strong and what's weak about this mandate. Reference specific numbers."
       },
-      "completeTeaser": "What the full analysis covers: 12-dimension mandate assessment with specific action items to strengthen the client's position"
+      "completeTeaser": "The full assessment breaks your mandate into 12 dimensions with specific action items — most clients find 2–3 adjustments that materially strengthen their position before sourcing begins."
     },
     "falseSignals": {
       "initial": ["Specific misleading signal for ${displayTitle} searches — what looks good but isn't", "Second false signal specific to ${formData.location || 'this market'} or this role type", "Third signal — something the client might misread during the process"],
-      "completeTeaser": "What the full analysis covers: screening protocols and verification frameworks for each signal"
+      "completeTeaser": "For ${displayTitle} roles, the full analysis includes screening questions that surface these signals early — saves 2–3 weeks of wasted interviews."
     }
   },
   "whatsNext": {
