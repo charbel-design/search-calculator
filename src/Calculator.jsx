@@ -1427,11 +1427,11 @@ Return this exact JSON structure:
                   <div className="bg-gradient-to-br from-brand-50 to-b-pink-50 rounded-xl p-5 border border-brand-100">
                     <div className="flex items-start gap-3 mb-4">
                       <div className="w-10 h-10 rounded-full bg-brand-500 flex items-center justify-center flex-shrink-0">
-                        <Download className="w-5 h-5 text-white" />
+                        <Mail className="w-5 h-5 text-white" />
                       </div>
                       <div>
                         <h4 className="font-semibold text-slate-900">Get Your Full Report</h4>
-                        <p className="text-sm text-slate-600 mt-1">Receive a detailed PDF analysis you can reference and share with decision-makers.</p>
+                        <p className="text-sm text-slate-600 mt-1">Receive a detailed analysis by email you can reference and share with decision-makers.</p>
                       </div>
                     </div>
                     <div className="space-y-3">
