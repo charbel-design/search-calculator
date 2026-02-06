@@ -830,6 +830,7 @@ export function ResultsView({
                     </h5>
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
                       {[
+                        'Candidate fit & motivation assessment',
                         'Compensation negotiation playbook',
                         'Social due diligence',
                         'Retention risk analysis & 90-day plan',
