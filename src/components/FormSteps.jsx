@@ -22,29 +22,61 @@ export function FormSteps({
     <>
       {/* Progress */}
       <div className="mb-8">
-        <div className="flex justify-between text-xs text-slate-500 mb-2">
+        <div className="flex items-center justify-between relative">
+          {/* Connecting line behind circles */}
+          <div className="absolute top-4 left-0 right-0 h-0.5 bg-slate-200">
+            <div className="h-0.5 transition-all duration-500 ease-out" style={{ width: `${((step - 1) / 3) * 100}%`, backgroundColor: '#2814ff' }} />
+          </div>
           {['Role & Location', 'Budget & Timeline', 'Requirements', 'Analysis'].map((label, i) => (
-            <span key={i} className={step >= i + 1 ? 'font-semibold text-brand-500' : ''}>{label}</span>
+            <div key={i} className="flex flex-col items-center relative z-10">
+              <div className={`w-8 h-8 rounded-full flex items-center justify-center text-xs font-bold transition-all duration-300 ${
+                step > i + 1 ? 'bg-brand-500 text-white' :
+                step === i + 1 ? 'bg-brand-500 text-white ring-4 ring-brand-100' :
+                'bg-slate-200 text-slate-400'
+              }`}>
+                {step > i + 1 ? '✓' : i + 1}
+              </div>
+              <span className={`text-xs mt-2 transition-colors duration-300 ${step >= i + 1 ? 'font-semibold text-brand-500' : 'text-slate-400'}`}>{label}</span>
+            </div>
           ))}
-        </div>
-        <div className="w-full bg-slate-200 rounded-full h-2">
-          <div className="h-2 rounded-full transition-all" style={{ width: `${(step / 4) * 100}%`, backgroundColor: '#2814ff' }} />
         </div>
       </div>
 
       <div className="bg-white rounded-2xl shadow-xl p-6 md:p-8 border border-slate-200" aria-label="Search parameters form">
         {loading && (
           <div className="fixed inset-0 bg-white/80 backdrop-blur-sm flex items-center justify-center z-50">
-            <div className="text-center animate-fadeInUp">
-              <div className="w-16 h-16 rounded-full border-4 border-slate-200 border-t-brand-500 animate-spin mx-auto mb-4"></div>
-              <p className="text-lg font-semibold text-slate-800">{loadingStep || 'Analyzing...'}</p>
-              <p className="text-sm text-slate-500 mt-1">This takes about 10 seconds</p>
+            <div className="text-center animate-fadeInUp max-w-sm">
+              <div className="w-16 h-16 rounded-full border-4 border-slate-200 border-t-brand-500 animate-spin mx-auto mb-6"></div>
+              <div className="space-y-3">
+                {[
+                  '1. Calculating complexity factors...',
+                  '2. Analyzing market conditions...',
+                  '3. Generating personalized insights...',
+                  '4. Finalizing your analysis...'
+                ].map((step, i) => (
+                  <div key={i} className="flex items-center gap-2">
+                    <div className={`w-5 h-5 rounded-full flex items-center justify-center text-xs font-bold transition-all ${
+                      loadingStep && i < loadingStep ? 'bg-brand-500 text-white' :
+                      loadingStep && i === loadingStep - 1 ? 'bg-brand-500 text-white ring-2 ring-brand-200' :
+                      'bg-slate-200 text-slate-400'
+                    }`}>
+                      {loadingStep && i < loadingStep ? '✓' : i + 1}
+                    </div>
+                    <span className={`text-sm transition-colors ${
+                      loadingStep && i < loadingStep ? 'text-slate-600 line-through' :
+                      loadingStep && i === loadingStep - 1 ? 'font-semibold text-brand-500' :
+                      'text-slate-500'
+                    }`}>{step}</span>
+                  </div>
+                ))}
+              </div>
+              <p className="text-sm text-slate-500 mt-4">This takes about 10 seconds</p>
             </div>
           </div>
         )}
         {/* Step 1 */}
         {step === 1 && (
-          <div className="space-y-6 animate-fadeInUp">
+          <div className="space-y-6 animate-slideInRight">
             <h3 className="text-xl font-semibold" style={{ color: '#2814ff' }}>Tell us about the role</h3>
 
             <div>
@@ -61,7 +93,7 @@ export function FormSteps({
                     else if (e.key === 'Enter' && highlightedPositionIndex >= 0) { e.preventDefault(); const selected = filteredPositions[highlightedPositionIndex]; setFormData({ ...formData, positionType: selected }); setPositionSearch(''); setShowPositionSuggestions(false); setHighlightedPositionIndex(-1); }
                     else if (e.key === 'Escape') { setShowPositionSuggestions(false); setHighlightedPositionIndex(-1); }
                   }}
-                  className="w-full px-4 py-3 border-2 border-slate-200 rounded-xl focus:border-brand-500 focus:ring-2 focus:ring-brand-100"
+                  className="w-full px-4 py-3 border-2 border-slate-200 rounded-xl focus:border-brand-500 focus:ring-2 focus:ring-brand-100 transition-all duration-200 focus:shadow-md"
                   placeholder={`Search ${commonRoles.length} roles... (e.g., Estate Manager, Private Chef)`}
                 />
                 {formData.positionType && (
@@ -107,7 +139,7 @@ export function FormSteps({
                   onFocus={() => setShowLocationSuggestions(true)}
                   onBlur={() => setTimeout(() => { setShowLocationSuggestions(false); setHighlightedLocationIndex(-1); }, 200)}
                   onKeyDown={handleLocationKeyDown}
-                  className="w-full pl-10 pr-4 py-3 border-2 border-slate-200 rounded-xl" placeholder="e.g., Palm Beach, FL or Monaco" />
+                  className="w-full pl-10 pr-4 py-3 border-2 border-slate-200 rounded-xl transition-all duration-200 focus:shadow-md focus:border-brand-500 focus:ring-2 focus:ring-brand-100" placeholder="e.g., Palm Beach, FL or Monaco" />
               </div>
               {showLocationSuggestions && filteredLocationSuggestions.length > 0 && (
                 <div className="absolute z-10 w-full mt-1 bg-white border border-slate-200 rounded-xl shadow-lg overflow-hidden">
@@ -126,7 +158,7 @@ export function FormSteps({
             <div>
               <label className="block text-sm font-medium text-slate-700 mb-2">Discretion Level</label>
               <select name="discretionLevel" value={formData.discretionLevel} onChange={handleInputChange}
-                className="w-full px-4 py-3 border-2 border-slate-200 rounded-xl">
+                className="w-full px-4 py-3 border-2 border-slate-200 rounded-xl transition-all duration-200 focus:shadow-md focus:border-brand-500 focus:ring-2 focus:ring-brand-100">
                 {discretionLevels.map(d => <option key={d.value} value={d.value}>{d.label} — {d.description}</option>)}
               </select>
             </div>
@@ -135,7 +167,7 @@ export function FormSteps({
 
         {/* Step 2 */}
         {step === 2 && (
-          <div className="space-y-6 animate-fadeInUp">
+          <div className="space-y-6 animate-slideInRight">
             <h3 className="text-xl font-semibold" style={{ color: '#2814ff' }}>Budget & Timeline</h3>
 
             <div>
@@ -162,7 +194,7 @@ export function FormSteps({
             <div>
               <label className="block text-sm font-medium text-slate-700 mb-2">Budget Range *</label>
               <select name="budgetRange" value={formData.budgetRange} onChange={handleInputChange}
-                className="w-full px-4 py-3 border-2 border-slate-200 rounded-xl">
+                className="w-full px-4 py-3 border-2 border-slate-200 rounded-xl transition-all duration-200 focus:shadow-md focus:border-brand-500 focus:ring-2 focus:ring-brand-100">
                 <option value="">Select budget range</option>
                 {budgetRanges.map(b => <option key={b.value} value={b.value}>{b.label}</option>)}
               </select>
@@ -186,7 +218,7 @@ export function FormSteps({
 
         {/* Step 3 */}
         {step === 3 && (
-          <div className="space-y-6 animate-fadeInUp">
+          <div className="space-y-6 animate-slideInRight">
             <h3 className="text-xl font-semibold" style={{ color: '#2814ff' }}>Key Requirements</h3>
 
             <div>
@@ -261,7 +293,7 @@ export function FormSteps({
             <div>
               <label className="block text-sm font-medium text-slate-700 mb-2">Travel Requirements</label>
               <select name="travelRequirement" value={formData.travelRequirement} onChange={handleInputChange}
-                className="w-full px-4 py-3 border-2 border-slate-200 rounded-xl">
+                className="w-full px-4 py-3 border-2 border-slate-200 rounded-xl transition-all duration-200 focus:shadow-md focus:border-brand-500 focus:ring-2 focus:ring-brand-100">
                 {travelOptions.map(t => <option key={t.value} value={t.value}>{t.label}</option>)}
               </select>
             </div>
@@ -269,7 +301,7 @@ export function FormSteps({
             <div>
               <label className="block text-sm font-medium text-slate-700 mb-2">Additional Requirements *</label>
               <textarea name="keyRequirements" value={formData.keyRequirements} onChange={handleInputChange} rows={4}
-                className="w-full px-4 py-3 border-2 border-slate-200 rounded-xl" placeholder="Describe specific experience, skills..." />
+                className="w-full px-4 py-3 border-2 border-slate-200 rounded-xl transition-all duration-200 focus:shadow-md focus:border-brand-500 focus:ring-2 focus:ring-brand-100" placeholder="Describe specific experience, skills..." />
               <p className={`text-xs mt-1 ${formData.keyRequirements.length >= 25 ? 'text-b-opal-500' : 'text-slate-500'}`}>
                 {formData.keyRequirements.length} chars {formData.keyRequirements.length < 25 ? `(${25 - formData.keyRequirements.length} more needed)` : '✓'}
               </p>
@@ -279,14 +311,15 @@ export function FormSteps({
 
         {/* Step 4 */}
         {step === 4 && (
-          <div className="space-y-6 animate-fadeInUp">
+          <div className="space-y-6 animate-slideInRight">
             <h3 className="text-xl font-semibold" style={{ color: '#2814ff' }}>Get Your Analysis</h3>
 
-            <div className="bg-brand-50 rounded-xl p-5 border border-brand-100 flex gap-3">
-              <Zap className="w-6 h-6 flex-shrink-0" style={{ color: '#2814ff' }} />
-              <div>
-                <p className="text-sm text-slate-600">Your search parameters are ready. Click "Get Analysis" below to generate your personalized complexity score and market insights.</p>
+            <div className="bg-brand-50 rounded-xl p-5 border border-brand-100">
+              <div className="flex items-start gap-3 mb-3">
+                <Zap className="w-6 h-6 flex-shrink-0" style={{ color: '#2814ff' }} />
+                <h4 className="font-semibold text-slate-900">Your analysis is almost ready</h4>
               </div>
+              <p className="text-sm text-slate-600">Your personalized analysis includes complexity scoring, salary benchmarks, candidate availability, and negotiation insights.</p>
             </div>
 
             {isCorporateRole ? (
@@ -294,7 +327,7 @@ export function FormSteps({
                 <div>
                   <label className="block text-sm font-medium text-slate-700 mb-2">Assets Under Management (AUM)</label>
                   <select name="aumRange" value={formData.aumRange} onChange={handleInputChange}
-                    className="w-full px-4 py-3 border-2 border-slate-200 rounded-xl">
+                    className="w-full px-4 py-3 border-2 border-slate-200 rounded-xl transition-all duration-200 focus:shadow-md focus:border-brand-500 focus:ring-2 focus:ring-brand-100">
                     <option value="">Select...</option>
                     <option value="under-100M">Under $100M</option>
                     <option value="100M-300M">$100M - $300M</option>
@@ -306,7 +339,7 @@ export function FormSteps({
                 <div>
                   <label className="block text-sm font-medium text-slate-700 mb-2">Team Size (Direct Reports)</label>
                   <select name="teamSize" value={formData.teamSize} onChange={handleInputChange}
-                    className="w-full px-4 py-3 border-2 border-slate-200 rounded-xl">
+                    className="w-full px-4 py-3 border-2 border-slate-200 rounded-xl transition-all duration-200 focus:shadow-md focus:border-brand-500 focus:ring-2 focus:ring-brand-100">
                     <option value="">Select...</option>
                     <option value="0">Individual contributor</option>
                     <option value="1-3">1-3 reports</option>
@@ -320,7 +353,7 @@ export function FormSteps({
                 <div>
                   <label className="block text-sm font-medium text-slate-700 mb-2">Properties to Staff</label>
                   <select name="propertiesCount" value={formData.propertiesCount} onChange={handleInputChange}
-                    className="w-full px-4 py-3 border-2 border-slate-200 rounded-xl">
+                    className="w-full px-4 py-3 border-2 border-slate-200 rounded-xl transition-all duration-200 focus:shadow-md focus:border-brand-500 focus:ring-2 focus:ring-brand-100">
                     <option value="">Select...</option>
                     <option value="1">1</option>
                     <option value="2-3">2-3</option>
@@ -331,7 +364,7 @@ export function FormSteps({
                 <div>
                   <label className="block text-sm font-medium text-slate-700 mb-2">Household Size</label>
                   <select name="householdSize" value={formData.householdSize} onChange={handleInputChange}
-                    className="w-full px-4 py-3 border-2 border-slate-200 rounded-xl">
+                    className="w-full px-4 py-3 border-2 border-slate-200 rounded-xl transition-all duration-200 focus:shadow-md focus:border-brand-500 focus:ring-2 focus:ring-brand-100">
                     <option value="">Select...</option>
                     <option value="1-2">1-2</option>
                     <option value="3-5">3-5 (family)</option>
@@ -353,7 +386,7 @@ export function FormSteps({
               </div>
               <div className="space-y-3">
                 <input type="email" name="email" value={formData.email} onChange={handleInputChange}
-                  className="w-full px-4 py-3 border-2 border-brand-100 rounded-xl focus:border-brand-500 focus:ring-2 focus:ring-brand-100 bg-white"
+                  className="w-full px-4 py-3 border-2 border-brand-100 rounded-xl focus:border-brand-500 focus:ring-2 focus:ring-brand-100 bg-white transition-all duration-200 focus:shadow-md"
                   placeholder="your@email.com" />
                 <p className="text-xs text-slate-500 flex items-center gap-1">
                   <Info className="w-3 h-3" />
@@ -376,7 +409,7 @@ export function FormSteps({
                   <p className="text-sm text-b-ocre-500 mt-2">Speak with a specialist within 24 hours. Get strategic advice tailored to your specific search.</p>
                   {formData.priorityCallback && (
                     <input type="tel" name="phone" value={formData.phone} onChange={handleInputChange}
-                      className="mt-3 w-full px-4 py-3 border-2 border-b-ocre-200 rounded-xl bg-white focus:border-b-ocre-300 focus:ring-2 focus:ring-b-ocre-200"
+                      className="mt-3 w-full px-4 py-3 border-2 border-b-ocre-200 rounded-xl bg-white focus:border-b-ocre-300 focus:ring-2 focus:ring-b-ocre-200 transition-all duration-200 focus:shadow-md"
                       placeholder="Best phone number to reach you" />
                   )}
                 </div>

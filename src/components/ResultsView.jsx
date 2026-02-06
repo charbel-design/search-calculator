@@ -355,6 +355,239 @@ export function ResultsView({
                     </div>
                   )}
 
+                  {/* Search Intelligence */}
+                  {results.benchmark && (
+                    <div className="space-y-6 animate-fadeInUp">
+                      <h4 className="font-semibold mb-4 flex items-center gap-2" style={{ color: '#2814ff' }}>
+                        <Brain className="w-5 h-5" />Search Intelligence
+                      </h4>
+
+                      {/* Row 1: Offer Acceptance Rate & Counter-Offer Rate */}
+                      {(results.benchmark.offerAcceptanceRate !== undefined || results.benchmark.counterOfferRate !== undefined) && (
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                          {results.benchmark.offerAcceptanceRate !== undefined && (
+                            <div className="bg-slate-50 rounded-xl p-6 border border-slate-100 text-center">
+                              <p className="text-xs text-slate-500 mb-2 uppercase tracking-widest font-medium">Offer Acceptance Rate</p>
+                              <p className="text-4xl font-bold mb-2" style={{ color: '#2814ff' }}>
+                                {Math.round(results.benchmark.offerAcceptanceRate * 100)}%
+                              </p>
+                              <p className="text-xs text-slate-500">~{Math.round(results.benchmark.offerAcceptanceRate * 10)} candidates per placement</p>
+                            </div>
+                          )}
+                          {results.benchmark.counterOfferRate !== undefined && (
+                            <div className="bg-slate-50 rounded-xl p-6 border border-slate-100 text-center">
+                              <p className="text-xs text-slate-500 mb-2 uppercase tracking-widest font-medium">Counter-Offer Rate</p>
+                              <p className="text-4xl font-bold mb-2" style={{ color: '#2814ff' }}>
+                                {Math.round(results.benchmark.counterOfferRate * 100)}%
+                              </p>
+                              <p className="text-xs text-slate-500">Risk of candidate retention</p>
+                            </div>
+                          )}
+                        </div>
+                      )}
+
+                      {/* Row 2: Sourcing Channel Mix */}
+                      {results.benchmark.sourcingChannels && (
+                        <div className="bg-slate-50 rounded-xl p-6 border border-slate-100">
+                          <p className="text-xs text-slate-500 mb-4 uppercase tracking-widest font-medium">Sourcing Channel Mix</p>
+                          <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+                            {results.benchmark.sourcingChannels.referral !== undefined && (
+                              <div className="text-center">
+                                <p className="text-2xl font-bold mb-1" style={{ color: '#2814ff' }}>
+                                  {Math.round(results.benchmark.sourcingChannels.referral * 100)}%
+                                </p>
+                                <p className="text-xs text-slate-500">Referral</p>
+                              </div>
+                            )}
+                            {results.benchmark.sourcingChannels.agency !== undefined && (
+                              <div className="text-center">
+                                <p className="text-2xl font-bold mb-1" style={{ color: '#2814ff' }}>
+                                  {Math.round(results.benchmark.sourcingChannels.agency * 100)}%
+                                </p>
+                                <p className="text-xs text-slate-500">Agency</p>
+                              </div>
+                            )}
+                            {results.benchmark.sourcingChannels.direct !== undefined && (
+                              <div className="text-center">
+                                <p className="text-2xl font-bold mb-1" style={{ color: '#2814ff' }}>
+                                  {Math.round(results.benchmark.sourcingChannels.direct * 100)}%
+                                </p>
+                                <p className="text-xs text-slate-500">Direct</p>
+                              </div>
+                            )}
+                            {results.benchmark.sourcingChannels.internal !== undefined && (
+                              <div className="text-center">
+                                <p className="text-2xl font-bold mb-1" style={{ color: '#2814ff' }}>
+                                  {Math.round(results.benchmark.sourcingChannels.internal * 100)}%
+                                </p>
+                                <p className="text-xs text-slate-500">Internal</p>
+                              </div>
+                            )}
+                          </div>
+                        </div>
+                      )}
+
+                      {/* Row 3: Compact Stats */}
+                      {(results.benchmark.salaryGrowthRate !== undefined ||
+                        results.benchmark.typicalExperience !== undefined ||
+                        results.benchmark.backgroundCheckTimeline !== undefined) && (
+                        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                          {results.benchmark.salaryGrowthRate !== undefined && (
+                            <div className="bg-slate-50 rounded-xl p-4 border border-slate-100 text-center">
+                              <p className="text-xs text-slate-500 mb-1 uppercase tracking-widest font-medium">Salary Growth YoY</p>
+                              <p className="text-3xl font-bold" style={{ color: '#2814ff' }}>
+                                {Math.round(results.benchmark.salaryGrowthRate * 100)}%
+                              </p>
+                            </div>
+                          )}
+                          {results.benchmark.typicalExperience && (
+                            <div className="bg-slate-50 rounded-xl p-4 border border-slate-100 text-center">
+                              <p className="text-xs text-slate-500 mb-1 uppercase tracking-widest font-medium">Typical Experience</p>
+                              <p className="text-3xl font-bold" style={{ color: '#2814ff' }}>
+                                {results.benchmark.typicalExperience.typical}y
+                              </p>
+                              {results.benchmark.typicalExperience.min && (
+                                <p className="text-xs text-slate-500 mt-1">{results.benchmark.typicalExperience.min}+ years min</p>
+                              )}
+                            </div>
+                          )}
+                          {results.benchmark.backgroundCheckTimeline !== undefined && (
+                            <div className="bg-slate-50 rounded-xl p-4 border border-slate-100 text-center">
+                              <p className="text-xs text-slate-500 mb-1 uppercase tracking-widest font-medium">Background Check</p>
+                              <p className="text-3xl font-bold" style={{ color: '#2814ff' }}>
+                                {results.benchmark.backgroundCheckTimeline}w
+                              </p>
+                              <p className="text-xs text-slate-500 mt-1">timeline</p>
+                            </div>
+                          )}
+                        </div>
+                      )}
+
+                      {/* Row 4: Retention & Compensation */}
+                      {(results.benchmark.retentionRisk !== undefined ||
+                        results.benchmark.compensationStructure !== undefined ||
+                        results.benchmark.relocationWillingness !== undefined) && (
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                          {/* Left: Retention & Relocation */}
+                          {(results.benchmark.retentionRisk !== undefined ||
+                            results.benchmark.relocationWillingness !== undefined) && (
+                            <div className="bg-slate-50 rounded-xl p-6 border border-slate-100">
+                              <p className="text-xs text-slate-500 mb-4 uppercase tracking-widest font-medium">Retention & Relocation</p>
+                              <div className="space-y-4">
+                                {results.benchmark.retentionRisk?.firstYearAttrition !== undefined && (
+                                  <div>
+                                    <p className="text-sm text-slate-600 mb-1">First-Year Attrition</p>
+                                    <p className="text-2xl font-bold" style={{ color: '#2814ff' }}>
+                                      {Math.round(results.benchmark.retentionRisk.firstYearAttrition * 100)}%
+                                    </p>
+                                  </div>
+                                )}
+                                {results.benchmark.relocationWillingness !== undefined && (
+                                  <div>
+                                    <p className="text-sm text-slate-600 mb-1">Relocation Willingness</p>
+                                    <p className="text-2xl font-bold" style={{ color: '#2814ff' }}>
+                                      {Math.round(results.benchmark.relocationWillingness * 100)}%
+                                    </p>
+                                  </div>
+                                )}
+                                {results.benchmark.retentionRisk?.topReasons && results.benchmark.retentionRisk.topReasons.length > 0 && (
+                                  <div className="pt-3 border-t border-slate-200">
+                                    <p className="text-xs text-slate-500 font-medium mb-2">Top Departure Risks</p>
+                                    <div className="flex flex-wrap gap-2">
+                                      {results.benchmark.retentionRisk.topReasons.map((reason, i) => (
+                                        <span key={i} className="inline-block px-2 py-1 bg-white border border-slate-200 rounded-full text-[11px] text-slate-600">
+                                          {reason}
+                                        </span>
+                                      ))}
+                                    </div>
+                                  </div>
+                                )}
+                              </div>
+                            </div>
+                          )}
+
+                          {/* Right: Compensation Structure */}
+                          {results.benchmark.compensationStructure && (
+                            <div className="bg-slate-50 rounded-xl p-6 border border-slate-100">
+                              <p className="text-xs text-slate-500 mb-4 uppercase tracking-widest font-medium">Compensation Structure</p>
+                              <div className="space-y-4">
+                                {(results.benchmark.compensationStructure.basePercent !== undefined ||
+                                  results.benchmark.compensationStructure.bonusPercent !== undefined ||
+                                  results.benchmark.compensationStructure.benefitsPercent !== undefined) && (
+                                  <div>
+                                    <p className="text-sm text-slate-600 mb-3">Typical Split</p>
+                                    <div className="space-y-2">
+                                      {results.benchmark.compensationStructure.basePercent !== undefined && (
+                                        <div>
+                                          <div className="flex justify-between text-xs text-slate-600 mb-1">
+                                            <span>Base Salary</span>
+                                            <span className="font-medium">{Math.round(results.benchmark.compensationStructure.basePercent * 100)}%</span>
+                                          </div>
+                                          <div className="h-2 bg-white rounded-full overflow-hidden">
+                                            <div
+                                              className="h-full"
+                                              style={{ backgroundColor: '#2814ff', width: `${Math.round(results.benchmark.compensationStructure.basePercent * 100)}%` }}
+                                            />
+                                          </div>
+                                        </div>
+                                      )}
+                                      {results.benchmark.compensationStructure.bonusPercent !== undefined && (
+                                        <div>
+                                          <div className="flex justify-between text-xs text-slate-600 mb-1">
+                                            <span>Bonus</span>
+                                            <span className="font-medium">{Math.round(results.benchmark.compensationStructure.bonusPercent * 100)}%</span>
+                                          </div>
+                                          <div className="h-2 bg-white rounded-full overflow-hidden">
+                                            <div
+                                              className="h-full"
+                                              style={{ backgroundColor: '#9ca3af', width: `${Math.round(results.benchmark.compensationStructure.bonusPercent * 100)}%` }}
+                                            />
+                                          </div>
+                                        </div>
+                                      )}
+                                      {results.benchmark.compensationStructure.benefitsPercent !== undefined && (
+                                        <div>
+                                          <div className="flex justify-between text-xs text-slate-600 mb-1">
+                                            <span>Benefits</span>
+                                            <span className="font-medium">{Math.round(results.benchmark.compensationStructure.benefitsPercent * 100)}%</span>
+                                          </div>
+                                          <div className="h-2 bg-white rounded-full overflow-hidden">
+                                            <div
+                                              className="h-full"
+                                              style={{ backgroundColor: '#cbd5e1', width: `${Math.round(results.benchmark.compensationStructure.benefitsPercent * 100)}%` }}
+                                            />
+                                          </div>
+                                        </div>
+                                      )}
+                                    </div>
+                                  </div>
+                                )}
+                                {(results.benchmark.compensationStructure.signingBonusFrequency !== undefined ||
+                                  results.benchmark.compensationStructure.signingBonusRange) && (
+                                  <div className="pt-3 border-t border-slate-200">
+                                    <p className="text-sm text-slate-600 mb-2">Signing Bonus</p>
+                                    <div className="space-y-1">
+                                      {results.benchmark.compensationStructure.signingBonusFrequency !== undefined && (
+                                        <p className="text-sm font-medium" style={{ color: '#2814ff' }}>
+                                          {Math.round(results.benchmark.compensationStructure.signingBonusFrequency * 100)}% offer signing bonus
+                                        </p>
+                                      )}
+                                      {results.benchmark.compensationStructure.signingBonusRange && (
+                                        <p className="text-xs text-slate-500">
+                                          {results.benchmark.compensationStructure.signingBonusRange}
+                                        </p>
+                                      )}
+                                    </div>
+                                  </div>
+                                )}
+                              </div>
+                            </div>
+                          )}
+                        </div>
+                      )}
+                    </div>
+                  )}
+
                   {/* Negotiation Leverage */}
                   {results.negotiationLeverage && (
                     <div>
