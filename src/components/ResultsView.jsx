@@ -219,10 +219,8 @@ export function ResultsView({
           <div className="mb-6 animate-fadeInUp delay-600">
             <div className="flex gap-2 border-b border-slate-200 mb-4 overflow-x-auto">
               {[
-                { id: 'breakdown', label: 'Breakdown' },
-                { id: 'strategy', label: 'Strategy' },
-                { id: 'market', label: 'Market' },
-                { id: 'decision', label: 'Insights' },
+                { id: 'breakdown', label: 'The Search' },
+                { id: 'strategy', label: 'The Strategy' },
                 { id: 'next', label: "What's Next" }
               ].map(tab => (
                 <button
@@ -294,66 +292,15 @@ export function ResultsView({
                       </div>
                     </div>
                   )}
-                </div>
-              )}
-
-              {/* STRATEGY TAB */}
-              {activeTab === 'strategy' && (
-                <div className="space-y-6 animate-fadeInUp">
-                  {/* Success Factors */}
-                  <div>
-                    <h4 className="font-semibold mb-3 flex items-center gap-2" style={{ color: '#2814ff' }}><CheckCircle className="w-5 h-5" />Success Factors</h4>
-                    <ul className="space-y-2">
-                      {results.keySuccessFactors?.map((f, i) => (
-                        <li key={i} className="flex items-start gap-3 bg-slate-50 rounded-lg p-3 border border-slate-100">
-                          <CheckCircle className="w-5 h-5 flex-shrink-0 mt-0.5" style={{ color: '#2814ff' }} />
-                          <span className="text-slate-700">{f}</span>
-                        </li>
-                      ))}
-                    </ul>
+                  {/* Market Competitiveness */}
+                  <div className="bg-slate-50 rounded-xl p-5 border border-slate-100">
+                    <div className="flex items-center gap-2 mb-2">
+                      <TrendingUp className="w-5 h-5" style={{ color: '#2814ff' }} />
+                      <h4 className="font-semibold text-sm">Market Competitiveness</h4>
+                    </div>
+                    <p className="text-slate-700">{results.marketCompetitiveness}</p>
                   </div>
 
-                  {/* Recommendations */}
-                  {results.recommendedAdjustments?.length > 0 && (
-                    <div>
-                      <h4 className="font-semibold mb-3 flex items-center gap-2" style={{ color: '#2814ff' }}><Lightbulb className="w-5 h-5" />Recommendations</h4>
-                      <ul className="space-y-2">
-                        {results.recommendedAdjustments.map((r, i) => (
-                          <li key={i} className="flex items-start gap-3 bg-slate-50 rounded-lg p-3 border border-slate-100">
-                            <ArrowRight className="w-5 h-5 flex-shrink-0 mt-0.5" style={{ color: '#2814ff' }} />
-                            <span className="text-slate-700">{r}</span>
-                          </li>
-                        ))}
-                      </ul>
-                    </div>
-                  )}
-
-                  {/* Sourcing Insight */}
-                  {results.sourcingInsight && (
-                    <div className="bg-slate-50 rounded-xl p-5 border border-slate-100">
-                      <div className="flex items-center gap-2 mb-2">
-                        <Target className="w-5 h-5" style={{ color: '#2814ff' }} />
-                        <h4 className="font-semibold text-sm">Where to Find These Candidates</h4>
-                      </div>
-                      <p className="text-slate-700">{results.sourcingInsight}</p>
-                    </div>
-                  )}
-
-                  {/* Red Flag Analysis */}
-                  {results.redFlagAnalysis && results.redFlagAnalysis !== "None - well-positioned search" && (
-                    <div>
-                      <h4 className="font-semibold mb-3 flex items-center gap-2" style={{ color: '#2814ff' }}><AlertCircle className="w-5 h-5" />Watch Out For</h4>
-                      <div className="bg-amber-50 rounded-xl p-4 border border-amber-200">
-                        <p className="text-slate-700 text-amber-900">{results.redFlagAnalysis}</p>
-                      </div>
-                    </div>
-                  )}
-                </div>
-              )}
-
-              {/* MARKET TAB */}
-              {activeTab === 'market' && (
-                <div className="space-y-6 animate-fadeInUp">
                   {/* Market Intelligence */}
                   {results.benchmark?.trends && (
                     <div>
@@ -369,14 +316,13 @@ export function ResultsView({
                     </div>
                   )}
 
-                  {/* Search Intelligence */}
+                  {/* The Numbers Behind the Search */}
                   {results.benchmark && (
-                    <div className="space-y-6 animate-fadeInUp">
+                    <div className="space-y-6">
                       <h4 className="font-semibold mb-4 flex items-center gap-2" style={{ color: '#2814ff' }}>
                         <Brain className="w-5 h-5" />The Numbers Behind the Search
                       </h4>
 
-                      {/* Row 1: Offer Acceptance Rate & Counter-Offer Rate */}
                       {(results.benchmark.offerAcceptanceRate !== undefined || results.benchmark.counterOfferRate !== undefined) && (
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                           {results.benchmark.offerAcceptanceRate !== undefined && (
@@ -400,40 +346,31 @@ export function ResultsView({
                         </div>
                       )}
 
-                      {/* Row 2: Sourcing Channel Mix */}
                       {results.benchmark.sourcingChannels && (
                         <div className="bg-slate-50 rounded-xl p-6 border border-slate-100">
                           <p className="text-xs text-slate-500 mb-4 uppercase tracking-widest font-medium">Sourcing Channel Mix</p>
                           <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
                             {results.benchmark.sourcingChannels.referral !== undefined && (
                               <div className="text-center">
-                                <p className="text-2xl font-bold mb-1" style={{ color: '#2814ff' }}>
-                                  {Math.round(results.benchmark.sourcingChannels.referral * 100)}%
-                                </p>
+                                <p className="text-2xl font-bold mb-1" style={{ color: '#2814ff' }}>{Math.round(results.benchmark.sourcingChannels.referral * 100)}%</p>
                                 <p className="text-xs text-slate-500">Referral</p>
                               </div>
                             )}
                             {results.benchmark.sourcingChannels.agency !== undefined && (
                               <div className="text-center">
-                                <p className="text-2xl font-bold mb-1" style={{ color: '#2814ff' }}>
-                                  {Math.round(results.benchmark.sourcingChannels.agency * 100)}%
-                                </p>
+                                <p className="text-2xl font-bold mb-1" style={{ color: '#2814ff' }}>{Math.round(results.benchmark.sourcingChannels.agency * 100)}%</p>
                                 <p className="text-xs text-slate-500">Search Firm</p>
                               </div>
                             )}
                             {results.benchmark.sourcingChannels.direct !== undefined && (
                               <div className="text-center">
-                                <p className="text-2xl font-bold mb-1" style={{ color: '#2814ff' }}>
-                                  {Math.round(results.benchmark.sourcingChannels.direct * 100)}%
-                                </p>
+                                <p className="text-2xl font-bold mb-1" style={{ color: '#2814ff' }}>{Math.round(results.benchmark.sourcingChannels.direct * 100)}%</p>
                                 <p className="text-xs text-slate-500">Direct</p>
                               </div>
                             )}
                             {results.benchmark.sourcingChannels.internal !== undefined && (
                               <div className="text-center">
-                                <p className="text-2xl font-bold mb-1" style={{ color: '#2814ff' }}>
-                                  {Math.round(results.benchmark.sourcingChannels.internal * 100)}%
-                                </p>
+                                <p className="text-2xl font-bold mb-1" style={{ color: '#2814ff' }}>{Math.round(results.benchmark.sourcingChannels.internal * 100)}%</p>
                                 <p className="text-xs text-slate-500">Internal</p>
                               </div>
                             )}
@@ -441,24 +378,18 @@ export function ResultsView({
                         </div>
                       )}
 
-                      {/* Row 3: Compact Stats */}
-                      {(results.benchmark.salaryGrowthRate !== undefined ||
-                        results.benchmark.typicalExperience !== undefined) && (
+                      {(results.benchmark.salaryGrowthRate !== undefined || results.benchmark.typicalExperience !== undefined) && (
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                           {results.benchmark.salaryGrowthRate !== undefined && (
                             <div className="bg-slate-50 rounded-xl p-4 border border-slate-100 text-center">
                               <p className="text-xs text-slate-500 mb-1 uppercase tracking-widest font-medium">Salary Growth YoY</p>
-                              <p className="text-3xl font-bold" style={{ color: '#2814ff' }}>
-                                {Math.round(results.benchmark.salaryGrowthRate * 100)}%
-                              </p>
+                              <p className="text-3xl font-bold" style={{ color: '#2814ff' }}>{Math.round(results.benchmark.salaryGrowthRate * 100)}%</p>
                             </div>
                           )}
                           {results.benchmark.typicalExperience && (
                             <div className="bg-slate-50 rounded-xl p-4 border border-slate-100 text-center">
                               <p className="text-xs text-slate-500 mb-1 uppercase tracking-widest font-medium">Typical Experience</p>
-                              <p className="text-3xl font-bold" style={{ color: '#2814ff' }}>
-                                {results.benchmark.typicalExperience.typical}y
-                              </p>
+                              <p className="text-3xl font-bold" style={{ color: '#2814ff' }}>{results.benchmark.typicalExperience.typical}y</p>
                               {results.benchmark.typicalExperience.min && (
                                 <p className="text-xs text-slate-500 mt-1">{results.benchmark.typicalExperience.min}+ years min</p>
                               )}
@@ -467,31 +398,22 @@ export function ResultsView({
                         </div>
                       )}
 
-                      {/* Row 4: Retention & Compensation */}
-                      {(results.benchmark.retentionRisk !== undefined ||
-                        results.benchmark.compensationStructure !== undefined ||
-                        results.benchmark.relocationWillingness !== undefined) && (
+                      {(results.benchmark.retentionRisk !== undefined || results.benchmark.compensationStructure !== undefined || results.benchmark.relocationWillingness !== undefined) && (
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                          {/* Left: Retention & Relocation */}
-                          {(results.benchmark.retentionRisk !== undefined ||
-                            results.benchmark.relocationWillingness !== undefined) && (
+                          {(results.benchmark.retentionRisk !== undefined || results.benchmark.relocationWillingness !== undefined) && (
                             <div className="bg-slate-50 rounded-xl p-6 border border-slate-100">
                               <p className="text-xs text-slate-500 mb-4 uppercase tracking-widest font-medium">Retention & Relocation</p>
                               <div className="space-y-4">
                                 {results.benchmark.retentionRisk?.firstYearAttrition !== undefined && (
                                   <div>
                                     <p className="text-sm text-slate-600 mb-1">First-Year Attrition</p>
-                                    <p className="text-2xl font-bold" style={{ color: '#2814ff' }}>
-                                      {Math.round(results.benchmark.retentionRisk.firstYearAttrition * 100)}%
-                                    </p>
+                                    <p className="text-2xl font-bold" style={{ color: '#2814ff' }}>{Math.round(results.benchmark.retentionRisk.firstYearAttrition * 100)}%</p>
                                   </div>
                                 )}
                                 {results.benchmark.relocationWillingness !== undefined && (
                                   <div>
                                     <p className="text-sm text-slate-600 mb-1">Relocation Willingness</p>
-                                    <p className="text-2xl font-bold" style={{ color: '#2814ff' }}>
-                                      {Math.round(results.benchmark.relocationWillingness * 100)}%
-                                    </p>
+                                    <p className="text-2xl font-bold" style={{ color: '#2814ff' }}>{Math.round(results.benchmark.relocationWillingness * 100)}%</p>
                                   </div>
                                 )}
                                 {results.benchmark.retentionRisk?.topReasons && results.benchmark.retentionRisk.topReasons.length > 0 && (
@@ -499,9 +421,7 @@ export function ResultsView({
                                     <p className="text-xs text-slate-500 font-medium mb-2">Top Departure Risks</p>
                                     <div className="flex flex-wrap gap-2">
                                       {results.benchmark.retentionRisk.topReasons.map((reason, i) => (
-                                        <span key={i} className="inline-block px-2 py-1 bg-white border border-slate-200 rounded-full text-[11px] text-slate-600">
-                                          {reason}
-                                        </span>
+                                        <span key={i} className="inline-block px-2 py-1 bg-white border border-slate-200 rounded-full text-[11px] text-slate-600">{reason}</span>
                                       ))}
                                     </div>
                                   </div>
@@ -509,77 +429,44 @@ export function ResultsView({
                               </div>
                             </div>
                           )}
-
-                          {/* Right: Compensation Structure */}
                           {results.benchmark.compensationStructure && (
                             <div className="bg-slate-50 rounded-xl p-6 border border-slate-100">
                               <p className="text-xs text-slate-500 mb-4 uppercase tracking-widest font-medium">Compensation Structure</p>
                               <div className="space-y-4">
-                                {(results.benchmark.compensationStructure.basePercent !== undefined ||
-                                  results.benchmark.compensationStructure.bonusPercent !== undefined ||
-                                  results.benchmark.compensationStructure.benefitsPercent !== undefined) && (
+                                {(results.benchmark.compensationStructure.basePercent !== undefined || results.benchmark.compensationStructure.bonusPercent !== undefined || results.benchmark.compensationStructure.benefitsPercent !== undefined) && (
                                   <div>
                                     <p className="text-sm text-slate-600 mb-3">Typical Split</p>
                                     <div className="space-y-2">
                                       {results.benchmark.compensationStructure.basePercent !== undefined && (
                                         <div>
-                                          <div className="flex justify-between text-xs text-slate-600 mb-1">
-                                            <span>Base Salary</span>
-                                            <span className="font-medium">{Math.round(results.benchmark.compensationStructure.basePercent * 100)}%</span>
-                                          </div>
-                                          <div className="h-2 bg-white rounded-full overflow-hidden">
-                                            <div
-                                              className="h-full"
-                                              style={{ backgroundColor: '#2814ff', width: `${Math.round(results.benchmark.compensationStructure.basePercent * 100)}%` }}
-                                            />
-                                          </div>
+                                          <div className="flex justify-between text-xs text-slate-600 mb-1"><span>Base Salary</span><span className="font-medium">{Math.round(results.benchmark.compensationStructure.basePercent * 100)}%</span></div>
+                                          <div className="h-2 bg-white rounded-full overflow-hidden"><div className="h-full" style={{ backgroundColor: '#2814ff', width: `${Math.round(results.benchmark.compensationStructure.basePercent * 100)}%` }} /></div>
                                         </div>
                                       )}
                                       {results.benchmark.compensationStructure.bonusPercent !== undefined && (
                                         <div>
-                                          <div className="flex justify-between text-xs text-slate-600 mb-1">
-                                            <span>Bonus</span>
-                                            <span className="font-medium">{Math.round(results.benchmark.compensationStructure.bonusPercent * 100)}%</span>
-                                          </div>
-                                          <div className="h-2 bg-white rounded-full overflow-hidden">
-                                            <div
-                                              className="h-full"
-                                              style={{ backgroundColor: '#9ca3af', width: `${Math.round(results.benchmark.compensationStructure.bonusPercent * 100)}%` }}
-                                            />
-                                          </div>
+                                          <div className="flex justify-between text-xs text-slate-600 mb-1"><span>Bonus</span><span className="font-medium">{Math.round(results.benchmark.compensationStructure.bonusPercent * 100)}%</span></div>
+                                          <div className="h-2 bg-white rounded-full overflow-hidden"><div className="h-full" style={{ backgroundColor: '#9ca3af', width: `${Math.round(results.benchmark.compensationStructure.bonusPercent * 100)}%` }} /></div>
                                         </div>
                                       )}
                                       {results.benchmark.compensationStructure.benefitsPercent !== undefined && (
                                         <div>
-                                          <div className="flex justify-between text-xs text-slate-600 mb-1">
-                                            <span>Benefits</span>
-                                            <span className="font-medium">{Math.round(results.benchmark.compensationStructure.benefitsPercent * 100)}%</span>
-                                          </div>
-                                          <div className="h-2 bg-white rounded-full overflow-hidden">
-                                            <div
-                                              className="h-full"
-                                              style={{ backgroundColor: '#cbd5e1', width: `${Math.round(results.benchmark.compensationStructure.benefitsPercent * 100)}%` }}
-                                            />
-                                          </div>
+                                          <div className="flex justify-between text-xs text-slate-600 mb-1"><span>Benefits</span><span className="font-medium">{Math.round(results.benchmark.compensationStructure.benefitsPercent * 100)}%</span></div>
+                                          <div className="h-2 bg-white rounded-full overflow-hidden"><div className="h-full" style={{ backgroundColor: '#cbd5e1', width: `${Math.round(results.benchmark.compensationStructure.benefitsPercent * 100)}%` }} /></div>
                                         </div>
                                       )}
                                     </div>
                                   </div>
                                 )}
-                                {(results.benchmark.compensationStructure.signingBonusFrequency !== undefined ||
-                                  results.benchmark.compensationStructure.signingBonusRange) && (
+                                {(results.benchmark.compensationStructure.signingBonusFrequency !== undefined || results.benchmark.compensationStructure.signingBonusRange) && (
                                   <div className="pt-3 border-t border-slate-200">
                                     <p className="text-sm text-slate-600 mb-2">Signing Bonus</p>
                                     <div className="space-y-1">
                                       {results.benchmark.compensationStructure.signingBonusFrequency !== undefined && (
-                                        <p className="text-sm font-medium" style={{ color: '#2814ff' }}>
-                                          {Math.round(results.benchmark.compensationStructure.signingBonusFrequency * 100)}% offer signing bonus
-                                        </p>
+                                        <p className="text-sm font-medium" style={{ color: '#2814ff' }}>{Math.round(results.benchmark.compensationStructure.signingBonusFrequency * 100)}% offer signing bonus</p>
                                       )}
                                       {results.benchmark.compensationStructure.signingBonusRange && (
-                                        <p className="text-xs text-slate-500">
-                                          {results.benchmark.compensationStructure.signingBonusRange}
-                                        </p>
+                                        <p className="text-xs text-slate-500">{results.benchmark.compensationStructure.signingBonusRange}</p>
                                       )}
                                     </div>
                                   </div>
@@ -591,90 +478,14 @@ export function ResultsView({
                       )}
                     </div>
                   )}
-
-                  {/* Negotiation Leverage */}
-                  {results.negotiationLeverage && (
-                    <div>
-                      <h4 className="font-semibold mb-3 flex items-center gap-2" style={{ color: '#2814ff' }}><ArrowLeftRight className="w-5 h-5" />Negotiation Leverage</h4>
-                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                        <div className="bg-slate-50 rounded-xl p-4 border border-slate-100">
-                          <h5 className="font-medium mb-2 text-sm" style={{ color: '#2814ff' }}>Candidate Advantages</h5>
-                          <ul className="space-y-1">{results.negotiationLeverage.candidateAdvantages?.map((a, i) => <li key={i} className="text-sm text-slate-700">• {a}</li>)}</ul>
-                        </div>
-                        <div className="bg-slate-50 rounded-xl p-4 border border-slate-100">
-                          <h5 className="font-medium mb-2 text-sm" style={{ color: '#2814ff' }}>Your Advantages</h5>
-                          <ul className="space-y-1">{results.negotiationLeverage.employerAdvantages?.map((a, i) => <li key={i} className="text-sm text-slate-700">• {a}</li>)}</ul>
-                        </div>
-                      </div>
-                    </div>
-                  )}
-
-                  {/* Market Competitiveness Detail */}
-                  <div className="bg-slate-50 rounded-xl p-5 border border-slate-100">
-                    <div className="flex items-center gap-2 mb-2">
-                      <TrendingUp className="w-5 h-5" style={{ color: '#2814ff' }} />
-                      <h4 className="font-semibold text-sm">Market Competitiveness</h4>
-                    </div>
-                    <p className="text-slate-700">{results.marketCompetitiveness}</p>
-                  </div>
                 </div>
               )}
 
-              {/* DECISION INTELLIGENCE TAB */}
-              {activeTab === 'decision' && results.decisionIntelligence && (
+              {/* THE STRATEGY TAB */}
+              {activeTab === 'strategy' && (
                 <div className="space-y-6 animate-fadeInUp">
-                  <p className="text-sm text-slate-600 mb-4">Here's the strategic picture. We've started the analysis — the full deep-dive happens when we talk.</p>
-
-                  <div className="space-y-4">
-                    {/* Trade-Off Scenarios */}
-                    {results.decisionIntelligence.tradeoffScenarios && (
-                      <div className="bg-white border border-slate-200 rounded-xl p-5 shadow-sm">
-                        <div className="flex items-center gap-2 mb-3">
-                          <div className="w-8 h-8 rounded-lg flex items-center justify-center" style={{ backgroundColor: '#d2d4ff' }}>
-                            <GitBranch className="w-4 h-4" style={{ color: '#2814ff' }} />
-                          </div>
-                          <h5 className="font-semibold text-slate-900">Trade-Off Scenarios</h5>
-                        </div>
-                        <ul className="space-y-2 mb-4">
-                          {results.decisionIntelligence.tradeoffScenarios.initial?.map((item, i) => (
-                            <li key={i} className="text-sm text-slate-700 flex items-start gap-2">
-                              <span className="font-medium" style={{ color: '#2814ff' }}>→</span>
-                              <span>{item}</span>
-                            </li>
-                          ))}
-                        </ul>
-                        <div className="border-t border-slate-100 pt-3 flex items-center gap-2">
-                          <ArrowRight className="w-3.5 h-3.5" style={{ color: '#2814ff' }} />
-                          <span className="text-xs text-slate-500">{results.decisionIntelligence.tradeoffScenarios.completeTeaser}</span>
-                        </div>
-                      </div>
-                    )}
-
-                    {/* Candidate Psychology */}
-                    {results.decisionIntelligence.candidatePsychology && (
-                      <div className="bg-white border border-slate-200 rounded-xl p-5 shadow-sm">
-                        <div className="flex items-center gap-2 mb-3">
-                          <div className="w-8 h-8 rounded-lg flex items-center justify-center" style={{ backgroundColor: '#d2d4ff' }}>
-                            <Users className="w-4 h-4" style={{ color: '#2814ff' }} />
-                          </div>
-                          <h5 className="font-semibold text-slate-900">What Top Candidates Care About</h5>
-                        </div>
-                        <ul className="space-y-2 mb-4">
-                          {results.decisionIntelligence.candidatePsychology.initial?.map((item, i) => (
-                            <li key={i} className="text-sm text-slate-700 flex items-start gap-2">
-                              <span style={{ color: '#2814ff' }} className="font-medium">•</span>
-                              <span>{item}</span>
-                            </li>
-                          ))}
-                        </ul>
-                        <div className="border-t border-slate-100 pt-3 flex items-center gap-2">
-                          <ArrowRight className="w-3.5 h-3.5" style={{ color: '#2814ff' }} />
-                          <span className="text-xs text-slate-500">{results.decisionIntelligence.candidatePsychology.completeTeaser}</span>
-                        </div>
-                      </div>
-                    )}
-
-                    {/* Probability & Mandate Strength Grid */}
+                  {/* Probability & Mandate Strength Grid */}
+                  {results.decisionIntelligence && (
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                       {results.decisionIntelligence.probabilityOfSuccess && (
                         <div className="bg-white border border-slate-200 rounded-xl p-5 shadow-sm">
@@ -690,7 +501,6 @@ export function ResultsView({
                                 const conf = results.decisionIntelligence.probabilityOfSuccess.initialConfidence || '';
                                 const pctMatch = conf.match(/(\d+)%/);
                                 const pct = pctMatch ? pctMatch[1] : null;
-                                const rest = pct ? conf.replace(/^\d+%\s*/, '') : conf;
                                 return pct ? (
                                   <>
                                     <span className="text-3xl font-bold" style={{ color: '#2814ff' }}>{pct}%</span>
@@ -746,31 +556,145 @@ export function ResultsView({
                         </div>
                       )}
                     </div>
+                  )}
 
-                    {/* False Signals */}
-                    {results.decisionIntelligence.falseSignals && (
-                      <div className="bg-amber-50 border border-amber-200 rounded-xl p-5">
-                        <div className="flex items-center gap-2 mb-3">
-                          <div className="w-8 h-8 rounded-lg flex items-center justify-center bg-amber-100">
-                            <AlertTriangle className="w-4 h-4 text-amber-600" />
-                          </div>
-                          <h5 className="font-semibold text-amber-900">Don't Be Fooled By</h5>
+                  {/* Trade-Off Scenarios */}
+                  {results.decisionIntelligence?.tradeoffScenarios && (
+                    <div className="bg-white border border-slate-200 rounded-xl p-5 shadow-sm">
+                      <div className="flex items-center gap-2 mb-3">
+                        <div className="w-8 h-8 rounded-lg flex items-center justify-center" style={{ backgroundColor: '#d2d4ff' }}>
+                          <GitBranch className="w-4 h-4" style={{ color: '#2814ff' }} />
                         </div>
-                        <ul className="space-y-2 mb-4">
-                          {results.decisionIntelligence.falseSignals.initial?.map((item, i) => (
-                            <li key={i} className="text-sm text-amber-800 flex items-start gap-2">
-                              <AlertCircle className="w-4 h-4 text-amber-600 flex-shrink-0 mt-0.5" />
-                              <span>{item}</span>
-                            </li>
-                          ))}
-                        </ul>
-                        <div className="border-t border-amber-200 pt-3 flex items-center gap-2">
-                          <ArrowRight className="w-3.5 h-3.5 text-amber-600" />
-                          <span className="text-xs text-amber-700">{results.decisionIntelligence.falseSignals.completeTeaser}</span>
+                        <h5 className="font-semibold text-slate-900">Trade-Off Scenarios</h5>
+                      </div>
+                      <ul className="space-y-2 mb-4">
+                        {results.decisionIntelligence.tradeoffScenarios.initial?.map((item, i) => (
+                          <li key={i} className="text-sm text-slate-700 flex items-start gap-2">
+                            <span className="font-medium" style={{ color: '#2814ff' }}>→</span>
+                            <span>{item}</span>
+                          </li>
+                        ))}
+                      </ul>
+                      <div className="border-t border-slate-100 pt-3 flex items-center gap-2">
+                        <ArrowRight className="w-3.5 h-3.5" style={{ color: '#2814ff' }} />
+                        <span className="text-xs text-slate-500">{results.decisionIntelligence.tradeoffScenarios.completeTeaser}</span>
+                      </div>
+                    </div>
+                  )}
+
+                  {/* Candidate Psychology */}
+                  {results.decisionIntelligence?.candidatePsychology && (
+                    <div className="bg-white border border-slate-200 rounded-xl p-5 shadow-sm">
+                      <div className="flex items-center gap-2 mb-3">
+                        <div className="w-8 h-8 rounded-lg flex items-center justify-center" style={{ backgroundColor: '#d2d4ff' }}>
+                          <Users className="w-4 h-4" style={{ color: '#2814ff' }} />
+                        </div>
+                        <h5 className="font-semibold text-slate-900">What Top Candidates Care About</h5>
+                      </div>
+                      <ul className="space-y-2 mb-4">
+                        {results.decisionIntelligence.candidatePsychology.initial?.map((item, i) => (
+                          <li key={i} className="text-sm text-slate-700 flex items-start gap-2">
+                            <span style={{ color: '#2814ff' }} className="font-medium">•</span>
+                            <span>{item}</span>
+                          </li>
+                        ))}
+                      </ul>
+                      <div className="border-t border-slate-100 pt-3 flex items-center gap-2">
+                        <ArrowRight className="w-3.5 h-3.5" style={{ color: '#2814ff' }} />
+                        <span className="text-xs text-slate-500">{results.decisionIntelligence.candidatePsychology.completeTeaser}</span>
+                      </div>
+                    </div>
+                  )}
+
+                  {/* Success Factors */}
+                  <div>
+                    <h4 className="font-semibold mb-3 flex items-center gap-2" style={{ color: '#2814ff' }}><CheckCircle className="w-5 h-5" />Success Factors</h4>
+                    <ul className="space-y-2">
+                      {results.keySuccessFactors?.map((f, i) => (
+                        <li key={i} className="flex items-start gap-3 bg-slate-50 rounded-lg p-3 border border-slate-100">
+                          <CheckCircle className="w-5 h-5 flex-shrink-0 mt-0.5" style={{ color: '#2814ff' }} />
+                          <span className="text-slate-700">{f}</span>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+
+                  {/* Recommendations */}
+                  {results.recommendedAdjustments?.length > 0 && (
+                    <div>
+                      <h4 className="font-semibold mb-3 flex items-center gap-2" style={{ color: '#2814ff' }}><Lightbulb className="w-5 h-5" />Recommendations</h4>
+                      <ul className="space-y-2">
+                        {results.recommendedAdjustments.map((r, i) => (
+                          <li key={i} className="flex items-start gap-3 bg-slate-50 rounded-lg p-3 border border-slate-100">
+                            <ArrowRight className="w-5 h-5 flex-shrink-0 mt-0.5" style={{ color: '#2814ff' }} />
+                            <span className="text-slate-700">{r}</span>
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+                  )}
+
+                  {/* Sourcing Insight */}
+                  {results.sourcingInsight && (
+                    <div className="bg-slate-50 rounded-xl p-5 border border-slate-100">
+                      <div className="flex items-center gap-2 mb-2">
+                        <Target className="w-5 h-5" style={{ color: '#2814ff' }} />
+                        <h4 className="font-semibold text-sm">Where to Find These Candidates</h4>
+                      </div>
+                      <p className="text-slate-700">{results.sourcingInsight}</p>
+                    </div>
+                  )}
+
+                  {/* Negotiation Dynamics */}
+                  {results.negotiationLeverage && (
+                    <div>
+                      <h4 className="font-semibold mb-3 flex items-center gap-2" style={{ color: '#2814ff' }}><ArrowLeftRight className="w-5 h-5" />Negotiation Dynamics</h4>
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div className="bg-slate-50 rounded-xl p-4 border border-slate-100">
+                          <h5 className="font-medium mb-2 text-sm" style={{ color: '#2814ff' }}>Candidate Advantages</h5>
+                          <ul className="space-y-1">{results.negotiationLeverage.candidateAdvantages?.map((a, i) => <li key={i} className="text-sm text-slate-700">• {a}</li>)}</ul>
+                        </div>
+                        <div className="bg-slate-50 rounded-xl p-4 border border-slate-100">
+                          <h5 className="font-medium mb-2 text-sm" style={{ color: '#2814ff' }}>Your Advantages</h5>
+                          <ul className="space-y-1">{results.negotiationLeverage.employerAdvantages?.map((a, i) => <li key={i} className="text-sm text-slate-700">• {a}</li>)}</ul>
                         </div>
                       </div>
-                    )}
-                  </div>
+                    </div>
+                  )}
+
+                  {/* Watch Out For — Red Flags + False Signals combined */}
+                  {(results.redFlagAnalysis || results.decisionIntelligence?.falseSignals) && (
+                    <div>
+                      <h4 className="font-semibold mb-3 flex items-center gap-2" style={{ color: '#2814ff' }}><AlertTriangle className="w-5 h-5" />Watch Out For</h4>
+                      {results.redFlagAnalysis && results.redFlagAnalysis !== "None - well-positioned search" && (
+                        <div className="bg-amber-50 rounded-xl p-4 border border-amber-200 mb-3">
+                          <p className="text-amber-900">{results.redFlagAnalysis}</p>
+                        </div>
+                      )}
+                      {results.decisionIntelligence?.falseSignals && (
+                        <div className="bg-amber-50 border border-amber-200 rounded-xl p-5">
+                          <div className="flex items-center gap-2 mb-3">
+                            <div className="w-8 h-8 rounded-lg flex items-center justify-center bg-amber-100">
+                              <AlertTriangle className="w-4 h-4 text-amber-600" />
+                            </div>
+                            <h5 className="font-semibold text-amber-900">Don't Be Fooled By</h5>
+                          </div>
+                          <ul className="space-y-2 mb-4">
+                            {results.decisionIntelligence.falseSignals.initial?.map((item, i) => (
+                              <li key={i} className="text-sm text-amber-800 flex items-start gap-2">
+                                <AlertCircle className="w-4 h-4 text-amber-600 flex-shrink-0 mt-0.5" />
+                                <span>{item}</span>
+                              </li>
+                            ))}
+                          </ul>
+                          <div className="border-t border-amber-200 pt-3 flex items-center gap-2">
+                            <ArrowRight className="w-3.5 h-3.5 text-amber-600" />
+                            <span className="text-xs text-amber-700">{results.decisionIntelligence.falseSignals.completeTeaser}</span>
+                          </div>
+                        </div>
+                      )}
+                    </div>
+                  )}
                 </div>
               )}
 
