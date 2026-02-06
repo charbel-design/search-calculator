@@ -62,8 +62,18 @@ export const REGIONAL_MULTIPLIERS = {
   "Chicago": { multiplier: 1.05, label: "Slight Premium", tier: "moderate", display: "Chicago, IL" },
   "Dallas": { multiplier: 1.0, label: "Market Rate", tier: "standard", display: "Dallas, TX" },
   "Houston": { multiplier: 0.95, label: "Below Coastal", tier: "standard", display: "Houston, TX" },
-  "London": { multiplier: 0.9, label: "London (GBP adjusted)", tier: "high", display: "London, UK" },
+  "London": { multiplier: 0.9, label: "London (GBP adjusted)", tier: "high", display: "London, United Kingdom" },
+  "Paris": { multiplier: 0.85, label: "Paris (EUR adjusted)", tier: "high", display: "Paris, France" },
   "Monaco": { multiplier: 1.75, label: "Monaco Premium", tier: "ultra-high", display: "Monaco" },
+  "Geneva": { multiplier: 1.5, label: "Geneva Premium (CHF)", tier: "ultra-high", display: "Geneva, Switzerland" },
+  "Zurich": { multiplier: 1.4, label: "Zurich Premium (CHF)", tier: "ultra-high", display: "Zurich, Switzerland" },
+  "Dubai": { multiplier: 1.3, label: "Dubai (tax-free)", tier: "high", display: "Dubai, UAE" },
+  "Singapore": { multiplier: 1.2, label: "Singapore Premium", tier: "high", display: "Singapore" },
+  "Hong Kong": { multiplier: 1.25, label: "Hong Kong Premium", tier: "high", display: "Hong Kong, China" },
+  "Sydney": { multiplier: 1.05, label: "Sydney (AUD adjusted)", tier: "moderate", display: "Sydney, Australia" },
+  "Marbella": { multiplier: 1.15, label: "Marbella (Costa del Sol)", tier: "moderate", display: "Marbella, Spain" },
+  "St. Barts": { multiplier: 1.6, label: "Island Premium", tier: "ultra-high", display: "St. Barts, French West Indies" },
+  "Cayman Islands": { multiplier: 1.35, label: "Cayman (tax-free)", tier: "high", display: "Cayman Islands" },
   "Remote/Multiple": { multiplier: 1.1, label: "Flexibility Premium", tier: "variable", display: "Remote / Multiple Locations" }
 };
 
