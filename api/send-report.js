@@ -481,6 +481,44 @@ function generateEmailHTML(results) {
     </div>
     ` : ''}
 
+    <!-- What's Next -->
+    ${results.whatsNext ? `
+    <div style="background-color:#ffffff;padding:20px 24px 24px;${sectionBorder}">
+      ${sectionHeading("What's Next")}
+      <p style="margin:0 0 16px;font-size:13px;color:#475569;line-height:1.6;">
+        ${results.whatsNext.intro || "You've got the data. Here's how we turn it into a successful placement."}
+      </p>
+
+      ${[
+        { num: '1', title: 'Discovery Call', duration: '30 min', text: results.whatsNext.discoveryCall || 'We walk through your analysis together, dig into the nuances that data alone can\'t capture, and align on what the right person looks like.' },
+        { num: '2', title: 'Sourcing Strategy', duration: 'Week 1', text: results.whatsNext.sourcingStrategy || 'Based on your role complexity, location, and budget, we build a sourcing plan — which networks to tap and how to position the opportunity.' },
+        { num: '3', title: 'Curated Shortlist', duration: 'Weeks 2–4', text: results.whatsNext.shortlist || 'You receive a vetted shortlist. Each profile includes social due diligence, reference notes, and our honest assessment.' },
+        { num: '4', title: 'Interview & Placement Support', duration: 'Through close', text: results.whatsNext.placementSupport || 'We coordinate interviews, support offer negotiation, and stay involved through the first 90 days.' },
+      ].map(step => `
+        <table style="width:100%;border-collapse:collapse;margin-bottom:12px;">
+          <tr>
+            <td style="width:40px;vertical-align:top;padding-top:2px;">
+              <div style="width:32px;height:32px;border-radius:50%;background-color:#2814ff;color:#fff;text-align:center;line-height:32px;font-size:13px;font-weight:bold;">${step.num}</div>
+            </td>
+            <td style="vertical-align:top;padding-left:10px;">
+              <strong style="color:#1e293b;font-size:13px;">${step.title}</strong>
+              <span style="font-size:11px;color:#2814ff;margin-left:6px;">${step.duration}</span><br>
+              <span style="color:#64748b;font-size:12px;line-height:1.5;">${step.text}</span>
+            </td>
+          </tr>
+        </table>
+      `).join('')}
+
+      <div style="background-color:#f8fafc;border-radius:8px;padding:14px;margin-top:8px;border:1px solid #e2e8f0;">
+        <p style="margin:0 0 8px;font-size:12px;font-weight:600;color:#1e293b;">What the full engagement includes</p>
+        ${['Candidate fit & motivation assessment', 'Compensation negotiation playbook', 'Social due diligence', 'Retention risk analysis & 90-day plan', 'Market-tested job positioning'].map(item =>
+          `<p style="margin:2px 0;font-size:11px;color:#475569;">&#10003; ${item}</p>`
+        ).join('')}
+      </div>
+    </div>
+    ${divider}
+    ` : ''}
+
     <!-- CTA -->
     <div style="background-color:#2814ff;padding:32px 24px;text-align:center;border-radius:0 0 12px 12px;">
       <h3 style="color:#ffffff;margin:0 0 8px;font-size:20px;">Ready for the Complete Picture?</h3>

@@ -528,7 +528,14 @@ ${benchmark?.regionalNotes ? `Regional Notes: ${benchmark.regionalNotes}` : ''}
 5. COMPENSATION: If signing bonuses are common (>40% frequency), recommend one. If bonus % is high, flag that base salary alone understates total comp. Use comp structure to advise on offer packaging.
 6. CANDIDATE POOL: ${benchmark?.relocationWillingness !== undefined ? `Only ${Math.round(benchmark.relocationWillingness * 100)}% will relocate.` : ''} ${benchmark?.candidatePoolSize ? `Pool is ~${benchmark.candidatePoolSize}.` : ''} Factor languages, certs, and discretion requirements as multiplicative filters that shrink the pool.
 7. SALARY DRIFT: ${benchmark?.salaryGrowthRate ? `At ${Math.round(benchmark.salaryGrowthRate * 100)}% YoY growth, benchmarks shift ~${Math.round(benchmark.salaryGrowthRate * 100 / 2)}% over a 6-month search.` : ''} Flag if the budget risks becoming uncompetitive mid-search.
-8. DISCRETION: ${formData.discretionLevel !== 'standard' ? `This is a ${discOption?.label || formData.discretionLevel} engagement. Higher discretion means: fewer public sourcing channels, longer timelines (stealth outreach takes more time), smaller viable candidate pools (only candidates comfortable with NDAs/blind searches), and potentially higher comp expectations (candidates accept risk/constraints for premium pay). Weave discretion impact into salary guidance, timeline, sourcing insight, candidate psychology, and What's Next narrative.` : 'Standard discretion — no special sourcing constraints.'}
+8. DISCRETION: ${formData.discretionLevel === 'standard'
+  ? 'Standard discretion — no special sourcing constraints.'
+  : formData.discretionLevel === 'elevated'
+    ? 'Elevated (NDA Required). This is standard UHNW practice and NOT a major constraint. Candidates hear the full role details in the first conversation; NDAs are signed before the client meeting. Most quality candidates are comfortable with this — it does NOT significantly shrink the pool or extend the timeline. Do not overstate NDA impact. Minor: add 0–1 weeks for logistics.'
+    : formData.discretionLevel === 'high-profile'
+      ? "High-Profile Principal (public figure). No public job postings, limited LinkedIn, referral-heavy approach. Candidates must be comfortable with media scrutiny. Moderate impact: shrinks pool 20–30%, adds 2–3 weeks. Weave into sourcing, candidate psychology, and What's Next."
+      : "Ultra-Discrete (blind search). Candidates cannot know the principal's identity until late-stage. Referral networks only. Significant impact: eliminates 40%+ of candidates, adds 3–4 weeks, may require higher comp. Weave into every section."
+}
 
 === GUARDRAILS ===
 1. COMPLEXITY SCORE is ${det.score}/10. Higher = harder search. Never suggest "improving" or "reaching" a complexity score. A 9 means extremely challenging — that's a fact, not a goal.
