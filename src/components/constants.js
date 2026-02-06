@@ -29,13 +29,25 @@ export function getComplexityColor(score) {
 export const sanitizeForPrompt = (text) => {
   if (!text) return '';
   return text
+    // Block instruction override patterns
     .replace(/ignore\s+(all\s+)?(previous|prior|above)\s+(instructions?|prompts?|rules?)/gi, '[filtered]')
+    .replace(/disregard\s+(all\s+)?(previous|prior|above|earlier)/gi, '[filtered]')
     .replace(/you\s+are\s+now/gi, '[filtered]')
     .replace(/system\s*:?\s*prompt/gi, '[filtered]')
     .replace(/\bdo\s+not\s+follow\b/gi, '[filtered]')
     .replace(/\boverride\b/gi, '[filtered]')
     .replace(/\breturn\s+only\b/gi, '[filtered]')
     .replace(/\bforget\s+(everything|all|your)\b/gi, '[filtered]')
+    // Block role reassignment and new instruction injection
+    .replace(/\bnew\s+instruction/gi, '[filtered]')
+    .replace(/\bact\s+as\b/gi, '[filtered]')
+    .replace(/\bpretend\s+(to\s+be|you\s+are)/gi, '[filtered]')
+    .replace(/\binstead\s+of\s+(the\s+)?(above|previous|json)/gi, '[filtered]')
+    .replace(/\bdo\s+not\s+return\s+json\b/gi, '[filtered]')
+    .replace(/\boutput\s+(only|just|the\s+word)/gi, '[filtered]')
+    // Strip control characters and excessive newlines
+    .replace(/[\x00-\x08\x0B\x0C\x0E-\x1F]/g, '')
+    .replace(/\n{3,}/g, '\n\n')
     .slice(0, 500);
 };
 

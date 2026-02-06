@@ -501,7 +501,7 @@ Computed Complexity Score: ${det.score}/10 (${det.label})
 ${adjustedBenchmark ? `Regionally-Adjusted Salary for ${formData.location || 'this market'}:
   25th Percentile: $${adjustedBenchmark.p25.toLocaleString()}
   Median (50th): $${adjustedBenchmark.p50.toLocaleString()}
-  75th Percentile: $${adjustedBenchmark.p75.toLocaleString()}` : 'No benchmark available — provide best-estimate guidance and flag the uncertainty.'}
+  75th Percentile: $${adjustedBenchmark.p75.toLocaleString()}` : 'No benchmark available. Any salary guidance MUST include the disclaimer: "This is an estimated range based on comparable roles — we recommend validating with current market data." Do NOT present estimates as benchmarked figures.'}
 ${benchmark?.benefits ? `Benefits: Housing: ${benchmark.benefits.housing} | Vehicle: ${benchmark.benefits.vehicle} | Health: ${benchmark.benefits.health} | Bonus: ${benchmark.benefits.bonus}` : ''}
 ${benchmark?.scarcity ? `Role Scarcity: ${benchmark.scarcity}/10` : ''}
 ${benchmark?.timeToFill ? `Time to Fill: ${benchmark.timeToFill} weeks (baseline — adjust for this search's complexity)` : ''}
@@ -526,7 +526,7 @@ ${benchmark?.regionalNotes ? `Regional Notes: ${benchmark.regionalNotes}` : ''}
 3. SOURCING: Reference the sourcing channel percentages. Tell the client WHERE placements actually come from for this role — not "use multiple channels."
 4. RETENTION: Use the attrition rate and departure reasons to power your red flags. Warn about THIS role's specific risks, not generic turnover advice.
 5. COMPENSATION: If signing bonuses are common (>40% frequency), recommend one. If bonus % is high, flag that base salary alone understates total comp. Use comp structure to advise on offer packaging.
-6. CANDIDATE POOL: ${benchmark?.relocationWillingness !== undefined ? `Only ${Math.round(benchmark.relocationWillingness * 100)}% will relocate.` : ''} ${benchmark?.candidatePoolSize ? `Pool is ~${benchmark.candidatePoolSize}.` : ''} Factor languages, certs, and discretion requirements as multiplicative filters that shrink the pool.
+6. CANDIDATE POOL: ${benchmark?.relocationWillingness !== undefined ? `Only ${Math.round(benchmark.relocationWillingness * 100)}% will relocate.` : ''} ${benchmark?.candidatePoolSize ? `Pool is ~${benchmark.candidatePoolSize}.` : ''} Factor languages, certs, and discretion as filters. If you estimate a filtered pool size, clearly flag it as "estimated" — do not present calculated reductions as precise data.
 7. SALARY DRIFT: ${benchmark?.salaryGrowthRate ? `At ${Math.round(benchmark.salaryGrowthRate * 100)}% YoY growth, benchmarks shift ~${Math.round(benchmark.salaryGrowthRate * 100 / 2)}% over a 6-month search.` : ''} Flag if the budget risks becoming uncompetitive mid-search.
 8. DISCRETION: ${formData.discretionLevel === 'standard'
   ? 'Standard discretion — no special sourcing constraints.'
@@ -562,7 +562,7 @@ ${benchmark?.regionalNotes ? `Regional Notes: ${benchmark.regionalNotes}` : ''}
 {
   "salaryRangeGuidance": "$Xk–$Yk base + bonus structure. 1–2 sentences on why, referencing the adjusted percentiles and how the client's budget compares.${isCorporateRole && formData.aumRange ? ' Factor AUM range into comp expectations.' : ''}",
   "estimatedTimeline": "X–Y weeks total. Break into phases: sourcing (Xw), interviews (Yw), offer/negotiation (Zw), due diligence (Zw). Factor the client's ${timelineOption?.label || formData.timeline} timeframe.",
-  "marketCompetitiveness": "2–3 sentences: Is this market easier or harder than 12 months ago? Why? What's driving competition for ${displayTitle} in ${formData.location || 'this market'}? Conclude with: 'This is a [favorable/challenging] market for this hire.'",
+  "marketCompetitiveness": "2–3 sentences: Based on the demand data and scarcity score provided, is this a favorable or challenging market for hiring a ${displayTitle} in ${formData.location || 'this market'}? What factors drive competition? Do NOT claim year-over-year trends unless YoY data was provided above. Conclude with: 'This is a [favorable/challenging] market for this hire.'",
   "keySuccessFactors": ["The single barrier that would cause this search to fail if unaddressed", "The requirement or constraint that most shrinks the candidate pool", "What tells you a candidate actually wants THIS role, not just any ${displayTitle} role"],
   "recommendedAdjustments": ["Concrete IF/THEN: 'Adding $20k to base (reaching 75th percentile) would expand your pool by ~40%'. Return 1–3 items, or empty array [] if search is well-positioned."],
   "candidateAvailability": "Exactly one of: Abundant, Moderate, Limited, Rare",
@@ -602,10 +602,10 @@ ${benchmark?.regionalNotes ? `Regional Notes: ${benchmark.regionalNotes}` : ''}
   },
   "whatsNext": {
     "intro": "1 sentence tailored to this search — what the client has and what comes next. Reference the role, market${formData.discretionLevel !== 'standard' ? ', and the ' + (discOption?.label || formData.discretionLevel) + ' discretion requirements' : ''}.",
-    "discoveryCall": "1–2 sentences: what we'd specifically focus on in the discovery call for a ${displayTitle} search in ${formData.location || 'this market'}. Reference the unique dynamics of this role${formData.discretionLevel !== 'standard' ? ' and how the ' + (discOption?.label || formData.discretionLevel) + ' discretion level shapes the engagement (e.g., NDA protocols, blind search setup, media-proofing)' : ''}.",
+    "discoveryCall": "1–2 sentences: what topics we'd explore in a discovery call for this ${displayTitle} search — role definition, must-haves, timeline, and budget alignment${formData.discretionLevel !== 'standard' ? ', plus how the ' + (discOption?.label || formData.discretionLevel) + ' discretion level shapes the approach' : ''}. Focus on questions to clarify, not promises about deliverables.",
     "sourcingStrategy": "1–2 sentences: how WE (Talent Gurus) source THIS role directly — our referral networks, our outreach, our candidate pipeline. Never mention agencies, partnerships, or third-party firms — WE are the search firm. Describe the TYPES of professional communities we tap into (e.g., 'formal butler training alumni networks' not 'Starkey International'; 'private aviation communities' not 'NBAA') — NEVER name specific organizations, schools, or professional bodies as though we have direct relationships with them because you don't know who we have relationships with.${formData.discretionLevel !== 'standard' ? ' Factor the ' + (discOption?.label || formData.discretionLevel) + ' discretion level into channel selection — which channels are off-limits, which require extra vetting.' : ''}",
     "shortlist": "1–2 sentences: what the vetting process focuses on for THIS role. Reference the specific requirements, discretion level, or cultural fit factors that matter most.",
-    "placementSupport": "1–2 sentences: what the placement support looks like for THIS type of hire. Reference specific risks (counter-offers, relocation, onboarding) relevant to the search data."
+    "placementSupport": "1–2 sentences: key risks to manage through the offer process for THIS hire (counter-offers, relocation, onboarding transition). Do NOT describe specific TG service packages or guarantee periods — focus on what the client should be prepared for."
   }
 }`;
 
@@ -704,7 +704,7 @@ ${benchmark?.regionalNotes ? `Regional Notes: ${benchmark.regionalNotes}` : ''}
             ? ["Competitive compensation", "Attractive opportunity"]
             : ["Growth opportunity"]
         },
-        bottomLine: "This preliminary analysis is based on our scoring algorithm and market benchmarks. For comprehensive insights including sourcing strategies, compensation structuring, and interview frameworks, schedule a consultation.",
+        bottomLine: "This preliminary analysis is based on our scoring algorithm and market benchmarks. For deeper insights tailored to this specific search, schedule a consultation with our team.",
         formData: { ...formData },
         aiAnalysisSuccess: false,
         adjustedBenchmark,
