@@ -2,8 +2,10 @@ import React, { useState, useEffect } from 'react';
 import {
   Share2, Mail, X, AlertCircle, CheckCircle, DollarSign, Clock, TrendingUp, Users, Target, Home, Car, Heart,
   SlidersHorizontal, Layers, Lightbulb, ArrowRight, ArrowLeftRight, Brain, GitBranch, Gauge, BarChart3,
-  AlertTriangle, Info, RefreshCw, ArrowLeftCircle, ChevronDown, Compass, MessageCircle, FileText, Shield
+  AlertTriangle, Info, RefreshCw, ArrowLeftCircle, ChevronDown, Compass, MessageCircle, FileText, Shield,
+  ClipboardCopy, Loader2, FileEdit
 } from 'lucide-react';
+import { sanitizeForPrompt } from './constants';
 import { ShareModal, EmailModal } from './Modals';
 import { getComplexityColor } from './constants';
 import { CustomSelect } from './CustomSelect';
@@ -39,6 +41,81 @@ export function ResultsView({
 }) {
   const [activeTab, setActiveTab] = useState('breakdown');
   const [methodologyExpanded, setMethodologyExpanded] = useState(false);
+  const [deepDiveExpanded, setDeepDiveExpanded] = useState(false);
+  const [jdContent, setJdContent] = useState('');
+  const [jdLoading, setJdLoading] = useState(false);
+  const [jdCopied, setJdCopied] = useState(false);
+
+  // JD Generator — lightweight API call using already-computed results
+  const handleGenerateJD = async () => {
+    if (jdLoading) return;
+    setJdLoading(true);
+    setJdContent('');
+
+    const jdPrompt = `Generate a job description for this role based on the search analysis below.
+
+ROLE: ${results.displayTitle}
+LOCATION: ${sanitizeForPrompt(formData?.location || '')}
+SALARY RANGE: ${results.salaryRangeGuidance || 'Competitive'}
+TIMELINE: ${results.estimatedTimeline || 'Standard'}
+MARKET: ${results.marketCompetitiveness || ''}
+CANDIDATE AVAILABILITY: ${results.candidateAvailability || 'Moderate'}
+
+REQUIREMENTS: ${sanitizeForPrompt(formData?.keyRequirements || 'See below')}
+LANGUAGES: ${formData?.languageRequirements?.join(', ') || 'None specified'}
+CERTIFICATIONS: ${formData?.certifications?.join(', ') || 'None specified'}
+TRAVEL: ${formData?.travelRequirement || 'None specified'}
+${formData?.aumRange ? `AUM RANGE: ${formData.aumRange}` : ''}
+${formData?.propertiesCount ? `PROPERTIES: ${formData.propertiesCount}` : ''}
+${formData?.householdSize ? `HOUSEHOLD SIZE: ${formData.householdSize}` : ''}
+
+KEY SUCCESS FACTORS: ${(results.keySuccessFactors || []).join('; ')}
+TOP CANDIDATE MOTIVATORS: ${(results.decisionIntelligence?.candidatePsychology?.initial || []).join('; ')}
+RED FLAGS TO ADDRESS IN JD: ${results.redFlagAnalysis || 'None'}
+
+FORMAT:
+ABOUT THE ROLE
+[2-3 engaging sentences about what makes this role unique]
+
+KEY RESPONSIBILITIES
+[6-8 bullet points — specific to THIS role, not generic]
+
+REQUIRED QUALIFICATIONS
+[5-7 must-haves drawn from the requirements and success factors]
+
+PREFERRED QUALIFICATIONS
+[3-4 nice-to-haves that would make a candidate stand out]
+
+WHAT WE OFFER
+[Compensation range, benefits, and lifestyle factors that attract top candidates for this role — use the candidate psychology data to highlight what actually matters to them]
+
+THE ENVIRONMENT
+[2-3 sentences about the working context — informed by the role type and discretion level]`;
+
+    try {
+      const response = await fetch('/api/analyze', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ prompt: jdPrompt, type: 'jd' })
+      });
+
+      if (!response.ok) throw new Error('Failed to generate');
+
+      const data = await response.json();
+      const text = data.content?.[0]?.text || '';
+      setJdContent(text.trim());
+    } catch (err) {
+      setJdContent('Unable to generate job description. Please try again.');
+    } finally {
+      setJdLoading(false);
+    }
+  };
+
+  const copyJD = () => {
+    navigator.clipboard.writeText(jdContent);
+    setJdCopied(true);
+    setTimeout(() => setJdCopied(false), 2000);
+  };
 
   return (
     <>
@@ -215,8 +292,28 @@ export function ResultsView({
             </a>
           </div>
 
-          {/* Tabbed Sections */}
+          {/* Deep Dive Toggle — Progressive Disclosure */}
           <div className="mb-6 animate-fadeInUp delay-600">
+            <button
+              onClick={() => setDeepDiveExpanded(!deepDiveExpanded)}
+              className="w-full p-4 flex items-center justify-between rounded-xl border border-slate-200 hover:bg-slate-50 transition-all group"
+            >
+              <div className="flex items-center gap-3">
+                <div className="w-8 h-8 rounded-full flex items-center justify-center" style={{ backgroundColor: '#2814ff15' }}>
+                  <Layers className="w-4 h-4" style={{ color: '#2814ff' }} />
+                </div>
+                <div className="text-left">
+                  <h4 className="font-semibold text-sm text-slate-900">Deep Dive</h4>
+                  <p className="text-xs text-slate-500">Market data, sourcing strategy, decision intelligence, and next steps</p>
+                </div>
+              </div>
+              <ChevronDown className={`w-5 h-5 text-slate-400 transition-transform ${deepDiveExpanded ? 'rotate-180' : ''}`} />
+            </button>
+          </div>
+
+          {/* Tabbed Sections — Hidden until Deep Dive expanded */}
+          {deepDiveExpanded && (
+          <div className="mb-6">
             <div className="flex gap-2 border-b border-slate-200 mb-4 overflow-x-auto">
               {[
                 { id: 'breakdown', label: 'The Search' },
@@ -790,9 +887,19 @@ export function ResultsView({
               )}
             </div>
           </div>
+          )}
 
-          {/* Action Buttons Row - Below Tabs */}
+          {/* Action Buttons Row */}
           <div className="flex flex-wrap gap-2 pt-6 border-t border-slate-200">
+            {results.aiAnalysisSuccess !== false && (
+              <button onClick={handleGenerateJD} disabled={jdLoading}
+                className="flex items-center gap-2 px-3 py-2 rounded-lg text-xs font-semibold text-white transition-all hover:shadow-md disabled:opacity-50"
+                style={{ backgroundColor: '#2814ff' }}
+                aria-label="Generate a job description based on this analysis">
+                {jdLoading ? <Loader2 className="w-4 h-4 animate-spin" /> : <FileEdit className="w-4 h-4" />}
+                {jdLoading ? 'Generating...' : jdContent ? 'Regenerate JD' : 'Generate Job Description'}
+              </button>
+            )}
             <button onClick={() => { setEmailForReport(formData.email || ''); setShowEmailModal(true); setEmailSent(false); }}
               className="flex items-center gap-2 px-3 py-2 bg-slate-100 hover:bg-slate-200 rounded-lg text-xs font-medium text-slate-700 transition-colors"
               aria-label="Email the analysis report">
@@ -809,6 +916,30 @@ export function ResultsView({
               <RefreshCw className="w-4 h-4" />Compare Budgets
             </button>
           </div>
+
+          {/* Generated Job Description */}
+          {jdContent && (
+            <div className="mt-6 bg-white rounded-xl border border-slate-200 overflow-hidden animate-fadeInUp">
+              <div className="flex items-center justify-between px-5 py-4 border-b border-slate-100">
+                <div className="flex items-center gap-2">
+                  <FileText className="w-5 h-5" style={{ color: '#2814ff' }} />
+                  <h4 className="font-semibold text-sm text-slate-900">Generated Job Description</h4>
+                </div>
+                <button onClick={copyJD}
+                  className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium transition-colors"
+                  style={jdCopied ? { backgroundColor: '#dcfce7', color: '#15803d' } : { backgroundColor: '#f1f5f9', color: '#475569' }}>
+                  <ClipboardCopy className="w-3.5 h-3.5" />
+                  {jdCopied ? 'Copied!' : 'Copy'}
+                </button>
+              </div>
+              <div className="px-5 py-4">
+                <pre className="whitespace-pre-wrap font-sans text-sm text-slate-700 leading-relaxed">{jdContent}</pre>
+              </div>
+              <div className="px-5 py-3 bg-slate-50 border-t border-slate-100">
+                <p className="text-xs text-slate-500">AI-generated based on your search analysis. Review and customize before posting.</p>
+              </div>
+            </div>
+          )}
         </div>
 
         {/* Budget Comparison Panel */}

@@ -101,6 +101,21 @@ DOMAIN SPECIFICS:
 - Scope creep is the #1 silent killer: 30–40% of household attrition comes from roles expanding beyond the original job description. Flag this risk proactively and recommend clear role boundaries in the offer.`
 };
 
+// JD generation system prompt — lightweight, fast
+const JD_SYSTEM_MESSAGE = `You are a senior UHNW recruitment consultant at Talent Gurus. Generate a polished, realistic job description based on the search analysis data provided. Write it as a hiring manager would post it — professional but not corporate-bland.
+
+RULES:
+- Use the salary range, requirements, and market data provided. Do not invent details.
+- Write for the actual audience (UHNW families, family offices, estates) — not corporate HR.
+- Never use "staffing" — say "search" or "placement."
+- Never use jargon: "synergy," "leverage," "best-in-class," "rock star," "ninja."
+- Be specific about what makes this role unique. Generic JDs attract generic candidates.
+- Include compensation range transparency — this is a competitive advantage.
+- NEVER name Talent Gurus or any specific agency in the JD.
+- ANTI-DISCRIMINATION: Never include age, gender, race, religion, or any protected characteristic as a requirement.
+- Return ONLY the job description text. No preamble, no JSON, no markdown code blocks.
+- Use clear section headers with line breaks between sections.`;
+
 // Allowed origins for CORS
 const ALLOWED_ORIGINS = [
   'https://search-calculator.vercel.app',
@@ -248,7 +263,7 @@ export default async function handler(req, res) {
   }
 
   try {
-    const { prompt, roleType } = req.body;
+    const { prompt, roleType, type } = req.body;
 
     // Validate input
     const validation = validateInput(prompt);
@@ -256,8 +271,14 @@ export default async function handler(req, res) {
       return res.status(400).json({ error: validation.error });
     }
 
-    // Select system message based on roleType
-    const systemMessage = SYSTEM_MESSAGES[roleType] || SYSTEM_MESSAGES.household;
+    // Select system message and params based on request type
+    const isJD = type === 'jd';
+    const systemMessage = isJD
+      ? JD_SYSTEM_MESSAGE
+      : (SYSTEM_MESSAGES[roleType] || SYSTEM_MESSAGES.household);
+    const maxTokens = isJD ? 1200 : 2500;
+    const temperature = isJD ? 0.3 : 0.4;
+    const timeout = isJD ? 45000 : 90000;
 
     const response = await fetchWithRetry('https://api.anthropic.com/v1/messages', {
       method: 'POST',
@@ -268,12 +289,12 @@ export default async function handler(req, res) {
       },
       body: JSON.stringify({
         model: 'claude-sonnet-4-20250514',
-        max_tokens: 2500,
-        temperature: 0.4,
+        max_tokens: maxTokens,
+        temperature,
         system: systemMessage,
         messages: [{ role: 'user', content: prompt }]
       })
-    }, 1, 90000); // 1 retry, 90 second timeout (large prompt needs time)
+    }, 1, timeout);
 
     if (!response.ok) {
       const errorText = await response.text();
