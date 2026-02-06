@@ -4,6 +4,58 @@ import {
 } from 'lucide-react';
 import { BENCHMARKS } from '../salaryData';
 
+function CustomSelect({ value, onChange, options, placeholder, name }) {
+  const [open, setOpen] = React.useState(false);
+  const [highlighted, setHighlighted] = React.useState(-1);
+  const ref = React.useRef(null);
+
+  React.useEffect(() => {
+    const handleClickOutside = (e) => { if (ref.current && !ref.current.contains(e.target)) setOpen(false); };
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, []);
+
+  React.useEffect(() => { if (!open) setHighlighted(-1); }, [open]);
+
+  const selected = options.find(o => o.value === value);
+
+  const handleKeyDown = (e) => {
+    if (!open && (e.key === 'ArrowDown' || e.key === 'Enter' || e.key === ' ')) {
+      e.preventDefault(); setOpen(true); return;
+    }
+    if (!open) return;
+    if (e.key === 'ArrowDown') { e.preventDefault(); setHighlighted(prev => prev < options.length - 1 ? prev + 1 : prev); }
+    else if (e.key === 'ArrowUp') { e.preventDefault(); setHighlighted(prev => prev > 0 ? prev - 1 : prev); }
+    else if (e.key === 'Enter' && highlighted >= 0) { e.preventDefault(); onChange({ target: { name, value: options[highlighted].value } }); setOpen(false); }
+    else if (e.key === 'Escape') { setOpen(false); }
+  };
+
+  return (
+    <div ref={ref} className="relative">
+      <button type="button" onClick={() => setOpen(!open)} onKeyDown={handleKeyDown}
+        className="w-full px-4 py-3 border-2 border-slate-200 rounded-xl transition-all duration-200 focus:shadow-md focus:border-brand-500 focus:ring-2 focus:ring-brand-100 text-left flex items-center justify-between bg-white">
+        <span className={selected ? 'text-slate-900' : 'text-slate-400'}>{selected ? selected.label : (placeholder || 'Select...')}</span>
+        <ChevronDown className={`w-4 h-4 text-slate-400 transition-transform ${open ? 'rotate-180' : ''}`} />
+      </button>
+      {open && (
+        <div className="absolute z-20 w-full mt-1 bg-brand-50 border border-brand-100 rounded-xl shadow-lg max-h-64 overflow-y-auto">
+          {options.map((opt, idx) => (
+            <button key={opt.value} type="button"
+              ref={idx === highlighted ? (el) => el?.scrollIntoView({ block: 'nearest' }) : null}
+              onClick={() => { onChange({ target: { name, value: opt.value } }); setOpen(false); }}
+              onMouseEnter={() => setHighlighted(idx)}
+              className={`w-full text-left px-4 py-2.5 text-sm ${
+                opt.value === value ? 'font-semibold text-brand-700' : ''
+              } ${idx === highlighted ? 'bg-brand-200 text-brand-700' : 'hover:bg-brand-100 text-slate-700'}`}>
+              {opt.label}
+            </button>
+          ))}
+        </div>
+      )}
+    </div>
+  );
+}
+
 export function FormSteps({
   step, setStep, formData, setFormData, loading, loadingStep, error, setError,
   warnings, positionSearch, setPositionSearch, showPositionSuggestions, setShowPositionSuggestions,
@@ -175,10 +227,8 @@ export function FormSteps({
 
             <div>
               <label className="block text-sm font-medium text-slate-700 mb-2">Discretion Level</label>
-              <select name="discretionLevel" value={formData.discretionLevel} onChange={handleInputChange}
-                className="w-full px-4 py-3 border-2 border-slate-200 rounded-xl transition-all duration-200 focus:shadow-md focus:border-brand-500 focus:ring-2 focus:ring-brand-100">
-                {discretionLevels.map(d => <option key={d.value} value={d.value} className="bg-brand-50">{d.label} — {d.description}</option>)}
-              </select>
+              <CustomSelect name="discretionLevel" value={formData.discretionLevel} onChange={handleInputChange}
+                options={discretionLevels.map(d => ({ value: d.value, label: `${d.label} — ${d.description}` }))} placeholder="Select discretion level" />
             </div>
           </div>
         )}
@@ -211,11 +261,8 @@ export function FormSteps({
 
             <div>
               <label className="block text-sm font-medium text-slate-700 mb-2">Budget Range *</label>
-              <select name="budgetRange" value={formData.budgetRange} onChange={handleInputChange}
-                className="w-full px-4 py-3 border-2 border-slate-200 rounded-xl transition-all duration-200 focus:shadow-md focus:border-brand-500 focus:ring-2 focus:ring-brand-100">
-                <option value="">Select budget range</option>
-                {budgetRanges.map(b => <option key={b.value} value={b.value}>{b.label}</option>)}
-              </select>
+              <CustomSelect name="budgetRange" value={formData.budgetRange} onChange={handleInputChange}
+                options={budgetRanges} placeholder="Select budget range" />
             </div>
 
             {warnings.length > 0 && (
@@ -310,10 +357,8 @@ export function FormSteps({
 
             <div>
               <label className="block text-sm font-medium text-slate-700 mb-2">Travel Requirements</label>
-              <select name="travelRequirement" value={formData.travelRequirement} onChange={handleInputChange}
-                className="w-full px-4 py-3 border-2 border-slate-200 rounded-xl transition-all duration-200 focus:shadow-md focus:border-brand-500 focus:ring-2 focus:ring-brand-100">
-                {travelOptions.map(t => <option key={t.value} value={t.value}>{t.label}</option>)}
-              </select>
+              <CustomSelect name="travelRequirement" value={formData.travelRequirement} onChange={handleInputChange}
+                options={travelOptions} placeholder="Select travel requirement" />
             </div>
 
             <div>
@@ -344,50 +389,46 @@ export function FormSteps({
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
                   <label className="block text-sm font-medium text-slate-700 mb-2">Assets Under Management (AUM)</label>
-                  <select name="aumRange" value={formData.aumRange} onChange={handleInputChange}
-                    className="w-full px-4 py-3 border-2 border-slate-200 rounded-xl transition-all duration-200 focus:shadow-md focus:border-brand-500 focus:ring-2 focus:ring-brand-100">
-                    <option value="">Select...</option>
-                    <option value="under-100M">Under $100M</option>
-                    <option value="100M-300M">$100M - $300M</option>
-                    <option value="300M-500M">$300M - $500M</option>
-                    <option value="500M-1B">$500M - $1B</option>
-                    <option value="1B-plus">$1B+</option>
-                  </select>
+                  <CustomSelect name="aumRange" value={formData.aumRange} onChange={handleInputChange}
+                    options={[
+                      { value: 'under-100M', label: 'Under $100M' },
+                      { value: '100M-300M', label: '$100M - $300M' },
+                      { value: '300M-500M', label: '$300M - $500M' },
+                      { value: '500M-1B', label: '$500M - $1B' },
+                      { value: '1B-plus', label: '$1B+' },
+                    ]} placeholder="Select..." />
                 </div>
                 <div>
                   <label className="block text-sm font-medium text-slate-700 mb-2">Team Size (Direct Reports)</label>
-                  <select name="teamSize" value={formData.teamSize} onChange={handleInputChange}
-                    className="w-full px-4 py-3 border-2 border-slate-200 rounded-xl transition-all duration-200 focus:shadow-md focus:border-brand-500 focus:ring-2 focus:ring-brand-100">
-                    <option value="">Select...</option>
-                    <option value="0">Individual contributor</option>
-                    <option value="1-3">1-3 reports</option>
-                    <option value="4-10">4-10 reports</option>
-                    <option value="10-plus">10+ reports</option>
-                  </select>
+                  <CustomSelect name="teamSize" value={formData.teamSize} onChange={handleInputChange}
+                    options={[
+                      { value: '0', label: 'Individual contributor' },
+                      { value: '1-3', label: '1-3 reports' },
+                      { value: '4-10', label: '4-10 reports' },
+                      { value: '10-plus', label: '10+ reports' },
+                    ]} placeholder="Select..." />
                 </div>
               </div>
             ) : (
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
                   <label className="block text-sm font-medium text-slate-700 mb-2">Properties to Staff</label>
-                  <select name="propertiesCount" value={formData.propertiesCount} onChange={handleInputChange}
-                    className="w-full px-4 py-3 border-2 border-slate-200 rounded-xl transition-all duration-200 focus:shadow-md focus:border-brand-500 focus:ring-2 focus:ring-brand-100">
-                    <option value="">Select...</option>
-                    <option value="1">1</option>
-                    <option value="2-3">2-3</option>
-                    <option value="4-6">4-6</option>
-                    <option value="7+">7+</option>
-                  </select>
+                  <CustomSelect name="propertiesCount" value={formData.propertiesCount} onChange={handleInputChange}
+                    options={[
+                      { value: '1', label: '1' },
+                      { value: '2-3', label: '2-3' },
+                      { value: '4-6', label: '4-6' },
+                      { value: '7+', label: '7+' },
+                    ]} placeholder="Select..." />
                 </div>
                 <div>
                   <label className="block text-sm font-medium text-slate-700 mb-2">Household Size</label>
-                  <select name="householdSize" value={formData.householdSize} onChange={handleInputChange}
-                    className="w-full px-4 py-3 border-2 border-slate-200 rounded-xl transition-all duration-200 focus:shadow-md focus:border-brand-500 focus:ring-2 focus:ring-brand-100">
-                    <option value="">Select...</option>
-                    <option value="1-2">1-2</option>
-                    <option value="3-5">3-5 (family)</option>
-                    <option value="6+">6+ (extended)</option>
-                  </select>
+                  <CustomSelect name="householdSize" value={formData.householdSize} onChange={handleInputChange}
+                    options={[
+                      { value: '1-2', label: '1-2' },
+                      { value: '3-5', label: '3-5 (family)' },
+                      { value: '6+', label: '6+ (extended)' },
+                    ]} placeholder="Select..." />
                 </div>
               </div>
             )}
