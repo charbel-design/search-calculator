@@ -103,8 +103,8 @@ export function useSearchEngine() {
   const debouncedLocation = useDebounce(formData.location, 150);
 
   const filteredLocationSuggestions = useMemo(() => {
-    if (!debouncedLocation) return [];
-    return LOCATION_SUGGESTIONS.filter(loc => loc.toLowerCase().includes(debouncedLocation.toLowerCase())).slice(0, 5);
+    if (!debouncedLocation) return LOCATION_SUGGESTIONS;
+    return LOCATION_SUGGESTIONS.filter(loc => loc.toLowerCase().includes(debouncedLocation.toLowerCase())).slice(0, 8);
   }, [debouncedLocation]);
 
   // Effects
@@ -470,6 +470,9 @@ export function useSearchEngine() {
       p75: Math.round(benchmark.p75 * regionalMultiplier)
     } : null;
 
+    // Discretion context for prompt enrichment
+    const discOption = discretionLevels.find(d => d.value === formData.discretionLevel);
+
     // Deliberate pauses so user sees each loading step progress
     await new Promise(r => setTimeout(r, 1200));
 
@@ -487,7 +490,7 @@ Requirements: ${sanitizeForPrompt(formData.keyRequirements)}
 Languages: ${formData.languageRequirements.join(', ') || 'None specified'}
 Certifications: ${formData.certifications.join(', ') || 'None specified'}
 Travel: ${formData.travelRequirement}
-Discretion: ${formData.discretionLevel}
+Discretion: ${discOption?.label || formData.discretionLevel} — ${discOption?.description || 'Normal confidentiality'}${formData.discretionLevel !== 'standard' ? ' ⚠ This significantly affects sourcing approach, candidate pool, and timeline.' : ''}
 ${isCorporateRole && formData.aumRange ? `AUM Range: ${formData.aumRange}` : ''}
 ${isCorporateRole && formData.teamSize ? `Team Size: ${formData.teamSize}` : ''}
 ${!isCorporateRole && formData.propertiesCount ? `Properties: ${formData.propertiesCount}` : ''}
@@ -525,6 +528,7 @@ ${benchmark?.regionalNotes ? `Regional Notes: ${benchmark.regionalNotes}` : ''}
 5. COMPENSATION: If signing bonuses are common (>40% frequency), recommend one. If bonus % is high, flag that base salary alone understates total comp. Use comp structure to advise on offer packaging.
 6. CANDIDATE POOL: ${benchmark?.relocationWillingness !== undefined ? `Only ${Math.round(benchmark.relocationWillingness * 100)}% will relocate.` : ''} ${benchmark?.candidatePoolSize ? `Pool is ~${benchmark.candidatePoolSize}.` : ''} Factor languages, certs, and discretion requirements as multiplicative filters that shrink the pool.
 7. SALARY DRIFT: ${benchmark?.salaryGrowthRate ? `At ${Math.round(benchmark.salaryGrowthRate * 100)}% YoY growth, benchmarks shift ~${Math.round(benchmark.salaryGrowthRate * 100 / 2)}% over a 6-month search.` : ''} Flag if the budget risks becoming uncompetitive mid-search.
+8. DISCRETION: ${formData.discretionLevel !== 'standard' ? `This is a ${discOption?.label || formData.discretionLevel} engagement. Higher discretion means: fewer public sourcing channels, longer timelines (stealth outreach takes more time), smaller viable candidate pools (only candidates comfortable with NDAs/blind searches), and potentially higher comp expectations (candidates accept risk/constraints for premium pay). Weave discretion impact into salary guidance, timeline, sourcing insight, candidate psychology, and What's Next narrative.` : 'Standard discretion — no special sourcing constraints.'}
 
 === GUARDRAILS ===
 1. COMPLEXITY SCORE is ${det.score}/10. Higher = harder search. Never suggest "improving" or "reaching" a complexity score. A 9 means extremely challenging — that's a fact, not a goal.
@@ -579,9 +583,9 @@ ${benchmark?.regionalNotes ? `Regional Notes: ${benchmark.regionalNotes}` : ''}
     }
   },
   "whatsNext": {
-    "intro": "1 sentence tailored to this search — what the client has and what comes next. Reference the role and market.",
-    "discoveryCall": "1–2 sentences: what we'd specifically focus on in the discovery call for a ${displayTitle} search in ${formData.location || 'this market'}. Reference the unique dynamics of this role (e.g., governance for Chief of Staff, cuisine for Private Chef, investment philosophy for CIO).",
-    "sourcingStrategy": "1–2 sentences: how we'd approach sourcing THIS role. Reference specific networks, associations, or channels from the sourcing data. Mention what makes sourcing a ${displayTitle} different from other roles.",
+    "intro": "1 sentence tailored to this search — what the client has and what comes next. Reference the role, market${formData.discretionLevel !== 'standard' ? ', and the ' + (discOption?.label || formData.discretionLevel) + ' discretion requirements' : ''}.",
+    "discoveryCall": "1–2 sentences: what we'd specifically focus on in the discovery call for a ${displayTitle} search in ${formData.location || 'this market'}. Reference the unique dynamics of this role${formData.discretionLevel !== 'standard' ? ' and how the ' + (discOption?.label || formData.discretionLevel) + ' discretion level shapes the engagement (e.g., NDA protocols, blind search setup, media-proofing)' : ''}.",
+    "sourcingStrategy": "1–2 sentences: how we'd approach sourcing THIS role. Reference specific networks, associations, or channels from the sourcing data. Mention what makes sourcing a ${displayTitle} different from other roles.${formData.discretionLevel !== 'standard' ? ' Factor the ' + (discOption?.label || formData.discretionLevel) + ' discretion level into channel selection — which channels are off-limits, which require extra vetting.' : ''}",
     "shortlist": "1–2 sentences: what the vetting process focuses on for THIS role. Reference the specific requirements, discretion level, or cultural fit factors that matter most.",
     "placementSupport": "1–2 sentences: what the placement support looks like for THIS type of hire. Reference specific risks (counter-offers, relocation, onboarding) relevant to the search data."
   }

@@ -112,7 +112,7 @@ export function FormSteps({
                     else if (e.key === 'Escape') { setShowPositionSuggestions(false); setHighlightedPositionIndex(-1); }
                   }}
                   className="w-full px-4 py-3 border-2 border-slate-200 rounded-xl focus:border-brand-500 focus:ring-2 focus:ring-brand-100 transition-all duration-200 focus:shadow-md"
-                  placeholder={`Search ${commonRoles.length} roles... (e.g., Estate Manager, Private Chef)`}
+                  placeholder="Type to search roles... (e.g., Estate Manager, CIO, Private Chef)"
                 />
                 {formData.positionType && (
                   <button type="button" onClick={() => { setFormData({ ...formData, positionType: '' }); setPositionSearch(''); }}
