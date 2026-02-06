@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import {
   Share2, Mail, X, AlertCircle, CheckCircle, DollarSign, Clock, TrendingUp, Users, Target, Home, Car, Heart,
   SlidersHorizontal, Layers, Lightbulb, ArrowRight, ArrowLeftRight, Brain, GitBranch, Gauge, BarChart3,
-  AlertTriangle, Info, RefreshCw, ArrowLeftCircle, ChevronDown
+  AlertTriangle, Info, RefreshCw, ArrowLeftCircle, ChevronDown, Compass, MessageCircle, FileText, Shield
 } from 'lucide-react';
 import { ShareModal, EmailModal } from './Modals';
 import { getComplexityColor } from './constants';
@@ -215,7 +215,8 @@ export function ResultsView({
                 { id: 'breakdown', label: 'Breakdown' },
                 { id: 'strategy', label: 'Strategy' },
                 { id: 'market', label: 'Market' },
-                { id: 'decision', label: 'Insights' }
+                { id: 'decision', label: 'Insights' },
+                { id: 'next', label: "What's Next" }
               ].map(tab => (
                 <button
                   key={tab.id}
@@ -762,6 +763,96 @@ export function ResultsView({
                         </div>
                       </div>
                     )}
+                  </div>
+                </div>
+              )}
+
+              {/* WHAT'S NEXT TAB */}
+              {activeTab === 'next' && (
+                <div className="space-y-6 animate-fadeInUp">
+                  <p className="text-sm text-slate-600">You've got the data. Here's how we turn it into a successful placement.</p>
+
+                  {/* Process Steps */}
+                  <div className="space-y-4">
+                    {[
+                      {
+                        step: 1,
+                        icon: MessageCircle,
+                        title: 'Discovery Call',
+                        duration: '30 min',
+                        description: 'We walk through your analysis together, dig into the nuances that data alone can\'t capture, and align on what "the right person" actually looks like for your household or office.',
+                      },
+                      {
+                        step: 2,
+                        icon: Compass,
+                        title: 'Sourcing Strategy',
+                        duration: 'Week 1',
+                        description: 'Based on your role complexity, location, and budget, we build a sourcing plan — which networks to tap, how to position the opportunity, and what the outreach looks like.',
+                      },
+                      {
+                        step: 3,
+                        icon: Users,
+                        title: 'Curated Shortlist',
+                        duration: 'Weeks 2–4',
+                        description: 'You receive a vetted shortlist of candidates who match the brief. Each profile includes background verification, cultural fit notes, and our honest assessment.',
+                      },
+                      {
+                        step: 4,
+                        icon: Shield,
+                        title: 'Interview & Placement Support',
+                        duration: 'Through close',
+                        description: 'We coordinate interviews, handle reference checks, support offer negotiation, and stay involved through the first 90 days to make sure the placement sticks.',
+                      },
+                    ].map((item, idx) => (
+                      <div key={idx} className="flex gap-4">
+                        <div className="flex flex-col items-center">
+                          <div className="w-10 h-10 rounded-full flex items-center justify-center text-white" style={{ backgroundColor: '#2814ff' }}>
+                            <item.icon className="w-5 h-5" />
+                          </div>
+                          {idx < 3 && <div className="w-0.5 flex-1 mt-1 bg-brand-200" />}
+                        </div>
+                        <div className="pb-4 flex-1">
+                          <div className="flex items-center gap-2 mb-1">
+                            <h5 className="font-semibold text-slate-900">{item.title}</h5>
+                            <span className="text-xs px-2 py-0.5 rounded-full bg-brand-50 text-brand-600 font-medium">{item.duration}</span>
+                          </div>
+                          <p className="text-sm text-slate-600 leading-relaxed">{item.description}</p>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+
+                  {/* What you get */}
+                  <div className="bg-slate-50 rounded-xl p-5 border border-slate-100">
+                    <h5 className="font-semibold text-sm text-slate-900 mb-3 flex items-center gap-2">
+                      <FileText className="w-4 h-4" style={{ color: '#2814ff' }} />
+                      What the full engagement includes
+                    </h5>
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
+                      {[
+                        'Deep candidate psychology profiles',
+                        'Compensation negotiation playbook',
+                        'Background & reference verification',
+                        'Cultural fit assessment framework',
+                        'Retention risk analysis & 90-day plan',
+                        'Market-tested job positioning',
+                      ].map((item, i) => (
+                        <div key={i} className="flex items-center gap-2 text-sm text-slate-700">
+                          <CheckCircle className="w-4 h-4 flex-shrink-0" style={{ color: '#2814ff' }} />
+                          <span>{item}</span>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+
+                  {/* CTA */}
+                  <div className="text-center pt-2">
+                    <a href="https://calendly.com/charbel-talentgurus" target="_blank" rel="noopener noreferrer"
+                      className="inline-flex items-center gap-2 px-6 py-3 rounded-lg text-sm font-semibold text-white hover:shadow-lg transition-all"
+                      style={{ backgroundColor: '#2814ff' }}>
+                      Book a Discovery Call<ArrowRight className="w-4 h-4" />
+                    </a>
+                    <p className="text-xs text-slate-500 mt-2">30 minutes. No obligation. We'll walk through your analysis together.</p>
                   </div>
                 </div>
               )}
