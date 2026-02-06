@@ -110,7 +110,7 @@ export function FormSteps({
                     else if (e.key === 'Enter' && highlightedPositionIndex >= 0) { e.preventDefault(); const selected = filteredPositions[highlightedPositionIndex]; setFormData({ ...formData, positionType: selected }); setPositionSearch(''); setShowPositionSuggestions(false); setHighlightedPositionIndex(-1); }
                     else if (e.key === 'Escape') { setShowPositionSuggestions(false); setHighlightedPositionIndex(-1); }
                   }}
-                  className="w-full px-4 py-3 border-2 border-slate-200 rounded-xl bg-brand-50 focus:border-brand-500 focus:ring-2 focus:ring-brand-100 transition-all duration-200 focus:shadow-md"
+                  className="w-full px-4 py-3 border-2 border-slate-200 rounded-xl focus:border-brand-500 focus:ring-2 focus:ring-brand-100 transition-all duration-200 focus:shadow-md"
                   placeholder={`Search ${commonRoles.length} roles... (e.g., Estate Manager, Private Chef)`}
                 />
                 {formData.positionType && (
@@ -120,12 +120,12 @@ export function FormSteps({
                   </button>
                 )}
                 {showPositionSuggestions && filteredPositions.length > 0 && (
-                  <div className="absolute z-20 w-full mt-1 bg-white border border-slate-200 rounded-xl shadow-lg max-h-64 overflow-y-auto">
+                  <div className="absolute z-20 w-full mt-1 bg-brand-50 border border-brand-100 rounded-xl shadow-lg max-h-64 overflow-y-auto">
                     {filteredPositions.map((role, idx) => (
                       <button key={role} type="button"
                         onClick={() => { setFormData({ ...formData, positionType: role }); setPositionSearch(''); setShowPositionSuggestions(false); setHighlightedPositionIndex(-1); }}
                         onMouseEnter={() => setHighlightedPositionIndex(idx)}
-                        className={`w-full text-left px-4 py-2.5 text-sm border-b border-slate-50 ${idx === highlightedPositionIndex ? 'bg-brand-100 text-brand-700' : 'hover:bg-brand-50 text-slate-700'}`}>
+                        className={`w-full text-left px-4 py-2.5 text-sm border-b border-brand-100/50 ${idx === highlightedPositionIndex ? 'bg-brand-200 text-brand-700' : 'hover:bg-brand-100 text-slate-700'}`}>
                         {role}
                         {BENCHMARKS[role] && <span className="text-xs text-slate-400 ml-2">${BENCHMARKS[role].p50.toLocaleString()}</span>}
                       </button>
@@ -133,7 +133,7 @@ export function FormSteps({
                   </div>
                 )}
                 {showPositionSuggestions && positionSearch && filteredPositions.length === 0 && (
-                  <div className="absolute z-20 w-full mt-1 bg-white border border-slate-200 rounded-xl shadow-lg p-4 text-center text-sm text-slate-500">
+                  <div className="absolute z-20 w-full mt-1 bg-brand-50 border border-brand-100 rounded-xl shadow-lg p-4 text-center text-sm text-slate-500">
                     No roles match "{positionSearch}"
                   </div>
                 )}
@@ -156,16 +156,16 @@ export function FormSteps({
                   onFocus={() => setShowLocationSuggestions(true)}
                   onBlur={() => setTimeout(() => { setShowLocationSuggestions(false); setHighlightedLocationIndex(-1); }, 200)}
                   onKeyDown={handleLocationKeyDown}
-                  className="w-full pl-10 pr-4 py-3 border-2 border-slate-200 rounded-xl bg-brand-50 transition-all duration-200 focus:shadow-md focus:border-brand-500 focus:ring-2 focus:ring-brand-100" placeholder="e.g., Palm Beach, FL or Monaco" />
+                  className="w-full pl-10 pr-4 py-3 border-2 border-slate-200 rounded-xl transition-all duration-200 focus:shadow-md focus:border-brand-500 focus:ring-2 focus:ring-brand-100" placeholder="e.g., Palm Beach, FL or Monaco" />
               </div>
               {showLocationSuggestions && filteredLocationSuggestions.length > 0 && (
-                <div className="absolute z-10 w-full mt-1 bg-white border border-slate-200 rounded-xl shadow-lg max-h-64 overflow-y-auto">
+                <div className="absolute z-10 w-full mt-1 bg-brand-50 border border-brand-100 rounded-xl shadow-lg max-h-64 overflow-y-auto">
                   {filteredLocationSuggestions.map((loc, idx) => (
                     <button key={idx} type="button"
                       ref={idx === highlightedLocationIndex ? (el) => el?.scrollIntoView({ block: 'nearest' }) : null}
                       onClick={() => { setFormData({ ...formData, location: loc }); setShowLocationSuggestions(false); setHighlightedLocationIndex(-1); }}
                       onMouseEnter={() => setHighlightedLocationIndex(idx)}
-                      className={`w-full text-left px-4 py-2.5 text-sm flex items-center justify-between ${idx === highlightedLocationIndex ? 'bg-brand-100 text-brand-700' : 'hover:bg-brand-50'}`}>
+                      className={`w-full text-left px-4 py-2.5 text-sm flex items-center justify-between ${idx === highlightedLocationIndex ? 'bg-brand-200 text-brand-700' : 'hover:bg-brand-100'}`}>
                       <span>{loc}</span>
                     </button>
                   ))}
@@ -176,8 +176,8 @@ export function FormSteps({
             <div>
               <label className="block text-sm font-medium text-slate-700 mb-2">Discretion Level</label>
               <select name="discretionLevel" value={formData.discretionLevel} onChange={handleInputChange}
-                className="w-full px-4 py-3 border-2 border-slate-200 rounded-xl bg-brand-50 transition-all duration-200 focus:shadow-md focus:border-brand-500 focus:ring-2 focus:ring-brand-100">
-                {discretionLevels.map(d => <option key={d.value} value={d.value}>{d.label} — {d.description}</option>)}
+                className="w-full px-4 py-3 border-2 border-slate-200 rounded-xl transition-all duration-200 focus:shadow-md focus:border-brand-500 focus:ring-2 focus:ring-brand-100">
+                {discretionLevels.map(d => <option key={d.value} value={d.value} className="bg-brand-50">{d.label} — {d.description}</option>)}
               </select>
             </div>
           </div>
@@ -212,7 +212,7 @@ export function FormSteps({
             <div>
               <label className="block text-sm font-medium text-slate-700 mb-2">Budget Range *</label>
               <select name="budgetRange" value={formData.budgetRange} onChange={handleInputChange}
-                className="w-full px-4 py-3 border-2 border-slate-200 rounded-xl bg-brand-50 transition-all duration-200 focus:shadow-md focus:border-brand-500 focus:ring-2 focus:ring-brand-100">
+                className="w-full px-4 py-3 border-2 border-slate-200 rounded-xl transition-all duration-200 focus:shadow-md focus:border-brand-500 focus:ring-2 focus:ring-brand-100">
                 <option value="">Select budget range</option>
                 {budgetRanges.map(b => <option key={b.value} value={b.value}>{b.label}</option>)}
               </select>
@@ -311,7 +311,7 @@ export function FormSteps({
             <div>
               <label className="block text-sm font-medium text-slate-700 mb-2">Travel Requirements</label>
               <select name="travelRequirement" value={formData.travelRequirement} onChange={handleInputChange}
-                className="w-full px-4 py-3 border-2 border-slate-200 rounded-xl bg-brand-50 transition-all duration-200 focus:shadow-md focus:border-brand-500 focus:ring-2 focus:ring-brand-100">
+                className="w-full px-4 py-3 border-2 border-slate-200 rounded-xl transition-all duration-200 focus:shadow-md focus:border-brand-500 focus:ring-2 focus:ring-brand-100">
                 {travelOptions.map(t => <option key={t.value} value={t.value}>{t.label}</option>)}
               </select>
             </div>
@@ -319,7 +319,7 @@ export function FormSteps({
             <div>
               <label className="block text-sm font-medium text-slate-700 mb-2">Additional Requirements *</label>
               <textarea name="keyRequirements" value={formData.keyRequirements} onChange={handleInputChange} rows={4}
-                className="w-full px-4 py-3 border-2 border-slate-200 rounded-xl bg-brand-50 transition-all duration-200 focus:shadow-md focus:border-brand-500 focus:ring-2 focus:ring-brand-100" placeholder="Describe specific experience, skills..." />
+                className="w-full px-4 py-3 border-2 border-slate-200 rounded-xl transition-all duration-200 focus:shadow-md focus:border-brand-500 focus:ring-2 focus:ring-brand-100" placeholder="Describe specific experience, skills..." />
               <p className={`text-xs mt-1 ${formData.keyRequirements.length >= 25 ? 'text-b-opal-500' : 'text-slate-500'}`}>
                 {formData.keyRequirements.length} chars {formData.keyRequirements.length < 25 ? `(${25 - formData.keyRequirements.length} more needed)` : '✓'}
               </p>
@@ -345,7 +345,7 @@ export function FormSteps({
                 <div>
                   <label className="block text-sm font-medium text-slate-700 mb-2">Assets Under Management (AUM)</label>
                   <select name="aumRange" value={formData.aumRange} onChange={handleInputChange}
-                    className="w-full px-4 py-3 border-2 border-slate-200 rounded-xl bg-brand-50 transition-all duration-200 focus:shadow-md focus:border-brand-500 focus:ring-2 focus:ring-brand-100">
+                    className="w-full px-4 py-3 border-2 border-slate-200 rounded-xl transition-all duration-200 focus:shadow-md focus:border-brand-500 focus:ring-2 focus:ring-brand-100">
                     <option value="">Select...</option>
                     <option value="under-100M">Under $100M</option>
                     <option value="100M-300M">$100M - $300M</option>
@@ -357,7 +357,7 @@ export function FormSteps({
                 <div>
                   <label className="block text-sm font-medium text-slate-700 mb-2">Team Size (Direct Reports)</label>
                   <select name="teamSize" value={formData.teamSize} onChange={handleInputChange}
-                    className="w-full px-4 py-3 border-2 border-slate-200 rounded-xl bg-brand-50 transition-all duration-200 focus:shadow-md focus:border-brand-500 focus:ring-2 focus:ring-brand-100">
+                    className="w-full px-4 py-3 border-2 border-slate-200 rounded-xl transition-all duration-200 focus:shadow-md focus:border-brand-500 focus:ring-2 focus:ring-brand-100">
                     <option value="">Select...</option>
                     <option value="0">Individual contributor</option>
                     <option value="1-3">1-3 reports</option>
@@ -371,7 +371,7 @@ export function FormSteps({
                 <div>
                   <label className="block text-sm font-medium text-slate-700 mb-2">Properties to Staff</label>
                   <select name="propertiesCount" value={formData.propertiesCount} onChange={handleInputChange}
-                    className="w-full px-4 py-3 border-2 border-slate-200 rounded-xl bg-brand-50 transition-all duration-200 focus:shadow-md focus:border-brand-500 focus:ring-2 focus:ring-brand-100">
+                    className="w-full px-4 py-3 border-2 border-slate-200 rounded-xl transition-all duration-200 focus:shadow-md focus:border-brand-500 focus:ring-2 focus:ring-brand-100">
                     <option value="">Select...</option>
                     <option value="1">1</option>
                     <option value="2-3">2-3</option>
@@ -382,7 +382,7 @@ export function FormSteps({
                 <div>
                   <label className="block text-sm font-medium text-slate-700 mb-2">Household Size</label>
                   <select name="householdSize" value={formData.householdSize} onChange={handleInputChange}
-                    className="w-full px-4 py-3 border-2 border-slate-200 rounded-xl bg-brand-50 transition-all duration-200 focus:shadow-md focus:border-brand-500 focus:ring-2 focus:ring-brand-100">
+                    className="w-full px-4 py-3 border-2 border-slate-200 rounded-xl transition-all duration-200 focus:shadow-md focus:border-brand-500 focus:ring-2 focus:ring-brand-100">
                     <option value="">Select...</option>
                     <option value="1-2">1-2</option>
                     <option value="3-5">3-5 (family)</option>
