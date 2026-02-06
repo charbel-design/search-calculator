@@ -35,7 +35,7 @@ export function ResultsView({
   showShareModal, setShowShareModal, shareUrl, copiedShare, copyShareUrl,
   showEmailModal, setShowEmailModal, emailForReport, setEmailForReport,
   handleSendEmail, sendingEmail, emailSent, setEmailSent, generateShareUrl, runComparison,
-  resetForm, showLanguages, setShowLanguages, commonRoles
+  resetForm, showLanguages, setShowLanguages, commonRoles, calculateComplexity
 }) {
   const [activeTab, setActiveTab] = useState('breakdown');
   const [methodologyExpanded, setMethodologyExpanded] = useState(false);
@@ -70,9 +70,16 @@ export function ResultsView({
           {results.isSharedResult && (
             <div className="bg-brand-50 rounded-xl p-4 mb-6 flex items-start gap-3 border border-brand-100 animate-fadeInUp">
               <Share2 className="w-5 h-5 text-brand-500 flex-shrink-0 mt-0.5" />
-              <div>
+              <div className="flex-1">
                 <p className="text-sm font-medium text-brand-600">This is a shared analysis</p>
-                <p className="text-xs text-brand-500 mt-1">Results are based on our scoring algorithm. For AI-powered insights, start a new analysis.</p>
+                <p className="text-xs text-brand-500 mt-1">You're viewing benchmark scores and data. Want the full AI-powered breakdown?</p>
+                <button
+                  onClick={calculateComplexity}
+                  className="mt-3 px-4 py-2 rounded-lg text-sm font-medium text-white transition-all hover:opacity-90"
+                  style={{ backgroundColor: '#2814ff' }}
+                >
+                  Run Full AI Analysis
+                </button>
               </div>
             </div>
           )}

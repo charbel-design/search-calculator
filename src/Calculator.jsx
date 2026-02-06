@@ -102,6 +102,7 @@ const SearchIntelligenceEngine = () => {
             showLanguages={engine.showLanguages}
             setShowLanguages={engine.setShowLanguages}
             commonRoles={engine.commonRoles}
+            calculateComplexity={engine.calculateComplexity}
           />
         ) : null}
 
