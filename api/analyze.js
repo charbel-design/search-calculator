@@ -1,3 +1,49 @@
+// --- Rate Limiting ---
+const rateLimit = new Map();
+const RATE_LIMIT_WINDOW_MS = 60 * 1000; // 1 minute
+const RATE_LIMIT_MAX_REQUESTS = 10; // per window per IP
+
+function checkRateLimit(ip) {
+  const now = Date.now();
+  const entry = rateLimit.get(ip);
+  if (!entry || now - entry.windowStart > RATE_LIMIT_WINDOW_MS) {
+    rateLimit.set(ip, { windowStart: now, count: 1 });
+    return { allowed: true };
+  }
+  entry.count++;
+  if (entry.count > RATE_LIMIT_MAX_REQUESTS) {
+    return { allowed: false, retryAfter: Math.ceil((entry.windowStart + RATE_LIMIT_WINDOW_MS - now) / 1000) };
+  }
+  return { allowed: true };
+}
+
+// Periodically clean up stale entries (every 5 minutes)
+setInterval(() => {
+  const now = Date.now();
+  for (const [ip, entry] of rateLimit) {
+    if (now - entry.windowStart > RATE_LIMIT_WINDOW_MS * 2) {
+      rateLimit.delete(ip);
+    }
+  }
+}, 5 * 60 * 1000);
+
+// --- Prompt Sanitization (server-side) ---
+function sanitizeForPrompt(text) {
+  if (!text || typeof text !== 'string') return '';
+  return text
+    .replace(/ignore\s+(all\s+)?(previous|prior|above)\s+(instructions?|prompts?|rules?)/gi, '[filtered]')
+    .replace(/you\s+are\s+now/gi, '[filtered]')
+    .replace(/system\s*:?\s*prompt/gi, '[filtered]')
+    .replace(/\bdo\s+not\s+follow\b/gi, '[filtered]')
+    .replace(/\boverride\b/gi, '[filtered]')
+    .replace(/\breturn\s+only\b/gi, '[filtered]')
+    .replace(/\bforget\s+(everything|all|your)\b/gi, '[filtered]')
+    .slice(0, 15000);
+}
+
+// --- Allowed roleType values ---
+const VALID_ROLE_TYPES = ['household', 'corporate'];
+
 // System messages for consistent, high-quality responses
 const SYSTEM_MESSAGES = {
   corporate: `You are a senior family office recruitment strategist specializing in C-suite placements for single and multi-family offices. You understand institutional investment culture, fiduciary governance, AUM-based compensation benchmarking, and the unique dynamics of recruiting for principal-led investment vehicles. You provide warm, direct advice to principals and boards seeking exceptional family office executives.
@@ -104,7 +150,7 @@ export default async function handler(req, res) {
   // CORS handling
   const origin = req.headers.origin;
   if (ALLOWED_ORIGINS.includes(origin) || process.env.NODE_ENV === 'development') {
-    res.setHeader('Access-Control-Allow-Origin', origin || '*');
+    res.setHeader('Access-Control-Allow-Origin', origin);
   }
   res.setHeader('Access-Control-Allow-Methods', 'POST, OPTIONS');
   res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
@@ -119,11 +165,19 @@ export default async function handler(req, res) {
     return res.status(405).json({ error: 'Method not allowed' });
   }
 
+  // Rate limiting
+  const clientIp = req.headers['x-forwarded-for']?.split(',')[0]?.trim() || req.socket?.remoteAddress || 'unknown';
+  const rateLimitResult = checkRateLimit(clientIp);
+  if (!rateLimitResult.allowed) {
+    res.setHeader('Retry-After', rateLimitResult.retryAfter);
+    return res.status(429).json({ error: 'Too many requests. Please try again later.' });
+  }
+
   const apiKey = process.env.ANTHROPIC_API_KEY;
 
   if (!apiKey) {
     console.error('ANTHROPIC_API_KEY not configured');
-    return res.status(500).json({ error: 'API key not configured' });
+    return res.status(500).json({ error: 'Service configuration error' });
   }
 
   try {
@@ -135,8 +189,14 @@ export default async function handler(req, res) {
       return res.status(400).json({ error: validation.error });
     }
 
+    // Validate roleType against allowlist
+    const safeRoleType = VALID_ROLE_TYPES.includes(roleType) ? roleType : 'household';
+
+    // Server-side prompt sanitization
+    const sanitizedPrompt = sanitizeForPrompt(prompt);
+
     // Select system message based on roleType
-    const systemMessage = SYSTEM_MESSAGES[roleType] || SYSTEM_MESSAGES.household;
+    const systemMessage = SYSTEM_MESSAGES[safeRoleType];
 
     const response = await fetchWithRetry('https://api.anthropic.com/v1/messages', {
       method: 'POST',
@@ -150,17 +210,17 @@ export default async function handler(req, res) {
         max_tokens: 3000,
         temperature: 0.3,
         system: systemMessage,
-        messages: [{ role: 'user', content: prompt }]
+        messages: [{ role: 'user', content: sanitizedPrompt }]
       })
     }, 2, 45000); // 2 retries, 45 second timeout
 
     if (!response.ok) {
       const errorText = await response.text();
       console.error('Anthropic API error:', response.status, errorText);
-      return res.status(response.status).json({
-        error: 'API request failed',
-        status: response.status,
-        details: errorText.substring(0, 200) // Include some error details
+      // Return generic error to client — never leak upstream details
+      const clientStatus = response.status === 429 ? 429 : 502;
+      return res.status(clientStatus).json({
+        error: response.status === 429 ? 'Service is busy. Please try again shortly.' : 'Analysis service temporarily unavailable.'
       });
     }
 
@@ -173,6 +233,6 @@ export default async function handler(req, res) {
       return res.status(504).json({ error: 'Request timeout - please try again' });
     }
     console.error('Server error:', error.message);
-    return res.status(500).json({ error: 'Internal server error', message: error.message });
+    return res.status(500).json({ error: 'Internal server error' });
   }
 }

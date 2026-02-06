@@ -1,6 +1,54 @@
 // Email Report API Route - Uses Resend to send analysis reports
 // Requires RESEND_API_KEY environment variable in Vercel
 
+// --- Rate Limiting ---
+const rateLimit = new Map();
+const RATE_LIMIT_WINDOW_MS = 60 * 1000; // 1 minute
+const RATE_LIMIT_MAX_REQUESTS = 5; // stricter limit for email endpoint
+
+function checkRateLimit(ip) {
+  const now = Date.now();
+  const entry = rateLimit.get(ip);
+  if (!entry || now - entry.windowStart > RATE_LIMIT_WINDOW_MS) {
+    rateLimit.set(ip, { windowStart: now, count: 1 });
+    return { allowed: true };
+  }
+  entry.count++;
+  if (entry.count > RATE_LIMIT_MAX_REQUESTS) {
+    return { allowed: false, retryAfter: Math.ceil((entry.windowStart + RATE_LIMIT_WINDOW_MS - now) / 1000) };
+  }
+  return { allowed: true };
+}
+
+setInterval(() => {
+  const now = Date.now();
+  for (const [ip, entry] of rateLimit) {
+    if (now - entry.windowStart > RATE_LIMIT_WINDOW_MS * 2) {
+      rateLimit.delete(ip);
+    }
+  }
+}, 5 * 60 * 1000);
+
+// --- Email Validation ---
+const EMAIL_REGEX = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)+$/;
+
+function isValidEmail(email) {
+  if (!email || typeof email !== 'string') return false;
+  if (email.length > 254) return false;
+  return EMAIL_REGEX.test(email);
+}
+
+// --- HTML Escaping ---
+function escapeHtml(str) {
+  if (str === null || str === undefined) return '';
+  return String(str)
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#39;');
+}
+
 const ALLOWED_ORIGINS = [
   'https://search-calculator.vercel.app',
   'https://talent-gurus.com',
@@ -10,9 +58,12 @@ const ALLOWED_ORIGINS = [
 ].filter(Boolean);
 
 function generateEmailHTML(results) {
-  const scoreColor = results.score <= 3 ? '#de9ea9' : results.score <= 5 ? '#c77d8a' : results.score <= 7 ? '#9e5f6a' : '#7a4a55';
+  // Escape helper shorthand
+  const e = escapeHtml;
+  const score = Number(results.score) || 0;
+  const scoreColor = score <= 3 ? '#de9ea9' : score <= 5 ? '#c77d8a' : score <= 7 ? '#9e5f6a' : '#7a4a55';
   const sectionBorder = 'border-left:1px solid #e2e8f0;border-right:1px solid #e2e8f0;';
-  const sectionHeading = (text) => `<h3 style="color:#2814ff;font-size:16px;margin:0 0 16px;font-weight:600;">${text}</h3>`;
+  const sectionHeading = (text) => `<h3 style="color:#2814ff;font-size:16px;margin:0 0 16px;font-weight:600;">${e(text)}</h3>`;
   const divider = `<div style="background-color:#ffffff;padding:0 24px 0;${sectionBorder}"><hr style="border:none;border-top:1px solid #e2e8f0;margin:0;"></div>`;
 
   return `
@@ -36,18 +87,18 @@ function generateEmailHTML(results) {
     <!-- Score Section -->
     <div style="background-color:#ffffff;padding:32px 24px;text-align:center;${sectionBorder}">
       <div style="width:110px;height:110px;border-radius:50%;background-color:${scoreColor}15;border:3px solid ${scoreColor};margin:0 auto 16px;line-height:110px;">
-        <span style="font-size:40px;font-weight:bold;color:${scoreColor};">${results.score}</span>
+        <span style="font-size:40px;font-weight:bold;color:${scoreColor};">${e(score)}</span>
       </div>
-      <h2 style="margin:0 0 4px;color:#1e293b;font-size:22px;">${results.displayTitle}</h2>
-      <p style="margin:0 0 8px;color:#64748b;font-size:14px;">${results.location || ''}${results.regionalMultiplier && results.regionalMultiplier !== 1 ? ` (${results.regionalMultiplier}x regional adjustment)` : ''}</p>
-      <span style="display:inline-block;padding:6px 20px;border-radius:20px;background-color:${scoreColor}15;color:${scoreColor};font-size:14px;font-weight:600;">${results.label} Search</span>
-      ${results.confidence ? `<p style="margin:8px 0 0;color:#94a3b8;font-size:12px;">Confidence: ${results.confidence}</p>` : ''}
+      <h2 style="margin:0 0 4px;color:#1e293b;font-size:22px;">${e(results.displayTitle)}</h2>
+      <p style="margin:0 0 8px;color:#64748b;font-size:14px;">${e(results.location || '')}${results.regionalMultiplier && results.regionalMultiplier !== 1 ? ` (${e(results.regionalMultiplier)}x regional adjustment)` : ''}</p>
+      <span style="display:inline-block;padding:6px 20px;border-radius:20px;background-color:${scoreColor}15;color:${scoreColor};font-size:14px;font-weight:600;">${e(results.label)} Search</span>
+      ${results.confidence ? `<p style="margin:8px 0 0;color:#94a3b8;font-size:12px;">Confidence: ${e(results.confidence)}</p>` : ''}
     </div>
 
     <!-- Executive Summary -->
     <div style="background-color:#ffffff;padding:16px 24px 24px;${sectionBorder}">
       <div style="border-left:4px solid #2814ff;padding:16px;background-color:#f8fafc;border-radius:0 8px 8px 0;">
-        <p style="margin:0;color:#334155;font-size:14px;line-height:1.6;">${results.bottomLine || ''}</p>
+        <p style="margin:0;color:#334155;font-size:14px;line-height:1.6;">${e(results.bottomLine || '')}</p>
       </div>
     </div>
 
@@ -60,25 +111,25 @@ function generateEmailHTML(results) {
       <!-- Salary -->
       <div style="padding:14px;background-color:#f0f7f5;border-radius:8px;margin-bottom:10px;border-left:4px solid #99c1b9;">
         <strong style="color:#4a776d;font-size:12px;text-transform:uppercase;letter-spacing:0.5px;">Salary Guidance</strong>
-        <p style="margin:6px 0 0;color:#334155;font-size:13px;line-height:1.5;">${results.salaryRangeGuidance || 'N/A'}</p>
+        <p style="margin:6px 0 0;color:#334155;font-size:13px;line-height:1.5;">${e(results.salaryRangeGuidance || 'N/A')}</p>
       </div>
 
       <!-- Timeline -->
       <div style="padding:14px;background-color:#eeeeff;border-radius:8px;margin-bottom:10px;border-left:4px solid #2814ff;">
         <strong style="color:#2814ff;font-size:12px;text-transform:uppercase;letter-spacing:0.5px;">Timeline</strong>
-        <p style="margin:6px 0 0;color:#334155;font-size:13px;line-height:1.5;">${results.estimatedTimeline || 'N/A'}</p>
+        <p style="margin:6px 0 0;color:#334155;font-size:13px;line-height:1.5;">${e(results.estimatedTimeline || 'N/A')}</p>
       </div>
 
       <!-- Market -->
       <div style="padding:14px;background-color:#fdf2f4;border-radius:8px;margin-bottom:10px;border-left:4px solid #de9ea9;">
         <strong style="color:#9e5f6a;font-size:12px;text-transform:uppercase;letter-spacing:0.5px;">Market Competitiveness</strong>
-        <p style="margin:6px 0 0;color:#334155;font-size:13px;line-height:1.5;">${results.marketCompetitiveness || 'N/A'}</p>
+        <p style="margin:6px 0 0;color:#334155;font-size:13px;line-height:1.5;">${e(results.marketCompetitiveness || 'N/A')}</p>
       </div>
 
       <!-- Availability -->
       <div style="padding:14px;background-color:#fef8f0;border-radius:8px;border-left:4px solid #f2d0a9;">
         <strong style="color:#a47840;font-size:12px;text-transform:uppercase;letter-spacing:0.5px;">Candidate Availability</strong>
-        <p style="margin:6px 0 0;color:#334155;font-size:13px;line-height:1.5;"><strong>${results.candidateAvailability || 'N/A'}</strong> — ${results.availabilityReason || ''}</p>
+        <p style="margin:6px 0 0;color:#334155;font-size:13px;line-height:1.5;"><strong>${e(results.candidateAvailability || 'N/A')}</strong> — ${e(results.availabilityReason || '')}</p>
       </div>
     </div>
 
@@ -89,7 +140,7 @@ function generateEmailHTML(results) {
     <div style="background-color:#ffffff;padding:20px 24px 24px;${sectionBorder}">
       ${sectionHeading('Where to Find These Candidates')}
       <div style="padding:14px;background-color:#eeeeff;border-radius:8px;border:1px solid #d2d4ff;">
-        <p style="margin:0;color:#334155;font-size:13px;line-height:1.5;">${results.sourcingInsight}</p>
+        <p style="margin:0;color:#334155;font-size:13px;line-height:1.5;">${e(results.sourcingInsight)}</p>
       </div>
     </div>
     ${divider}
@@ -98,7 +149,7 @@ function generateEmailHTML(results) {
     <!-- Benchmarks -->
     ${results.benchmark ? `
     <div style="background-color:#ffffff;padding:20px 24px 24px;${sectionBorder}">
-      ${sectionHeading('Salary Benchmarks: ' + results.displayTitle)}
+      ${sectionHeading('Salary Benchmarks: ' + (results.displayTitle || ''))}
       <table style="width:100%;text-align:center;border-collapse:collapse;margin-bottom:16px;">
         <tr>
           <td style="padding:14px;background-color:#f8fafc;border-radius:8px;">
@@ -122,22 +173,22 @@ function generateEmailHTML(results) {
         <tr>
           <td style="padding:8px;background-color:#f8fafc;border-radius:6px;text-align:center;width:25%;">
             <div style="font-size:11px;font-weight:600;color:#334155;">Housing</div>
-            <div style="font-size:11px;color:#64748b;">${results.benchmark.benefits.housing || 'N/A'}</div>
+            <div style="font-size:11px;color:#64748b;">${e(results.benchmark.benefits.housing || 'N/A')}</div>
           </td>
           <td style="width:4px;"></td>
           <td style="padding:8px;background-color:#f8fafc;border-radius:6px;text-align:center;width:25%;">
             <div style="font-size:11px;font-weight:600;color:#334155;">Vehicle</div>
-            <div style="font-size:11px;color:#64748b;">${results.benchmark.benefits.vehicle || 'N/A'}</div>
+            <div style="font-size:11px;color:#64748b;">${e(results.benchmark.benefits.vehicle || 'N/A')}</div>
           </td>
           <td style="width:4px;"></td>
           <td style="padding:8px;background-color:#f8fafc;border-radius:6px;text-align:center;width:25%;">
             <div style="font-size:11px;font-weight:600;color:#334155;">Health</div>
-            <div style="font-size:11px;color:#64748b;">${results.benchmark.benefits.health || 'N/A'}</div>
+            <div style="font-size:11px;color:#64748b;">${e(results.benchmark.benefits.health || 'N/A')}</div>
           </td>
           <td style="width:4px;"></td>
           <td style="padding:8px;background-color:#f8fafc;border-radius:6px;text-align:center;width:25%;">
             <div style="font-size:11px;font-weight:600;color:#334155;">Bonus</div>
-            <div style="font-size:11px;color:#64748b;">${results.benchmark.benefits.bonus || 'N/A'}</div>
+            <div style="font-size:11px;color:#64748b;">${e(results.benchmark.benefits.bonus || 'N/A')}</div>
           </td>
         </tr>
       </table>
@@ -152,7 +203,7 @@ function generateEmailHTML(results) {
       ${sectionHeading('Key Success Factors')}
       ${results.keySuccessFactors.map(f => `
         <div style="padding:10px 12px;background-color:#f0f7f5;border-radius:8px;margin-bottom:8px;border:1px solid #c2ddd7;">
-          <span style="color:#5f9488;font-weight:bold;">&#10003;</span> <span style="color:#334155;font-size:13px;">${f}</span>
+          <span style="color:#5f9488;font-weight:bold;">&#10003;</span> <span style="color:#334155;font-size:13px;">${e(f)}</span>
         </div>
       `).join('')}
     </div>
@@ -165,7 +216,7 @@ function generateEmailHTML(results) {
       ${sectionHeading('Recommendations')}
       ${results.recommendedAdjustments.map(r => `
         <div style="padding:10px 12px;background-color:#fef8f0;border-radius:8px;margin-bottom:8px;border:1px solid #f2d0a9;">
-          <span style="color:#c4975e;font-weight:bold;">&#10140;</span> <span style="color:#334155;font-size:13px;">${r}</span>
+          <span style="color:#c4975e;font-weight:bold;">&#10140;</span> <span style="color:#334155;font-size:13px;">${e(r)}</span>
         </div>
       `).join('')}
     </div>
@@ -177,7 +228,7 @@ function generateEmailHTML(results) {
     <div style="background-color:#ffffff;padding:20px 24px 24px;${sectionBorder}">
       ${sectionHeading('Red Flag Analysis')}
       <div style="padding:14px;background-color:#fdf2f4;border-radius:8px;border:1px solid #ebc7cd;">
-        <p style="margin:0;color:#334155;font-size:13px;line-height:1.5;">${results.redFlagAnalysis}</p>
+        <p style="margin:0;color:#334155;font-size:13px;line-height:1.5;">${e(results.redFlagAnalysis)}</p>
       </div>
     </div>
     ${divider}
@@ -188,10 +239,10 @@ function generateEmailHTML(results) {
     <div style="background-color:#ffffff;padding:20px 24px 24px;${sectionBorder}">
       ${sectionHeading('Market Intelligence')}
       <div style="padding:14px;background-color:#f8fafc;border-radius:8px;border:1px solid #e2e8f0;">
-        <p style="margin:0 0 8px;color:#334155;font-size:13px;line-height:1.5;">${results.benchmark.trends}</p>
+        <p style="margin:0 0 8px;color:#334155;font-size:13px;line-height:1.5;">${e(results.benchmark.trends)}</p>
         ${results.benchmark.regionalNotes ? `
         <div style="border-top:1px solid #e2e8f0;padding-top:10px;margin-top:10px;">
-          <p style="margin:0;color:#64748b;font-size:12px;line-height:1.5;"><strong>Regional Notes:</strong> ${results.benchmark.regionalNotes}</p>
+          <p style="margin:0;color:#64748b;font-size:12px;line-height:1.5;"><strong>Regional Notes:</strong> ${e(results.benchmark.regionalNotes)}</p>
         </div>
         ` : ''}
       </div>
@@ -295,7 +346,7 @@ function generateEmailHTML(results) {
         <div style="margin-top:8px;">
           ${(results.benchmark.retentionRisk.topReasons || []).map((reason, i) => `
             <div style="display:inline-block;padding:5px 12px;background-color:#fff;border:1px solid #e2e8f0;border-radius:16px;margin:3px 4px;font-size:12px;color:#475569;">
-              ${reason}
+              ${e(reason)}
             </div>
           `).join('')}
         </div>
@@ -321,7 +372,7 @@ function generateEmailHTML(results) {
         </table>
         <div style="margin-top:10px;padding-top:10px;border-top:1px solid #e2e8f0;text-align:center;">
           <span style="font-size:12px;color:#475569;">Signing bonus offered in <strong style="color:#2814ff;">${Math.round(results.benchmark.compensationStructure.signingBonusFrequency * 100)}%</strong> of placements</span>
-          <span style="font-size:11px;color:#94a3b8;"> · Typical range: $${results.benchmark.compensationStructure.signingBonusRange}</span>
+          <span style="font-size:11px;color:#94a3b8;"> · Typical range: $${e(results.benchmark.compensationStructure.signingBonusRange)}</span>
         </div>
       </div>
       ` : ''}
@@ -338,14 +389,14 @@ function generateEmailHTML(results) {
           <td style="padding:14px;background-color:#fdf2f4;border-radius:8px;vertical-align:top;width:48%;">
             <strong style="color:#9e5f6a;font-size:12px;text-transform:uppercase;">Candidate Advantages</strong>
             ${(results.negotiationLeverage.candidateAdvantages || []).map(a => `
-              <p style="margin:6px 0 0;color:#334155;font-size:12px;line-height:1.4;">&#8226; ${a}</p>
+              <p style="margin:6px 0 0;color:#334155;font-size:12px;line-height:1.4;">&#8226; ${e(a)}</p>
             `).join('')}
           </td>
           <td style="width:4%;"></td>
           <td style="padding:14px;background-color:#f0f7f5;border-radius:8px;vertical-align:top;width:48%;">
             <strong style="color:#4a776d;font-size:12px;text-transform:uppercase;">Your Advantages</strong>
             ${(results.negotiationLeverage.employerAdvantages || []).map(a => `
-              <p style="margin:6px 0 0;color:#334155;font-size:12px;line-height:1.4;">&#8226; ${a}</p>
+              <p style="margin:6px 0 0;color:#334155;font-size:12px;line-height:1.4;">&#8226; ${e(a)}</p>
             `).join('')}
           </td>
         </tr>
@@ -367,10 +418,10 @@ function generateEmailHTML(results) {
           <span style="display:inline-block;padding:3px 8px;background-color:#d2d4ff;border-radius:4px;font-size:11px;color:#2814ff;font-weight:600;">TRADE-OFF SCENARIOS</span>
         </div>
         ${(results.decisionIntelligence.tradeoffScenarios.initial || []).map(item => `
-          <p style="margin:0 0 6px;color:#334155;font-size:13px;line-height:1.5;padding-left:12px;border-left:2px solid #a5a8ff;"><span style="color:#2814ff;font-weight:500;">&#8594;</span> ${item}</p>
+          <p style="margin:0 0 6px;color:#334155;font-size:13px;line-height:1.5;padding-left:12px;border-left:2px solid #a5a8ff;"><span style="color:#2814ff;font-weight:500;">&#8594;</span> ${e(item)}</p>
         `).join('')}
         ${results.decisionIntelligence.tradeoffScenarios.completeTeaser ? `
-        <p style="margin:10px 0 0;color:#94a3b8;font-size:11px;font-style:italic;">&#8594; ${results.decisionIntelligence.tradeoffScenarios.completeTeaser}</p>
+        <p style="margin:10px 0 0;color:#94a3b8;font-size:11px;font-style:italic;">&#8594; ${e(results.decisionIntelligence.tradeoffScenarios.completeTeaser)}</p>
         ` : ''}
       </div>
       ` : ''}
@@ -382,10 +433,10 @@ function generateEmailHTML(results) {
           <span style="display:inline-block;padding:3px 8px;background-color:#f5e6e9;border-radius:4px;font-size:11px;color:#9e5f6a;font-weight:600;">CANDIDATE PSYCHOLOGY</span>
         </div>
         ${(results.decisionIntelligence.candidatePsychology.initial || []).map(item => `
-          <p style="margin:0 0 6px;color:#334155;font-size:13px;line-height:1.5;padding-left:12px;border-left:2px solid #de9ea9;">&#8226; ${item}</p>
+          <p style="margin:0 0 6px;color:#334155;font-size:13px;line-height:1.5;padding-left:12px;border-left:2px solid #de9ea9;">&#8226; ${e(item)}</p>
         `).join('')}
         ${results.decisionIntelligence.candidatePsychology.completeTeaser ? `
-        <p style="margin:10px 0 0;color:#94a3b8;font-size:11px;font-style:italic;">&#8594; ${results.decisionIntelligence.candidatePsychology.completeTeaser}</p>
+        <p style="margin:10px 0 0;color:#94a3b8;font-size:11px;font-style:italic;">&#8594; ${e(results.decisionIntelligence.candidatePsychology.completeTeaser)}</p>
         ` : ''}
       </div>
       ` : ''}
@@ -405,10 +456,10 @@ function generateEmailHTML(results) {
                   : results.decisionIntelligence.probabilityOfSuccess.initialLabel === 'Moderate'
                   ? 'background-color:#fef8f0;color:#a47840;'
                   : 'background-color:#fdf2f4;color:#9e5f6a;'
-              }">${results.decisionIntelligence.probabilityOfSuccess.initialLabel}</span>
+              }">${e(results.decisionIntelligence.probabilityOfSuccess.initialLabel)}</span>
             </div>
             ${results.decisionIntelligence.probabilityOfSuccess.completeTeaser ? `
-            <p style="margin:8px 0 0;color:#94a3b8;font-size:10px;font-style:italic;">&#8594; ${results.decisionIntelligence.probabilityOfSuccess.completeTeaser}</p>
+            <p style="margin:8px 0 0;color:#94a3b8;font-size:10px;font-style:italic;">&#8594; ${e(results.decisionIntelligence.probabilityOfSuccess.completeTeaser)}</p>
             ` : ''}
           </td>
           ` : '<td></td>'}
@@ -426,9 +477,9 @@ function generateEmailHTML(results) {
               }</span>
               <span style="font-size:14px;color:#94a3b8;"> / 10</span>
             </div>
-            <p style="margin:4px 0 0;color:#64748b;font-size:12px;text-align:center;">${results.decisionIntelligence.mandateStrength.initial?.rationale || ''}</p>
+            <p style="margin:4px 0 0;color:#64748b;font-size:12px;text-align:center;">${e(results.decisionIntelligence.mandateStrength.initial?.rationale || '')}</p>
             ${results.decisionIntelligence.mandateStrength.completeTeaser ? `
-            <p style="margin:8px 0 0;color:#94a3b8;font-size:10px;font-style:italic;">&#8594; ${results.decisionIntelligence.mandateStrength.completeTeaser}</p>
+            <p style="margin:8px 0 0;color:#94a3b8;font-size:10px;font-style:italic;">&#8594; ${e(results.decisionIntelligence.mandateStrength.completeTeaser)}</p>
             ` : ''}
           </td>
           ` : '<td></td>'}
@@ -442,10 +493,10 @@ function generateEmailHTML(results) {
           <span style="display:inline-block;padding:3px 8px;background-color:#f2d0a9;border-radius:4px;font-size:11px;color:#a47840;font-weight:600;">&#9888; FALSE SIGNAL WARNINGS</span>
         </div>
         ${(results.decisionIntelligence.falseSignals.initial || []).map(item => `
-          <p style="margin:0 0 6px;color:#334155;font-size:13px;line-height:1.5;padding-left:12px;border-left:2px solid #f2d0a9;">&#9888; ${item}</p>
+          <p style="margin:0 0 6px;color:#334155;font-size:13px;line-height:1.5;padding-left:12px;border-left:2px solid #f2d0a9;">&#9888; ${e(item)}</p>
         `).join('')}
         ${results.decisionIntelligence.falseSignals.completeTeaser ? `
-        <p style="margin:10px 0 0;color:#a47840;font-size:11px;font-style:italic;">&#8594; ${results.decisionIntelligence.falseSignals.completeTeaser}</p>
+        <p style="margin:10px 0 0;color:#a47840;font-size:11px;font-style:italic;">&#8594; ${e(results.decisionIntelligence.falseSignals.completeTeaser)}</p>
         ` : ''}
       </div>
       ` : ''}
@@ -471,8 +522,8 @@ function generateEmailHTML(results) {
                 <div style="width:36px;height:36px;border-radius:50%;background-color:#2814ff;color:#fff;text-align:center;line-height:36px;font-size:12px;font-weight:bold;">+${d.points}</div>
               </td>
               <td style="vertical-align:middle;padding-left:8px;">
-                <strong style="color:#1e293b;font-size:13px;">${d.factor}</strong><br>
-                <span style="color:#64748b;font-size:12px;">${d.rationale}</span>
+                <strong style="color:#1e293b;font-size:13px;">${e(d.factor)}</strong><br>
+                <span style="color:#64748b;font-size:12px;">${e(d.rationale)}</span>
               </td>
             </tr>
           </table>
@@ -538,13 +589,21 @@ export default async function handler(req, res) {
   // CORS
   const origin = req.headers.origin;
   if (ALLOWED_ORIGINS.includes(origin) || process.env.NODE_ENV === 'development') {
-    res.setHeader('Access-Control-Allow-Origin', origin || '*');
+    res.setHeader('Access-Control-Allow-Origin', origin);
   }
   res.setHeader('Access-Control-Allow-Methods', 'POST, OPTIONS');
   res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
 
   if (req.method === 'OPTIONS') return res.status(200).end();
   if (req.method !== 'POST') return res.status(405).json({ error: 'Method not allowed' });
+
+  // Rate limiting (stricter for email endpoint)
+  const clientIp = req.headers['x-forwarded-for']?.split(',')[0]?.trim() || req.socket?.remoteAddress || 'unknown';
+  const rateLimitResult = checkRateLimit(clientIp);
+  if (!rateLimitResult.allowed) {
+    res.setHeader('Retry-After', rateLimitResult.retryAfter);
+    return res.status(429).json({ error: 'Too many requests. Please try again later.' });
+  }
 
   const apiKey = process.env.RESEND_API_KEY;
   if (!apiKey) {
@@ -555,7 +614,8 @@ export default async function handler(req, res) {
   try {
     const { email, results } = req.body;
 
-    if (!email || !email.includes('@')) {
+    // Proper email validation
+    if (!isValidEmail(email)) {
       return res.status(400).json({ error: 'Valid email required' });
     }
 
@@ -564,6 +624,10 @@ export default async function handler(req, res) {
     }
 
     const html = generateEmailHTML(results);
+
+    // Sanitize subject line to prevent header injection
+    const safeTitle = String(results.displayTitle || '').replace(/[\r\n]/g, '').slice(0, 100);
+    const safeScore = Number(results.score) || 0;
 
     const response = await fetch('https://api.resend.com/emails', {
       method: 'POST',
@@ -574,7 +638,7 @@ export default async function handler(req, res) {
       body: JSON.stringify({
         from: 'Talent Gurus <reports@talent-gurus.com>',
         to: [email],
-        subject: `Search Analysis: ${results.displayTitle} — ${results.score}/10 Complexity`,
+        subject: `Search Analysis: ${safeTitle} — ${safeScore}/10 Complexity`,
         html: html
       })
     });
