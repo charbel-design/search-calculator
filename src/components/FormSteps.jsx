@@ -159,9 +159,10 @@ export function FormSteps({
                   className="w-full pl-10 pr-4 py-3 border-2 border-slate-200 rounded-xl transition-all duration-200 focus:shadow-md focus:border-brand-500 focus:ring-2 focus:ring-brand-100" placeholder="e.g., Palm Beach, FL or Monaco" />
               </div>
               {showLocationSuggestions && filteredLocationSuggestions.length > 0 && (
-                <div className="absolute z-10 w-full mt-1 bg-white border border-slate-200 rounded-xl shadow-lg overflow-hidden">
+                <div className="absolute z-10 w-full mt-1 bg-white border border-slate-200 rounded-xl shadow-lg max-h-64 overflow-y-auto">
                   {filteredLocationSuggestions.map((loc, idx) => (
                     <button key={idx} type="button"
+                      ref={idx === highlightedLocationIndex ? (el) => el?.scrollIntoView({ block: 'nearest' }) : null}
                       onClick={() => { setFormData({ ...formData, location: loc }); setShowLocationSuggestions(false); setHighlightedLocationIndex(-1); }}
                       onMouseEnter={() => setHighlightedLocationIndex(idx)}
                       className={`w-full text-left px-4 py-2.5 text-sm flex items-center justify-between ${idx === highlightedLocationIndex ? 'bg-brand-100 text-brand-700' : 'hover:bg-brand-50'}`}>
