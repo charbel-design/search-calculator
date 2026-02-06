@@ -548,8 +548,7 @@ const SearchIntelligenceEngine = () => {
     try {
       setLoadingStep('Analyzing market conditions...');
 
-      const roleContext = isCorporateRole ? 'family office executive/investment' : 'UHNW household staff';
-      const prompt = `You are an expert ${roleContext} recruiter. Analyze this search and return detailed, actionable JSON.
+      const prompt = `Analyze this search and return detailed, actionable JSON.
 
 Position: ${displayTitle}
 Location: ${formData.location}${det.regionalData ? ` (${det.regionalData.label}, ${regionalMultiplier}x cost multiplier)` : ''}
@@ -660,7 +659,7 @@ Return this exact JSON structure:
       const response = await fetchWithRetry("/api/analyze", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ prompt })
+        body: JSON.stringify({ prompt, roleType: isCorporateRole ? 'corporate' : 'household' })
       }, 2);
 
       if (!response.ok) {
@@ -1152,7 +1151,7 @@ Return this exact JSON structure:
               </div>
             </div>
 
-            <div className="bg-white rounded-2xl shadow-xl p-6 md:p-8 border border-slate-200">
+            <div className="bg-white rounded-2xl shadow-xl p-6 md:p-8 border border-slate-200" aria-label="Search parameters form">
               {/* Step 1 */}
               {step === 1 && (
                 <div className="space-y-6">
@@ -1485,8 +1484,8 @@ Return this exact JSON structure:
                   className="text-white px-6 py-3 rounded-xl font-semibold flex items-center gap-2 hover:shadow-lg disabled:opacity-70 transition-all"
                   style={{ backgroundColor: '#2814ff' }}>
                   {loading ? (
-                    <div className="flex items-center gap-2">
-                      <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-white"></div>
+                    <div className="flex items-center gap-2" role="status" aria-label="Analyzing your search parameters">
+                      <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-white" aria-hidden="true"></div>
                       <span className="animate-pulse">{loadingStep || 'Analyzing...'}</span>
                     </div>
                   ) : step === 4 ? (<><Target className="w-5 h-5" />Get Analysis</>) : (<>Continue<ArrowRight className="w-5 h-5" /></>)}
@@ -1555,7 +1554,7 @@ Return this exact JSON structure:
               </div>
             )}
 
-            <div ref={resultsRef} className="bg-white rounded-2xl shadow-xl p-6 md:p-8 border border-slate-200">
+            <div ref={resultsRef} className="bg-white rounded-2xl shadow-xl p-6 md:p-8 border border-slate-200" aria-live="polite" role="region" aria-label="Analysis results">
               {/* Shared Result Banner */}
               {results.isSharedResult && (
                 <div className="bg-brand-50 rounded-xl p-4 mb-6 flex items-start gap-3 border border-brand-100">
@@ -1570,6 +1569,7 @@ Return this exact JSON structure:
               {/* Score */}
               <div className="text-center mb-8">
                 <div className="w-40 h-40 rounded-full flex items-center justify-center mx-auto mb-4 border-4 shadow-lg"
+                  role="img" aria-label={`Search complexity score: ${results.score} out of 10, ${results.label} search`}
                   style={{ backgroundColor: getComplexityColor(results.score).bg, borderColor: '#2814ff' }}>
                   <div className="text-center">
                     <div className="text-4xl font-bold leading-tight" style={{ color: getComplexityColor(results.score).text }}>{results.score}</div>
@@ -1983,15 +1983,18 @@ Return this exact JSON structure:
               {/* Action Buttons - Enhanced with new features */}
               <div className="flex flex-wrap gap-3 pt-4 border-t border-slate-200">
                 <button onClick={() => { setEmailForReport(formData.email || ''); setShowEmailModal(true); setEmailSent(false); }}
-                  className="flex items-center gap-2 px-4 py-2 bg-slate-100 hover:bg-slate-200 rounded-lg text-sm font-medium text-slate-700">
+                  className="flex items-center gap-2 px-4 py-2 bg-slate-100 hover:bg-slate-200 rounded-lg text-sm font-medium text-slate-700"
+                  aria-label="Email the analysis report">
                   <Mail className="w-4 h-4" />Email Report
                 </button>
                 <button onClick={generateShareUrl}
-                  className="flex items-center gap-2 px-4 py-2 bg-slate-100 hover:bg-slate-200 rounded-lg text-sm font-medium text-slate-700">
+                  className="flex items-center gap-2 px-4 py-2 bg-slate-100 hover:bg-slate-200 rounded-lg text-sm font-medium text-slate-700"
+                  aria-label="Generate a shareable link for this analysis">
                   <Share2 className="w-4 h-4" />Share Link
                 </button>
                 <button onClick={runComparison}
-                  className="flex items-center gap-2 px-4 py-2 bg-slate-100 hover:bg-slate-200 rounded-lg text-sm font-medium text-slate-700">
+                  className="flex items-center gap-2 px-4 py-2 bg-slate-100 hover:bg-slate-200 rounded-lg text-sm font-medium text-slate-700"
+                  aria-label="Compare budget impacts and alternatives">
                   <RefreshCw className="w-4 h-4" />Compare Budgets
                 </button>
               </div>

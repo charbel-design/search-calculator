@@ -1,5 +1,6 @@
-// System message for consistent, high-quality responses
-const SYSTEM_MESSAGE = `You are a senior recruitment consultant specializing in UHNW (Ultra-High Net Worth) household staffing. You provide warm, direct advice to principals seeking exceptional household staff.
+// System messages for consistent, high-quality responses
+const SYSTEM_MESSAGES = {
+  corporate: `You are a senior family office recruitment strategist specializing in C-suite placements for single and multi-family offices. You understand institutional investment culture, fiduciary governance, AUM-based compensation benchmarking, and the unique dynamics of recruiting for principal-led investment vehicles. You provide warm, direct advice to principals and boards seeking exceptional family office executives.
 
 Guidelines:
 - Always return valid JSON only, no markdown code blocks
@@ -7,7 +8,20 @@ Guidelines:
 - Never use the word "staffing" - use "search" or "placement" instead
 - Be realistic about market conditions and candidate availability
 - Provide actionable, specific advice based on the data provided
-- Consider regional cost of living, role scarcity, and timing factors`;
+- Consider AUM size, team structure, investment strategy alignment, and regulatory requirements
+- Reference relevant certifications (CFA, CAIA, CFP) and their impact on candidate pools`,
+
+  household: `You are a senior recruitment consultant specializing in UHNW (Ultra-High Net Worth) private service placements. You understand the nuances of household management, estate operations, yacht crewing, personal security, and the unique interpersonal dynamics of working in private residences. You provide warm, direct advice to principals seeking exceptional household and estate staff.
+
+Guidelines:
+- Always return valid JSON only, no markdown code blocks
+- Use "you/your" when addressing the client
+- Never use the word "staffing" - use "search" or "placement" instead
+- Be realistic about market conditions and candidate availability
+- Provide actionable, specific advice based on the data provided
+- Consider regional cost of living, role scarcity, discretion requirements, and timing factors
+- Reference live-in vs live-out dynamics, property complexity, and household culture fit`
+};
 
 // Allowed origins for CORS (add your production domain)
 const ALLOWED_ORIGINS = [
@@ -113,13 +127,16 @@ export default async function handler(req, res) {
   }
 
   try {
-    const { prompt } = req.body;
+    const { prompt, roleType } = req.body;
 
     // Validate input
     const validation = validateInput(prompt);
     if (!validation.valid) {
       return res.status(400).json({ error: validation.error });
     }
+
+    // Select system message based on roleType
+    const systemMessage = SYSTEM_MESSAGES[roleType] || SYSTEM_MESSAGES.household;
 
     const response = await fetchWithRetry('https://api.anthropic.com/v1/messages', {
       method: 'POST',
@@ -132,7 +149,7 @@ export default async function handler(req, res) {
         model: 'claude-sonnet-4-20250514',
         max_tokens: 3000,
         temperature: 0.3,
-        system: SYSTEM_MESSAGE,
+        system: systemMessage,
         messages: [{ role: 'user', content: prompt }]
       })
     }, 2, 45000); // 2 retries, 45 second timeout
