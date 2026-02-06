@@ -479,7 +479,7 @@ export function useSearchEngine() {
     try {
       setLoadingStep(2);
 
-      const prompt = `You are analyzing a specific UHNW search for a Talent Gurus client. Return detailed, actionable JSON.
+      const prompt = `Analyze this UHNW search for a Talent Gurus client. Return detailed, actionable JSON only — no preamble, no explanation. Before generating, mentally verify that salary, timeline, pool size, and probability are internally consistent.
 
 === SEARCH PARAMETERS ===
 Position: ${displayTitle}
@@ -539,6 +539,9 @@ ${benchmark?.regionalNotes ? `Regional Notes: ${benchmark.regionalNotes}` : ''}
 6. CANDIDATE PSYCHOLOGY must reveal what candidates in THIS role actually care about. What makes them leave a current position? What makes them decline an offer? What's the unspoken dealbreaker?
 7. ALL completeTeaser fields describe WHAT the full paid analysis contains. Never suggest score improvements in teasers.
 8. NUMERICAL CONSISTENCY: Every statistic (pool size, rates, percentages) must appear identically wherever cited. No rounding differently between sections.
+9. NO HALLUCINATED DATA: Use the exact figures provided above. If a data point was NOT provided (the line is missing from MARKET DATA), you may estimate but must flag it as "estimated" or "based on market patterns." Never invent a specific statistic and present it as fact.
+10. FIELD UNIQUENESS: Each JSON field must contribute NEW information. If you made a point in bottomLine, don't restate it in redFlagAnalysis or keySuccessFactors. Cross-reference instead ("As reflected in the timeline above...").
+11. ASSESS MANDATE BEFORE PROBABILITY: Determine mandate strength first (how strong is the client's position?), then derive probability of success from the combination of mandate strength and complexity score.
 
 === RETURN THIS JSON ===
 {
@@ -546,7 +549,7 @@ ${benchmark?.regionalNotes ? `Regional Notes: ${benchmark.regionalNotes}` : ''}
   "estimatedTimeline": "X–Y weeks total. Break into phases: sourcing (Xw), interviews (Yw), offer/negotiation (Zw), due diligence (Zw). Factor the client's ${timelineOption?.label || formData.timeline} timeframe.",
   "marketCompetitiveness": "2–3 sentences about the specific dynamics of hiring a ${displayTitle} in ${formData.location || 'this market'} right now. Reference demand trends, pool size, and what's driving competition.",
   "keySuccessFactors": ["Factor 1 specific to this search — what will actually make or break it", "Factor 2 — reference a requirement, the location, or the comp", "Factor 3 — what will differentiate this opportunity to candidates"],
-  "recommendedAdjustments": ["Concrete change with expected impact, e.g. 'Adding $20k to base (reaching 75th percentile) would expand your pool by ~40%'"] or [],
+  "recommendedAdjustments": ["Concrete change with expected impact, e.g. 'Adding $20k to base (reaching 75th percentile) would expand your pool by ~40%'. Return 1–3 items, or empty array [] if search is well-positioned."],
   "candidateAvailability": "Abundant|Moderate|Limited|Rare",
   "availabilityReason": "Why — reference pool size, filters applied (languages, certs, location), and what's shrinking availability.",
   "sourcingInsight": "Where these candidates actually come from. Reference the sourcing channel data. Name specific networks, associations, or approaches that work for ${displayTitle} roles.",
@@ -566,13 +569,13 @@ ${benchmark?.regionalNotes ? `Regional Notes: ${benchmark.regionalNotes}` : ''}
       "completeTeaser": "What the full analysis covers: role-specific positioning language, objection-handling frameworks, and interview question design"
     },
     "probabilityOfSuccess": {
-      "initialLabel": "Low|Moderate|High",
-      "initialConfidence": "X% estimated fill probability within the ${timelineOption?.label || formData.timeline} timeline — 1 sentence on the primary factor driving this number",
+      "initialLabel": "Low | Moderate | High — pick exactly one. Low = <35% fill probability, Moderate = 35–65%, High = >65%. Return just the word.",
+      "initialConfidence": "X% estimated fill probability within the ${timelineOption?.label || formData.timeline} timeline — 1 sentence on the primary factor driving this number. The % MUST match the label range and be consistent with mandate strength.",
       "completeTeaser": "What the full analysis covers: probability deltas showing how adjusting budget, timeline, or requirements shifts the fill probability"
     },
     "mandateStrength": {
       "initial": {
-        "score": 7.5,
+        "score": "NUMBER from 1.0–10.0. Derive from: budget vs. market rate, timeline feasibility, requirement reasonableness, role attractiveness. Do NOT default to 7–8 — a below-market budget with a tight timeline could be a 4; a generous budget with flexible timeline could be a 9.",
         "rationale": "One sentence: what's strong and what's weak about this mandate. Reference specific numbers."
       },
       "completeTeaser": "What the full analysis covers: 12-dimension mandate assessment with specific action items to strengthen the client's position"
@@ -611,10 +614,31 @@ ${benchmark?.regionalNotes ? `Regional Notes: ${benchmark.regionalNotes}` : ''}
       let text = data.content?.[0]?.text || '';
       text = text.trim().replace(/^```(?:json)?\s*/gi, '').replace(/\s*```$/gi, '').trim();
 
+      // Robust JSON extraction — handle potential preamble or trailing text
+      if (!text.startsWith('{')) {
+        const jsonStart = text.indexOf('{');
+        if (jsonStart !== -1) text = text.substring(jsonStart);
+      }
+      if (!text.endsWith('}')) {
+        const jsonEnd = text.lastIndexOf('}');
+        if (jsonEnd !== -1) text = text.substring(0, jsonEnd + 1);
+      }
+
       const ai = JSON.parse(text);
 
       if (!ai.salaryRangeGuidance || !ai.bottomLine) {
         throw new Error('Incomplete response from AI');
+      }
+
+      // Normalize AI response data
+      if (ai.decisionIntelligence?.mandateStrength?.initial?.score != null) {
+        const score = parseFloat(ai.decisionIntelligence.mandateStrength.initial.score);
+        if (!isNaN(score)) ai.decisionIntelligence.mandateStrength.initial.score = Math.min(10, Math.max(1, score));
+      }
+      if (ai.decisionIntelligence?.probabilityOfSuccess?.initialLabel) {
+        // Strip any parenthetical ranges the AI might include, keep just the word
+        ai.decisionIntelligence.probabilityOfSuccess.initialLabel =
+          ai.decisionIntelligence.probabilityOfSuccess.initialLabel.replace(/\s*\(.*?\)\s*/g, '').replace(/[^a-zA-Z]/g, '').trim();
       }
 
       setResults({
