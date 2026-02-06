@@ -473,8 +473,8 @@ export function useSearchEngine() {
     // Discretion context for prompt enrichment
     const discOption = discretionLevels.find(d => d.value === formData.discretionLevel);
 
-    // Deliberate pauses so user sees each loading step progress
-    await new Promise(r => setTimeout(r, 1200));
+    // Brief pause so user sees loading state
+    await new Promise(r => setTimeout(r, 400));
 
     try {
       setLoadingStep(2);
@@ -549,7 +549,8 @@ ${benchmark?.regionalNotes ? `Regional Notes: ${benchmark.regionalNotes}` : ''}
 9. NO HALLUCINATED DATA: Use the exact figures provided above. If a data point was NOT provided (the line is missing from MARKET DATA), you may estimate but must flag it as "estimated" or "based on market patterns." Never invent a specific statistic and present it as fact.
 10. FIELD UNIQUENESS: Each JSON field must contribute NEW information. If you made a point in bottomLine, don't restate it in redFlagAnalysis or keySuccessFactors. Cross-reference instead ("As reflected in the timeline above...").
 11. ASSESS MANDATE BEFORE PROBABILITY: Determine mandate strength first (how strong is the client's position?), then derive probability of success from the combination of mandate strength and complexity score.
-12. COMMON SENSE FILTER CHECK: Before claiming any requirement "eliminates X%" or "shrinks the pool by Y%," verify: is this a core function of the role (table stakes) or genuinely unusual? Staff management for an Estate Manager, portfolio oversight for a CIO, cooking for a Private Chef, driving for a Chauffeur — these ARE the job, not filters. Nearly all qualified candidates have these skills. Only non-standard requirements genuinely shrink pools: rare certifications, specific language fluency, niche specializations, unusual geography, or extreme discretion levels. If you cannot defend the percentage with specific reasoning, do not cite one. Overstating filter impact destroys credibility with experienced clients.
+12. NO FABRICATED RELATIONSHIPS: NEVER name specific organizations, training institutions, alumni networks, professional guilds, certification bodies, or industry associations as though Talent Gurus has partnerships or direct relationships with them. You do not know who TG has relationships with. Use generic category references instead: "butler training alumni networks" not "Starkey International alumni"; "close protection professional communities" not "SIA-certified networks"; "private aviation communities" not "NBAA members." This applies to sourcingInsight, sourcingStrategy, and any other field. Inventing specific affiliations destroys credibility.
+13. COMMON SENSE FILTER CHECK: Before claiming any requirement "eliminates X%" or "shrinks the pool by Y%," verify: is this a core function of the role (table stakes) or genuinely unusual? Staff management for an Estate Manager, portfolio oversight for a CIO, cooking for a Private Chef, driving for a Chauffeur — these ARE the job, not filters. Nearly all qualified candidates have these skills. Only non-standard requirements genuinely shrink pools: rare certifications, specific language fluency, niche specializations, unusual geography, or extreme discretion levels. If you cannot defend the percentage with specific reasoning, do not cite one. Overstating filter impact destroys credibility with experienced clients.
 
 === VOICE GUIDANCE ===
 - salaryRangeGuidance: Sound like you've placed 100 people at this range. Confident, matter-of-fact. "You're at the 65th percentile, which is exactly right for this market."
@@ -566,7 +567,7 @@ ${benchmark?.regionalNotes ? `Regional Notes: ${benchmark.regionalNotes}` : ''}
   "recommendedAdjustments": ["Concrete IF/THEN: 'Adding $20k to base (reaching 75th percentile) would expand your pool by ~40%'. Return 1–3 items, or empty array [] if search is well-positioned."],
   "candidateAvailability": "Exactly one of: Abundant, Moderate, Limited, Rare",
   "availabilityReason": "Why — reference pool size, filters applied (languages, certs, location), and what's shrinking availability.",
-  "sourcingInsight": "Where these candidates actually come from. Reference sourcing channel data. Name specific networks or associations for ${displayTitle} roles. Which channels are primary, which are a waste of time?",
+  "sourcingInsight": "Where these candidates actually come from. Reference sourcing channel data. Describe the TYPES of channels (referral networks, direct outreach, professional communities) — do NOT name specific organizations, training institutions, or professional bodies as though TG has partnerships with them. Which channel types are primary, which are a waste of time?",
   "negotiationLeverage": {
     "candidateAdvantages": ["What gives candidates power — scarcity, competing offers, golden handcuffs at current role. State the leverage + dollar impact."],
     "employerAdvantages": ["What gives you power — geography, opportunity, lifestyle. State the advantage + impact: e.g., 'No state income tax = $20k–$28k effective raise vs. NYC competitors.'"]
@@ -602,13 +603,13 @@ ${benchmark?.regionalNotes ? `Regional Notes: ${benchmark.regionalNotes}` : ''}
   "whatsNext": {
     "intro": "1 sentence tailored to this search — what the client has and what comes next. Reference the role, market${formData.discretionLevel !== 'standard' ? ', and the ' + (discOption?.label || formData.discretionLevel) + ' discretion requirements' : ''}.",
     "discoveryCall": "1–2 sentences: what we'd specifically focus on in the discovery call for a ${displayTitle} search in ${formData.location || 'this market'}. Reference the unique dynamics of this role${formData.discretionLevel !== 'standard' ? ' and how the ' + (discOption?.label || formData.discretionLevel) + ' discretion level shapes the engagement (e.g., NDA protocols, blind search setup, media-proofing)' : ''}.",
-    "sourcingStrategy": "1–2 sentences: how WE (Talent Gurus) source THIS role directly — our referral networks, our outreach, our candidate pipeline. Never mention agencies, partnerships, or third-party firms — WE are the search firm. Reference specific associations or professional communities relevant to ${displayTitle}.${formData.discretionLevel !== 'standard' ? ' Factor the ' + (discOption?.label || formData.discretionLevel) + ' discretion level into channel selection — which channels are off-limits, which require extra vetting.' : ''}",
+    "sourcingStrategy": "1–2 sentences: how WE (Talent Gurus) source THIS role directly — our referral networks, our outreach, our candidate pipeline. Never mention agencies, partnerships, or third-party firms — WE are the search firm. Describe the TYPES of professional communities we tap into (e.g., 'formal butler training alumni networks' not 'Starkey International'; 'private aviation communities' not 'NBAA') — NEVER name specific organizations, schools, or professional bodies as though we have direct relationships with them because you don't know who we have relationships with.${formData.discretionLevel !== 'standard' ? ' Factor the ' + (discOption?.label || formData.discretionLevel) + ' discretion level into channel selection — which channels are off-limits, which require extra vetting.' : ''}",
     "shortlist": "1–2 sentences: what the vetting process focuses on for THIS role. Reference the specific requirements, discretion level, or cultural fit factors that matter most.",
     "placementSupport": "1–2 sentences: what the placement support looks like for THIS type of hire. Reference specific risks (counter-offers, relocation, onboarding) relevant to the search data."
   }
 }`;
 
-      await new Promise(r => setTimeout(r, 1200));
+      await new Promise(r => setTimeout(r, 300));
       setLoadingStep(3);
 
       const response = await fetchWithRetry("/api/analyze", {
@@ -713,7 +714,7 @@ ${benchmark?.regionalNotes ? `Regional Notes: ${benchmark.regionalNotes}` : ''}
 
     // Show all 4 steps complete before hiding
     setLoadingStep(5);
-    await new Promise(r => setTimeout(r, 800));
+    await new Promise(r => setTimeout(r, 400));
     setLoading(false);
     setLoadingStep(0);
   };

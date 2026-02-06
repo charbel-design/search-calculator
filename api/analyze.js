@@ -59,7 +59,7 @@ DOMAIN SPECIFICS:
 - Consider investment strategy alignment (direct deals vs. fund-of-funds vs. co-invest) when assessing candidate fit.
 - Understand that family office roles blend institutional rigor with the intimacy of serving a family — this tension defines the search.
 - Factor C-suite exit dynamics: non-competes (typically 12–24 months in finance), deferred compensation clawbacks, and unvested equity. These extend timelines and inflate offer requirements significantly.
-- Recognize that family office candidates are sourced through relationship networks (CFA Society chapters, FOX network, UHNW Institute events, trusted referrals) far more than job boards. Sourcing strategy must reflect this.
+- Recognize that family office candidates are sourced through relationship networks and trusted referrals far more than job boards. Sourcing strategy must reflect this. NEVER name specific organizations (e.g., CFA Society chapters, FOX network) as though TG has partnerships — use generic references like "professional finance networks" or "family office peer communities."
 - Consider governance structure: a single-family office with one decision-maker moves fast; a multi-family office with a board and investment committee adds 3–6 weeks to the hiring process.
 - Understand golden handcuffs: phantom equity, carried interest (0.05–0.25% for investment roles), and deferred comp with 3–4 year vesting schedules. These are the real retention tools — a $20k salary counter-offer doesn't move someone with $150k in unvested equity. Factor this into both candidate psychology and comp design.
 - Hiring decisions rarely happen in isolation: trust attorneys, family office COOs, and long-standing wealth advisors often have veto power. Factor this into timeline (adds 2–3 weeks) and candidate psychology (candidates worry about committee-based decisions).
@@ -75,7 +75,7 @@ DOMAIN SPECIFICS:
 - Understand that household roles require an unusual combination of professional excellence and personal compatibility — technical skills get candidates to the interview, but chemistry gets them the job.
 - Reference regional lifestyle costs (housing, commute, cost of living) that affect whether candidates will actually accept.
 - Factor seasonal hiring patterns: heavy placement activity before summer (resort/vacation properties) and before year-end holidays. Off-season searches may have better candidate availability but smaller active pools.
-- Recognize that elite household candidates circulate through trusted referral networks — we reach them through our own referral channels and direct outreach, not public job boards. The best candidates are usually not actively looking; we find them through relationships we've built over years of placements.
+- Recognize that elite household candidates circulate through trusted referral networks — we reach them through our own referral channels and direct outreach, not public job boards. The best candidates are usually not actively looking; we find them through relationships we've built over years of placements. NEVER name specific training schools, alumni networks, or professional guilds as though TG has direct relationships — use generic category references only.
 - Understand principal personality dynamics: formal European households operate differently from relaxed American ones. Cultural compatibility is often the hidden dealbreaker that surfaces after placement.
 - Housing-as-compensation is a golden handcuff, not just a perk. A candidate with $150k base + free housing in a $4M estate is effectively earning $185k+. They know this, and it locks them in — which means you need to either match or offer a compelling lifestyle upgrade to attract them away.
 - UHNW household counter-offers are relational, not financial: "I'll give you more money AND I need 6 months' notice" is a de facto retention tool. Candidates feel personal loyalty to the family. Counter-offer acceptance is higher in households (~20–25%) than corporate because the bond is personal.
@@ -206,7 +206,7 @@ export default async function handler(req, res) {
       },
       body: JSON.stringify({
         model: 'claude-sonnet-4-20250514',
-        max_tokens: 4096,
+        max_tokens: 3000,
         temperature: 0.4,
         system: systemMessage,
         messages: [{ role: 'user', content: prompt }]
