@@ -66,45 +66,36 @@ export function ResultsView({
     setJdLoading(true);
     setJdContent('');
 
-    const jdPrompt = `Generate a job description for this role based on the search analysis below.
+    const jdPrompt = `Generate a job description for this role based on the search analysis data below. Use ONLY the data provided — do not invent details, statistics, or requirements not present in the analysis.
 
-ROLE: ${results.displayTitle}
+--- ROLE DATA ---
+TITLE: ${results.displayTitle}
 LOCATION: ${sanitizeForPrompt(formData?.location || '')}
-SALARY RANGE: ${results.salaryRangeGuidance || 'Competitive'}
+SALARY RANGE: ${results.salaryRangeGuidance || 'Not specified'}
 TIMELINE: ${results.estimatedTimeline || 'Standard'}
-MARKET: ${results.marketCompetitiveness || ''}
+MARKET CONTEXT: ${results.marketCompetitiveness || ''}
 CANDIDATE AVAILABILITY: ${results.candidateAvailability || 'Moderate'}
+DISCRETION LEVEL: ${sanitizeForPrompt(formData?.discretionLevel || 'standard')}
 
-REQUIREMENTS: ${sanitizeForPrompt(formData?.keyRequirements || 'See below')}
-LANGUAGES: ${formData?.languageRequirements?.join(', ') || 'None specified'}
-CERTIFICATIONS: ${formData?.certifications?.join(', ') || 'None specified'}
-TRAVEL: ${formData?.travelRequirement || 'None specified'}
-${formData?.aumRange ? `AUM RANGE: ${formData.aumRange}` : ''}
-${formData?.propertiesCount ? `PROPERTIES: ${formData.propertiesCount}` : ''}
-${formData?.householdSize ? `HOUSEHOLD SIZE: ${formData.householdSize}` : ''}
+--- CLIENT REQUIREMENTS ---
+DESCRIPTION: ${sanitizeForPrompt(formData?.keyRequirements || 'See success factors below')}
+LANGUAGES: ${formData?.languageRequirements?.length > 0 ? formData.languageRequirements.join(', ') : 'None specified'}
+CERTIFICATIONS: ${formData?.certifications?.length > 0 ? formData.certifications.join(', ') : 'None specified'}
+TRAVEL: ${sanitizeForPrompt(formData?.travelRequirement || 'None specified')}
+${formData?.aumRange ? `AUM RANGE: ${sanitizeForPrompt(formData.aumRange)}` : ''}
+${formData?.teamSize ? `TEAM SIZE: ${sanitizeForPrompt(formData.teamSize)}` : ''}
+${formData?.propertiesCount ? `PROPERTIES: ${sanitizeForPrompt(formData.propertiesCount)}` : ''}
+${formData?.householdSize ? `HOUSEHOLD SIZE: ${sanitizeForPrompt(formData.householdSize)}` : ''}
 
+--- ANALYSIS INSIGHTS (use to inform JD, do not copy verbatim) ---
 KEY SUCCESS FACTORS: ${(results.keySuccessFactors || []).join('; ')}
-TOP CANDIDATE MOTIVATORS: ${(results.decisionIntelligence?.candidatePsychology?.initial || []).join('; ')}
-RED FLAGS TO ADDRESS IN JD: ${results.redFlagAnalysis || 'None'}
+WHAT TOP CANDIDATES CARE ABOUT: ${(results.decisionIntelligence?.candidatePsychology?.initial || []).join('; ')}
+RED FLAGS TO ADDRESS: ${results.redFlagAnalysis || 'None identified'}
+SOURCING INSIGHT: ${results.sourcingInsight || 'N/A'}
+${results.benchmark?.benefits ? `BENEFITS CONTEXT: Housing: ${results.benchmark.benefits.housing || 'N/A'}, Vehicle: ${results.benchmark.benefits.vehicle || 'N/A'}, Health: ${results.benchmark.benefits.health || 'N/A'}, Bonus: ${results.benchmark.benefits.bonus || 'N/A'}` : ''}
 
-FORMAT:
-ABOUT THE ROLE
-[2-3 engaging sentences about what makes this role unique]
-
-KEY RESPONSIBILITIES
-[6-8 bullet points — specific to THIS role, not generic]
-
-REQUIRED QUALIFICATIONS
-[5-7 must-haves drawn from the requirements and success factors]
-
-PREFERRED QUALIFICATIONS
-[3-4 nice-to-haves that would make a candidate stand out]
-
-WHAT WE OFFER
-[Compensation range, benefits, and lifestyle factors that attract top candidates for this role — use the candidate psychology data to highlight what actually matters to them]
-
-THE ENVIRONMENT
-[2-3 sentences about the working context — informed by the role type and discretion level]`;
+--- INSTRUCTIONS ---
+Write the JD following the system prompt structure exactly. Use the candidate psychology data to write the "WHAT WE OFFER" section — highlight what actually motivates top candidates for THIS specific role, not generic benefits. The "ABOUT THE ROLE" section should sell the opportunity based on what makes it genuinely compelling — use the analysis insights, don't just repeat the title. ALWAYS end with an EEO statement.`;
 
     try {
       const response = await fetch('/api/analyze', {
