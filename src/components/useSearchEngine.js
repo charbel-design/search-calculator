@@ -428,12 +428,12 @@ export function useSearchEngine() {
   };
 
   // API call
-  const fetchWithRetry = async (url, options, maxRetries = 2) => {
+  const fetchWithRetry = async (url, options, maxRetries = 1) => {
     let lastError;
     for (let attempt = 0; attempt <= maxRetries; attempt++) {
       try {
         const controller = new AbortController();
-        const timeoutId = setTimeout(() => controller.abort(), 45000);
+        const timeoutId = setTimeout(() => controller.abort(), 120000); // 120s — large AI prompt needs time
         const response = await fetch(url, { ...options, signal: controller.signal });
         clearTimeout(timeoutId);
         if (response.ok || (response.status >= 400 && response.status < 500)) {
@@ -444,7 +444,7 @@ export function useSearchEngine() {
         lastError = err;
       }
       if (attempt < maxRetries) {
-        await new Promise(resolve => setTimeout(resolve, 1000 * Math.pow(2, attempt)));
+        await new Promise(resolve => setTimeout(resolve, 2000));
       }
     }
     throw lastError;
@@ -520,92 +520,68 @@ ${benchmark?.backgroundCheckTimeline ? `Due Diligence: ${benchmark.backgroundChe
 ${benchmark?.trends ? `Market Context: ${benchmark.trends}` : ''}
 ${benchmark?.regionalNotes ? `Regional Notes: ${benchmark.regionalNotes}` : ''}
 
-=== HOW TO USE THE DATA ===
-1. SALARY: Base your range on the adjusted percentiles above, factored for this client's budget position. State the range as "$Xk–$Yk base + Z% bonus" — never say "competitive" or "market-rate."
-2. TIMELINE: Start from Time to Fill as baseline. Add weeks for: complexity factors, due diligence (${benchmark?.backgroundCheckTimeline || 2}w), counter-offer risk (${benchmark?.counterOfferRate ? Math.round(benchmark.counterOfferRate * 100) + '%' : '~25%'} of candidates get countered). Break into phases: sourcing → interviews → offer → start.
-3. SOURCING: Reference the sourcing channel percentages. Tell the client WHERE placements actually come from for this role — not "use multiple channels."
-4. RETENTION: Use the attrition rate and departure reasons to power your red flags. Warn about THIS role's specific risks, not generic turnover advice.
-5. COMPENSATION: If signing bonuses are common (>40% frequency), recommend one. If bonus % is high, flag that base salary alone understates total comp. Use comp structure to advise on offer packaging.
-6. CANDIDATE POOL: ${benchmark?.relocationWillingness !== undefined ? `Only ${Math.round(benchmark.relocationWillingness * 100)}% will relocate.` : ''} ${benchmark?.candidatePoolSize ? `Pool is ~${benchmark.candidatePoolSize}.` : ''} Factor languages, certs, and discretion as filters. If you estimate a filtered pool size, clearly flag it as "estimated" — do not present calculated reductions as precise data.
-7. SALARY DRIFT: ${benchmark?.salaryGrowthRate ? `At ${Math.round(benchmark.salaryGrowthRate * 100)}% YoY growth, benchmarks shift ~${Math.round(benchmark.salaryGrowthRate * 100 / 2)}% over a 6-month search.` : ''} Flag if the budget risks becoming uncompetitive mid-search.
-8. DISCRETION: ${formData.discretionLevel === 'standard'
-  ? 'Standard discretion — no special sourcing constraints.'
-  : formData.discretionLevel === 'elevated'
-    ? 'Elevated (NDA Required). This is standard UHNW practice and NOT a major constraint. Candidates hear the full role details in the first conversation; NDAs are signed before the client meeting. Most quality candidates are comfortable with this — it does NOT significantly shrink the pool or extend the timeline. Do not overstate NDA impact. Minor: add 0–1 weeks for logistics.'
-    : formData.discretionLevel === 'high-profile'
-      ? "High-Profile Principal (public figure). No public job postings, limited LinkedIn, referral-heavy approach. Candidates must be comfortable with media scrutiny. Moderate impact: shrinks pool 20–30%, adds 2–3 weeks. Weave into sourcing, candidate psychology, and What's Next."
-      : "Ultra-Discrete (blind search). Candidates cannot know the principal's identity until late-stage. Referral networks only. Significant impact: eliminates 40%+ of candidates, adds 3–4 weeks, may require higher comp. Weave into every section."
-}
+=== DATA USAGE ===
+- SALARY: Use adjusted percentiles above. State as "$Xk–$Yk base + Z% bonus." Factor budget position.
+- TIMELINE: Start from Time to Fill, add due diligence (${benchmark?.backgroundCheckTimeline || 2}w) + counter-offer risk (${benchmark?.counterOfferRate ? Math.round(benchmark.counterOfferRate * 100) + '%' : '~25%'}). Break into phases.
+- SOURCING: Reference channel percentages. Name WHERE candidates come from — never "use multiple channels."
+- POOL: ${benchmark?.relocationWillingness !== undefined ? `${Math.round(benchmark.relocationWillingness * 100)}% relocate. ` : ''}${benchmark?.candidatePoolSize ? `Pool ~${benchmark.candidatePoolSize}. ` : ''}Flag estimated pool sizes as "estimated."
+- DISCRETION: ${formData.discretionLevel === 'standard' ? 'Standard — no constraints.'
+  : formData.discretionLevel === 'elevated' ? 'Elevated (NDA). Standard UHNW practice, NOT a major constraint. Add 0–1 weeks.'
+    : formData.discretionLevel === 'high-profile' ? 'High-Profile. No public postings, referral-heavy. Shrinks pool 20–30%, adds 2–3 weeks.'
+      : 'Ultra-Discrete (blind search). Referral only. Eliminates 40%+, adds 3–4 weeks, may need higher comp.'}
 
 === GUARDRAILS ===
-1. COMPLEXITY SCORE is ${det.score}/10. Higher = harder search. Never suggest "improving" or "reaching" a complexity score. A 9 means extremely challenging — that's a fact, not a goal.
-2. MANDATE STRENGTH is separate from complexity. Higher = stronger client position (good). Reflects budget adequacy, role attractiveness, timeline feasibility, requirement reasonableness.
-3. PROBABILITY OF SUCCESS must be logically consistent: high complexity + weak mandate = lower probability. Low complexity + strong mandate = higher probability. The percentage must be defensible.
-4. TRADE-OFF SCENARIOS must use concrete IF/THEN with real numbers from this search. Bad: "If you increase budget, you'll attract better candidates." Good: "If you move from $180k to $220k (75th percentile), your candidate pool roughly doubles and fill time drops by 3–4 weeks."
-5. FALSE SIGNALS must be specific to ${displayTitle} in ${formData.location || 'this market'}. Bad: "Don't be fooled by impressive resumes." Good: "Candidates from corporate ${isCorporateRole ? 'asset management' : 'hospitality'} backgrounds may interview well but struggle with the ${isCorporateRole ? 'principal-relationship intensity of a family office' : 'lack of structure in a private household'}."
-6. CANDIDATE PSYCHOLOGY must reveal what candidates in THIS role actually care about. What makes them leave a current position? What makes them decline an offer? What's the unspoken dealbreaker?
-7. ALL completeTeaser fields describe WHAT the full paid analysis contains. Never suggest score improvements in teasers.
-8. NUMERICAL CONSISTENCY: Every statistic (pool size, rates, percentages) must appear identically wherever cited. No rounding differently between sections.
-9. NO HALLUCINATED DATA: Use the exact figures provided above. If a data point was NOT provided (the line is missing from MARKET DATA), you may estimate but must flag it as "estimated" or "based on market patterns." Never invent a specific statistic and present it as fact.
-10. FIELD UNIQUENESS: Each JSON field must contribute NEW information. If you made a point in bottomLine, don't restate it in redFlagAnalysis or keySuccessFactors. Cross-reference instead ("As reflected in the timeline above...").
-11. ASSESS MANDATE BEFORE PROBABILITY: Determine mandate strength first (how strong is the client's position?), then derive probability of success from the combination of mandate strength and complexity score.
-12. NO FABRICATED RELATIONSHIPS: NEVER name specific organizations, training institutions, alumni networks, professional guilds, certification bodies, or industry associations as though Talent Gurus has partnerships or direct relationships with them. You do not know who TG has relationships with. Use generic category references instead: "butler training alumni networks" not "Starkey International alumni"; "close protection professional communities" not "SIA-certified networks"; "private aviation communities" not "NBAA members." This applies to sourcingInsight, sourcingStrategy, and any other field. Inventing specific affiliations destroys credibility.
-13. COMMON SENSE FILTER CHECK: Before claiming any requirement "eliminates X%" or "shrinks the pool by Y%," verify: is this a core function of the role (table stakes) or genuinely unusual? Staff management for an Estate Manager, portfolio oversight for a CIO, cooking for a Private Chef, driving for a Chauffeur — these ARE the job, not filters. Nearly all qualified candidates have these skills. Only non-standard requirements genuinely shrink pools: rare certifications, specific language fluency, niche specializations, unusual geography, or extreme discretion levels. If you cannot defend the percentage with specific reasoning, do not cite one. Overstating filter impact destroys credibility with experienced clients.
+1. COMPLEXITY ${det.score}/10 is a FACT, not a goal. MANDATE STRENGTH (1–10) reflects client position. PROBABILITY must be consistent: high complexity + weak mandate = lower probability. Derive probability AFTER assessing mandate.
+2. TRADE-OFFS: Concrete IF/THEN with real numbers. "If you move from $180k to $220k, pool roughly doubles."
+3. FALSE SIGNALS and CANDIDATE PSYCHOLOGY must be specific to ${displayTitle} in ${formData.location || 'this market'}, not generic.
+4. NO HALLUCINATED DATA: Use exact figures provided. Missing data = "estimated." Never invent statistics.
+5. NO FABRICATED RELATIONSHIPS: Never name specific orgs/schools/guilds as TG partners. Use generic categories only ("butler training alumni" not "Starkey International").
+6. COMMON SENSE: Core job functions are table stakes, not filters. Only non-standard requirements (rare certs, specific languages, unusual geography) genuinely shrink pools.
+7. Each JSON field must add NEW info — no restating between sections. Numbers must be consistent everywhere.
 
-=== VOICE GUIDANCE ===
-- salaryRangeGuidance: Sound like you've placed 100 people at this range. Confident, matter-of-fact. "You're at the 65th percentile, which is exactly right for this market."
-- bottomLine: Advisor-to-principal. Sentence 1 = verdict ("This hire is feasible / This budget won't work"). Sentence 2 = the one thing they're probably underestimating. Sentence 3 = recommended next action.
-- redFlagAnalysis: Name the actual problem, explain its impact, give options. "Your 4-week timeline conflicts with the 12-week average — either compress due diligence (risky) or extend to 7 weeks (realistic)."
-- candidatePsychology: Insider reveal. Tell them what candidates think when they're off the call. Be specific to THIS role. ${isCorporateRole ? 'For FO roles: candidates care about investment mandate clarity, decision-making authority, and whether they report to a principal or a committee. Golden handcuffs (unvested equity, deferred comp) are the real retention lever — not salary.' : 'For household roles: candidates care about family stability, work-life boundaries, and whether the principal respects their time off. Housing-as-comp is the golden handcuff. They fear scope creep more than low pay.'}
-
-=== RETURN THIS JSON ===
+=== RETURN THIS JSON (be concise — 1–2 sentences per field unless noted) ===
 {
-  "salaryRangeGuidance": "$Xk–$Yk base + bonus structure. 1–2 sentences on why, referencing the adjusted percentiles and how the client's budget compares.${isCorporateRole && formData.aumRange ? ' Factor AUM range into comp expectations.' : ''}",
-  "estimatedTimeline": "X–Y weeks total. Break into phases: sourcing (Xw), interviews (Yw), offer/negotiation (Zw), due diligence (Zw). Factor the client's ${timelineOption?.label || formData.timeline} timeframe.",
-  "marketCompetitiveness": "2–3 sentences: Based on the demand data and scarcity score provided, is this a favorable or challenging market for hiring a ${displayTitle} in ${formData.location || 'this market'}? What factors drive competition? Do NOT claim year-over-year trends unless YoY data was provided above. Conclude with: 'This is a [favorable/challenging] market for this hire.'",
-  "keySuccessFactors": ["The single barrier that would cause this search to fail if unaddressed", "The requirement or constraint that most shrinks the candidate pool", "What tells you a candidate actually wants THIS role, not just any ${displayTitle} role"],
-  "recommendedAdjustments": ["Concrete IF/THEN: 'Adding $20k to base (reaching 75th percentile) would expand your pool by ~40%'. Return 1–3 items, or empty array [] if search is well-positioned."],
-  "candidateAvailability": "Exactly one of: Abundant, Moderate, Limited, Rare",
-  "availabilityReason": "Why — reference pool size, filters applied (languages, certs, location), and what's shrinking availability.",
-  "sourcingInsight": "Where these candidates actually come from. Reference sourcing channel data. Describe the TYPES of channels (referral networks, direct outreach, professional communities) — do NOT name specific organizations, training institutions, or professional bodies as though TG has partnerships with them. Which channel types are primary, which are a waste of time?",
+  "salaryRangeGuidance": "$Xk–$Yk base + bonus. Why, referencing percentiles and budget.${isCorporateRole && formData.aumRange ? ' Factor AUM.' : ''}",
+  "estimatedTimeline": "X–Y weeks. Phases: sourcing, interviews, offer, due diligence.",
+  "marketCompetitiveness": "Favorable or challenging? What drives competition? No YoY claims without data.",
+  "keySuccessFactors": ["Barrier that kills this search if unaddressed", "Constraint that most shrinks pool", "Signal a candidate wants THIS role specifically"],
+  "recommendedAdjustments": ["IF/THEN with $$ numbers. 1–3 items or empty []."],
+  "candidateAvailability": "Abundant|Moderate|Limited|Rare",
+  "availabilityReason": "Why — pool size, filters, what shrinks it.",
+  "sourcingInsight": "Where candidates come from. Use channel types (referral, direct outreach, professional communities) — never name specific orgs as TG partners.",
   "negotiationLeverage": {
-    "candidateAdvantages": ["What gives candidates power — scarcity, competing offers, golden handcuffs at current role. State the leverage + dollar impact."],
-    "employerAdvantages": ["What gives you power — geography, opportunity, lifestyle. State the advantage + impact: e.g., 'No state income tax = $20k–$28k effective raise vs. NYC competitors.'"]
+    "candidateAdvantages": ["Leverage + dollar impact"],
+    "employerAdvantages": ["Advantage + impact"]
   },
-  "redFlagAnalysis": "Name the problem, explain impact, give options. Or 'None — this search is well-positioned' if genuinely clean. Never cushion.",
-  "bottomLine": "3–4 sentences. Sentence 1: declarative verdict ('This is doable' or 'Timeline and budget are misaligned'). Sentence 2: the one thing the client is probably underestimating. Sentence 3: what to do next. Use 'you/your' — this is the first thing they read.",
+  "redFlagAnalysis": "Problem, impact, options. Or 'None — well-positioned.'",
+  "bottomLine": "3 sentences: verdict, what client underestimates, next step.",
   "decisionIntelligence": {
     "tradeoffScenarios": {
-      "initial": ["IF [specific change with $$ or weeks] THEN [quantified outcome]. Max 2 sentences.", "IF [second trade-off] THEN [outcome].", "IF [third trade-off, optional] THEN [outcome]."],
-      "completeTeaser": "Your analysis identified ${det.score >= 7 ? 'several high-impact levers' : 'key optimization opportunities'} — the full assessment models how each budget/timeline/requirement change shifts your fill probability and candidate quality for this ${displayTitle} search."
+      "initial": ["IF [change with $$] THEN [outcome]", "IF [second] THEN [outcome]"]
     },
     "candidatePsychology": {
-      "initial": ["What actually motivates ${displayTitle} candidates to move — the real trigger, not 'career growth'", "The unspoken concern candidates won't voice in interviews — what kills offers before they're made", "What makes top candidates leave their current position — the specific friction point, not generic dissatisfaction"],
-      "completeTeaser": "For ${displayTitle} searches in ${formData.location || 'this market'}, the full analysis includes positioning language that addresses these specific motivators, plus objection-handling frameworks for the counter-offer conversation."
+      "initial": ["Real trigger to move", "Unspoken concern that kills offers", "What makes them leave current role"]
     },
     "probabilityOfSuccess": {
-      "initialLabel": "Exactly one of: Low, Moderate, High",
-      "initialConfidence": "X% fill probability within the ${timelineOption?.label || formData.timeline} timeline — 1 sentence on the primary factor driving this number. The % MUST match the label (Low <35%, Moderate 35–65%, High >65%) and be consistent with mandate strength.",
-      "completeTeaser": "The full analysis maps exactly which single adjustment (budget, timeline, or requirements) has the highest probability impact for this specific ${displayTitle} search — typically worth 15–25 percentage points."
+      "initialLabel": "Low|Moderate|High",
+      "initialConfidence": "X% fill probability — primary factor. Low<35%, Moderate 35–65%, High>65%."
     },
     "mandateStrength": {
       "initial": {
-        "score": "NUMBER from 1.0–10.0. Derive from: budget vs. market rate, timeline feasibility, requirement reasonableness, role attractiveness. Do NOT default to 7–8 — a below-market budget with tight timeline could be a 4; generous budget with flexible timeline could be a 9.",
-        "rationale": "One sentence: what's strong and what's weak about this mandate. Reference specific numbers."
-      },
-      "completeTeaser": "The full assessment breaks your mandate into 12 dimensions with specific action items — most clients find 2–3 adjustments that materially strengthen their position before sourcing begins."
+        "score": "NUMBER 1.0–10.0. Don't default to 7–8.",
+        "rationale": "What's strong and weak. Reference numbers."
+      }
     },
     "falseSignals": {
-      "initial": ["Specific misleading signal for ${displayTitle} searches — what looks good but isn't", "Second false signal specific to ${formData.location || 'this market'} or this role type", "Third signal — something the client might misread during the process"],
-      "completeTeaser": "For ${displayTitle} roles, the full analysis includes screening questions that surface these signals early — saves 2–3 weeks of wasted interviews."
+      "initial": ["Misleading signal for ${displayTitle}", "Signal specific to ${formData.location || 'this market'}", "Process misread risk"]
     }
   },
   "whatsNext": {
-    "intro": "1 sentence tailored to this search — what the client has and what comes next. Reference the role, market${formData.discretionLevel !== 'standard' ? ', and the ' + (discOption?.label || formData.discretionLevel) + ' discretion requirements' : ''}.",
-    "discoveryCall": "1–2 sentences: what topics we'd explore in a discovery call for this ${displayTitle} search — role definition, must-haves, timeline, and budget alignment${formData.discretionLevel !== 'standard' ? ', plus how the ' + (discOption?.label || formData.discretionLevel) + ' discretion level shapes the approach' : ''}. Focus on questions to clarify, not promises about deliverables.",
-    "sourcingStrategy": "1–2 sentences: how WE (Talent Gurus) source THIS role directly — our referral networks, our outreach, our candidate pipeline. Never mention agencies, partnerships, or third-party firms — WE are the search firm. Describe the TYPES of professional communities we tap into (e.g., 'formal butler training alumni networks' not 'Starkey International'; 'private aviation communities' not 'NBAA') — NEVER name specific organizations, schools, or professional bodies as though we have direct relationships with them because you don't know who we have relationships with.${formData.discretionLevel !== 'standard' ? ' Factor the ' + (discOption?.label || formData.discretionLevel) + ' discretion level into channel selection — which channels are off-limits, which require extra vetting.' : ''}",
-    "shortlist": "1–2 sentences: what the vetting process focuses on for THIS role. Reference the specific requirements, discretion level, or cultural fit factors that matter most.",
-    "placementSupport": "1–2 sentences: key risks to manage through the offer process for THIS hire (counter-offers, relocation, onboarding transition). Do NOT describe specific TG service packages or guarantee periods — focus on what the client should be prepared for."
+    "intro": "1 sentence: what client has, what comes next.",
+    "discoveryCall": "Topics for a ${displayTitle} discovery call.${formData.discretionLevel !== 'standard' ? ' Factor ' + (discOption?.label || formData.discretionLevel) + ' discretion.' : ''}",
+    "sourcingStrategy": "How WE source this role — our networks, outreach. Never name specific orgs as partners.${formData.discretionLevel !== 'standard' ? ' Factor discretion into channel selection.' : ''}",
+    "shortlist": "What vetting focuses on for THIS role.",
+    "placementSupport": "Key offer-process risks. No TG service promises."
   }
 }`;
 
@@ -616,7 +592,7 @@ ${benchmark?.regionalNotes ? `Regional Notes: ${benchmark.regionalNotes}` : ''}
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ prompt, roleType: isCorporateRole ? 'corporate' : 'household' })
-      }, 2);
+      }, 1);
 
       if (!response.ok) {
         const errorData = await response.json().catch(() => ({}));
@@ -651,9 +627,18 @@ ${benchmark?.regionalNotes ? `Regional Notes: ${benchmark.regionalNotes}` : ''}
         if (!isNaN(score)) ai.decisionIntelligence.mandateStrength.initial.score = Math.min(10, Math.max(1, score));
       }
       if (ai.decisionIntelligence?.probabilityOfSuccess?.initialLabel) {
-        // Strip any parenthetical ranges the AI might include, keep just the word
         ai.decisionIntelligence.probabilityOfSuccess.initialLabel =
           ai.decisionIntelligence.probabilityOfSuccess.initialLabel.replace(/\s*\(.*?\)\s*/g, '').replace(/[^a-zA-Z]/g, '').trim();
+      }
+
+      // Generate completeTeaser fields client-side (saves AI output tokens)
+      if (ai.decisionIntelligence) {
+        const di = ai.decisionIntelligence;
+        if (di.tradeoffScenarios) di.tradeoffScenarios.completeTeaser = `Your analysis identified ${det.score >= 7 ? 'several high-impact levers' : 'key optimization opportunities'} — the full assessment models how each budget/timeline/requirement change shifts your fill probability and candidate quality for this ${displayTitle} search.`;
+        if (di.candidatePsychology) di.candidatePsychology.completeTeaser = `For ${displayTitle} searches in ${formData.location || 'this market'}, the full analysis includes positioning language that addresses these specific motivators, plus objection-handling frameworks for the counter-offer conversation.`;
+        if (di.probabilityOfSuccess) di.probabilityOfSuccess.completeTeaser = `The full analysis maps exactly which single adjustment (budget, timeline, or requirements) has the highest probability impact for this specific ${displayTitle} search — typically worth 15–25 percentage points.`;
+        if (di.mandateStrength) di.mandateStrength.completeTeaser = `The full assessment breaks your mandate into 12 dimensions with specific action items — most clients find 2–3 adjustments that materially strengthen their position before sourcing begins.`;
+        if (di.falseSignals) di.falseSignals.completeTeaser = `For ${displayTitle} roles, the full analysis includes screening questions that surface these signals early — saves 2–3 weeks of wasted interviews.`;
       }
 
       setResults({

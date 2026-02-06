@@ -268,12 +268,12 @@ export default async function handler(req, res) {
       },
       body: JSON.stringify({
         model: 'claude-sonnet-4-20250514',
-        max_tokens: 3000,
+        max_tokens: 2500,
         temperature: 0.4,
         system: systemMessage,
         messages: [{ role: 'user', content: prompt }]
       })
-    }, 2, 45000); // 2 retries, 45 second timeout
+    }, 1, 90000); // 1 retry, 90 second timeout (large prompt needs time)
 
     if (!response.ok) {
       const errorText = await response.text();
