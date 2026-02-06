@@ -101,14 +101,43 @@ DOMAIN SPECIFICS:
 - Scope creep is the #1 silent killer: 30–40% of household attrition comes from roles expanding beyond the original job description. Flag this risk proactively and recommend clear role boundaries in the offer.`
 };
 
-// Allowed origins for CORS (add your production domain)
+// Allowed origins for CORS
 const ALLOWED_ORIGINS = [
   'https://search-calculator.vercel.app',
   'https://talent-gurus.com',
   'https://www.talent-gurus.com',
   'https://search-intelligence-engine.vercel.app',
-  process.env.ALLOWED_ORIGIN // Custom domain via env var
+  process.env.ALLOWED_ORIGIN
 ].filter(Boolean);
+
+// Simple in-memory rate limiter (per serverless instance)
+const rateLimitMap = new Map();
+const RATE_LIMIT_WINDOW = 60 * 1000; // 60 seconds
+const RATE_LIMIT_MAX = 10; // max requests per window per IP
+
+function checkRateLimit(ip) {
+  const now = Date.now();
+  const key = ip || 'unknown';
+  const entry = rateLimitMap.get(key);
+
+  // Clean old entries periodically
+  if (rateLimitMap.size > 1000) {
+    for (const [k, v] of rateLimitMap) {
+      if (now - v.windowStart > RATE_LIMIT_WINDOW) rateLimitMap.delete(k);
+    }
+  }
+
+  if (!entry || now - entry.windowStart > RATE_LIMIT_WINDOW) {
+    rateLimitMap.set(key, { windowStart: now, count: 1 });
+    return { allowed: true, remaining: RATE_LIMIT_MAX - 1 };
+  }
+
+  entry.count++;
+  if (entry.count > RATE_LIMIT_MAX) {
+    return { allowed: false, remaining: 0 };
+  }
+  return { allowed: true, remaining: RATE_LIMIT_MAX - entry.count };
+}
 
 // Input validation
 function validateInput(prompt) {
@@ -179,10 +208,10 @@ async function fetchWithRetry(url, options, maxRetries = 2, timeout = 45000) {
 }
 
 export default async function handler(req, res) {
-  // CORS handling
+  // CORS handling — strict origin check, no dev bypass
   const origin = req.headers.origin;
-  if (ALLOWED_ORIGINS.includes(origin) || process.env.NODE_ENV === 'development') {
-    res.setHeader('Access-Control-Allow-Origin', origin || '*');
+  if (ALLOWED_ORIGINS.includes(origin)) {
+    res.setHeader('Access-Control-Allow-Origin', origin);
   }
   res.setHeader('Access-Control-Allow-Methods', 'POST, OPTIONS');
   res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
@@ -197,11 +226,25 @@ export default async function handler(req, res) {
     return res.status(405).json({ error: 'Method not allowed' });
   }
 
+  // Rate limiting
+  const clientIP = req.headers['x-forwarded-for']?.split(',')[0]?.trim() || req.socket?.remoteAddress;
+  const rateCheck = checkRateLimit(clientIP);
+  res.setHeader('X-RateLimit-Remaining', rateCheck.remaining);
+  if (!rateCheck.allowed) {
+    return res.status(429).json({ error: 'Too many requests. Please wait a minute and try again.' });
+  }
+
+  // Body size check (reject payloads over 50KB)
+  const bodySize = JSON.stringify(req.body || '').length;
+  if (bodySize > 50000) {
+    return res.status(413).json({ error: 'Request too large' });
+  }
+
   const apiKey = process.env.ANTHROPIC_API_KEY;
 
   if (!apiKey) {
     console.error('ANTHROPIC_API_KEY not configured');
-    return res.status(500).json({ error: 'API key not configured' });
+    return res.status(500).json({ error: 'Service configuration error' });
   }
 
   try {
@@ -235,10 +278,12 @@ export default async function handler(req, res) {
     if (!response.ok) {
       const errorText = await response.text();
       console.error('Anthropic API error:', response.status, errorText);
-      return res.status(response.status).json({
-        error: 'API request failed',
-        status: response.status,
-        details: errorText.substring(0, 200) // Include some error details
+      // Return generic error — never expose upstream API details to client
+      const clientStatus = response.status === 429 ? 429 : 502;
+      return res.status(clientStatus).json({
+        error: clientStatus === 429
+          ? 'Service is busy. Please try again in a moment.'
+          : 'Analysis service temporarily unavailable. Please try again.'
       });
     }
 
@@ -251,6 +296,6 @@ export default async function handler(req, res) {
       return res.status(504).json({ error: 'Request timeout - please try again' });
     }
     console.error('Server error:', error.message);
-    return res.status(500).json({ error: 'Internal server error', message: error.message });
+    return res.status(500).json({ error: 'Internal server error' });
   }
 }

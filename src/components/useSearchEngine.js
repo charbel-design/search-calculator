@@ -483,18 +483,18 @@ export function useSearchEngine() {
 
 === SEARCH PARAMETERS ===
 Position: ${displayTitle}
-Location: ${formData.location}${det.regionalData ? ` (${det.regionalData.label}, ${regionalMultiplier}x cost multiplier)` : ''}
-Client Timeline: ${timelineOption?.label || formData.timeline}
-Client Budget: ${budgetOption?.label || formData.budgetRange}
+Location: ${sanitizeForPrompt(formData.location)}${det.regionalData ? ` (${det.regionalData.label}, ${regionalMultiplier}x cost multiplier)` : ''}
+Client Timeline: ${timelineOption?.label || sanitizeForPrompt(formData.timeline)}
+Client Budget: ${budgetOption?.label || sanitizeForPrompt(formData.budgetRange)}
 Requirements: ${sanitizeForPrompt(formData.keyRequirements)}
-Languages: ${formData.languageRequirements.join(', ') || 'None specified'}
-Certifications: ${formData.certifications.join(', ') || 'None specified'}
-Travel: ${formData.travelRequirement}
-Discretion: ${discOption?.label || formData.discretionLevel} — ${discOption?.description || 'Normal confidentiality'}${formData.discretionLevel !== 'standard' ? ' ⚠ This significantly affects sourcing approach, candidate pool, and timeline.' : ''}
-${isCorporateRole && formData.aumRange ? `AUM Range: ${formData.aumRange}` : ''}
-${isCorporateRole && formData.teamSize ? `Team Size: ${formData.teamSize}` : ''}
-${!isCorporateRole && formData.propertiesCount ? `Properties: ${formData.propertiesCount}` : ''}
-${!isCorporateRole && formData.householdSize ? `Household Size: ${formData.householdSize}` : ''}
+Languages: ${formData.languageRequirements.map(l => sanitizeForPrompt(l)).join(', ') || 'None specified'}
+Certifications: ${formData.certifications.map(c => sanitizeForPrompt(c)).join(', ') || 'None specified'}
+Travel: ${sanitizeForPrompt(formData.travelRequirement)}
+Discretion: ${discOption?.label || sanitizeForPrompt(formData.discretionLevel)} — ${discOption?.description || 'Normal confidentiality'}${formData.discretionLevel !== 'standard' ? ' ⚠ This significantly affects sourcing approach, candidate pool, and timeline.' : ''}
+${isCorporateRole && formData.aumRange ? `AUM Range: ${sanitizeForPrompt(formData.aumRange)}` : ''}
+${isCorporateRole && formData.teamSize ? `Team Size: ${sanitizeForPrompt(formData.teamSize)}` : ''}
+${!isCorporateRole && formData.propertiesCount ? `Properties: ${sanitizeForPrompt(formData.propertiesCount)}` : ''}
+${!isCorporateRole && formData.householdSize ? `Household Size: ${sanitizeForPrompt(formData.householdSize)}` : ''}
 Computed Complexity Score: ${det.score}/10 (${det.label})
 
 === MARKET DATA (use these exact figures) ===
