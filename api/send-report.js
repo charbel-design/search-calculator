@@ -175,7 +175,7 @@ function generateEmailHTML(results) {
     <!-- Red Flag Analysis -->
     ${results.redFlagAnalysis && results.redFlagAnalysis !== "None - well-positioned search" ? `
     <div style="background-color:#ffffff;padding:20px 24px 24px;${sectionBorder}">
-      ${sectionHeading('Red Flag Analysis')}
+      ${sectionHeading('Watch Out For')}
       <div style="padding:14px;background-color:#fdf2f4;border-radius:8px;border:1px solid #ebc7cd;">
         <p style="margin:0;color:#334155;font-size:13px;line-height:1.5;">${results.redFlagAnalysis}</p>
       </div>
@@ -379,7 +379,7 @@ function generateEmailHTML(results) {
       ${results.decisionIntelligence.candidatePsychology ? `
       <div style="padding:16px;background-color:#f8fafc;border-radius:8px;margin-bottom:12px;border:1px solid #e2e8f0;">
         <div style="margin-bottom:10px;">
-          <span style="display:inline-block;padding:3px 8px;background-color:#f5e6e9;border-radius:4px;font-size:11px;color:#9e5f6a;font-weight:600;">CANDIDATE PSYCHOLOGY</span>
+          <span style="display:inline-block;padding:3px 8px;background-color:#f5e6e9;border-radius:4px;font-size:11px;color:#9e5f6a;font-weight:600;">WHAT TOP CANDIDATES CARE ABOUT</span>
         </div>
         ${(results.decisionIntelligence.candidatePsychology.initial || []).map(item => `
           <p style="margin:0 0 6px;color:#334155;font-size:13px;line-height:1.5;padding-left:12px;border-left:2px solid #de9ea9;">&#8226; ${item}</p>
@@ -439,7 +439,7 @@ function generateEmailHTML(results) {
       ${results.decisionIntelligence.falseSignals ? `
       <div style="padding:16px;background-color:#fef8f0;border-radius:8px;border:1px solid #f2d0a9;">
         <div style="margin-bottom:10px;">
-          <span style="display:inline-block;padding:3px 8px;background-color:#f2d0a9;border-radius:4px;font-size:11px;color:#a47840;font-weight:600;">&#9888; FALSE SIGNAL WARNINGS</span>
+          <span style="display:inline-block;padding:3px 8px;background-color:#f2d0a9;border-radius:4px;font-size:11px;color:#a47840;font-weight:600;">&#9888; DON'T BE FOOLED BY</span>
         </div>
         ${(results.decisionIntelligence.falseSignals.initial || []).map(item => `
           <p style="margin:0 0 6px;color:#334155;font-size:13px;line-height:1.5;padding-left:12px;border-left:2px solid #f2d0a9;">&#9888; ${item}</p>
@@ -462,7 +462,7 @@ function generateEmailHTML(results) {
     <!-- Complexity Drivers -->
     ${results.drivers?.length > 0 ? `
     <div style="background-color:#ffffff;padding:20px 24px 24px;${sectionBorder}">
-      ${sectionHeading('Complexity Drivers (' + results.drivers.reduce((sum, d) => sum + d.points, 0) + ' points)')}
+      ${sectionHeading('What Makes This Search Tricky (' + results.drivers.reduce((sum, d) => sum + d.points, 0) + ' points)')}
       ${results.drivers.map(d => `
         <div style="padding:10px 0;border-bottom:1px solid #f1f5f9;">
           <table style="width:100%;border-collapse:collapse;">

@@ -12,7 +12,7 @@ const SearchIntelligenceEngine = () => {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 via-white to-brand-50 p-4 md:p-8">
-      <div className="max-w-4xl mx-auto" style={{ fontFamily: "'DM Sans', sans-serif" }}>
+      <div className="max-w-4xl mx-auto">
         {/* Header */}
         <Header showRoleComparison={engine.showRoleComparison} setShowRoleComparison={engine.setShowRoleComparison} results={engine.results} />
 

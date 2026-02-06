@@ -29,10 +29,10 @@ export function FormSteps({
   }, [loading]);
 
   const loadingLabels = [
-    'Calculating complexity factors',
-    'Analyzing market conditions',
-    'Generating personalized insights',
-    'Finalizing your analysis'
+    'Crunching the numbers',
+    'Checking the market',
+    'Putting your insights together',
+    'Almost there'
   ];
 
   return (
@@ -142,7 +142,7 @@ export function FormSteps({
                 <div className="mt-2 text-xs text-slate-500 space-y-1">
                   <p>Market: ${BENCHMARKS[formData.positionType].p25.toLocaleString()} - ${BENCHMARKS[formData.positionType].p75.toLocaleString()}</p>
                   {BENCHMARKS[formData.positionType].scarcity && (
-                    <p>Talent Scarcity: {BENCHMARKS[formData.positionType].scarcity}/10 {BENCHMARKS[formData.positionType].scarcity >= 7 ? '(Hard to find)' : BENCHMARKS[formData.positionType].scarcity >= 5 ? '(Moderate)' : '(Accessible)'}</p>
+                    <p>How easy to find: {BENCHMARKS[formData.positionType].scarcity}/10 {BENCHMARKS[formData.positionType].scarcity >= 7 ? '(Rare talent)' : BENCHMARKS[formData.positionType].scarcity >= 5 ? '(Moderate)' : '(Readily available)'}</p>
                   )}
                 </div>
               )}
@@ -334,9 +334,9 @@ export function FormSteps({
             <div className="bg-brand-50 rounded-xl p-5 border border-brand-100">
               <div className="flex items-start gap-3 mb-3">
                 <Zap className="w-6 h-6 flex-shrink-0" style={{ color: '#2814ff' }} />
-                <h4 className="font-semibold text-slate-900">Your analysis is almost ready</h4>
+                <h4 className="font-semibold text-slate-900">Almost there — let's wrap this up</h4>
               </div>
-              <p className="text-sm text-slate-600">Your personalized analysis includes complexity scoring, salary benchmarks, candidate availability, and negotiation insights.</p>
+              <p className="text-sm text-slate-600">You're about to get salary benchmarks, a breakdown of what makes this role tricky, and a clear picture of the candidate market.</p>
             </div>
 
             {isCorporateRole ? (
@@ -397,8 +397,8 @@ export function FormSteps({
                   <Mail className="w-5 h-5 text-white" />
                 </div>
                 <div>
-                  <h4 className="font-semibold text-slate-900">Get Your Full Report</h4>
-                  <p className="text-sm text-slate-600 mt-1">Receive a detailed analysis by email you can reference and share with decision-makers.</p>
+                  <h4 className="font-semibold text-slate-900">Want this in your inbox?</h4>
+                  <p className="text-sm text-slate-600 mt-1">We'll send you a clean report you can share with your team or keep for reference.</p>
                 </div>
               </div>
               <div className="space-y-3">
@@ -421,9 +421,9 @@ export function FormSteps({
                   <label className="flex items-center gap-2 cursor-pointer">
                     <input type="checkbox" name="priorityCallback" checked={formData.priorityCallback} onChange={handleInputChange}
                       className="w-5 h-5 rounded border-b-ocre-300 text-b-ocre-500 focus:ring-b-ocre-300" />
-                    <span className="font-semibold text-b-ocre-600">Request a Consultation (No Obligation)</span>
+                    <span className="font-semibold text-b-ocre-600">Let's talk (no strings attached)</span>
                   </label>
-                  <p className="text-sm text-b-ocre-500 mt-2">Speak with a specialist within 24 hours. Get strategic advice tailored to your specific search.</p>
+                  <p className="text-sm text-b-ocre-500 mt-2">Chat with one of us within 24 hours. We'll give you honest, tailored advice for your search.</p>
                   {formData.priorityCallback && (
                     <input type="tel" name="phone" value={formData.phone} onChange={handleInputChange}
                       className="mt-3 w-full px-4 py-3 border-2 border-b-ocre-200 rounded-xl bg-white focus:border-b-ocre-300 focus:ring-2 focus:ring-b-ocre-200 transition-all duration-200 focus:shadow-md"

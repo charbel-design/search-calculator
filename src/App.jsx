@@ -48,7 +48,7 @@ class ErrorBoundary extends React.Component {
                 fontWeight: 'bold',
               }}
             >
-              Something went wrong
+              Oops — something went sideways
             </h1>
             <p
               style={{
@@ -58,7 +58,7 @@ class ErrorBoundary extends React.Component {
                 lineHeight: '1.6',
               }}
             >
-              We hit an unexpected error. Your data is safe.
+              We hit a snag, but your data is safe. Let's try that again.
             </p>
             {this.state.error && (
               <p

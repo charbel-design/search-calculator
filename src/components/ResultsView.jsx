@@ -138,9 +138,9 @@ export function ResultsView({
             <div className="bg-gradient-to-br from-brand-50 to-b-pink-50 rounded-xl p-5 border border-brand-100">
               <div className="flex items-center gap-2 mb-4">
                 <SlidersHorizontal className="w-5 h-5" style={{ color: '#2814ff' }} />
-                <h4 className="font-semibold text-sm" style={{ color: '#2814ff' }}>What-If Scenarios</h4>
+                <h4 className="font-semibold text-sm" style={{ color: '#2814ff' }}>Play with the Numbers</h4>
               </div>
-              <p className="text-sm text-slate-600 mb-4">Adjust parameters to see how they affect your complexity score in real-time.</p>
+              <p className="text-sm text-slate-600 mb-4">Curious how a different timeline or budget changes things? Try it out.</p>
 
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
                 <div>
@@ -198,7 +198,7 @@ export function ResultsView({
             <a href="https://calendly.com/charbel-talentgurus" target="_blank" rel="noopener noreferrer"
               className="inline-flex items-center gap-2 px-6 py-3 rounded-lg text-sm font-semibold text-white hover:shadow-lg transition-all"
               style={{ backgroundColor: '#2814ff' }}>
-              Get Personalized Strategy<ArrowRight className="w-4 h-4" />
+              Let's Build Your Strategy<ArrowRight className="w-4 h-4" />
             </a>
           </div>
 
@@ -209,7 +209,7 @@ export function ResultsView({
                 { id: 'breakdown', label: 'Breakdown' },
                 { id: 'strategy', label: 'Strategy' },
                 { id: 'market', label: 'Market' },
-                { id: 'decision', label: 'Decision Intel' }
+                { id: 'decision', label: 'Insights' }
               ].map(tab => (
                 <button
                   key={tab.id}
@@ -234,7 +234,7 @@ export function ResultsView({
                   {/* Drivers */}
                   <div>
                     <h4 className="font-semibold text-lg mb-4 flex items-center gap-2" style={{ color: '#2814ff' }}>
-                      <Layers className="w-5 h-5" />Complexity Drivers
+                      <Layers className="w-5 h-5" />What Makes This Search Tricky
                     </h4>
                     <div className="space-y-2">
                       {results.drivers?.map((d, i) => (
@@ -328,7 +328,7 @@ export function ResultsView({
                   {/* Red Flag Analysis */}
                   {results.redFlagAnalysis && results.redFlagAnalysis !== "None - well-positioned search" && (
                     <div>
-                      <h4 className="font-semibold mb-3 flex items-center gap-2" style={{ color: '#2814ff' }}><AlertCircle className="w-5 h-5" />Red Flag Analysis</h4>
+                      <h4 className="font-semibold mb-3 flex items-center gap-2" style={{ color: '#2814ff' }}><AlertCircle className="w-5 h-5" />Watch Out For</h4>
                       <div className="bg-amber-50 rounded-xl p-4 border border-amber-200">
                         <p className="text-slate-700 text-amber-900">{results.redFlagAnalysis}</p>
                       </div>
@@ -359,7 +359,7 @@ export function ResultsView({
                   {results.benchmark && (
                     <div className="space-y-6 animate-fadeInUp">
                       <h4 className="font-semibold mb-4 flex items-center gap-2" style={{ color: '#2814ff' }}>
-                        <Brain className="w-5 h-5" />Search Intelligence
+                        <Brain className="w-5 h-5" />The Numbers Behind the Search
                       </h4>
 
                       {/* Row 1: Offer Acceptance Rate & Counter-Offer Rate */}
@@ -619,7 +619,7 @@ export function ResultsView({
               {/* DECISION INTELLIGENCE TAB */}
               {activeTab === 'decision' && results.decisionIntelligence && (
                 <div className="space-y-6 animate-fadeInUp">
-                  <p className="text-sm text-slate-600 mb-4">Strategic insights to inform your hiring decisions. Each module provides initial analysis with deeper insights available in your consultation.</p>
+                  <p className="text-sm text-slate-600 mb-4">Here's the strategic picture. We've started the analysis — the full deep-dive happens when we talk.</p>
 
                   <div className="space-y-4">
                     {/* Trade-Off Scenarios */}
@@ -653,7 +653,7 @@ export function ResultsView({
                           <div className="w-8 h-8 rounded-lg flex items-center justify-center" style={{ backgroundColor: '#d2d4ff' }}>
                             <Users className="w-4 h-4" style={{ color: '#2814ff' }} />
                           </div>
-                          <h5 className="font-semibold text-slate-900">Candidate Psychology</h5>
+                          <h5 className="font-semibold text-slate-900">What Top Candidates Care About</h5>
                         </div>
                         <ul className="space-y-2 mb-4">
                           {results.decisionIntelligence.candidatePsychology.initial?.map((item, i) => (
@@ -704,7 +704,7 @@ export function ResultsView({
                             <div className="w-8 h-8 rounded-lg flex items-center justify-center" style={{ backgroundColor: '#d2d4ff' }}>
                               <BarChart3 className="w-4 h-4" style={{ color: '#2814ff' }} />
                             </div>
-                            <h5 className="font-semibold text-slate-900">Mandate Strength</h5>
+                            <h5 className="font-semibold text-slate-900">How Strong Is This Brief?</h5>
                           </div>
                           <div className="mb-3">
                             <div className="flex items-baseline gap-2">
@@ -732,7 +732,7 @@ export function ResultsView({
                           <div className="w-8 h-8 rounded-lg flex items-center justify-center bg-amber-100">
                             <AlertTriangle className="w-4 h-4 text-amber-600" />
                           </div>
-                          <h5 className="font-semibold text-amber-900">False Signal Warnings</h5>
+                          <h5 className="font-semibold text-amber-900">Don't Be Fooled By</h5>
                         </div>
                         <ul className="space-y-2 mb-4">
                           {results.decisionIntelligence.falseSignals.initial?.map((item, i) => (
@@ -778,7 +778,7 @@ export function ResultsView({
         {compareMode && comparisonResults && (
           <div className="bg-white rounded-2xl shadow-xl p-6 border border-slate-200">
             <div className="flex justify-between mb-4">
-              <h4 className="font-semibold text-lg" style={{ color: '#2814ff' }}>Budget Impact Analysis</h4>
+              <h4 className="font-semibold text-lg" style={{ color: '#2814ff' }}>What Happens If You Adjust the Budget?</h4>
               <button onClick={() => setCompareMode(false)} className="text-slate-400 hover:text-slate-600"><X className="w-5 h-5" /></button>
             </div>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
@@ -827,7 +827,7 @@ export function ResultsView({
             {comparisonResults.withIncrease && comparisonResults.current.score === comparisonResults.withIncrease.score ? (
               <div className="bg-b-ocre-50 border border-b-ocre-200 rounded-lg p-3 mt-4">
                 <p className="text-sm text-b-ocre-500">
-                  <strong>💡 Why no change?</strong> Your budget is already competitive for this role. At this point, complexity is driven by timeline, location, role scarcity, and specialized requirements — not compensation.
+                  <strong>💡 Good news:</strong> Your budget is already competitive for this role. What's making the search tricky has more to do with timing, location, and how specialized the role is — not money.
                 </p>
               </div>
             ) : (
@@ -842,8 +842,8 @@ export function ResultsView({
         <div className="bg-white rounded-xl shadow-md p-6 border border-slate-200">
           <div className="flex items-center justify-between gap-4">
             <div>
-              <h3 className="text-lg font-semibold text-slate-900 mb-1">Get the Complete Picture</h3>
-              <p className="text-sm text-slate-600">Personalized sourcing strategy, compensation deep-dive, and interview framework</p>
+              <h3 className="text-lg font-semibold text-slate-900 mb-1">Ready for the Full Picture?</h3>
+              <p className="text-sm text-slate-600">A sourcing plan built for your search, compensation benchmarks, and an interview framework — all tailored to you</p>
             </div>
             <a href="https://calendly.com/charbel-talentgurus" target="_blank" rel="noopener noreferrer"
               className="flex-shrink-0 inline-flex items-center gap-2 px-6 py-3 rounded-lg font-semibold text-white hover:shadow-lg transition-all"
