@@ -574,6 +574,13 @@ ${benchmark?.regionalNotes ? `Regional Notes: ${benchmark.regionalNotes}` : ''}
       "initial": ["Specific misleading signal for ${displayTitle} searches — what looks good but isn't", "Second false signal specific to ${formData.location || 'this market'} or this role type", "Third signal — something the client might misread during the process"],
       "completeTeaser": "What the full analysis covers: screening protocols and verification frameworks for each signal"
     }
+  },
+  "whatsNext": {
+    "intro": "1 sentence tailored to this search — what the client has and what comes next. Reference the role and market.",
+    "discoveryCall": "1–2 sentences: what we'd specifically focus on in the discovery call for a ${displayTitle} search in ${formData.location || 'this market'}. Reference the unique dynamics of this role (e.g., governance for Chief of Staff, cuisine for Private Chef, investment philosophy for CIO).",
+    "sourcingStrategy": "1–2 sentences: how we'd approach sourcing THIS role. Reference specific networks, associations, or channels from the sourcing data. Mention what makes sourcing a ${displayTitle} different from other roles.",
+    "shortlist": "1–2 sentences: what the vetting process focuses on for THIS role. Reference the specific requirements, discretion level, or cultural fit factors that matter most.",
+    "placementSupport": "1–2 sentences: what the placement support looks like for THIS type of hire. Reference specific risks (counter-offers, relocation, onboarding) relevant to the search data."
   }
 }`;
 

@@ -770,7 +770,9 @@ export function ResultsView({
               {/* WHAT'S NEXT TAB */}
               {activeTab === 'next' && (
                 <div className="space-y-6 animate-fadeInUp">
-                  <p className="text-sm text-slate-600">You've got the data. Here's how we turn it into a successful placement.</p>
+                  <p className="text-sm text-slate-600">
+                    {results.whatsNext?.intro || "You've got the data. Here's how we turn it into a successful placement."}
+                  </p>
 
                   {/* Process Steps */}
                   <div className="space-y-4">
@@ -780,28 +782,28 @@ export function ResultsView({
                         icon: MessageCircle,
                         title: 'Discovery Call',
                         duration: '30 min',
-                        description: 'We walk through your analysis together, dig into the nuances that data alone can\'t capture, and align on what "the right person" actually looks like for your household or office.',
+                        description: results.whatsNext?.discoveryCall || 'We walk through your analysis together, dig into the nuances that data alone can\'t capture, and align on what "the right person" actually looks like for your household or office.',
                       },
                       {
                         step: 2,
                         icon: Compass,
                         title: 'Sourcing Strategy',
                         duration: 'Week 1',
-                        description: 'Based on your role complexity, location, and budget, we build a sourcing plan — which networks to tap, how to position the opportunity, and what the outreach looks like.',
+                        description: results.whatsNext?.sourcingStrategy || 'Based on your role complexity, location, and budget, we build a sourcing plan — which networks to tap, how to position the opportunity, and what the outreach looks like.',
                       },
                       {
                         step: 3,
                         icon: Users,
                         title: 'Curated Shortlist',
                         duration: 'Weeks 2–4',
-                        description: 'You receive a vetted shortlist of candidates who match the brief. Each profile includes social due diligence, reference notes, and our honest assessment.',
+                        description: results.whatsNext?.shortlist || 'You receive a vetted shortlist of candidates who match the brief. Each profile includes social due diligence, reference notes, and our honest assessment.',
                       },
                       {
                         step: 4,
                         icon: Shield,
                         title: 'Interview & Placement Support',
                         duration: 'Through close',
-                        description: 'We coordinate interviews, handle reference checks, support offer negotiation, and stay involved through the first 90 days to make sure the placement sticks.',
+                        description: results.whatsNext?.placementSupport || 'We coordinate interviews, handle reference checks, support offer negotiation, and stay involved through the first 90 days to make sure the placement sticks.',
                       },
                     ].map((item, idx) => (
                       <div key={idx} className="flex gap-4">
