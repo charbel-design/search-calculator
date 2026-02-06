@@ -885,7 +885,7 @@ Return this exact JSON structure:
     showLanguages, setShowLanguages, showRoleComparison, setShowRoleComparison, comparisonRoles,
     shareUrl, showShareModal, setShowShareModal, copiedShare, whatIfMode, setWhatIfMode,
     whatIfBudget, setWhatIfBudget, whatIfTimeline, setWhatIfTimeline, showEmailModal,
-    setShowEmailModal, emailForReport, setEmailForReport, sendingEmail, emailSent, resultsRef,
+    setShowEmailModal, emailForReport, setEmailForReport, sendingEmail, emailSent, setEmailSent, resultsRef,
     // Constants
     positionsByCategory, commonRoles, isCorporateRole, budgetRanges, timelineOptions,
     discretionLevels, householdLanguageOptions, corporateLanguageOptions,

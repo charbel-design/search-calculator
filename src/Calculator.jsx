@@ -1,5 +1,4 @@
-import React from 'react';
-import { Info } from 'lucide-react';
+import React, { useState } from 'react';
 import { useSearchEngine } from './components/useSearchEngine';
 import { Header } from './components/Header';
 import { RoleComparison } from './components/RoleComparison';
@@ -9,6 +8,7 @@ import { APP_VERSION } from './components/constants';
 
 const SearchIntelligenceEngine = () => {
   const engine = useSearchEngine();
+  const [showDisclaimer, setShowDisclaimer] = useState(false);
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 via-white to-brand-50 p-4 md:p-8">
@@ -19,19 +19,6 @@ const SearchIntelligenceEngine = () => {
         {/* Role Comparison Panel */}
         {engine.showRoleComparison && !engine.results && (
           <RoleComparison comparisonRoles={engine.comparisonRoles} toggleComparisonRole={engine.toggleComparisonRole} positionsByCategory={engine.positionsByCategory} />
-        )}
-
-        {/* Disclaimer */}
-        {!engine.showRoleComparison && (
-          <div className="bg-slate-50 border-l-4 rounded-lg p-4 mb-8 text-sm text-slate-600" style={{ borderColor: '#2814ff' }}>
-            <div className="flex gap-2 mb-2">
-              <Info className="w-5 h-5 flex-shrink-0 mt-0.5" style={{ color: '#2814ff' }} />
-              <div>
-                <p className="mb-2"><strong>Disclaimer:</strong> This tool provides market intelligence based on aggregated industry data and should not be construed as a guarantee of search outcomes, candidate availability, or compensation accuracy. Every search is unique, and actual results may vary based on market conditions, candidate preferences, and specific role requirements.</p>
-                <p className="text-xs text-slate-500"><strong>AI Disclosure:</strong> Portions of this analysis are generated using AI language models. While we strive for accuracy, AI-generated content may contain errors or inaccuracies. This tool is for informational purposes only and does not constitute professional staffing advice. For personalized guidance, please consult directly with Talent Gurus.</p>
-              </div>
-            </div>
-          </div>
         )}
 
         {/* Form or Results */}
@@ -106,6 +93,7 @@ const SearchIntelligenceEngine = () => {
             handleSendEmail={engine.handleSendEmail}
             sendingEmail={engine.sendingEmail}
             emailSent={engine.emailSent}
+            setEmailSent={engine.setEmailSent}
             generateShareUrl={engine.generateShareUrl}
             runComparison={engine.runComparison}
             resetForm={engine.resetForm}
@@ -117,11 +105,21 @@ const SearchIntelligenceEngine = () => {
 
         {/* Footer */}
         <div className="mt-12 text-center space-y-2">
-          <p className="font-semibold" style={{ color: '#2814ff' }}>Talent Gurus - Finding Exceptional Talent for Family Offices</p>
-          <p className="text-slate-500">We find the people you'll rely on for years.</p>
+          <p className="font-semibold" style={{ color: '#2814ff' }}>Talent Gurus</p>
+          <p className="text-sm text-slate-500">We find the people you'll rely on for years.</p>
           <a href="https://talent-gurus.com" target="_blank" rel="noopener noreferrer" className="text-xs hover:underline" style={{ color: '#2814ff' }}>talent-gurus.com</a>
-          <p className="text-xs text-slate-400 mt-4">Salary data: TBD | {engine.commonRoles.length || 0} positions tracked</p>
-          <p className="text-xs text-slate-400 mt-4">v{APP_VERSION}</p>
+          <div className="pt-2">
+            <button onClick={() => setShowDisclaimer(!showDisclaimer)} className="text-xs text-slate-400 hover:text-slate-600 transition-colors">
+              Disclaimer & AI Disclosure {showDisclaimer ? '▾' : '▸'}
+            </button>
+            {showDisclaimer && (
+              <div className="mt-2 max-w-2xl mx-auto text-xs text-slate-400 animate-fadeInUp">
+                <p className="mb-1">This tool provides market intelligence based on aggregated industry data and should not be construed as a guarantee of search outcomes, candidate availability, or compensation accuracy. Every search is unique, and actual results may vary based on market conditions, candidate preferences, and specific role requirements.</p>
+                <p>AI Disclosure: Portions of this analysis are generated using AI language models. While we strive for accuracy, AI-generated content may contain errors or inaccuracies. This tool is for informational purposes only and does not constitute professional staffing advice. For personalized guidance, please consult directly with Talent Gurus.</p>
+              </div>
+            )}
+          </div>
+          <p className="text-xs text-slate-400 mt-2">{engine.commonRoles.length} positions tracked · v{APP_VERSION}</p>
         </div>
       </div>
     </div>

@@ -16,6 +16,8 @@ export function FormSteps({
   corporateCertificationOptions, travelOptions, corporateLanguageShortList,
   showLanguages, setShowLanguages, commonRoles
 }) {
+  const [showAllCerts, setShowAllCerts] = React.useState(false);
+  const [showAllLangs, setShowAllLangs] = React.useState(false);
   return (
     <>
       {/* Progress */}
@@ -31,9 +33,18 @@ export function FormSteps({
       </div>
 
       <div className="bg-white rounded-2xl shadow-xl p-6 md:p-8 border border-slate-200" aria-label="Search parameters form">
+        {loading && (
+          <div className="fixed inset-0 bg-white/80 backdrop-blur-sm flex items-center justify-center z-50">
+            <div className="text-center animate-fadeInUp">
+              <div className="w-16 h-16 rounded-full border-4 border-slate-200 border-t-brand-500 animate-spin mx-auto mb-4"></div>
+              <p className="text-lg font-semibold text-slate-800">{loadingStep || 'Analyzing...'}</p>
+              <p className="text-sm text-slate-500 mt-1">This takes about 10 seconds</p>
+            </div>
+          </div>
+        )}
         {/* Step 1 */}
         {step === 1 && (
-          <div className="space-y-6">
+          <div className="space-y-6 animate-fadeInUp">
             <h3 className="text-xl font-semibold" style={{ color: '#2814ff' }}>Tell us about the role</h3>
 
             <div>
@@ -124,7 +135,7 @@ export function FormSteps({
 
         {/* Step 2 */}
         {step === 2 && (
-          <div className="space-y-6">
+          <div className="space-y-6 animate-fadeInUp">
             <h3 className="text-xl font-semibold" style={{ color: '#2814ff' }}>Budget & Timeline</h3>
 
             <div>
@@ -175,7 +186,7 @@ export function FormSteps({
 
         {/* Step 3 */}
         {step === 3 && (
-          <div className="space-y-6">
+          <div className="space-y-6 animate-fadeInUp">
             <h3 className="text-xl font-semibold" style={{ color: '#2814ff' }}>Key Requirements</h3>
 
             <div>
@@ -184,13 +195,18 @@ export function FormSteps({
                 {isCorporateRole && <span className="text-xs text-slate-500 ml-2">(Finance/Investment)</span>}
               </label>
               <div className="flex flex-wrap gap-2">
-                {(isCorporateRole ? corporateCertificationOptions : householdCertificationOptions).map(cert => (
+                {(isCorporateRole ? corporateCertificationOptions : householdCertificationOptions).slice(0, showAllCerts ? undefined : 6).map(cert => (
                   <button key={cert} type="button" onClick={() => handleMultiSelect('certifications', cert)}
                     className={`px-3 py-1.5 rounded-full text-sm ${formData.certifications.includes(cert) ? 'bg-brand-500 text-white' : 'bg-slate-100 text-slate-700 hover:bg-slate-200'}`}>
                     {cert}
                   </button>
                 ))}
               </div>
+              {(isCorporateRole ? corporateCertificationOptions : householdCertificationOptions).length > 6 && (
+                <button type="button" onClick={() => setShowAllCerts(!showAllCerts)} className="mt-2 text-xs text-slate-500 hover:text-slate-700 transition-colors">
+                  {showAllCerts ? 'Show less' : `Show all ${(isCorporateRole ? corporateCertificationOptions : householdCertificationOptions).length} certifications`}
+                </button>
+              )}
             </div>
 
             {isCorporateRole ? (
@@ -205,13 +221,18 @@ export function FormSteps({
                 {showLanguages && (
                   <div className="mt-3 pt-3 border-t border-slate-200">
                     <div className="flex flex-wrap gap-2">
-                      {corporateLanguageShortList.map(lang => (
+                      {corporateLanguageShortList.slice(0, showAllLangs ? undefined : 8).map(lang => (
                         <button key={lang} type="button" onClick={() => handleMultiSelect('languageRequirements', lang)}
                           className={`px-3 py-1.5 rounded-full text-sm ${formData.languageRequirements.includes(lang) ? 'bg-brand-500 text-white' : 'bg-slate-100 text-slate-700 hover:bg-slate-200'}`}>
                           {lang}
                         </button>
                       ))}
                     </div>
+                    {corporateLanguageShortList.length > 8 && (
+                      <button type="button" onClick={() => setShowAllLangs(!showAllLangs)} className="mt-2 text-xs text-slate-500 hover:text-slate-700 transition-colors">
+                        {showAllLangs ? 'Show less' : `Show all ${corporateLanguageShortList.length} languages`}
+                      </button>
+                    )}
                   </div>
                 )}
                 {formData.languageRequirements.length > 0 && !showLanguages && (
@@ -222,13 +243,18 @@ export function FormSteps({
               <div>
                 <label className="block text-sm font-medium text-slate-700 mb-2">Language Requirements</label>
                 <div className="flex flex-wrap gap-2">
-                  {householdLanguageOptions.map(lang => (
+                  {householdLanguageOptions.slice(0, showAllLangs ? undefined : 8).map(lang => (
                     <button key={lang} type="button" onClick={() => handleMultiSelect('languageRequirements', lang)}
                       className={`px-3 py-1.5 rounded-full text-sm ${formData.languageRequirements.includes(lang) ? 'bg-brand-500 text-white' : 'bg-slate-100 text-slate-700 hover:bg-slate-200'}`}>
                       {lang}
                     </button>
                   ))}
                 </div>
+                {householdLanguageOptions.length > 8 && (
+                  <button type="button" onClick={() => setShowAllLangs(!showAllLangs)} className="mt-2 text-xs text-slate-500 hover:text-slate-700 transition-colors">
+                    {showAllLangs ? 'Show less' : `Show all ${householdLanguageOptions.length} languages`}
+                  </button>
+                )}
               </div>
             )}
 
@@ -253,21 +279,13 @@ export function FormSteps({
 
         {/* Step 4 */}
         {step === 4 && (
-          <div className="space-y-6">
+          <div className="space-y-6 animate-fadeInUp">
             <h3 className="text-xl font-semibold" style={{ color: '#2814ff' }}>Get Your Analysis</h3>
 
             <div className="bg-brand-50 rounded-xl p-5 border border-brand-100 flex gap-3">
               <Zap className="w-6 h-6 flex-shrink-0" style={{ color: '#2814ff' }} />
               <div>
-                <h4 className="font-semibold text-slate-900 mb-1">Your analysis is almost ready</h4>
-                <p className="text-sm text-slate-600">In a few seconds, you'll receive a detailed complexity score, market analysis, and recommendations.</p>
-                <h4 className="font-semibold text-slate-900 mb-1">Your personalized analysis includes:</h4>
-                <ul className="text-sm text-slate-600 space-y-1 mt-2">
-                  <li className="flex items-center gap-2"><CheckCircle className="w-4 h-4 text-brand-500" />Search complexity score & market positioning</li>
-                  <li className="flex items-center gap-2"><CheckCircle className="w-4 h-4 text-brand-500" />Salary benchmarks for your location</li>
-                  <li className="flex items-center gap-2"><CheckCircle className="w-4 h-4 text-brand-500" />Candidate availability & timeline estimates</li>
-                  <li className="flex items-center gap-2"><CheckCircle className="w-4 h-4 text-brand-500" />Negotiation leverage insights</li>
-                </ul>
+                <p className="text-sm text-slate-600">Your search parameters are ready. Click "Get Analysis" below to generate your personalized complexity score and market insights.</p>
               </div>
             </div>
 
@@ -382,12 +400,7 @@ export function FormSteps({
           <button onClick={step === 4 ? calculateComplexity : nextStep} disabled={loading}
             className="text-white px-6 py-3 rounded-xl font-semibold flex items-center gap-2 hover:shadow-lg disabled:opacity-70 transition-all"
             style={{ backgroundColor: '#2814ff' }}>
-            {loading ? (
-              <div className="flex items-center gap-2" role="status" aria-label="Analyzing your search parameters">
-                <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-white" aria-hidden="true"></div>
-                <span className="animate-pulse">{loadingStep || 'Analyzing...'}</span>
-              </div>
-            ) : step === 4 ? (<><Target className="w-5 h-5" />Get Analysis</>) : (<>Continue<ArrowRight className="w-5 h-5" /></>)}
+            {step === 4 ? (<><Target className="w-5 h-5" />Get Analysis</>) : (<>Continue<ArrowRight className="w-5 h-5" /></>)}
           </button>
         </div>
       </div>
