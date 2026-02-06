@@ -411,7 +411,7 @@ export function ResultsView({
                                 <p className="text-2xl font-bold mb-1" style={{ color: '#2814ff' }}>
                                   {Math.round(results.benchmark.sourcingChannels.agency * 100)}%
                                 </p>
-                                <p className="text-xs text-slate-500">Agency</p>
+                                <p className="text-xs text-slate-500">Search Firm</p>
                               </div>
                             )}
                             {results.benchmark.sourcingChannels.direct !== undefined && (

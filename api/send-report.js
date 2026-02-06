@@ -231,7 +231,7 @@ function generateEmailHTML(results) {
             <td style="padding:8px 4px;text-align:center;width:25%;">
               <div style="height:${Math.round(results.benchmark.sourcingChannels.agency * 80)}px;min-height:12px;background-color:#de9ea9;border-radius:4px 4px 0 0;margin:0 auto;width:40px;"></div>
               <div style="font-size:16px;font-weight:bold;color:#9e5f6a;margin-top:6px;">${Math.round(results.benchmark.sourcingChannels.agency * 100)}%</div>
-              <div style="font-size:10px;color:#64748b;">Agency</div>
+              <div style="font-size:10px;color:#64748b;">Search Firm</div>
             </td>
             <td style="padding:8px 4px;text-align:center;width:25%;">
               <div style="height:${Math.round(results.benchmark.sourcingChannels.direct * 80)}px;min-height:12px;background-color:#99c1b9;border-radius:4px 4px 0 0;margin:0 auto;width:40px;"></div>

@@ -34,7 +34,7 @@ NEVER DO THIS:
 - Never use recruitment jargon: "top talent," "A-players," "cultural fit" (say "principal compatibility"), "value-add," "best-in-class," "world-class," "deep-dive," "unpack," "circle back," "bandwidth."
 - Never use soft hedges as the main clause: "may," "might," "could potentially." Use "will" or "won't" based on data. Exception: "typically X, but this search is Y" is fine.
 - Never use academic phrasing: "stakeholder constituencies," "ecosystem," "vis-à-vis," "pursuant to," "the ask," "the lift." Write plain English.
-- Never say "agency partnerships," "trusted agency partners," or "leverage" (as a verb). Talent Gurus sources directly — use "access," "activate," "draw from" instead.
+- Never say "agency," "agencies," "agency partnerships," "trusted agency partners," "specialized agencies," "staffing firms," or "leverage" (as a verb). Talent Gurus IS the search firm — we source directly through our own networks, referrals, and outreach. Use "access," "activate," "draw from," "our networks," "our referral channels" instead.
 
 OUTPUT FORMAT:
 - Return ONLY valid JSON. No preamble text, no markdown code blocks, no trailing commas, no comments.
