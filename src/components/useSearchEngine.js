@@ -570,6 +570,7 @@ ${benchmark?.regionalNotes ? `Regional Notes: ${benchmark.regionalNotes}` : ''}
   : formData.discretionLevel === 'elevated' ? 'Elevated (NDA). Standard UHNW practice, NOT a major constraint. Add 0–1 weeks.'
     : formData.discretionLevel === 'high-profile' ? 'High-Profile. No public postings, referral-heavy. Shrinks pool 20–30%, adds 2–3 weeks.'
       : 'Ultra-Discrete (blind search). Referral only. Eliminates 40%+, adds 3–4 weeks, may need higher comp.'}
+- SIMULATOR: Recommendations in "recommendedAdjustments" and "tradeoffScenarios" will feed an interactive What-If simulator. Frame each recommendation as a testable change: specific $ amount, specific requirement to add/remove, or specific timeline shift. Vague recommendations ("increase budget") are useless — say "move from $180k to $210k" or "remove the Mandarin requirement."
 
 === GUARDRAILS ===
 1. COMPLEXITY ${det.score}/10 is a FACT, not a goal. MANDATE STRENGTH (1–10) reflects client position. PROBABILITY must be consistent: high complexity + weak mandate = lower probability. Derive probability AFTER assessing mandate.
@@ -579,6 +580,7 @@ ${benchmark?.regionalNotes ? `Regional Notes: ${benchmark.regionalNotes}` : ''}
 5. NO FABRICATED RELATIONSHIPS: Never name specific orgs/schools/guilds as TG partners. Use generic categories only ("butler training alumni" not "Starkey International").
 6. COMMON SENSE: Core job functions are table stakes, not filters. Only non-standard requirements (rare certs, specific languages, unusual geography) genuinely shrink pools.
 7. Each JSON field must add NEW info — no restating between sections. Numbers must be consistent everywhere.
+8. RECOMMENDATIONS MUST BE ACTIONABLE: Each "recommendedAdjustments" item must specify at least ONE of: exact $ change, specific requirement to drop/add, or specific timeline shift. The client will test these in a simulator — "consider adjusting compensation" is worthless. "Move from $180k to $220k to access 40% more candidates" is useful.
 
 === RETURN THIS JSON (be concise — 1–2 sentences per field unless noted) ===
 {
@@ -586,7 +588,7 @@ ${benchmark?.regionalNotes ? `Regional Notes: ${benchmark.regionalNotes}` : ''}
   "estimatedTimeline": "X–Y weeks. Phases: sourcing, interviews, offer, due diligence.",
   "marketCompetitiveness": "Favorable or challenging? What drives competition? No YoY claims without data.",
   "keySuccessFactors": ["Barrier that kills this search if unaddressed", "Constraint that most shrinks pool", "Signal a candidate wants THIS role specifically"],
-  "recommendedAdjustments": ["IF/THEN with $$ numbers. 1–3 items or empty []."],
+  "recommendedAdjustments": ["IF [specific $ change / requirement drop / timeline shift] THEN [quantified outcome]. 1–3 items or empty []. Each must be testable in a slider."],
   "candidateAvailability": "Abundant|Moderate|Limited|Rare",
   "availabilityReason": "Why — pool size, filters, what shrinks it.",
   "sourcingInsight": "Where candidates come from. Use channel types (referral, direct outreach, professional communities) — never name specific orgs as TG partners.",
@@ -598,7 +600,7 @@ ${benchmark?.regionalNotes ? `Regional Notes: ${benchmark.regionalNotes}` : ''}
   "bottomLine": "3 sentences: verdict, what client underestimates, next step.",
   "decisionIntelligence": {
     "tradeoffScenarios": {
-      "initial": ["IF [change with $$] THEN [outcome]", "IF [second] THEN [outcome]"]
+      "initial": ["IF budget moves from $Xk to $Yk THEN [quantified outcome]", "IF [specific requirement] removed THEN [quantified pool/timeline impact]"]
     },
     "candidatePsychology": {
       "initial": ["Real trigger to move", "Unspoken concern that kills offers", "What makes them leave current role"]

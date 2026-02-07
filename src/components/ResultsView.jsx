@@ -540,17 +540,35 @@ Write the JD following the system prompt structure exactly. Use the candidate ps
           <div className="mb-6 animate-fadeInUp delay-600">
             <button
               onClick={() => setDeepDiveExpanded(!deepDiveExpanded)}
-              className="w-full p-4 flex items-center justify-between rounded-btn border transition-all duration-200 group hover:opacity-80"
-              style={{ borderColor: '#d2d2d7', backgroundColor: 'transparent' }}
+              className="w-full p-5 flex flex-col gap-3 rounded-card transition-all duration-200 group"
+              style={{
+                backgroundColor: '#eeeeff',
+                borderLeft: '3px solid #2814ff',
+                boxShadow: deepDiveExpanded ? 'none' : '0 1px 8px rgba(40, 20, 255, 0.08)'
+              }}
             >
-              <div className="flex items-center gap-3">
-                <Layers className="w-4 h-4" style={{ color: '#2814ff' }} />
-                <div className="text-left">
-                  <h4 className="font-semibold text-sm" style={{ color: '#1d1d1f' }}>Deep Dive</h4>
-                  <p className="text-xs" style={{ color: '#a1a1a6' }}>Market data, sourcing strategy, decision intelligence</p>
+              <div className="flex items-center justify-between w-full">
+                <div className="flex items-center gap-3">
+                  <div className="w-7 h-7 rounded-full flex items-center justify-center" style={{ backgroundColor: '#2814ff' }}>
+                    <Layers className="w-3.5 h-3.5 text-white" />
+                  </div>
+                  <div className="text-left">
+                    <h4 className="font-semibold text-sm" style={{ color: '#1d1d1f' }}>Deep Dive</h4>
+                    <p className="text-xs" style={{ color: '#6e6e73' }}>The full picture behind your score</p>
+                  </div>
                 </div>
+                <ChevronDown className="w-4 h-4 transition-transform duration-200" style={{ color: '#2814ff', transform: deepDiveExpanded ? 'rotate(180deg)' : 'rotate(0)' }} />
               </div>
-              <ChevronDown className="w-4 h-4 transition-transform duration-200" style={{ color: '#a1a1a6', transform: deepDiveExpanded ? 'rotate(180deg)' : 'rotate(0)' }} />
+              {!deepDiveExpanded && (
+                <div className="flex gap-2 pl-10">
+                  {['The Search', 'The Strategy', "What's Next"].map(label => (
+                    <span key={label} className="px-2.5 py-0.5 rounded-full text-[10px] font-medium"
+                      style={{ backgroundColor: '#ffffff', color: '#2814ff', border: '1px solid #d2d4ff' }}>
+                      {label}
+                    </span>
+                  ))}
+                </div>
+              )}
             </button>
           </div>
 
