@@ -1,5 +1,5 @@
 import jsPDF from 'jspdf';
-import 'jspdf-autotable';
+import autoTable from 'jspdf-autotable';
 
 // Brand colors
 const BRAND = '#2814ff';
@@ -31,6 +31,7 @@ function formatCurrency(val) {
 }
 
 export function generateSearchReport(results, formData) {
+  try {
   const doc = new jsPDF('p', 'mm', 'a4');
   const pageWidth = doc.internal.pageSize.getWidth(); // 210
   const pageHeight = doc.internal.pageSize.getHeight(); // 297
@@ -238,7 +239,7 @@ export function generateSearchReport(results, formData) {
       ['75th Percentile', formatCurrency(adjustedBenchmark.p75)]
     ];
 
-    doc.autoTable({
+    autoTable(doc, {
       startY: y,
       head: [['Benchmark', 'Annual Compensation']],
       body: salaryData,
@@ -267,7 +268,7 @@ export function generateSearchReport(results, formData) {
         ['Bonus', benchmark.benefits.bonus]
       ].filter(b => b[1]);
 
-      doc.autoTable({
+      autoTable(doc, {
         startY: y,
         body: benefits,
         theme: 'plain',
@@ -297,7 +298,7 @@ export function generateSearchReport(results, formData) {
   if (benchmark.backgroundCheckTimeline) searchMetrics.push(['Due Diligence Timeline', `${benchmark.backgroundCheckTimeline} weeks`]);
 
   if (searchMetrics.length > 0) {
-    doc.autoTable({
+    autoTable(doc, {
       startY: y,
       body: searchMetrics,
       theme: 'plain',
@@ -329,7 +330,7 @@ export function generateSearchReport(results, formData) {
       ['Internal', `${Math.round(benchmark.sourcingChannels.internal * 100)}%`]
     ];
 
-    doc.autoTable({
+    autoTable(doc, {
       startY: y,
       body: channels,
       theme: 'plain',
@@ -413,7 +414,7 @@ export function generateSearchReport(results, formData) {
       .sort((a, b) => b.points - a.points)
       .map(d => [d.factor, d.rationale || '', `+${d.points}`]);
 
-    doc.autoTable({
+    autoTable(doc, {
       startY: y,
       head: [['Factor', 'Detail', 'Points']],
       body: driverData,
@@ -514,7 +515,6 @@ export function generateSearchReport(results, formData) {
     y += 5;
 
     rr.topReasons.forEach(reason => {
-      drawRoundedRect(margin, y - 3, 0, 0, 1, WHITE); // clear
       doc.setFontSize(8);
       doc.setFont('helvetica', 'normal');
       doc.setTextColor(...hexToRGB(DARK));
@@ -535,7 +535,7 @@ export function generateSearchReport(results, formData) {
 
       const rfData = rr.riskFactors.map(rf => [rf.factor, rf.detail, rf.value]);
 
-      doc.autoTable({
+      autoTable(doc, {
         startY: y,
         head: [['Factor', 'Detail', 'Value']],
         body: rfData,
@@ -596,7 +596,7 @@ export function generateSearchReport(results, formData) {
         ['Signing Bonus', `In ${Math.round(benchmark.compensationStructure.signingBonusFrequency * 100)}% of placements ($${benchmark.compensationStructure.signingBonusRange})`]
       ];
 
-      doc.autoTable({
+      autoTable(doc, {
         startY: y,
         body: compData,
         theme: 'plain',
@@ -899,4 +899,9 @@ export function generateSearchReport(results, formData) {
   // ============================================================
   const filename = `TG_Search_Report_${(results.displayTitle || 'Analysis').replace(/[^a-zA-Z0-9]/g, '_')}_${new Date().toISOString().split('T')[0]}.pdf`;
   doc.save(filename);
+
+  } catch (err) {
+    console.error('PDF generation error:', err);
+    alert('Error generating PDF. Please try again.');
+  }
 }
