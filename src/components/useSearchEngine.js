@@ -851,11 +851,11 @@ ${benchmark?.regionalNotes ? `Regional Notes: ${benchmark.regionalNotes}` : ''}
     }
   },
   "whatsNext": {
-    "intro": "1 sentence: what client has, what comes next.",
-    "discoveryCall": "Topics for a ${displayTitle} discovery call.${formData.discretionLevel !== 'standard' ? ' Factor ' + (discOption?.label || formData.discretionLevel) + ' discretion.' : ''}",
-    "sourcingStrategy": "How WE source this role — our networks, outreach. Never name specific orgs as partners.${formData.discretionLevel !== 'standard' ? ' Factor discretion into channel selection.' : ''}",
-    "shortlist": "What vetting focuses on for THIS role.",
-    "placementSupport": "Key offer-process risks. No TG service promises."
+    "intro": "1 sentence: what client has, what comes next. Reference the ${displayTitle} role.",
+    "discoveryCall": "Describe OUR discovery call process for a ${displayTitle} search — what we cover, what we ask, what we calibrate. Write as a process step, not a topic list.${formData.discretionLevel !== 'standard' ? ' Factor ' + (discOption?.label || formData.discretionLevel) + ' discretion.' : ''}",
+    "sourcingStrategy": "Describe OUR sourcing approach for this ${displayTitle} search — which channels we activate and why, how we position the opportunity to attract top candidates. Write as a process step. Never name specific orgs as partners.${formData.discretionLevel !== 'standard' ? ' Factor discretion into channel selection.' : ''}",
+    "shortlist": "Describe what the client RECEIVES in the curated shortlist for a ${displayTitle} — how many candidates, what each profile includes, and what role-specific dimensions we vet for. Write as a process step, not a list of criteria.",
+    "placementSupport": "Describe OUR support through the offer and placement process for a ${displayTitle} — what risks we manage, how we handle negotiations, and what the first 90 days look like. Write as a process step."
   }
 }`;
 
@@ -1151,7 +1151,8 @@ ${benchmark?.regionalNotes ? `Regional Notes: ${benchmark.regionalNotes}` : ''}
             drivers: results.drivers,
             regionalMultiplier: results.regionalMultiplier,
             confidence: results.confidence,
-            retentionRisk: results.retentionRisk
+            retentionRisk: results.retentionRisk,
+            whatsNext: results.whatsNext || null
           }
         })
       });
