@@ -362,8 +362,8 @@ Write the JD following the system prompt structure exactly. Use the candidate ps
                       </h4>
                       <div className="space-y-2">
                         {results.drivers?.map((d, i) => (
-                          <div key={i} className="flex items-start gap-3 p-4 rounded-card" style={{ backgroundColor: d.points >= 3 ? '#fdf2f4' : d.points >= 2 ? '#fef8f0' : '#ffffff', border: '1px solid #d2d2d7', borderLeft: d.points >= 3 ? '3px solid #c77d8a' : d.points >= 2 ? '3px solid #ddb87e' : '1px solid #d2d2d7' }}>
-                            <div className="font-semibold text-sm mt-0.5" style={{ color: d.points >= 3 ? '#c77d8a' : d.points >= 2 ? '#ddb87e' : '#72a89d' }}>+{d.points}</div>
+                          <div key={i} className="flex items-start gap-3 p-4 rounded-card" style={{ backgroundColor: '#eeeeff', border: '1px solid #d2d4ff', borderLeft: '3px solid #2814ff' }}>
+                            <div className="font-semibold text-sm mt-0.5" style={{ color: '#2814ff' }}>+{d.points}</div>
                             <div className="flex-1">
                               <div className="font-medium" style={{ color: '#1d1d1f' }}>{d.factor}</div>
                               <div className="text-sm" style={{ color: '#6e6e73' }}>{d.rationale}</div>
