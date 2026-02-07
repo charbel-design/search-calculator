@@ -11,7 +11,7 @@ const SearchIntelligenceEngine = () => {
   const [showDisclaimer, setShowDisclaimer] = useState(false);
 
   return (
-    <div className="min-h-screen p-4 md:p-8" style={{ backgroundColor: '#ffffff' }}>
+    <div className="min-h-screen p-4 md:p-8" style={{ background: 'linear-gradient(180deg, #ffffff 0%, #f8f8ff 100%)' }}>
       <div className="max-w-4xl mx-auto">
         {/* Header */}
         <Header showRoleComparison={engine.showRoleComparison} setShowRoleComparison={engine.setShowRoleComparison} results={engine.results} />

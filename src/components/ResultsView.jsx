@@ -171,7 +171,7 @@ Write the JD following the system prompt structure exactly. Use the candidate ps
           )}
 
           {/* Score Section - Always Visible (Top) */}
-          <div className="text-center mb-8 animate-fadeInUp">
+          <div className="text-center mb-8 animate-fadeInUp py-8 rounded-card" style={{ backgroundColor: 'rgba(40, 20, 255, 0.03)' }}>
             <div className="mb-4">
               <div className="text-5xl font-semibold leading-none" style={{ color: '#2814ff' }}>
                 <ScoreCounter target={results.score} />
@@ -183,7 +183,7 @@ Write the JD following the system prompt structure exactly. Use the candidate ps
                 {results.label} Search
               </p>
             </div>
-            <div className="inline-block px-3 py-1 rounded-full text-[11px] font-medium" style={{ backgroundColor: '#f5f5f7', color: '#6e6e73' }}>
+            <div className="inline-block px-3 py-1 rounded-full text-[11px] font-medium" style={{ backgroundColor: 'rgba(40, 20, 255, 0.08)', color: '#2814ff' }}>
               Confidence: {results.confidence}
             </div>
             <div role="img" aria-label={`Search complexity score: ${results.score} out of 10, ${results.label} search`} className="sr-only">
@@ -357,12 +357,12 @@ Write the JD following the system prompt structure exactly. Use the candidate ps
                   <div className="space-y-6 animate-fadeInUp">
                     {/* Drivers */}
                     <div>
-                      <h4 className="font-semibold text-base mb-4" style={{ color: '#1d1d1f' }}>
+                      <h4 className="font-semibold text-base mb-4" style={{ color: '#2814ff' }}>
                         What Makes This Search Tricky
                       </h4>
                       <div className="space-y-2">
                         {results.drivers?.map((d, i) => (
-                          <div key={i} className="flex items-start gap-3 p-4 rounded-card" style={{ backgroundColor: d.points >= 3 ? '#f5f5f7' : '#ffffff', border: '1px solid #d2d2d7' }}>
+                          <div key={i} className="flex items-start gap-3 p-4 rounded-card" style={{ backgroundColor: d.points >= 3 ? 'rgba(40, 20, 255, 0.03)' : '#ffffff', border: '1px solid #d2d2d7', borderLeft: d.points >= 3 ? '3px solid #2814ff' : '1px solid #d2d2d7' }}>
                             <div className="font-semibold text-sm mt-0.5" style={{ color: '#2814ff' }}>+{d.points}</div>
                             <div className="flex-1">
                               <div className="font-medium" style={{ color: '#1d1d1f' }}>{d.factor}</div>
@@ -376,7 +376,7 @@ Write the JD following the system prompt structure exactly. Use the candidate ps
                     {/* Benchmarks */}
                     {results.benchmark && (
                       <div style={{ backgroundColor: '#f5f5f7' }} className="rounded-card p-8">
-                        <h4 className="font-semibold mb-6" style={{ color: '#1d1d1f' }}>
+                        <h4 className="font-semibold mb-6" style={{ color: '#2814ff' }}>
                           Benchmarks: {results.displayTitle}
                           {results.regionalMultiplier && results.regionalMultiplier !== 1 && (
                             <span className="text-xs font-normal ml-2" style={{ color: '#a1a1a6' }}>({results.regionalMultiplier}x regional adjustment)</span>
@@ -398,7 +398,7 @@ Write the JD following the system prompt structure exactly. Use the candidate ps
                         </div>
                         <div className="grid grid-cols-4 gap-2 text-xs">
                           {[['Housing', results.benchmark.benefits.housing, Home], ['Vehicle', results.benchmark.benefits.vehicle, Car], ['Health', results.benchmark.benefits.health, Heart], ['Bonus', results.benchmark.benefits.bonus, DollarSign]].map(([label, val, Icon]) => (
-                            <div key={label} className="bg-white rounded-btn p-3"><Icon className="w-4 h-4 mb-1" style={{ color: '#a1a1a6' }} /><div className="font-medium" style={{ color: '#1d1d1f' }}>{label}</div><div style={{ color: '#a1a1a6' }}>{val}</div></div>
+                            <div key={label} className="bg-white rounded-btn p-3"><Icon className="w-4 h-4 mb-1" style={{ color: '#2814ff' }} /><div className="font-medium" style={{ color: '#1d1d1f' }}>{label}</div><div style={{ color: '#a1a1a6' }}>{val}</div></div>
                           ))}
                         </div>
                       </div>
@@ -413,7 +413,7 @@ Write the JD following the system prompt structure exactly. Use the candidate ps
                     {/* Market Intelligence */}
                     {results.benchmark?.trends && (
                       <div>
-                        <h4 className="font-semibold mb-4" style={{ color: '#1d1d1f' }}>Market Intelligence</h4>
+                        <h4 className="font-semibold mb-4" style={{ color: '#2814ff' }}>Market Intelligence</h4>
                         <div style={{ backgroundColor: '#f5f5f7' }} className="rounded-card p-6">
                           <p style={{ color: '#1d1d1f' }} className="mb-3">{results.benchmark.trends}</p>
                           {results.benchmark.regionalNotes && (
@@ -428,7 +428,7 @@ Write the JD following the system prompt structure exactly. Use the candidate ps
                     {/* The Numbers Behind the Search */}
                     {results.benchmark && (
                       <div className="space-y-6">
-                        <h4 className="font-semibold" style={{ color: '#1d1d1f' }}>The Numbers Behind the Search</h4>
+                        <h4 className="font-semibold" style={{ color: '#2814ff' }}>The Numbers Behind the Search</h4>
 
                         {(results.benchmark.offerAcceptanceRate !== undefined || results.benchmark.counterOfferRate !== undefined) && (
                           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -596,7 +596,7 @@ Write the JD following the system prompt structure exactly. Use the candidate ps
                       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                         {results.decisionIntelligence.probabilityOfSuccess && (
                           <div className="bg-white rounded-card p-5 border" style={{ borderColor: '#d2d2d7' }}>
-                            <h5 className="font-semibold text-slate-900 mb-3" style={{ color: '#1d1d1f' }}>Success Probability</h5>
+                            <h5 className="font-semibold mb-3" style={{ color: '#2814ff' }}>Success Probability</h5>
                             <div className="mb-3">
                               <div className="flex items-baseline gap-2">
                                 {(() => {
@@ -630,7 +630,7 @@ Write the JD following the system prompt structure exactly. Use the candidate ps
 
                         {results.decisionIntelligence.mandateStrength && (
                           <div className="bg-white rounded-card p-5 border" style={{ borderColor: '#d2d2d7' }}>
-                            <h5 className="font-semibold mb-3" style={{ color: '#1d1d1f' }}>How Strong Is This Brief?</h5>
+                            <h5 className="font-semibold mb-3" style={{ color: '#2814ff' }}>How Strong Is This Brief?</h5>
                             <div className="mb-3">
                               <div className="flex items-baseline gap-2">
                                 <span className="text-3xl font-semibold" style={{ color: '#2814ff' }}>
@@ -654,7 +654,7 @@ Write the JD following the system prompt structure exactly. Use the candidate ps
                     {/* Trade-Off Scenarios */}
                     {results.decisionIntelligence?.tradeoffScenarios && (
                       <div className="bg-white rounded-card p-5 border" style={{ borderColor: '#d2d2d7' }}>
-                        <h5 className="font-semibold mb-3" style={{ color: '#1d1d1f' }}>Trade-Off Scenarios</h5>
+                        <h5 className="font-semibold mb-3" style={{ color: '#2814ff' }}>Trade-Off Scenarios</h5>
                         <ul className="space-y-2 mb-4">
                           {results.decisionIntelligence.tradeoffScenarios.initial?.map((item, i) => (
                             <li key={i} className="text-sm flex items-start gap-2" style={{ color: '#1d1d1f' }}>
@@ -673,7 +673,7 @@ Write the JD following the system prompt structure exactly. Use the candidate ps
                     {/* Candidate Psychology */}
                     {results.decisionIntelligence?.candidatePsychology && (
                       <div className="bg-white rounded-card p-5 border" style={{ borderColor: '#d2d2d7' }}>
-                        <h5 className="font-semibold mb-3" style={{ color: '#1d1d1f' }}>What Top Candidates Care About</h5>
+                        <h5 className="font-semibold mb-3" style={{ color: '#2814ff' }}>What Top Candidates Care About</h5>
                         <ul className="space-y-2 mb-4">
                           {results.decisionIntelligence.candidatePsychology.initial?.map((item, i) => (
                             <li key={i} className="text-sm flex items-start gap-2" style={{ color: '#1d1d1f' }}>
@@ -691,7 +691,7 @@ Write the JD following the system prompt structure exactly. Use the candidate ps
 
                     {/* Success Factors */}
                     <div>
-                      <h4 className="font-semibold mb-3" style={{ color: '#1d1d1f' }}>Success Factors</h4>
+                      <h4 className="font-semibold mb-3" style={{ color: '#2814ff' }}>Success Factors</h4>
                       <ul className="space-y-2">
                         {results.keySuccessFactors?.map((f, i) => (
                           <li key={i} className="flex items-start gap-3 p-3 rounded-card" style={{ backgroundColor: '#f5f5f7' }}>
@@ -705,7 +705,7 @@ Write the JD following the system prompt structure exactly. Use the candidate ps
                     {/* Recommendations */}
                     {results.recommendedAdjustments?.length > 0 && (
                       <div>
-                        <h4 className="font-semibold mb-3" style={{ color: '#1d1d1f' }}>Recommendations</h4>
+                        <h4 className="font-semibold mb-3" style={{ color: '#2814ff' }}>Recommendations</h4>
                         <ul className="space-y-2">
                           {results.recommendedAdjustments.map((r, i) => (
                             <li key={i} className="flex items-start gap-3 p-3 rounded-card" style={{ backgroundColor: '#f5f5f7' }}>

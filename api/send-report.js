@@ -56,7 +56,7 @@ function isValidEmail(email) {
 function generateEmailHTML(results) {
   // Escape all dynamic content to prevent XSS
   const e = escapeHTML;
-  const sectionHeading = (text) => `<h3 style="color:#1d1d1f;font-size:16px;margin:0 0 16px;font-weight:600;">${e(text)}</h3>`;
+  const sectionHeading = (text) => `<h3 style="color:#2814ff;font-size:16px;margin:0 0 16px;font-weight:600;">${e(text)}</h3>`;
   const spacer = `<div style="height:32px;"></div>`;
 
   return `
@@ -71,15 +71,15 @@ function generateEmailHTML(results) {
     <tr><td align="center" style="padding:20px;">
       <table role="presentation" cellpadding="0" cellspacing="0" width="640" style="max-width:640px;width:100%;background-color:#ffffff;border-radius:12px;overflow:hidden;">
 
-    <!-- Header — White, minimal -->
-    <div style="padding:32px 32px 24px;text-align:center;border-bottom:2px solid #2814ff;">
-      <h1 style="color:#1d1d1f;margin:0;font-size:20px;font-weight:600;letter-spacing:0.08em;">TALENT GURUS</h1>
-      <p style="color:#a1a1a6;margin:8px 0 0;font-size:13px;">Search Intelligence Report</p>
+    <!-- Header — Brand Blue -->
+    <div style="padding:32px 32px 24px;text-align:center;background-color:#2814ff;border-radius:12px 12px 0 0;">
+      <h1 style="color:#ffffff;margin:0;font-size:20px;font-weight:600;letter-spacing:0.08em;">TALENT GURUS</h1>
+      <p style="color:rgba(255,255,255,0.7);margin:8px 0 0;font-size:13px;">Search Intelligence Report</p>
     </div>
 
-    <!-- Score Section — Clean, no circle -->
+    <!-- Score Section — Brand-tinted background -->
     <div style="padding:40px 32px 32px;text-align:center;">
-      <div style="margin:0 0 16px;">
+      <div style="margin:0 0 16px;display:inline-block;background-color:rgba(40,20,255,0.04);padding:20px 32px;border-radius:12px;">
         <span style="font-size:48px;font-weight:600;color:#2814ff;">${results.score}</span>
         <span style="font-size:16px;color:#a1a1a6;">/10</span>
       </div>
@@ -102,22 +102,22 @@ function generateEmailHTML(results) {
     <div style="padding:0 32px 32px;">
       ${sectionHeading('Key Metrics')}
 
-      <div style="padding:16px;background-color:#f5f5f7;border-radius:8px;margin-bottom:12px;">
+      <div style="padding:16px;background-color:#f5f5f7;border-radius:8px;margin-bottom:12px;border-left:3px solid #2814ff;">
         <strong style="color:#6e6e73;font-size:11px;text-transform:uppercase;letter-spacing:0.05em;">Salary Guidance</strong>
         <p style="margin:6px 0 0;color:#1d1d1f;font-size:14px;line-height:1.5;">${e(results.salaryRangeGuidance || 'N/A')}</p>
       </div>
 
-      <div style="padding:16px;background-color:#f5f5f7;border-radius:8px;margin-bottom:12px;">
+      <div style="padding:16px;background-color:#f5f5f7;border-radius:8px;margin-bottom:12px;border-left:3px solid #2814ff;">
         <strong style="color:#6e6e73;font-size:11px;text-transform:uppercase;letter-spacing:0.05em;">Timeline</strong>
         <p style="margin:6px 0 0;color:#1d1d1f;font-size:14px;line-height:1.5;">${e(results.estimatedTimeline || 'N/A')}</p>
       </div>
 
-      <div style="padding:16px;background-color:#f5f5f7;border-radius:8px;margin-bottom:12px;">
+      <div style="padding:16px;background-color:#f5f5f7;border-radius:8px;margin-bottom:12px;border-left:3px solid #2814ff;">
         <strong style="color:#6e6e73;font-size:11px;text-transform:uppercase;letter-spacing:0.05em;">Market Competitiveness</strong>
         <p style="margin:6px 0 0;color:#1d1d1f;font-size:14px;line-height:1.5;">${e(results.marketCompetitiveness || 'N/A')}</p>
       </div>
 
-      <div style="padding:16px;background-color:#f5f5f7;border-radius:8px;">
+      <div style="padding:16px;background-color:#f5f5f7;border-radius:8px;border-left:3px solid #2814ff;">
         <strong style="color:#6e6e73;font-size:11px;text-transform:uppercase;letter-spacing:0.05em;">Candidate Availability</strong>
         <p style="margin:6px 0 0;color:#1d1d1f;font-size:14px;line-height:1.5;"><strong>${e(results.candidateAvailability || 'N/A')}</strong> — ${e(results.availabilityReason || '')}</p>
       </div>
@@ -389,7 +389,7 @@ function generateEmailHTML(results) {
     <!-- Decision Intelligence -->
     ${results.decisionIntelligence ? `
     <div style="padding:0 32px 32px;">
-      <h3 style="color:#1d1d1f;font-size:18px;margin:0 0 8px;font-weight:600;">Decision Intelligence</h3>
+      <h3 style="color:#2814ff;font-size:18px;margin:0 0 8px;font-weight:600;">Decision Intelligence</h3>
       <p style="color:#6e6e73;font-size:13px;margin:0 0 20px;">Strategic insights to inform your hiring decisions.</p>
 
       ${results.decisionIntelligence.tradeoffScenarios ? `
