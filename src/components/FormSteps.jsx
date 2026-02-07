@@ -5,6 +5,59 @@ import {
 import { BENCHMARKS } from '../salaryData';
 import { CustomSelect } from './CustomSelect';
 
+const LOADING_FACTS = [
+  "The average UHNW household employs 7-12 full-time staff across multiple properties.",
+  "A Chief of Staff in a family office typically manages $2M-$5M in annual household operating budgets.",
+  "Over 60% of private service placements come through referrals rather than job boards.",
+  "The average tenure for a private chef in an UHNW household is just 2.3 years.",
+  "Estate Managers in top-tier markets earn 30-40% more than the national median.",
+  "Bilingual candidates command a 15-25% salary premium in private service roles.",
+  "The counter-offer rate for senior household staff exceeds 40% in major metros.",
+  "Family offices managing $500M+ typically employ 15-25 dedicated staff members.",
+  "NDA requirements add 1-3 weeks to the average placement timeline.",
+  "Relocation packages for estate managers can reach $50,000-$100,000.",
+  "Maritime crew placement timelines shrink by 40% during peak charter season.",
+  "The global superyacht fleet has grown 77% over the past decade.",
+  "Private aviation staff turnover is 35% lower when housing is included in compensation.",
+  "Over 80% of UHNW principals prefer candidates vetted through personal networks.",
+  "The top 3 departure reasons in private service: burnout, lack of boundaries, and relocation.",
+  "A typical executive search produces 200+ initial candidates narrowed to 3-5 finalists.",
+  "Background checks for high-profile households average 2-4 weeks for domestic and international vetting.",
+  "Household managers who speak 3+ languages are in the top 5% of candidate scarcity.",
+  "The demand for tech-savvy estate managers has increased 300% since 2019.",
+  "Only 12% of private service professionals have formal hospitality certifications.",
+  "Yacht crew with both STCW and ENG1 certifications earn 20% above median.",
+  "The average search for a C-suite family office role takes 90-120 days.",
+  "Signing bonuses are offered in roughly 35% of senior private service placements.",
+  "First-year attrition in private service drops by half when cultural fit is assessed during hiring.",
+  "Florida, California, and New York account for 65% of all UHNW household staffing demand.",
+  "Seasonal staffing needs spike 40% between November and February in resort markets.",
+  "The personal assistant role has evolved — 70% now require project management skills.",
+  "Private service professionals with military backgrounds have 45% higher retention rates.",
+  "Dual-couple households (two principals with separate offices) require 2x the typical staff.",
+  "A single property estate typically needs 3-5 core staff; multi-property estates need 8-15.",
+  "Travel-heavy roles (50%+ travel) reduce the candidate pool by approximately 60%.",
+  "The median time-to-hire for a house manager in Manhattan is 8-12 weeks.",
+  "Candidates who complete a trial period have 70% higher long-term retention.",
+  "Executive protection professionals command premiums of 40-60% over standard security roles.",
+  "Over 50% of private chef candidates are sourced from high-end restaurant networks.",
+  "The family office sector is projected to manage $5.4 trillion in assets by 2030.",
+  "Remote estate oversight roles have grown 150% since the pandemic.",
+  "The average UHNW family interviews 6-8 candidates before making a hire.",
+  "Discretion-heavy roles (celebrity, political) add 2-3 weeks to sourcing timelines.",
+  "Benefits packages in UHNW households often include housing, vehicles, and travel allowances.",
+  "Nanny placements in UHNW households require an average of 4 reference checks.",
+  "The busiest hiring months for private service are January, June, and September.",
+  "Candidates with smart-home technology skills are 3x more likely to receive multiple offers.",
+  "Estate managers overseeing $10M+ properties typically earn $150K-$250K base salary.",
+  "Cultural alignment interviews reduce first-year turnover by up to 55%.",
+  "The yacht industry requires crew certifications to be renewed every 5 years.",
+  "Multi-generational households are the fastest-growing segment in private service staffing.",
+  "Over 40% of family office hires come with non-compete agreements lasting 12-24 months.",
+  "The average cost-per-hire for a senior household position is $15,000-$25,000.",
+  "Principals who provide clear role documentation see 3x faster placement timelines.",
+];
+
 export function FormSteps({
   step, setStep, formData, setFormData, loading, loadingStep, error, setError,
   warnings, positionSearch, setPositionSearch, showPositionSuggestions, setShowPositionSuggestions,
@@ -21,11 +74,29 @@ export function FormSteps({
   const [showAllLangs, setShowAllLangs] = React.useState(false);
 
   const [elapsed, setElapsed] = React.useState(0);
+  const [factIndex, setFactIndex] = React.useState(0);
+  const [factFade, setFactFade] = React.useState(true);
+
   React.useEffect(() => {
     if (!loading) { setElapsed(0); return; }
     const start = Date.now();
     const timer = setInterval(() => setElapsed(Math.floor((Date.now() - start) / 1000)), 1000);
     return () => clearInterval(timer);
+  }, [loading]);
+
+  // Pick a random starting fact when loading begins, then rotate every 5s
+  React.useEffect(() => {
+    if (!loading) return;
+    setFactIndex(Math.floor(Math.random() * LOADING_FACTS.length));
+    setFactFade(true);
+    const interval = setInterval(() => {
+      setFactFade(false);
+      setTimeout(() => {
+        setFactIndex(prev => (prev + 1) % LOADING_FACTS.length);
+        setFactFade(true);
+      }, 300);
+    }, 5000);
+    return () => clearInterval(interval);
   }, [loading]);
 
   const stepLabels = ['Role', 'Budget', 'Requirements', 'Finalize'];
@@ -56,9 +127,15 @@ export function FormSteps({
             <div className="absolute top-0 left-0 right-0" style={{ backgroundColor: '#e5e5ea', height: '2px' }}>
               <div className="h-full transition-all duration-1000 ease-out" style={{ backgroundColor: '#2814ff', width: `${Math.min(95, loadingStep * 25)}%` }} />
             </div>
-            <div className="text-center">
-              <p className="text-sm" style={{ color: '#6e6e73' }}>Analyzing your search...</p>
-              <p className="text-xs mt-2 tabular-nums" style={{ color: '#a1a1a6' }}>{elapsed}s</p>
+            <div className="text-center max-w-md px-6">
+              <p className="text-sm font-medium" style={{ color: '#1d1d1f' }}>Analyzing your search...</p>
+              <p className="text-xs mt-1 tabular-nums" style={{ color: '#a1a1a6' }}>{elapsed}s</p>
+              <div className="mt-8 pt-6" style={{ borderTop: '1px solid #e5e5ea' }}>
+                <p className="text-[10px] uppercase tracking-widest font-medium mb-2" style={{ color: '#2814ff', letterSpacing: '0.1em' }}>Did you know?</p>
+                <p className="text-sm leading-relaxed transition-opacity duration-300" style={{ color: '#6e6e73', opacity: factFade ? 1 : 0 }}>
+                  {LOADING_FACTS[factIndex]}
+                </p>
+              </div>
             </div>
           </div>
         )}
