@@ -194,7 +194,7 @@ Write the JD following the system prompt structure exactly. Use the candidate ps
           {/* Bottom Line */}
           {results.bottomLine && (
             <div className="border-l-2 pl-4 mb-6 animate-fadeInUp delay-200" style={{ borderColor: '#2814ff' }}>
-              <div style={{ backgroundColor: '#f5f5f7' }} className="rounded-card p-6">
+              <div style={{ backgroundColor: '#eeeeff' }} className="rounded-card p-6">
                 <p className="text-sm text-gray-700 leading-relaxed" style={{ color: '#1d1d1f' }}>
                   {results.bottomLine}
                 </p>
@@ -234,7 +234,7 @@ Write the JD following the system prompt structure exactly. Use the candidate ps
 
           {/* What-If Scenarios - Collapsible */}
           <div className="mb-6 animate-fadeInUp delay-400">
-            <div style={{ backgroundColor: '#f5f5f7' }} className="rounded-card overflow-hidden">
+            <div style={{ backgroundColor: '#eeeeff' }} className="rounded-card overflow-hidden">
               <button
                 onClick={() => setWhatIfMode(!whatIfMode)}
                 className="w-full p-4 flex items-center justify-between hover:opacity-80 transition-opacity duration-200"
@@ -277,7 +277,7 @@ Write the JD following the system prompt structure exactly. Use the candidate ps
                             {calculateWhatIfScore.score}
                           </span>
                           <span className="text-sm" style={{ color: '#a1a1a6' }}>/ 10</span>
-                          <span className="px-2 py-1 rounded-full text-xs font-medium" style={{ backgroundColor: '#f5f5f7', color: '#6e6e73' }}>
+                          <span className="px-2 py-1 rounded-full text-xs font-medium" style={{ backgroundColor: '#eeeeff', color: '#6e6e73' }}>
                             {calculateWhatIfScore.label}
                           </span>
                         </div>
@@ -330,7 +330,7 @@ Write the JD following the system prompt structure exactly. Use the candidate ps
           {deepDiveExpanded && (
             <div className="mb-6">
               {/* Apple-style Segmented Control */}
-              <div className="flex gap-1 p-1 rounded-btn mb-6" style={{ backgroundColor: '#f5f5f7' }}>
+              <div className="flex gap-1 p-1 rounded-btn mb-6" style={{ backgroundColor: '#f5f5f3' }}>
                 {[
                   { id: 'breakdown', label: 'The Search' },
                   { id: 'strategy', label: 'The Strategy' },
@@ -375,7 +375,7 @@ Write the JD following the system prompt structure exactly. Use the candidate ps
 
                     {/* Benchmarks */}
                     {results.benchmark && (
-                      <div style={{ backgroundColor: '#f5f5f7' }} className="rounded-card p-8">
+                      <div style={{ backgroundColor: '#fef8f0' }} className="rounded-card p-8">
                         <h4 className="font-semibold mb-6" style={{ color: '#2814ff' }}>
                           Benchmarks: {results.displayTitle}
                           {results.regionalMultiplier && results.regionalMultiplier !== 1 && (
@@ -414,7 +414,7 @@ Write the JD following the system prompt structure exactly. Use the candidate ps
                     {results.benchmark?.trends && (
                       <div>
                         <h4 className="font-semibold mb-4" style={{ color: '#2814ff' }}>Market Intelligence</h4>
-                        <div style={{ backgroundColor: '#f5f5f7' }} className="rounded-card p-6">
+                        <div style={{ backgroundColor: '#eeeeff' }} className="rounded-card p-6">
                           <p style={{ color: '#1d1d1f' }} className="mb-3">{results.benchmark.trends}</p>
                           {results.benchmark.regionalNotes && (
                             <div className="mt-3 pt-3 border-t" style={{ borderColor: '#d2d2d7' }}>
@@ -433,7 +433,7 @@ Write the JD following the system prompt structure exactly. Use the candidate ps
                         {(results.benchmark.offerAcceptanceRate !== undefined || results.benchmark.counterOfferRate !== undefined) && (
                           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                             {results.benchmark.offerAcceptanceRate !== undefined && (
-                              <div style={{ backgroundColor: '#f5f5f7' }} className="rounded-card p-6 text-center">
+                              <div style={{ backgroundColor: '#fef8f0' }} className="rounded-card p-6 text-center">
                                 <p className="text-xs mb-3 uppercase tracking-widest font-medium" style={{ color: '#a1a1a6' }}>Offer Acceptance Rate</p>
                                 <p className="text-4xl font-semibold mb-2" style={{ color: '#2814ff' }}>
                                   {Math.round(results.benchmark.offerAcceptanceRate * 100)}%
@@ -442,7 +442,7 @@ Write the JD following the system prompt structure exactly. Use the candidate ps
                               </div>
                             )}
                             {results.benchmark.counterOfferRate !== undefined && (
-                              <div style={{ backgroundColor: '#f5f5f7' }} className="rounded-card p-6 text-center">
+                              <div style={{ backgroundColor: '#fdf2f4' }} className="rounded-card p-6 text-center">
                                 <p className="text-xs mb-3 uppercase tracking-widest font-medium" style={{ color: '#a1a1a6' }}>Counter-Offer Rate</p>
                                 <p className="text-4xl font-semibold mb-2" style={{ color: '#2814ff' }}>
                                   {Math.round(results.benchmark.counterOfferRate * 100)}%
@@ -454,7 +454,7 @@ Write the JD following the system prompt structure exactly. Use the candidate ps
                         )}
 
                         {results.benchmark.sourcingChannels && (
-                          <div style={{ backgroundColor: '#f5f5f7' }} className="rounded-card p-6">
+                          <div style={{ backgroundColor: '#eeeeff' }} className="rounded-card p-6">
                             <p className="text-xs mb-4 uppercase tracking-widest font-medium" style={{ color: '#a1a1a6' }}>Sourcing Channel Mix</p>
                             <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
                               {results.benchmark.sourcingChannels.referral !== undefined && (
@@ -488,13 +488,13 @@ Write the JD following the system prompt structure exactly. Use the candidate ps
                         {(results.benchmark.salaryGrowthRate !== undefined || results.benchmark.typicalExperience !== undefined) && (
                           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                             {results.benchmark.salaryGrowthRate !== undefined && (
-                              <div style={{ backgroundColor: '#f5f5f7' }} className="rounded-card p-4 text-center">
+                              <div style={{ backgroundColor: '#fef8f0' }} className="rounded-card p-4 text-center">
                                 <p className="text-xs mb-2 uppercase tracking-widest font-medium" style={{ color: '#a1a1a6' }}>Salary Growth YoY</p>
                                 <p className="text-3xl font-semibold" style={{ color: '#2814ff' }}>{Math.round(results.benchmark.salaryGrowthRate * 100)}%</p>
                               </div>
                             )}
                             {results.benchmark.typicalExperience && (
-                              <div style={{ backgroundColor: '#f5f5f7' }} className="rounded-card p-4 text-center">
+                              <div style={{ backgroundColor: '#eeeeff' }} className="rounded-card p-4 text-center">
                                 <p className="text-xs mb-2 uppercase tracking-widest font-medium" style={{ color: '#a1a1a6' }}>Typical Experience</p>
                                 <p className="text-3xl font-semibold" style={{ color: '#2814ff' }}>{results.benchmark.typicalExperience.typical}y</p>
                                 {results.benchmark.typicalExperience.min && (
@@ -606,7 +606,7 @@ Write the JD following the system prompt structure exactly. Use the candidate ps
                                   return pct ? (
                                     <>
                                       <span className="text-3xl font-semibold" style={{ color: '#2814ff' }}>{pct}%</span>
-                                      <span className="px-2 py-1 rounded-full text-xs font-semibold" style={{ backgroundColor: '#f5f5f7', color: '#6e6e73' }}>
+                                      <span className="px-2 py-1 rounded-full text-xs font-semibold" style={{ backgroundColor: '#eeeeff', color: '#6e6e73' }}>
                                         {results.decisionIntelligence.probabilityOfSuccess.initialLabel}
                                       </span>
                                     </>
@@ -719,7 +719,7 @@ Write the JD following the system prompt structure exactly. Use the candidate ps
 
                     {/* Sourcing Insight */}
                     {results.sourcingInsight && (
-                      <div style={{ backgroundColor: '#f5f5f7' }} className="rounded-card p-6">
+                      <div style={{ backgroundColor: '#eeeeff' }} className="rounded-card p-6">
                         <h4 className="font-semibold text-sm mb-2" style={{ color: '#1d1d1f' }}>Where to Find These Candidates</h4>
                         <p style={{ color: '#1d1d1f' }}>{results.sourcingInsight}</p>
                       </div>
@@ -730,11 +730,11 @@ Write the JD following the system prompt structure exactly. Use the candidate ps
                       <div>
                         <h4 className="font-semibold mb-3" style={{ color: '#1d1d1f' }}>Negotiation Dynamics</h4>
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                          <div style={{ backgroundColor: '#f5f5f7' }} className="rounded-card p-4">
+                          <div style={{ backgroundColor: '#eeeeff' }} className="rounded-card p-4">
                             <h5 className="font-medium mb-2 text-sm" style={{ color: '#1d1d1f' }}>Candidate Advantages</h5>
                             <ul className="space-y-1">{results.negotiationLeverage.candidateAdvantages?.map((a, i) => <li key={i} className="text-sm" style={{ color: '#6e6e73' }}>• {a}</li>)}</ul>
                           </div>
-                          <div style={{ backgroundColor: '#f5f5f7' }} className="rounded-card p-4">
+                          <div style={{ backgroundColor: '#eeeeff' }} className="rounded-card p-4">
                             <h5 className="font-medium mb-2 text-sm" style={{ color: '#1d1d1f' }}>Your Advantages</h5>
                             <ul className="space-y-1">{results.negotiationLeverage.employerAdvantages?.map((a, i) => <li key={i} className="text-sm" style={{ color: '#6e6e73' }}>• {a}</li>)}</ul>
                           </div>
@@ -822,7 +822,7 @@ Write the JD following the system prompt structure exactly. Use the candidate ps
                           <div className="pb-4 flex-1">
                             <div className="flex items-center gap-2 mb-1">
                               <h5 className="font-semibold" style={{ color: '#1d1d1f' }}>{item.title}</h5>
-                              <span className="text-xs px-2 py-0.5 rounded-full font-medium" style={{ backgroundColor: '#f5f5f7', color: '#6e6e73' }}>{item.duration}</span>
+                              <span className="text-xs px-2 py-0.5 rounded-full font-medium" style={{ backgroundColor: '#eeeeff', color: '#6e6e73' }}>{item.duration}</span>
                             </div>
                             <p className="text-sm leading-relaxed" style={{ color: '#6e6e73' }}>{item.description}</p>
                           </div>
@@ -831,7 +831,7 @@ Write the JD following the system prompt structure exactly. Use the candidate ps
                     </div>
 
                     {/* What you get */}
-                    <div style={{ backgroundColor: '#f5f5f7' }} className="rounded-card p-6">
+                    <div style={{ backgroundColor: '#eeeeff' }} className="rounded-card p-6">
                       <h5 className="font-semibold text-sm mb-3 flex items-center gap-2" style={{ color: '#1d1d1f' }}>
                         <FileText className="w-4 h-4" style={{ color: '#2814ff' }} />
                         What the full engagement includes
@@ -901,7 +901,7 @@ Write the JD following the system prompt structure exactly. Use the candidate ps
           {/* Generated Job Description */}
           {jdContent && (
             <div className="mt-6 rounded-card border overflow-hidden animate-fadeInUp" style={{ borderColor: '#d2d2d7' }}>
-              <div className="flex items-center justify-between px-5 py-3.5 border-b" style={{ backgroundColor: '#f5f5f7', borderColor: '#d2d2d7' }}>
+              <div className="flex items-center justify-between px-5 py-3.5 border-b" style={{ backgroundColor: '#f5f5f3', borderColor: '#d2d2d7' }}>
                 <div className="flex items-center gap-2">
                   <FileText className="w-4 h-4" style={{ color: '#2814ff' }} />
                   <h4 className="font-semibold text-sm" style={{ color: '#1d1d1f' }}>Generated Job Description</h4>
@@ -921,7 +921,7 @@ Write the JD following the system prompt structure exactly. Use the candidate ps
                   style={{ color: '#1d1d1f' }}
                   dangerouslySetInnerHTML={{ __html: formatJDContent(jdContent) }} />
               </div>
-              <div className="px-5 py-2.5 border-t" style={{ backgroundColor: '#f5f5f7', borderColor: '#d2d2d7' }}>
+              <div className="px-5 py-2.5 border-t" style={{ backgroundColor: '#f5f5f3', borderColor: '#d2d2d7' }}>
                 <p className="text-[11px]" style={{ color: '#a1a1a6' }}>AI-generated. Review and customize before posting.</p>
               </div>
             </div>
@@ -948,7 +948,7 @@ Write the JD following the system prompt structure exactly. Use the candidate ps
                   )}
                 </div>
               ) : (
-                <div className="rounded-card p-4 border" style={{ backgroundColor: '#f5f5f7', borderColor: '#d2d2d7' }}>
+                <div className="rounded-card p-4 border" style={{ backgroundColor: '#eeeeff', borderColor: '#d2d2d7' }}>
                   <h5 className="font-medium mb-2 text-sm" style={{ color: '#a1a1a6' }}>Lower Budget</h5>
                   <p className="text-xs" style={{ color: '#a1a1a6' }}>Already at minimum range</p>
                 </div>
@@ -972,7 +972,7 @@ Write the JD following the system prompt structure exactly. Use the candidate ps
                   )}
                 </div>
               ) : (
-                <div className="rounded-card p-4 border" style={{ backgroundColor: '#f5f5f7', borderColor: '#d2d2d7' }}>
+                <div className="rounded-card p-4 border" style={{ backgroundColor: '#eeeeff', borderColor: '#d2d2d7' }}>
                   <h5 className="font-medium mb-2 text-sm" style={{ color: '#a1a1a6' }}>Higher Budget</h5>
                   <p className="text-xs" style={{ color: '#a1a1a6' }}>Already at maximum range</p>
                 </div>
@@ -1008,7 +1008,7 @@ Write the JD following the system prompt structure exactly. Use the candidate ps
         </div>
 
         {/* Methodology & Data Sources - Collapsible */}
-        <div className="rounded-card border overflow-hidden" style={{ backgroundColor: '#f5f5f7', borderColor: '#d2d2d7' }}>
+        <div className="rounded-card border overflow-hidden" style={{ backgroundColor: '#f5f5f3', borderColor: '#d2d2d7' }}>
           <button
             onClick={() => setMethodologyExpanded(!methodologyExpanded)}
             className="w-full px-6 py-4 flex items-center justify-between hover:opacity-80 transition-opacity"

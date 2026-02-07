@@ -109,7 +109,7 @@ export function FormSteps({
           <span className="text-xs font-medium uppercase" style={{ letterSpacing: '0.05em', color: '#6e6e73' }}>Step {step} of 4</span>
           <span className="text-xs" style={{ color: '#a1a1a6' }}>{stepLabels[step - 1]}</span>
         </div>
-        <div className="rounded-card overflow-hidden" style={{ backgroundColor: '#e5e5ea', height: '2px' }}>
+        <div className="rounded-card overflow-hidden" style={{ backgroundColor: '#d2d4ff', height: '2px' }}>
           <div
             className="h-full rounded-card transition-all duration-500 ease-out"
             style={{ width: `${((step) / 4) * 100}%`, backgroundColor: '#2814ff' }}
@@ -124,13 +124,13 @@ export function FormSteps({
         {loading && (
           <div className="fixed inset-0 loading-overlay flex flex-col items-center justify-center z-50">
             {/* Thin progress bar at top */}
-            <div className="absolute top-0 left-0 right-0" style={{ backgroundColor: '#e5e5ea', height: '2px' }}>
+            <div className="absolute top-0 left-0 right-0" style={{ backgroundColor: '#d2d4ff', height: '2px' }}>
               <div className="h-full transition-all duration-1000 ease-out" style={{ backgroundColor: '#2814ff', width: `${Math.min(95, loadingStep * 25)}%` }} />
             </div>
             <div className="text-center max-w-md px-6">
               <p className="text-sm font-medium" style={{ color: '#1d1d1f' }}>Analyzing your search...</p>
               <p className="text-xs mt-1 tabular-nums" style={{ color: '#a1a1a6' }}>{elapsed}s</p>
-              <div className="mt-8 pt-6" style={{ borderTop: '1px solid #e5e5ea' }}>
+              <div className="mt-8 pt-6" style={{ borderTop: '1px solid #d2d4ff' }}>
                 <p className="text-[10px] uppercase tracking-widest font-medium mb-2" style={{ color: '#2814ff', letterSpacing: '0.1em' }}>Did you know?</p>
                 <p className="text-sm leading-relaxed transition-opacity duration-300" style={{ color: '#6e6e73', opacity: factFade ? 1 : 0 }}>
                   {LOADING_FACTS[factIndex]}
@@ -355,7 +355,7 @@ export function FormSteps({
                     className="px-3 py-1.5 rounded-btn text-xs font-medium transition-all duration-200"
                     style={formData.certifications.includes(cert)
                       ? { backgroundColor: '#2814ff', color: '#ffffff' }
-                      : { backgroundColor: '#f5f5f7', color: '#6e6e73' }
+                      : { backgroundColor: '#eeeeff', color: '#6e6e73' }
                     }>
                     {cert}
                   </button>
@@ -378,7 +378,7 @@ export function FormSteps({
                     <span className="text-xs font-medium uppercase" style={{ letterSpacing: '0.05em', color: '#6e6e73' }}>Language Requirements</span>
                     <span className="text-xs normal-case" style={{ color: '#a1a1a6', letterSpacing: 'normal' }}>(optional)</span>
                     {formData.languageRequirements.length > 0 && !showLanguages && (
-                      <span className="text-xs px-2 py-0.5 rounded-full font-medium" style={{ backgroundColor: '#f5f5f7', color: '#2814ff' }}>{formData.languageRequirements.length} selected</span>
+                      <span className="text-xs px-2 py-0.5 rounded-full font-medium" style={{ backgroundColor: '#eeeeff', color: '#2814ff' }}>{formData.languageRequirements.length} selected</span>
                     )}
                   </div>
                   <ChevronDown className={`w-4 h-4 transition-transform duration-200 ${showLanguages ? 'rotate-180' : ''}`} style={{ color: '#a1a1a6' }} />
@@ -391,7 +391,7 @@ export function FormSteps({
                           className="px-3 py-1.5 rounded-btn text-xs font-medium transition-all duration-200"
                           style={formData.languageRequirements.includes(lang)
                             ? { backgroundColor: '#2814ff', color: '#ffffff' }
-                            : { backgroundColor: '#f5f5f7', color: '#6e6e73' }
+                            : { backgroundColor: '#eeeeff', color: '#6e6e73' }
                           }>
                           {lang}
                         </button>
@@ -418,7 +418,7 @@ export function FormSteps({
                       className="px-3 py-1.5 rounded-btn text-xs font-medium transition-all duration-200"
                       style={formData.languageRequirements.includes(lang)
                         ? { backgroundColor: '#2814ff', color: '#ffffff' }
-                        : { backgroundColor: '#f5f5f7', color: '#6e6e73' }
+                        : { backgroundColor: '#eeeeff', color: '#6e6e73' }
                       }>
                       {lang}
                     </button>
@@ -451,7 +451,7 @@ export function FormSteps({
             </div>
 
             {/* Summary */}
-            <div className="rounded-btn p-4" style={{ backgroundColor: '#f5f5f7' }}>
+            <div className="rounded-btn p-4" style={{ backgroundColor: '#eeeeff' }}>
               <h4 className="font-medium text-sm mb-1" style={{ color: '#1d1d1f' }}>Your report will include</h4>
               <p className="text-xs leading-relaxed" style={{ color: '#6e6e73' }}>Salary benchmarks, search complexity score, sourcing strategy, candidate availability, and market positioning — all tailored to your specific search.</p>
             </div>

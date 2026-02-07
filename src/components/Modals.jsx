@@ -16,7 +16,7 @@ export function ShareModal({ visible, shareUrl, copiedShare, copyShareUrl, onClo
         <p className="text-sm mb-4" style={{ color: '#6e6e73' }}>Share this link — recipients will see your search details and analysis.</p>
         <div className="flex gap-2">
           <input type="text" readOnly value={shareUrl}
-            className="flex-1 px-3 py-2.5 border rounded-btn text-sm truncate" style={{ borderColor: '#d2d2d7', backgroundColor: '#f5f5f7', color: '#6e6e73' }} />
+            className="flex-1 px-3 py-2.5 border rounded-btn text-sm truncate" style={{ borderColor: '#d2d2d7', backgroundColor: '#f5f5f3', color: '#6e6e73' }} />
           <button onClick={copyShareUrl}
             className="px-4 py-2.5 rounded-btn text-sm font-medium flex items-center gap-2 transition-opacity hover:opacity-88 text-white"
             style={{ backgroundColor: copiedShare ? '#5f9488' : '#2814ff' }}>
