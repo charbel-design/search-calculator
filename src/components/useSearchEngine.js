@@ -36,6 +36,53 @@ import {
 
 console.log(`Search Calculator v${APP_VERSION} - With Role Comparison, Shareable Links, What-If Sliders, Email Reports`);
 
+// ─── Engagement Fee Calculator ───
+// Derives a retainer fee estimate from complexity score + adjusted benchmark salary.
+// Industry base: 25% of adjusted median. Complexity multiplier scales 0.85x–1.60x.
+function calculateEngagementFee(score, adjustedP50, formData = {}) {
+  if (!adjustedP50 || !score) return null;
+
+  const complexityMultiplier = {
+    1: 0.85, 2: 0.85, 3: 0.95, 4: 1.00, 5: 1.08,
+    6: 1.15, 7: 1.25, 8: 1.35, 9: 1.45, 10: 1.60
+  }[score] || 1.0;
+
+  // Situational modifiers
+  let modifier = 1.0;
+  if (formData.discretionLevel === 'ultra-discrete') modifier += 0.10;
+  if (formData.timeline === 'immediate') modifier += 0.05;
+  if ((formData.languageRequirements || []).length >= 3) modifier += 0.05;
+
+  const basePercent = 0.25;
+  const baseFee = Math.round(adjustedP50 * basePercent);
+  const adjustedFee = Math.round(baseFee * complexityMultiplier * modifier);
+  const lowEnd = Math.round(adjustedFee * 0.9);
+  const highEnd = Math.round(adjustedFee * 1.1);
+
+  // Industry standard range (flat 25–33%, no complexity adjustment)
+  const industryLow = Math.round(adjustedP50 * 0.25);
+  const industryHigh = Math.round(adjustedP50 * 0.33);
+
+  // Effective percentage of base salary
+  const effectivePercent = Math.round((adjustedFee / adjustedP50) * 100);
+
+  return {
+    lowEnd,
+    highEnd,
+    adjustedFee,
+    baseFee,
+    basePercent: 25,
+    effectivePercent,
+    complexityMultiplier,
+    modifier,
+    adjustedP50,
+    industryLow,
+    industryHigh,
+    formattedRange: `$${(lowEnd / 1000).toFixed(0)}k – $${(highEnd / 1000).toFixed(0)}k`,
+    formattedFee: `$${(adjustedFee / 1000).toFixed(0)}k`
+  };
+}
+
 function useDebounce(value, delay = 150) {
   const [debouncedValue, setDebouncedValue] = useState(value);
   useEffect(() => {
@@ -941,6 +988,7 @@ ${benchmark?.regionalNotes ? `Regional Notes: ${benchmark.regionalNotes}` : ''}
       }
 
       const retentionRisk = calculateRetentionRisk(det);
+      const engagementFeeEstimate = calculateEngagementFee(det.score, adjustedBenchmark?.p50, formData);
 
       setResults({
         ...det,
@@ -950,7 +998,8 @@ ${benchmark?.regionalNotes ? `Regional Notes: ${benchmark.regionalNotes}` : ''}
         aiAnalysisSuccess: true,
         adjustedBenchmark,
         regionalMultiplier,
-        retentionRisk
+        retentionRisk,
+        engagementFeeEstimate
       });
 
     } catch (err) {
@@ -996,7 +1045,8 @@ ${benchmark?.regionalNotes ? `Regional Notes: ${benchmark.regionalNotes}` : ''}
         aiAnalysisSuccess: false,
         adjustedBenchmark,
         regionalMultiplier,
-        retentionRisk: calculateRetentionRisk(det)
+        retentionRisk: calculateRetentionRisk(det),
+        engagementFeeEstimate: calculateEngagementFee(det.score, adjustedBenchmark?.p50, formData)
       });
     }
 
@@ -1058,7 +1108,8 @@ ${benchmark?.regionalNotes ? `Regional Notes: ${benchmark.regionalNotes}` : ''}
       isSharedResult: true,
       adjustedBenchmark,
       regionalMultiplier,
-      retentionRisk: calculateRetentionRisk(det)
+      retentionRisk: calculateRetentionRisk(det),
+      engagementFeeEstimate: calculateEngagementFee(det.score, adjustedBenchmark?.p50, formData)
     });
     setStep(1);
   };
@@ -1177,7 +1228,8 @@ ${benchmark?.regionalNotes ? `Regional Notes: ${benchmark.regionalNotes}` : ''}
             regionalMultiplier: results.regionalMultiplier,
             confidence: results.confidence,
             retentionRisk: results.retentionRisk,
-            whatsNext: results.whatsNext || null
+            whatsNext: results.whatsNext || null,
+            engagementFeeEstimate: results.engagementFeeEstimate || null
           }
         })
       });
