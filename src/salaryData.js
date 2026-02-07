@@ -4131,9 +4131,11 @@ export const BENCHMARKS = {
     relocationWillingness: 0.75,
     backgroundCheckTimeline: 4,
     sourceBenchmarks: {
-      "Heidrick_2024_US": { min: 500000, max: 1200000 },
-      "Heidrick_2024_Europe": { min: 400000, max: 850000 }
-    }
+      "Heidrick_PEbacked_CEO_2024_US": { min: 500000, max: 1200000, percentiles: true },
+      "Heidrick_PEbacked_CEO_2024_Europe": { min: 400000, max: 850000, percentiles: true },
+      "Heidrick_FO_2025": { overlay: true, notes: "FO platform CEO/CIO comp overlay" }
+    },
+    dataCoverage: 'direct'
   },
   "Portfolio Company CFO": {
     category: "Portfolio Company - C-Suite",
@@ -4161,9 +4163,10 @@ export const BENCHMARKS = {
     relocationWillingness: 0.70,
     backgroundCheckTimeline: 3,
     sourceBenchmarks: {
-      "Heidrick_2024_US": { min: 325000, max: 600000 },
-      "Heidrick_2024_Europe": { min: 300000, max: 520000 }
-    }
+      "Heidrick_PEbacked_CFO_2024_US": { min: 325000, max: 600000, percentiles: true },
+      "Heidrick_PEbacked_CFO_2024_Europe": { min: 300000, max: 520000, percentiles: true }
+    },
+    dataCoverage: 'direct'
   },
   "Portfolio Company COO": {
     category: "Portfolio Company - C-Suite",
@@ -4191,9 +4194,11 @@ export const BENCHMARKS = {
     relocationWillingness: 0.68,
     backgroundCheckTimeline: 3,
     sourceBenchmarks: {
-      "Heidrick_2024_US": { min: 350000, max: 750000 },
-      "Heidrick_2024_Europe": { min: 330000, max: 680000 }
-    }
+      "Heidrick_PEbacked_CEO_2024": { anchor: true, notes: "CEO total cash as upper bound" },
+      "Heidrick_PEbacked_CFO_2024": { anchor: true, notes: "CFO percentiles as lower anchor" },
+      "CharlesAris_PE_PortOps_2024": { min: 350000, max: 750000, notes: "COO examples from completed searches" }
+    },
+    dataCoverage: 'indirect'
   },
   "Portfolio Company General Counsel": {
     category: "Portfolio Company - C-Suite",
@@ -4221,9 +4226,11 @@ export const BENCHMARKS = {
     relocationWillingness: 0.65,
     backgroundCheckTimeline: 4,
     sourceBenchmarks: {
-      "Heidrick_2024_US": { min: 280000, max: 480000 },
-      "Heidrick_2024_Europe": { min: 270000, max: 450000 }
-    }
+      "Heidrick_PEbacked_CFO_2024": { anchor: true, notes: "GC base slightly below CFO for similar complexity" },
+      "Botoff_FO_Exec_2024": { contextOnly: true, notes: "CLO/GC context from FO executive summary" },
+      "CharlesAris_PE_PortOps_2024": { notes: "GC/Chief Legal from Finance & Corporate searches" }
+    },
+    dataCoverage: 'indirect'
   },
   "Portfolio Company CHRO / Head of People": {
     category: "Portfolio Company - C-Suite",
@@ -4251,9 +4258,11 @@ export const BENCHMARKS = {
     relocationWillingness: 0.62,
     backgroundCheckTimeline: 3,
     sourceBenchmarks: {
-      "Heidrick_2024_US": { min: 220000, max: 400000 },
-      "Heidrick_2024_Europe": { min: 200000, max: 360000 }
-    }
+      "CharlesAris_PE_PortOps_2024": { min: 220000, max: 400000, notes: "Head of Talent / HR roles from portfolio ops offers" },
+      "Botoff_FO_Exec_2024": { contextOnly: true, notes: "Exec incentive design context" },
+      "Heidrick_FO_2025": { contextOnly: true, notes: "HR/People role breakdowns if available" }
+    },
+    dataCoverage: 'indirect'
   },
 
   // ==========================================
@@ -4285,9 +4294,11 @@ export const BENCHMARKS = {
     relocationWillingness: 0.40,
     backgroundCheckTimeline: 3,
     sourceBenchmarks: {
-      "SpencerStuart_2024_SP500": { min: 280000, max: 380000 },
-      "Heidrick_2024_US_Private": { min: 100000, max: 280000 }
-    }
+      "SpencerStuart_SP500_2025": { avgTotal: 336352, avgRetainer: 146605, percentiles: true, notes: "S&P 500 director comp; private FO portfolio cos scaled 0.4-0.7x" },
+      "SpencerStuart_SP500_2025_Sectors": { bySector: true, notes: "Average comp per non-employee director by sector" },
+      "SpencerStuart_SP500_2025_Committees": { notes: "Audit/Comp/Nom committee retainers for members and chairs" }
+    },
+    dataCoverage: 'direct'
   },
   "Board Chair (Independent)": {
     category: "Portfolio Company - Board",
@@ -4315,9 +4326,10 @@ export const BENCHMARKS = {
     relocationWillingness: 0.35,
     backgroundCheckTimeline: 3,
     sourceBenchmarks: {
-      "SpencerStuart_2024_SP500": { min: 450000, max: 560000 },
-      "Heidrick_2024_US_Private": { min: 170000, max: 450000 }
-    }
+      "SpencerStuart_SP500_2025": { chairPremium: 172867, chairPremiumRange: "40000-500000", notes: "Avg premium paid to independent board chairs" },
+      "SpencerStuart_SP500_2025_Derived": { derivation: "total_chair = avg_director_comp + chair_premium", scaleFactor: "0.4-0.7x for private/FO portfolio companies" }
+    },
+    dataCoverage: 'direct'
   },
 
   // ==========================================
@@ -4349,9 +4361,10 @@ export const BENCHMARKS = {
     relocationWillingness: 0.72,
     backgroundCheckTimeline: 3,
     sourceBenchmarks: {
-      "Heidrick_2024_US": { min: 250000, max: 700000 },
-      "Heidrick_2024_Europe": { min: 230000, max: 650000 }
-    }
+      "Heidrick_NA_PE_OpProf_2024": { min: 250000, max: 700000, percentiles: true, notes: "Operating Partner by firm AUM and fund AUM quartiles" },
+      "CharlesAris_PE_PortOps_2024": { min: 250000, max: 650000, notes: "Operating Partner by latest fund size; includes carry at 2x" }
+    },
+    dataCoverage: 'direct'
   },
   "Investment Director (Portfolio Oversight)": {
     category: "Portfolio Company - Operations",
@@ -4379,9 +4392,11 @@ export const BENCHMARKS = {
     relocationWillingness: 0.70,
     backgroundCheckTimeline: 3,
     sourceBenchmarks: {
-      "Heidrick_2024_US": { min: 300000, max: 800000 },
-      "Heidrick_2024_Europe": { min: 280000, max: 750000 }
-    }
+      "external_required": true,
+      "recommended": ["Heidrick_NA_PE_Investment_Professional_2024", "Preqin_Private_Capital_Comp_2024", "Thelander_AON_Investment_Professional"],
+      "anchoring": "Use mid-level PE Principal/Director data; discount for FO if mandate less deal-heavy"
+    },
+    dataCoverage: 'missing'
   },
   "Head of Portfolio Operations": {
     category: "Portfolio Company - Operations",
@@ -4409,9 +4424,10 @@ export const BENCHMARKS = {
     relocationWillingness: 0.68,
     backgroundCheckTimeline: 4,
     sourceBenchmarks: {
-      "Heidrick_2024_US": { min: 350000, max: 850000 },
-      "Heidrick_2024_Europe": { min: 320000, max: 800000 }
-    }
+      "Heidrick_NA_PE_OpProf_2024": { min: 350000, max: 850000, percentiles: true, notes: "Firm leader / head of portfolio ops rows by AUM" },
+      "CharlesAris_PE_PortOps_2024": { min: 320000, max: 800000, notes: "Director/Principal and Operating Partner by fund size; includes carry and co-invest" }
+    },
+    dataCoverage: 'direct'
   },
 
   // ==========================================
@@ -4443,9 +4459,10 @@ export const BENCHMARKS = {
     relocationWillingness: 0.58,
     backgroundCheckTimeline: 2,
     sourceBenchmarks: {
-      "Heidrick_2024_US": { min: 180000, max: 350000 },
-      "Heidrick_2024_Europe": { min: 165000, max: 320000 }
-    }
+      "Heidrick_PEbacked_CFO_2024": { anchor: true, adjustmentFactor: "0.6-0.8x CFO base", percentiles: true },
+      "CharlesAris_PE_PortOps_2024": { min: 180000, max: 350000, notes: "VP FP&A and Director FP&A from Finance completed searches" }
+    },
+    dataCoverage: 'indirect'
   },
   "VP Operations (Portfolio)": {
     category: "Portfolio Company - Functional Leadership",
@@ -4473,9 +4490,10 @@ export const BENCHMARKS = {
     relocationWillingness: 0.60,
     backgroundCheckTimeline: 2,
     sourceBenchmarks: {
-      "Heidrick_2024_US": { min: 200000, max: 400000 },
-      "Heidrick_2024_Europe": { min: 185000, max: 370000 }
-    }
+      "Heidrick_NA_PE_OpProf_2024": { min: 200000, max: 400000, notes: "VP / Operating Principal rows by fund AUM quartiles" },
+      "CharlesAris_PE_PortOps_2024": { notes: "Director of Operations and VP Manufacturing examples from completed searches" }
+    },
+    dataCoverage: 'indirect'
   },
   "VP Sales / CRO (Portfolio)": {
     category: "Portfolio Company - Functional Leadership",
@@ -4503,9 +4521,10 @@ export const BENCHMARKS = {
     relocationWillingness: 0.65,
     backgroundCheckTimeline: 2,
     sourceBenchmarks: {
-      "Heidrick_2024_US": { min: 250000, max: 650000 },
-      "Heidrick_2024_Europe": { min: 230000, max: 580000 }
-    }
+      "CharlesAris_PE_PortOps_2024": { min: 250000, max: 650000, notes: "CRO, VP Sales, VP Sales & Marketing from Go-to-Market completed searches" },
+      "external_recommended": ["AlexanderGroup_Sales_Leadership", "Mercer_Radford_Commercial"]
+    },
+    dataCoverage: 'indirect'
   },
   "VP Technology / CTO (Portfolio)": {
     category: "Portfolio Company - Functional Leadership",
@@ -4533,9 +4552,10 @@ export const BENCHMARKS = {
     relocationWillingness: 0.68,
     backgroundCheckTimeline: 3,
     sourceBenchmarks: {
-      "Heidrick_2024_US": { min: 250000, max: 550000 },
-      "Heidrick_2024_Europe": { min: 220000, max: 480000 }
-    }
+      "CharlesAris_PE_PortOps_2024": { min: 250000, max: 550000, notes: "CTO and Director of Engineering from Strategy/Technology completed searches" },
+      "external_recommended": ["Radford_Tech_Survey", "Carta_OptionImpact_CTO_Equity"]
+    },
+    dataCoverage: 'indirect'
   },
   "VP Marketing / CMO (Portfolio)": {
     category: "Portfolio Company - Functional Leadership",
@@ -4563,9 +4583,10 @@ export const BENCHMARKS = {
     relocationWillingness: 0.56,
     backgroundCheckTimeline: 2,
     sourceBenchmarks: {
-      "Heidrick_2024_US": { min: 220000, max: 450000 },
-      "Heidrick_2024_Europe": { min: 200000, max: 410000 }
-    }
+      "CharlesAris_PE_PortOps_2024": { min: 220000, max: 450000, notes: "CMO and VP Marketing from Go-to-Market completed searches" },
+      "external_recommended": ["Mercer_Radford_Marketing_Exec"]
+    },
+    dataCoverage: 'indirect'
   }
 };
 

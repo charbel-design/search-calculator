@@ -2,7 +2,7 @@ import React from 'react';
 import {
   MapPin, Clock, DollarSign, Target, AlertCircle, CheckCircle, ArrowRight, Info, Zap, ChevronDown, Search, Briefcase, Shield, Anchor, Plane
 } from 'lucide-react';
-import { BENCHMARKS } from '../salaryData';
+import { BENCHMARKS, CATEGORY_GROUPS } from '../salaryData';
 import { CustomSelect } from './CustomSelect';
 
 const LOADING_FACTS = [
@@ -180,16 +180,36 @@ export function FormSteps({
                 )}
                 {showPositionSuggestions && filteredPositions.length > 0 && (
                   <div className="absolute z-20 w-full mt-1 bg-white rounded-btn shadow-elevated max-h-64 overflow-y-auto custom-scrollbar">
-                    {filteredPositions.map((role, idx) => (
-                      <button key={role} type="button"
-                        onClick={() => { setFormData({ ...formData, positionType: role }); setPositionSearch(''); setShowPositionSuggestions(false); setHighlightedPositionIndex(-1); }}
-                        onMouseEnter={() => setHighlightedPositionIndex(idx)}
-                        className={`w-full text-left px-4 py-2.5 text-sm flex items-center justify-between transition-colors duration-100`}
-                        style={idx === highlightedPositionIndex ? { backgroundColor: '#2814ff', color: '#ffffff' } : { color: '#1d1d1f' }}>
-                        <span>{role}</span>
-                        {BENCHMARKS[role] && <span className="text-xs ml-2 tabular-nums" style={{ opacity: idx === highlightedPositionIndex ? 0.8 : 0.5 }}>${BENCHMARKS[role].p50.toLocaleString()}</span>}
-                      </button>
-                    ))}
+                    {(() => {
+                      const groupLabels = { "Family Office - Corporate": "Family Office", "Portfolio Company": "Portfolio Company", "Private Service": "Private Service & Household" };
+                      const catToGroup = {};
+                      for (const [gName, subCats] of Object.entries(CATEGORY_GROUPS)) {
+                        for (const cat of subCats) catToGroup[cat] = gName;
+                      }
+                      let lastGroup = null;
+                      return filteredPositions.map((role, idx) => {
+                        const group = catToGroup[BENCHMARKS[role]?.category] || null;
+                        const showHeader = group && group !== lastGroup;
+                        if (showHeader) lastGroup = group;
+                        return (
+                          <React.Fragment key={role}>
+                            {showHeader && (
+                              <div className="px-4 py-2 sticky top-0 bg-white z-10" style={{ borderBottom: '1px solid #eeeeff' }}>
+                                <span className="text-[10px] font-semibold uppercase" style={{ color: '#2814ff', letterSpacing: '0.08em' }}>{groupLabels[group] || group}</span>
+                              </div>
+                            )}
+                            <button type="button"
+                              onClick={() => { setFormData({ ...formData, positionType: role }); setPositionSearch(''); setShowPositionSuggestions(false); setHighlightedPositionIndex(-1); }}
+                              onMouseEnter={() => setHighlightedPositionIndex(idx)}
+                              className="w-full text-left px-4 py-2.5 text-sm flex items-center justify-between transition-colors duration-100"
+                              style={idx === highlightedPositionIndex ? { backgroundColor: '#2814ff', color: '#ffffff' } : { color: '#1d1d1f' }}>
+                              <span>{role}</span>
+                              {BENCHMARKS[role] && <span className="text-xs ml-2 tabular-nums" style={{ opacity: idx === highlightedPositionIndex ? 0.8 : 0.5 }}>${BENCHMARKS[role].p50.toLocaleString()}</span>}
+                            </button>
+                          </React.Fragment>
+                        );
+                      });
+                    })()}
                   </div>
                 )}
                 {showPositionSuggestions && positionSearch && filteredPositions.length === 0 && (

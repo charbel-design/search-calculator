@@ -99,7 +99,21 @@ export function useSearchEngine() {
 
   // Memos
   const positionsByCategory = useMemo(() => getPositionsByCategory(), []);
-  const commonRoles = useMemo(() => getAllPositionNames(), []);
+
+  // Sort roles by top-level group: Family Office → Portfolio Company → Private Service
+  const commonRoles = useMemo(() => {
+    const allRoles = getAllPositionNames();
+    const groupOrder = Object.keys(CATEGORY_GROUPS);
+    const categoryGroupIndex = {};
+    groupOrder.forEach((groupName, gi) => {
+      (CATEGORY_GROUPS[groupName] || []).forEach(cat => { categoryGroupIndex[cat] = gi; });
+    });
+    return allRoles.sort((a, b) => {
+      const giA = categoryGroupIndex[BENCHMARKS[a]?.category] ?? 99;
+      const giB = categoryGroupIndex[BENCHMARKS[b]?.category] ?? 99;
+      return giA - giB;
+    });
+  }, []);
 
   const filteredPositions = useMemo(() => {
     if (!positionSearch.trim()) return commonRoles;
