@@ -68,7 +68,7 @@ const SearchIntelligenceEngine = () => {
             dealStageOptions={engine.dealStageOptions}
             governanceOptions={engine.governanceOptions}
             coInvestorOptions={engine.coInvestorOptions}
-            travelOptions={engine.travelOptions}
+            travelOptions={engine.activeTravelOptions}
             corporateLanguageShortList={engine.corporateLanguageShortList}
             showLanguages={engine.showLanguages}
             setShowLanguages={engine.setShowLanguages}
@@ -101,7 +101,7 @@ const SearchIntelligenceEngine = () => {
             calculateWhatIfScore={engine.calculateWhatIfScore}
             timelineOptions={engine.timelineOptions}
             budgetRanges={engine.budgetRanges}
-            travelOptions={engine.travelOptions}
+            travelOptions={engine.activeTravelOptions}
             discretionLevels={engine.discretionLevels}
             showShareModal={engine.showShareModal}
             setShowShareModal={engine.setShowShareModal}

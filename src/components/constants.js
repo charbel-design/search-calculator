@@ -130,9 +130,34 @@ export const coInvestorOptions = [
 
 export const corporateLanguageShortList = ['Mandarin', 'Spanish', 'German', 'Japanese', 'Arabic', 'French'];
 
+// Private Service & Household roles — travel with the principal / family
+export const privateServiceTravelOptions = [
+  { value: 'minimal', label: 'Minimal (Local only)', points: 0 },
+  { value: 'occasional', label: 'Occasional (1-2 trips/month)', points: 3 },
+  { value: 'frequent', label: 'Frequent (Weekly travel)', points: 8 },
+  { value: 'heavy-rotation', label: 'Heavy / Rotation (Traveling with principal)', points: 15 }
+];
+
+// Family Office corporate roles — multi-property / multi-entity oversight
+export const corporateTravelOptions = [
+  { value: 'minimal', label: 'Minimal (Single office)', points: 0 },
+  { value: 'occasional', label: 'Occasional (1-2 trips/month)', points: 3 },
+  { value: 'frequent', label: 'Frequent (Multi-office / Weekly)', points: 8 },
+  { value: 'heavy-rotation', label: 'Extensive (50%+ travel across entities)', points: 15 }
+];
+
+// Portfolio Company roles — board meetings, site visits, deal travel
+export const portfolioTravelOptions = [
+  { value: 'minimal', label: 'Minimal (Single site)', points: 0 },
+  { value: 'occasional', label: 'Occasional (Monthly board / site visit)', points: 3 },
+  { value: 'frequent', label: 'Frequent (Weekly, multi-site)', points: 8 },
+  { value: 'heavy-rotation', label: 'Extensive (50%+ deal & portfolio travel)', points: 15 }
+];
+
+// Default fallback (generic)
 export const travelOptions = [
   { value: 'minimal', label: 'Minimal (Local only)', points: 0 },
   { value: 'occasional', label: 'Occasional (1-2 trips/month)', points: 3 },
   { value: 'frequent', label: 'Frequent (Weekly travel)', points: 8 },
-  { value: 'heavy-rotation', label: 'Heavy/Rotation (Following principal)', points: 15 }
+  { value: 'heavy-rotation', label: 'Extensive (50%+ travel)', points: 15 }
 ];

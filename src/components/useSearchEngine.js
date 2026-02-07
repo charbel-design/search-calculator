@@ -20,6 +20,9 @@ import {
   governanceOptions,
   coInvestorOptions,
   travelOptions,
+  privateServiceTravelOptions,
+  corporateTravelOptions,
+  portfolioTravelOptions,
   corporateLanguageShortList,
   APP_VERSION
 } from './constants';
@@ -146,6 +149,8 @@ export function useSearchEngine() {
   }, [formData.positionType]);
 
   const budgetRanges = isPortfolioRole ? portfolioBudgetRanges : isCorporateRole ? corporateBudgetRanges : householdBudgetRanges;
+
+  const activeTravelOptions = isPortfolioRole ? portfolioTravelOptions : isCorporateRole ? corporateTravelOptions : privateServiceTravelOptions;
 
   const debouncedLocation = useDebounce(formData.location, 150);
 
@@ -423,7 +428,7 @@ export function useSearchEngine() {
 
     // Travel
     const activeTravelValue = travelOverride !== null ? travelOverride : formData.travelRequirement;
-    const travelOpt = travelOptions.find(t => t.value === activeTravelValue);
+    const travelOpt = activeTravelOptions.find(t => t.value === activeTravelValue);
     if (travelOpt?.points > 0) {
       points += travelOpt.points;
       drivers.push({ factor: "Travel", points: travelOpt.points, rationale: travelOpt.label });
@@ -1233,7 +1238,7 @@ ${benchmark?.regionalNotes ? `Regional Notes: ${benchmark.regionalNotes}` : ''}
     householdCertificationOptions, corporateCertificationOptions, corporateLanguageShortList,
     portfolioCertificationOptions, portfolioLanguageOptions,
     dealStageOptions, governanceOptions, coInvestorOptions,
-    travelOptions, CATEGORY_GROUPS, BENCHMARKS,
+    travelOptions, activeTravelOptions, CATEGORY_GROUPS, BENCHMARKS,
     // Functions
     handleInputChange, handleMultiSelect, handleLocationKeyDown, validateAndWarn, validateStep,
     nextStep, calculateDeterministicScore, calculateComplexity, calculateComplexityFromShare,
