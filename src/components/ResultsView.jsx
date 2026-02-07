@@ -3,12 +3,12 @@ import {
   Share2, Mail, X, AlertCircle, CheckCircle, DollarSign, Clock, TrendingUp, Users, Target, Home, Car, Heart,
   SlidersHorizontal, Layers, Lightbulb, ArrowRight, ArrowLeftRight, Brain, GitBranch, Gauge, BarChart3,
   AlertTriangle, Info, RefreshCw, ArrowLeftCircle, ChevronDown, Compass, MessageCircle, FileText, Shield,
-  ClipboardCopy, Loader2, FileEdit, Globe, Lock, Award, Plane, RotateCcw, Download
+  ClipboardCopy, Loader2, FileEdit, Globe, Lock, Award, Plane, RotateCcw
 } from 'lucide-react';
 import { sanitizeForPrompt } from './constants';
 import { ShareModal, EmailModal } from './Modals';
 import { getComplexityColor } from './constants';
-import { generateSearchReport } from './generatePDF';
+
 import { CustomSelect } from './CustomSelect';
 import { SALARY_DATA_META } from '../salaryData';
 
@@ -1277,12 +1277,6 @@ Write the JD following the system prompt structure exactly. Use the candidate ps
                 {jdLoading ? 'Generating...' : jdContent ? 'Regenerate JD' : 'Generate Job Description'}
               </button>
             )}
-            <button onClick={() => generateSearchReport(results, formData)}
-              className="flex items-center gap-2 px-4 py-2.5 rounded-btn text-xs font-medium transition-all duration-200 hover:opacity-80 border"
-              style={{ backgroundColor: '#ffffff', borderColor: '#d2d2d7', color: '#6e6e73' }}
-              aria-label="Download a professional PDF report">
-              <Download className="w-3.5 h-3.5" />PDF Report
-            </button>
             <button onClick={() => { setEmailForReport(formData.email || ''); setShowEmailModal(true); setEmailSent(false); }}
               className="flex items-center gap-2 px-4 py-2.5 rounded-btn text-xs font-medium transition-all duration-200 hover:opacity-80 border"
               style={{ backgroundColor: '#ffffff', borderColor: '#d2d2d7', color: '#6e6e73' }}
