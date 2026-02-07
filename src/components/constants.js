@@ -78,6 +78,16 @@ export const corporateBudgetRanges = [
   { value: 'not-sure', label: 'Not Sure / Need Guidance', midpoint: null }
 ];
 
+export const portfolioBudgetRanges = [
+  { value: 'under-300k', label: 'Under $300k', midpoint: 250000 },
+  { value: '300k-500k', label: '$300k - $500k', midpoint: 400000 },
+  { value: '500k-750k', label: '$500k - $750k', midpoint: 625000 },
+  { value: '750k-1m', label: '$750k - $1M', midpoint: 875000 },
+  { value: '1m-1.5m', label: '$1M - $1.5M', midpoint: 1250000 },
+  { value: 'over-1.5m', label: 'Over $1.5M', midpoint: 1750000 },
+  { value: 'not-sure', label: 'Not Sure / Need Guidance', midpoint: null }
+];
+
 export const discretionLevels = [
   { value: 'standard', label: 'Standard', points: 0, description: 'Normal confidentiality' },
   { value: 'elevated', label: 'Elevated - NDA Required', points: 5, description: 'Formal NDA, limited disclosure' },
@@ -92,6 +102,31 @@ export const corporateLanguageOptions = ['English (Native/Fluent)', 'Mandarin', 
 export const householdCertificationOptions = ['STCW (Maritime)', 'CPR/First Aid', 'Firearms License', 'LEOSA', 'Commercial Driver (CDL)', 'Culinary Degree', 'Security Clearance', 'Child Development (CDA)', 'Sommelier (CMS)', 'WSET Level 3/4', 'Certified Wine Educator', 'Cicerone (Beer)', 'ServSafe', 'ENG1 Medical', 'PEC (Yacht)', 'RYA Yachtmaster', 'Butler Training (Starkey/IICS)', 'Nursing License (RN/LPN)', 'Montessori Certification', 'Private Pilot License', 'Close Protection (SIA)', 'AED/BLS Certified', 'Estate Management Certification'];
 
 export const corporateCertificationOptions = ['CFA (Chartered Financial Analyst)', 'Series 7 (General Securities)', 'Series 65/66 (Investment Adviser)', 'CPA (Certified Public Accountant)', 'CFP (Certified Financial Planner)', 'CAIA (Alternative Investments)', 'CTFA (Trust & Fiduciary)', 'CIMA (Investment Management)', 'MBA', 'JD (Law Degree)', 'PMP (Project Management)', 'CISSP (Cybersecurity)', 'FRM (Financial Risk Manager)', 'CMA (Management Accounting)', 'EA (Enrolled Agent)', 'CEBS (Employee Benefits)', 'ChFC (Chartered Financial Consultant)', 'CLU (Chartered Life Underwriter)', 'AAMS (Asset Management)', 'CPWA (Private Wealth Advisor)'];
+
+export const portfolioCertificationOptions = ['MBA (Top-tier)', 'CPA (Certified Public Accountant)', 'CFA (Chartered Financial Analyst)', 'JD (Law Degree)', 'Board Director Certification (NACD/ICD)', 'PE Operating Partner Experience', 'Prior CEO/CFO of PE-backed Company', 'Big 4 Background', 'Management Consulting (MBB)', 'Industry-Specific License', 'Six Sigma / Lean Certification', 'PMP (Project Management)', 'CISSP (Cybersecurity)', 'CMA (Management Accounting)', 'FRM (Financial Risk Manager)'];
+
+export const portfolioLanguageOptions = ['English (Native/Fluent)', 'Mandarin', 'Spanish', 'French', 'German', 'Japanese', 'Arabic', 'Portuguese', 'Korean', 'Italian', 'Hindi', 'Dutch', 'Russian', 'Cantonese', 'Swedish', 'Hebrew', 'Singaporean English', 'Thai', 'Swiss German', 'Bahasa'];
+
+export const dealStageOptions = [
+  { value: 'turnaround', label: 'Turnaround / Distressed', points: 15, description: 'Restructuring, cost reduction, lender negotiation' },
+  { value: 'growth', label: 'Growth / Expansion', points: 8, description: 'Scaling operations, new markets, acquisitions' },
+  { value: 'mature', label: 'Mature / Cash-Flowing', points: 3, description: 'Stable operations, yield-focused, stewardship' },
+  { value: 'pre-acquisition', label: 'Pre-Acquisition (No team yet)', points: 12, description: 'Building leadership before or at deal close' }
+];
+
+export const governanceOptions = [
+  { value: 'single-principal', label: 'Single Decision-Maker', points: 5, description: 'Patriarch/matriarch has final say' },
+  { value: 'family-council', label: 'Family Council / Board', points: 10, description: 'Multiple family stakeholders to align' },
+  { value: 'next-gen', label: 'Next-Gen Led', points: 12, description: 'Generational transition, modernization push' },
+  { value: 'professional', label: 'Professional Board', points: 3, description: 'Independent board, institutional governance' }
+];
+
+export const coInvestorOptions = [
+  { value: 'solo-fo', label: 'Solo Family Office', points: 0, description: 'Single family, full control' },
+  { value: 'fo-club', label: 'FO Club Deal (Multiple Families)', points: 8, description: 'Multiple families co-investing' },
+  { value: 'fo-pe', label: 'FO + Institutional PE', points: 12, description: 'Family office alongside PE fund' },
+  { value: 'fo-strategic', label: 'FO + Strategic Partner', points: 5, description: 'Family office with industry partner' }
+];
 
 export const corporateLanguageShortList = ['Mandarin', 'Spanish', 'German', 'Japanese', 'Arabic', 'French'];
 

@@ -55,6 +55,7 @@ const SearchIntelligenceEngine = () => {
             isCorporateRole={engine.isCorporateRole}
             isMaritimeRole={engine.isMaritimeRole}
             isAviationRole={engine.isAviationRole}
+            isPortfolioRole={engine.isPortfolioRole}
             budgetRanges={engine.budgetRanges}
             timelineOptions={engine.timelineOptions}
             discretionLevels={engine.discretionLevels}
@@ -62,6 +63,11 @@ const SearchIntelligenceEngine = () => {
             corporateLanguageOptions={engine.corporateLanguageOptions}
             householdCertificationOptions={engine.householdCertificationOptions}
             corporateCertificationOptions={engine.corporateCertificationOptions}
+            portfolioCertificationOptions={engine.portfolioCertificationOptions}
+            portfolioLanguageOptions={engine.portfolioLanguageOptions}
+            dealStageOptions={engine.dealStageOptions}
+            governanceOptions={engine.governanceOptions}
+            coInvestorOptions={engine.coInvestorOptions}
             travelOptions={engine.travelOptions}
             corporateLanguageShortList={engine.corporateLanguageShortList}
             showLanguages={engine.showLanguages}

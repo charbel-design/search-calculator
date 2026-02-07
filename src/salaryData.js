@@ -167,6 +167,12 @@ export const CATEGORY_GROUPS = {
     "Family Office - Operations & Finance",
     "Family Office - Support"
   ],
+  "Portfolio Company": [
+    "Portfolio Company - C-Suite",
+    "Portfolio Company - Board",
+    "Portfolio Company - Operations",
+    "Portfolio Company - Functional Leadership"
+  ],
   "Private Service": [
     "Estate Leadership",
     "Personal & Administrative",
@@ -189,6 +195,11 @@ export const CATEGORIES = [
   "Family Office - Investment",
   "Family Office - Operations & Finance",
   "Family Office - Support",
+  // Portfolio Company
+  "Portfolio Company - C-Suite",
+  "Portfolio Company - Board",
+  "Portfolio Company - Operations",
+  "Portfolio Company - Functional Leadership",
   // Private Service
   "Estate Leadership",
   "Personal & Administrative",
@@ -4089,6 +4100,472 @@ export const BENCHMARKS = {
     compensationStructure: { basePercent: 0.65, bonusPercent: 0.22, benefitsPercent: 0.13, signingBonusFrequency: 0.4, signingBonusRange: "20k-50k" },
     relocationWillingness: 0.42,
     backgroundCheckTimeline: 3
+  },
+
+  // ==========================================
+  // PORTFOLIO COMPANY - C-SUITE
+  // ==========================================
+  "Portfolio Company CEO / Managing Director": {
+    category: "Portfolio Company - C-Suite",
+    p25: 550000, p50: 900000, p75: 1100000,
+    benefits: {
+      housing: "Often subsidized or included in executive package; relocation assistance common",
+      vehicle: "Executive vehicle allowance or company car typical",
+      health: "Comprehensive health, dental, vision; executive health screening often included",
+      bonus: "25-35% of base, tied to revenue/EBITDA/exit milestones"
+    },
+    scarcity: 9,
+    regionalNotes: "US markets command premium; Europe avg total cash ~$642k vs US ~$900k. Middle East and Singapore emerging.",
+    trends: "Increasing demand for CEOs with operational improvement track record. Equity upside expectations rising post-2021 exits.",
+    timeToFill: 20,
+    candidatePoolSize: "40-80",
+    turnover: { avgTenure: 4, annualTurnover: 0.20 },
+    demandTrend: { direction: "growing", yoyChange: 0.12 },
+    offerAcceptanceRate: 0.82,
+    counterOfferRate: 0.35,
+    sourcingChannels: { referral: 0.20, agency: 0.65, direct: 0.10, internal: 0.05 },
+    salaryGrowthRate: 0.08,
+    typicalExperience: { min: 15, typical: 20 },
+    retentionRisk: { firstYearAttrition: 0.08, topReasons: ['misaligned expectations on equity upside', 'governance conflicts with family sponsor', 'cultural mismatch with board'] },
+    compensationStructure: { basePercent: 0.40, bonusPercent: 0.53, benefitsPercent: 0.07, signingBonusFrequency: 0.75, signingBonusRange: "100k-400k" },
+    relocationWillingness: 0.75,
+    backgroundCheckTimeline: 4,
+    sourceBenchmarks: {
+      "Heidrick_2024_US": { min: 500000, max: 1200000 },
+      "Heidrick_2024_Europe": { min: 400000, max: 850000 }
+    }
+  },
+  "Portfolio Company CFO": {
+    category: "Portfolio Company - C-Suite",
+    p25: 350000, p50: 463000, p75: 580000,
+    benefits: {
+      housing: "Relocation package typical for external hires",
+      vehicle: "Vehicle allowance or company car",
+      health: "Standard executive health, dental, vision coverage",
+      bonus: "40-50% of base, tied to EBITDA, leverage, and cashflow metrics"
+    },
+    scarcity: 8,
+    regionalNotes: "Mid-market CFOs command $325-450k base. Large platform companies higher. UK/Europe ~20-30% below US.",
+    trends: "Increasing demand for digital finance and data analytics capabilities. PE-proven CFOs at premium.",
+    timeToFill: 15,
+    candidatePoolSize: "60-140",
+    turnover: { avgTenure: 4.5, annualTurnover: 0.18 },
+    demandTrend: { direction: "growing", yoyChange: 0.10 },
+    offerAcceptanceRate: 0.78,
+    counterOfferRate: 0.28,
+    sourcingChannels: { referral: 0.20, agency: 0.60, direct: 0.12, internal: 0.08 },
+    salaryGrowthRate: 0.07,
+    typicalExperience: { min: 12, typical: 18 },
+    retentionRisk: { firstYearAttrition: 0.10, topReasons: ['equity disappointment at exit', 'reporting structure changes post-acquisition', 'operational stress from PE KPIs'] },
+    compensationStructure: { basePercent: 0.55, bonusPercent: 0.38, benefitsPercent: 0.07, signingBonusFrequency: 0.60, signingBonusRange: "50k-150k" },
+    relocationWillingness: 0.70,
+    backgroundCheckTimeline: 3,
+    sourceBenchmarks: {
+      "Heidrick_2024_US": { min: 325000, max: 600000 },
+      "Heidrick_2024_Europe": { min: 300000, max: 520000 }
+    }
+  },
+  "Portfolio Company COO": {
+    category: "Portfolio Company - C-Suite",
+    p25: 400000, p50: 550000, p75: 700000,
+    benefits: {
+      housing: "Relocation assistance for external candidates",
+      vehicle: "Vehicle allowance",
+      health: "Executive health coverage",
+      bonus: "40-75% of base, tied to operational KPIs (margin, productivity, supply chain)"
+    },
+    scarcity: 7,
+    regionalNotes: "Base typically 80-110% of CFO base. Operational focus commands premium in manufacturing/logistics.",
+    trends: "High demand for supply chain and operational improvement expertise. Lean/Six Sigma still valued.",
+    timeToFill: 17,
+    candidatePoolSize: "50-110",
+    turnover: { avgTenure: 4, annualTurnover: 0.22 },
+    demandTrend: { direction: "growing", yoyChange: 0.13 },
+    offerAcceptanceRate: 0.75,
+    counterOfferRate: 0.32,
+    sourcingChannels: { referral: 0.20, agency: 0.60, direct: 0.12, internal: 0.08 },
+    salaryGrowthRate: 0.075,
+    typicalExperience: { min: 14, typical: 19 },
+    retentionRisk: { firstYearAttrition: 0.12, topReasons: ['conflicting operational direction with CEO', 'limited strategic authority', 'inadequate budget for transformation initiatives'] },
+    compensationStructure: { basePercent: 0.52, bonusPercent: 0.40, benefitsPercent: 0.08, signingBonusFrequency: 0.65, signingBonusRange: "75k-200k" },
+    relocationWillingness: 0.68,
+    backgroundCheckTimeline: 3,
+    sourceBenchmarks: {
+      "Heidrick_2024_US": { min: 350000, max: 750000 },
+      "Heidrick_2024_Europe": { min: 330000, max: 680000 }
+    }
+  },
+  "Portfolio Company General Counsel": {
+    category: "Portfolio Company - C-Suite",
+    p25: 310000, p50: 380000, p75: 450000,
+    benefits: {
+      housing: "Relocation package often provided",
+      vehicle: "Vehicle allowance",
+      health: "Comprehensive coverage including D&O and tail coverage",
+      bonus: "30-60% of base, tied to legal compliance and transaction metrics"
+    },
+    scarcity: 7,
+    regionalNotes: "Base range $275-420k depending on company size. Regulatory complexity drives higher comp.",
+    trends: "Increasing demand for M&A and regulatory expertise. Privacy/ESG compliance now baseline requirement.",
+    timeToFill: 14,
+    candidatePoolSize: "45-100",
+    turnover: { avgTenure: 5, annualTurnover: 0.16 },
+    demandTrend: { direction: "growing", yoyChange: 0.11 },
+    offerAcceptanceRate: 0.76,
+    counterOfferRate: 0.30,
+    sourcingChannels: { referral: 0.25, agency: 0.55, direct: 0.15, internal: 0.05 },
+    salaryGrowthRate: 0.065,
+    typicalExperience: { min: 13, typical: 18 },
+    retentionRisk: { firstYearAttrition: 0.09, topReasons: ['unrealistic deal timelines from PE sponsors', 'understaffing in legal function', 'limited advancement to board level'] },
+    compensationStructure: { basePercent: 0.58, bonusPercent: 0.35, benefitsPercent: 0.07, signingBonusFrequency: 0.55, signingBonusRange: "40k-120k" },
+    relocationWillingness: 0.65,
+    backgroundCheckTimeline: 4,
+    sourceBenchmarks: {
+      "Heidrick_2024_US": { min: 280000, max: 480000 },
+      "Heidrick_2024_Europe": { min: 270000, max: 450000 }
+    }
+  },
+  "Portfolio Company CHRO / Head of People": {
+    category: "Portfolio Company - C-Suite",
+    p25: 255000, p50: 310000, p75: 375000,
+    benefits: {
+      housing: "Relocation assistance common",
+      vehicle: "Vehicle allowance",
+      health: "Standard executive health coverage; mental health/wellness programs emphasized",
+      bonus: "30-60% of base, tied to cultural and talent metrics"
+    },
+    scarcity: 6,
+    regionalNotes: "Smaller talent pools in Europe; lower base expectations. Tech companies command premium.",
+    trends: "Rising demand for organizational design and change management expertise in PE-backed contexts.",
+    timeToFill: 13,
+    candidatePoolSize: "80-180",
+    turnover: { avgTenure: 3.5, annualTurnover: 0.25 },
+    demandTrend: { direction: "growing", yoyChange: 0.14 },
+    offerAcceptanceRate: 0.72,
+    counterOfferRate: 0.25,
+    sourcingChannels: { referral: 0.22, agency: 0.52, direct: 0.18, internal: 0.08 },
+    salaryGrowthRate: 0.07,
+    typicalExperience: { min: 11, typical: 16 },
+    retentionRisk: { firstYearAttrition: 0.14, topReasons: ['conflict between PE cost reduction and culture building', 'inadequate HR systems and technology', 'limited executive presence in decision-making'] },
+    compensationStructure: { basePercent: 0.60, bonusPercent: 0.33, benefitsPercent: 0.07, signingBonusFrequency: 0.50, signingBonusRange: "35k-100k" },
+    relocationWillingness: 0.62,
+    backgroundCheckTimeline: 3,
+    sourceBenchmarks: {
+      "Heidrick_2024_US": { min: 220000, max: 400000 },
+      "Heidrick_2024_Europe": { min: 200000, max: 360000 }
+    }
+  },
+
+  // ==========================================
+  // PORTFOLIO COMPANY - BOARD
+  // ==========================================
+  "Board Director (Independent)": {
+    category: "Portfolio Company - Board",
+    p25: 120000, p50: 180000, p75: 240000,
+    benefits: {
+      housing: "None typically; travel expenses reimbursed",
+      vehicle: "None typically",
+      health: "Directors & Officers liability insurance always included",
+      bonus: "None; equity (0.25-1.0% fully diluted) is primary incentive beyond retainer"
+    },
+    scarcity: 7,
+    regionalNotes: "Private/mid-market board pay 40-70% of S&P 500 ($327-336k). Committee roles add $5-25k.",
+    trends: "Increasing demand for operational and digital expertise on boards. FO-focused directors gaining premium.",
+    timeToFill: 12,
+    candidatePoolSize: "200-500",
+    turnover: { avgTenure: 7, annualTurnover: 0.10 },
+    demandTrend: { direction: "growing", yoyChange: 0.08 },
+    offerAcceptanceRate: 0.68,
+    counterOfferRate: 0.15,
+    sourcingChannels: { referral: 0.50, agency: 0.25, direct: 0.15, internal: 0.10 },
+    salaryGrowthRate: 0.04,
+    typicalExperience: { min: 20, typical: 28 },
+    retentionRisk: { firstYearAttrition: 0.05, topReasons: ['conflicting board dynamics', 'inadequate equity upside', 'time commitment underestimated'] },
+    compensationStructure: { basePercent: 0.50, bonusPercent: 0.00, benefitsPercent: 0.50, signingBonusFrequency: 0.30, signingBonusRange: "25k-75k" },
+    relocationWillingness: 0.40,
+    backgroundCheckTimeline: 3,
+    sourceBenchmarks: {
+      "SpencerStuart_2024_SP500": { min: 280000, max: 380000 },
+      "Heidrick_2024_US_Private": { min: 100000, max: 280000 }
+    }
+  },
+  "Board Chair (Independent)": {
+    category: "Portfolio Company - Board",
+    p25: 180000, p50: 300000, p75: 400000,
+    benefits: {
+      housing: "None typically; travel reimbursed",
+      vehicle: "None typically",
+      health: "D&O insurance included; enhanced indemnification standard",
+      bonus: "None; equity (0.5-1.5%) is primary incentive"
+    },
+    scarcity: 8,
+    regionalNotes: "Chair premium is 1.25-1.75x standard director pay. S&P 500 chair avg adds ~$172k to director comp.",
+    trends: "High demand for experienced board chairs with PE/FO governance background. Marquee names at premium.",
+    timeToFill: 14,
+    candidatePoolSize: "80-200",
+    turnover: { avgTenure: 8, annualTurnover: 0.08 },
+    demandTrend: { direction: "growing", yoyChange: 0.09 },
+    offerAcceptanceRate: 0.70,
+    counterOfferRate: 0.20,
+    sourcingChannels: { referral: 0.55, agency: 0.30, direct: 0.10, internal: 0.05 },
+    salaryGrowthRate: 0.05,
+    typicalExperience: { min: 22, typical: 30 },
+    retentionRisk: { firstYearAttrition: 0.04, topReasons: ['governance tension with family sponsor', 'CEO performance issues requiring replacement', 'insufficient influence on strategic direction'] },
+    compensationStructure: { basePercent: 0.48, bonusPercent: 0.00, benefitsPercent: 0.52, signingBonusFrequency: 0.40, signingBonusRange: "50k-150k" },
+    relocationWillingness: 0.35,
+    backgroundCheckTimeline: 3,
+    sourceBenchmarks: {
+      "SpencerStuart_2024_SP500": { min: 450000, max: 560000 },
+      "Heidrick_2024_US_Private": { min: 170000, max: 450000 }
+    }
+  },
+
+  // ==========================================
+  // PORTFOLIO COMPANY - OPERATIONS
+  // ==========================================
+  "Operating Partner": {
+    category: "Portfolio Company - Operations",
+    p25: 300000, p50: 450000, p75: 600000,
+    benefits: {
+      housing: "Often covered for multi-site operational roles",
+      vehicle: "Vehicle allowance",
+      health: "Comprehensive executive coverage",
+      bonus: "50-100% of base, tied to portfolio company value creation and operational milestones"
+    },
+    scarcity: 8,
+    regionalNotes: "FO-style: base $250-450k. Carry meaningful across portfolio (can reach $500k-$2M+ at exit).",
+    trends: "Increasing demand as FOs professionalize direct investing. Digital transformation skills at premium.",
+    timeToFill: 16,
+    candidatePoolSize: "40-100",
+    turnover: { avgTenure: 5.5, annualTurnover: 0.12 },
+    demandTrend: { direction: "growing", yoyChange: 0.15 },
+    offerAcceptanceRate: 0.74,
+    counterOfferRate: 0.30,
+    sourcingChannels: { referral: 0.30, agency: 0.50, direct: 0.15, internal: 0.05 },
+    salaryGrowthRate: 0.08,
+    typicalExperience: { min: 15, typical: 22 },
+    retentionRisk: { firstYearAttrition: 0.10, topReasons: ['portfolio company culture resistance', 'inadequate authority for transformation', 'carry expectation misalignment'] },
+    compensationStructure: { basePercent: 0.48, bonusPercent: 0.44, benefitsPercent: 0.08, signingBonusFrequency: 0.60, signingBonusRange: "75k-250k" },
+    relocationWillingness: 0.72,
+    backgroundCheckTimeline: 3,
+    sourceBenchmarks: {
+      "Heidrick_2024_US": { min: 250000, max: 700000 },
+      "Heidrick_2024_Europe": { min: 230000, max: 650000 }
+    }
+  },
+  "Investment Director (Portfolio Oversight)": {
+    category: "Portfolio Company - Operations",
+    p25: 350000, p50: 500000, p75: 700000,
+    benefits: {
+      housing: "Often subsidized for portfolio company site visits",
+      vehicle: "Vehicle allowance and travel budget",
+      health: "Executive health coverage; travel insurance included",
+      bonus: "75-150% of base, tied to company performance and value creation metrics"
+    },
+    scarcity: 8,
+    regionalNotes: "Base $250-400k. Carry meaningful across portfolio (expected $500k-$2M+ over fund life).",
+    trends: "High demand for operational and financial diligence expertise. M&A and integration experience valued.",
+    timeToFill: 15,
+    candidatePoolSize: "50-120",
+    turnover: { avgTenure: 5, annualTurnover: 0.14 },
+    demandTrend: { direction: "growing", yoyChange: 0.15 },
+    offerAcceptanceRate: 0.72,
+    counterOfferRate: 0.28,
+    sourcingChannels: { referral: 0.32, agency: 0.48, direct: 0.15, internal: 0.05 },
+    salaryGrowthRate: 0.09,
+    typicalExperience: { min: 14, typical: 20 },
+    retentionRisk: { firstYearAttrition: 0.12, topReasons: ['carry/equity expectations misaligned', 'portfolio company CEO resistance to guidance', 'limited strategic influence on exits'] },
+    compensationStructure: { basePercent: 0.50, bonusPercent: 0.42, benefitsPercent: 0.08, signingBonusFrequency: 0.65, signingBonusRange: "100k-300k" },
+    relocationWillingness: 0.70,
+    backgroundCheckTimeline: 3,
+    sourceBenchmarks: {
+      "Heidrick_2024_US": { min: 300000, max: 800000 },
+      "Heidrick_2024_Europe": { min: 280000, max: 750000 }
+    }
+  },
+  "Head of Portfolio Operations": {
+    category: "Portfolio Company - Operations",
+    p25: 380000, p50: 550000, p75: 750000,
+    benefits: {
+      housing: "Often subsidized for multi-site coordination role",
+      vehicle: "Executive vehicle allowance",
+      health: "Comprehensive executive health and wellness coverage",
+      bonus: "50-100% of base, tied to portfolio company performance and portfolio health metrics"
+    },
+    scarcity: 8,
+    regionalNotes: "Base $275-450k. Carry significant: 0.25-1.0% per portfolio company plus central pool.",
+    trends: "Critical role for multi-company family offices. Digital systems and PMO expertise increasingly essential.",
+    timeToFill: 17,
+    candidatePoolSize: "35-80",
+    turnover: { avgTenure: 5.5, annualTurnover: 0.11 },
+    demandTrend: { direction: "growing", yoyChange: 0.17 },
+    offerAcceptanceRate: 0.73,
+    counterOfferRate: 0.32,
+    sourcingChannels: { referral: 0.35, agency: 0.45, direct: 0.15, internal: 0.05 },
+    salaryGrowthRate: 0.09,
+    typicalExperience: { min: 15, typical: 22 },
+    retentionRisk: { firstYearAttrition: 0.10, topReasons: ['misaligned expectations on portfolio strategy', 'insufficient authority across portfolio companies', 'carry structure complexity and vesting uncertainty'] },
+    compensationStructure: { basePercent: 0.50, bonusPercent: 0.43, benefitsPercent: 0.07, signingBonusFrequency: 0.70, signingBonusRange: "125k-350k" },
+    relocationWillingness: 0.68,
+    backgroundCheckTimeline: 4,
+    sourceBenchmarks: {
+      "Heidrick_2024_US": { min: 350000, max: 850000 },
+      "Heidrick_2024_Europe": { min: 320000, max: 800000 }
+    }
+  },
+
+  // ==========================================
+  // PORTFOLIO COMPANY - FUNCTIONAL LEADERSHIP
+  // ==========================================
+  "VP Finance / FP&A (Portfolio)": {
+    category: "Portfolio Company - Functional Leadership",
+    p25: 200000, p50: 270000, p75: 340000,
+    benefits: {
+      housing: "Relocation assistance for external candidates",
+      vehicle: "Vehicle allowance or parking benefit",
+      health: "Standard health, dental, vision coverage",
+      bonus: "25-50% of base, tied to financial planning accuracy and cost control"
+    },
+    scarcity: 5,
+    regionalNotes: "Base $180-260k. SaaS/tech companies at higher range. Smaller companies at lower range.",
+    trends: "Increasing demand for real-time financial analytics and modeling. Cloud systems expertise essential.",
+    timeToFill: 12,
+    candidatePoolSize: "120-300",
+    turnover: { avgTenure: 3.5, annualTurnover: 0.28 },
+    demandTrend: { direction: "growing", yoyChange: 0.12 },
+    offerAcceptanceRate: 0.71,
+    counterOfferRate: 0.22,
+    sourcingChannels: { referral: 0.18, agency: 0.50, direct: 0.22, internal: 0.10 },
+    salaryGrowthRate: 0.08,
+    typicalExperience: { min: 8, typical: 14 },
+    retentionRisk: { firstYearAttrition: 0.15, topReasons: ['limited strategic involvement', 'tools and systems inadequate', 'career advancement path unclear'] },
+    compensationStructure: { basePercent: 0.63, bonusPercent: 0.30, benefitsPercent: 0.07, signingBonusFrequency: 0.40, signingBonusRange: "25k-75k" },
+    relocationWillingness: 0.58,
+    backgroundCheckTimeline: 2,
+    sourceBenchmarks: {
+      "Heidrick_2024_US": { min: 180000, max: 350000 },
+      "Heidrick_2024_Europe": { min: 165000, max: 320000 }
+    }
+  },
+  "VP Operations (Portfolio)": {
+    category: "Portfolio Company - Functional Leadership",
+    p25: 220000, p50: 300000, p75: 390000,
+    benefits: {
+      housing: "Relocation support common",
+      vehicle: "Vehicle allowance",
+      health: "Standard coverage",
+      bonus: "30-60% of base, tied to operational efficiency metrics"
+    },
+    scarcity: 5,
+    regionalNotes: "Base $200-275k. Manufacturing/logistics companies command premium. Service companies lower.",
+    trends: "Post-COVID focus on supply chain resilience and automation. Process improvement expertise valued.",
+    timeToFill: 12,
+    candidatePoolSize: "100-250",
+    turnover: { avgTenure: 3.8, annualTurnover: 0.26 },
+    demandTrend: { direction: "growing", yoyChange: 0.13 },
+    offerAcceptanceRate: 0.70,
+    counterOfferRate: 0.24,
+    sourcingChannels: { referral: 0.17, agency: 0.52, direct: 0.21, internal: 0.10 },
+    salaryGrowthRate: 0.08,
+    typicalExperience: { min: 10, typical: 16 },
+    retentionRisk: { firstYearAttrition: 0.16, topReasons: ['conflicting priorities from CEO and PE sponsor', 'inadequate budget for improvements', 'limited autonomy in decision-making'] },
+    compensationStructure: { basePercent: 0.62, bonusPercent: 0.32, benefitsPercent: 0.06, signingBonusFrequency: 0.45, signingBonusRange: "30k-90k" },
+    relocationWillingness: 0.60,
+    backgroundCheckTimeline: 2,
+    sourceBenchmarks: {
+      "Heidrick_2024_US": { min: 200000, max: 400000 },
+      "Heidrick_2024_Europe": { min: 185000, max: 370000 }
+    }
+  },
+  "VP Sales / CRO (Portfolio)": {
+    category: "Portfolio Company - Functional Leadership",
+    p25: 280000, p50: 420000, p75: 580000,
+    benefits: {
+      housing: "Often included for field-heavy roles; relocation common",
+      vehicle: "Vehicle allowance standard",
+      health: "Standard coverage; performance bonus insurance included",
+      bonus: "50-150% of base as commission/variable pay; OTE $400-600k at mid-market"
+    },
+    scarcity: 6,
+    regionalNotes: "Base $200-275k but total cash $400-600k with bonus. B2B SaaS commands premium (OTE to $750k+).",
+    trends: "High demand for sales leaders with digital/cloud expertise. SaaS sales experience increasingly valued.",
+    timeToFill: 13,
+    candidatePoolSize: "80-200",
+    turnover: { avgTenure: 3, annualTurnover: 0.32 },
+    demandTrend: { direction: "growing", yoyChange: 0.14 },
+    offerAcceptanceRate: 0.68,
+    counterOfferRate: 0.35,
+    sourcingChannels: { referral: 0.20, agency: 0.45, direct: 0.25, internal: 0.10 },
+    salaryGrowthRate: 0.09,
+    typicalExperience: { min: 9, typical: 15 },
+    retentionRisk: { firstYearAttrition: 0.20, topReasons: ['unrealistic revenue targets from PE', 'limited marketing/product support', 'comp plan not competitive with alternatives'] },
+    compensationStructure: { basePercent: 0.48, bonusPercent: 0.45, benefitsPercent: 0.07, signingBonusFrequency: 0.55, signingBonusRange: "50k-150k" },
+    relocationWillingness: 0.65,
+    backgroundCheckTimeline: 2,
+    sourceBenchmarks: {
+      "Heidrick_2024_US": { min: 250000, max: 650000 },
+      "Heidrick_2024_Europe": { min: 230000, max: 580000 }
+    }
+  },
+  "VP Technology / CTO (Portfolio)": {
+    category: "Portfolio Company - Functional Leadership",
+    p25: 280000, p50: 380000, p75: 500000,
+    benefits: {
+      housing: "Relocation assistance common for talent acquisition",
+      vehicle: "Vehicle allowance",
+      health: "Comprehensive tech-focused coverage often includes wellness",
+      bonus: "25-50% of base, tied to product/system milestones and tech debt reduction"
+    },
+    scarcity: 7,
+    regionalNotes: "Base $225-325k. SaaS/Tech companies pay 0.25-1.5% equity; non-tech 0.1-0.4%. US > Europe ~15%.",
+    trends: "Extreme scarcity for cloud-native and AI/ML expertise. Equity expectations high (0.5-1.5% expected).",
+    timeToFill: 15,
+    candidatePoolSize: "60-150",
+    turnover: { avgTenure: 3.2, annualTurnover: 0.30 },
+    demandTrend: { direction: "growing", yoyChange: 0.16 },
+    offerAcceptanceRate: 0.66,
+    counterOfferRate: 0.38,
+    sourcingChannels: { referral: 0.25, agency: 0.40, direct: 0.25, internal: 0.10 },
+    salaryGrowthRate: 0.10,
+    typicalExperience: { min: 12, typical: 18 },
+    retentionRisk: { firstYearAttrition: 0.18, topReasons: ['legacy tech stack not modernized', 'inadequate engineering team size', 'equity expectations vs actual exit value'] },
+    compensationStructure: { basePercent: 0.60, bonusPercent: 0.33, benefitsPercent: 0.07, signingBonusFrequency: 0.65, signingBonusRange: "75k-200k" },
+    relocationWillingness: 0.68,
+    backgroundCheckTimeline: 3,
+    sourceBenchmarks: {
+      "Heidrick_2024_US": { min: 250000, max: 550000 },
+      "Heidrick_2024_Europe": { min: 220000, max: 480000 }
+    }
+  },
+  "VP Marketing / CMO (Portfolio)": {
+    category: "Portfolio Company - Functional Leadership",
+    p25: 250000, p50: 330000, p75: 420000,
+    benefits: {
+      housing: "Relocation assistance for external hires",
+      vehicle: "Vehicle allowance",
+      health: "Standard coverage",
+      bonus: "25-50% of base, tied to customer acquisition and brand metrics"
+    },
+    scarcity: 5,
+    regionalNotes: "Base $225-325k. B2B tech companies at higher range. Consumer/retail at lower range.",
+    trends: "Increasing demand for data-driven marketing and digital transformation expertise. MarTech skills valued.",
+    timeToFill: 12,
+    candidatePoolSize: "100-250",
+    turnover: { avgTenure: 3, annualTurnover: 0.30 },
+    demandTrend: { direction: "growing", yoyChange: 0.11 },
+    offerAcceptanceRate: 0.69,
+    counterOfferRate: 0.26,
+    sourcingChannels: { referral: 0.19, agency: 0.48, direct: 0.23, internal: 0.10 },
+    salaryGrowthRate: 0.08,
+    typicalExperience: { min: 10, typical: 16 },
+    retentionRisk: { firstYearAttrition: 0.17, topReasons: ['insufficient marketing budget allocation', 'tension between brand building and CAC reduction', 'limited resources vs ambitious growth targets'] },
+    compensationStructure: { basePercent: 0.64, bonusPercent: 0.29, benefitsPercent: 0.07, signingBonusFrequency: 0.40, signingBonusRange: "25k-80k" },
+    relocationWillingness: 0.56,
+    backgroundCheckTimeline: 2,
+    sourceBenchmarks: {
+      "Heidrick_2024_US": { min: 220000, max: 450000 },
+      "Heidrick_2024_Europe": { min: 200000, max: 410000 }
+    }
   }
 };
 

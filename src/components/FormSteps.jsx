@@ -65,9 +65,11 @@ export function FormSteps({
   showLocationSuggestions, setShowLocationSuggestions, highlightedLocationIndex, setHighlightedLocationIndex,
   filteredLocationSuggestions, handleInputChange, handleLocationKeyDown, handleMultiSelect,
   validateAndWarn, validateStep, nextStep, calculateComplexity,
-  isCorporateRole, isMaritimeRole, isAviationRole, budgetRanges, timelineOptions, discretionLevels,
+  isCorporateRole, isMaritimeRole, isAviationRole, isPortfolioRole, budgetRanges, timelineOptions, discretionLevels,
   householdLanguageOptions, corporateLanguageOptions, householdCertificationOptions,
-  corporateCertificationOptions, travelOptions, corporateLanguageShortList,
+  corporateCertificationOptions, portfolioCertificationOptions, portfolioLanguageOptions,
+  dealStageOptions, governanceOptions, coInvestorOptions,
+  travelOptions, corporateLanguageShortList,
   showLanguages, setShowLanguages, commonRoles
 }) {
   const [showAllCerts, setShowAllCerts] = React.useState(false);
@@ -346,11 +348,11 @@ export function FormSteps({
             {/* Certifications */}
             <div>
               <label className="block text-xs font-medium uppercase mb-2" style={{ letterSpacing: '0.05em', color: '#6e6e73' }}>
-                {isCorporateRole ? 'Professional Certifications' : 'Certifications'}
+                {isPortfolioRole ? 'Qualifications & Experience' : isCorporateRole ? 'Professional Certifications' : 'Certifications'}
                 <span className="normal-case ml-1.5" style={{ color: '#a1a1a6', letterSpacing: 'normal' }}>(optional)</span>
               </label>
               <div className="flex flex-wrap gap-2">
-                {(isCorporateRole ? corporateCertificationOptions : householdCertificationOptions).slice(0, showAllCerts ? undefined : 6).map(cert => (
+                {(isPortfolioRole ? portfolioCertificationOptions : isCorporateRole ? corporateCertificationOptions : householdCertificationOptions).slice(0, showAllCerts ? undefined : 6).map(cert => (
                   <button key={cert} type="button" onClick={() => handleMultiSelect('certifications', cert)}
                     className="px-3 py-1.5 rounded-btn text-xs font-medium transition-all duration-200"
                     style={formData.certifications.includes(cert)
@@ -361,16 +363,16 @@ export function FormSteps({
                   </button>
                 ))}
               </div>
-              {(isCorporateRole ? corporateCertificationOptions : householdCertificationOptions).length > 6 && (
+              {(isPortfolioRole ? portfolioCertificationOptions : isCorporateRole ? corporateCertificationOptions : householdCertificationOptions).length > 6 && (
                 <button type="button" onClick={() => setShowAllCerts(!showAllCerts)}
                   className="mt-2 text-xs hover:opacity-75 transition-opacity" style={{ color: '#a1a1a6' }}>
-                  {showAllCerts ? 'Show less' : `+ ${(isCorporateRole ? corporateCertificationOptions : householdCertificationOptions).length - 6} more`}
+                  {showAllCerts ? 'Show less' : `+ ${(isPortfolioRole ? portfolioCertificationOptions : isCorporateRole ? corporateCertificationOptions : householdCertificationOptions).length - 6} more`}
                 </button>
               )}
             </div>
 
             {/* Languages */}
-            {isCorporateRole ? (
+            {(isCorporateRole || isPortfolioRole) ? (
               <div className="rounded-btn overflow-hidden" style={{ border: '1px solid #d2d2d7' }}>
                 <button type="button" onClick={() => setShowLanguages(!showLanguages)}
                   className="flex items-center justify-between w-full text-left p-3.5 transition-opacity hover:opacity-88">
@@ -386,7 +388,7 @@ export function FormSteps({
                 {showLanguages && (
                   <div className="px-3.5 pb-3.5" style={{ borderTop: '1px solid #e5e5ea' }}>
                     <div className="flex flex-wrap gap-2 pt-3">
-                      {corporateLanguageShortList.slice(0, showAllLangs ? undefined : 8).map(lang => (
+                      {(isPortfolioRole ? portfolioLanguageOptions : corporateLanguageShortList).slice(0, showAllLangs ? undefined : 8).map(lang => (
                         <button key={lang} type="button" onClick={() => handleMultiSelect('languageRequirements', lang)}
                           className="px-3 py-1.5 rounded-btn text-xs font-medium transition-all duration-200"
                           style={formData.languageRequirements.includes(lang)
@@ -397,10 +399,10 @@ export function FormSteps({
                         </button>
                       ))}
                     </div>
-                    {corporateLanguageShortList.length > 8 && (
+                    {(isPortfolioRole ? portfolioLanguageOptions : corporateLanguageShortList).length > 8 && (
                       <button type="button" onClick={() => setShowAllLangs(!showAllLangs)}
                         className="mt-2 text-xs hover:opacity-75 transition-opacity" style={{ color: '#a1a1a6' }}>
-                        {showAllLangs ? 'Show less' : `+ ${corporateLanguageShortList.length - 8} more`}
+                        {showAllLangs ? 'Show less' : `+ ${(isPortfolioRole ? portfolioLanguageOptions : corporateLanguageShortList).length - 8} more`}
                       </button>
                     )}
                   </div>
@@ -457,7 +459,54 @@ export function FormSteps({
             </div>
 
             {/* Contextual fields */}
-            {isCorporateRole ? (
+            {isPortfolioRole ? (
+              <div className="space-y-4">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                  <div>
+                    <label className="block text-xs font-medium uppercase mb-2" style={{ letterSpacing: '0.05em', color: '#6e6e73' }}>Deal Stage</label>
+                    <CustomSelect name="dealStage" value={formData.dealStage} onChange={handleInputChange}
+                      options={dealStageOptions} placeholder="Select deal stage..." />
+                    {formData.dealStage && (
+                      <p className="mt-1 text-xs" style={{ color: '#a1a1a6' }}>
+                        {dealStageOptions.find(o => o.value === formData.dealStage)?.description}
+                      </p>
+                    )}
+                  </div>
+                  <div>
+                    <label className="block text-xs font-medium uppercase mb-2" style={{ letterSpacing: '0.05em', color: '#6e6e73' }}>Governance Structure</label>
+                    <CustomSelect name="governanceType" value={formData.governanceType} onChange={handleInputChange}
+                      options={governanceOptions} placeholder="Select governance..." />
+                    {formData.governanceType && (
+                      <p className="mt-1 text-xs" style={{ color: '#a1a1a6' }}>
+                        {governanceOptions.find(o => o.value === formData.governanceType)?.description}
+                      </p>
+                    )}
+                  </div>
+                </div>
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                  <div>
+                    <label className="block text-xs font-medium uppercase mb-2" style={{ letterSpacing: '0.05em', color: '#6e6e73' }}>Co-Investor Structure</label>
+                    <CustomSelect name="coInvestorType" value={formData.coInvestorType} onChange={handleInputChange}
+                      options={coInvestorOptions} placeholder="Select co-investor type..." />
+                    {formData.coInvestorType && (
+                      <p className="mt-1 text-xs" style={{ color: '#a1a1a6' }}>
+                        {coInvestorOptions.find(o => o.value === formData.coInvestorType)?.description}
+                      </p>
+                    )}
+                  </div>
+                  <div>
+                    <label className="block text-xs font-medium uppercase mb-2" style={{ letterSpacing: '0.05em', color: '#6e6e73' }}>Team Size</label>
+                    <CustomSelect name="teamSize" value={formData.teamSize} onChange={handleInputChange}
+                      options={[
+                        { value: '0', label: 'Individual contributor' },
+                        { value: '1-3', label: '1-3 reports' },
+                        { value: '4-10', label: '4-10 reports' },
+                        { value: '10-plus', label: '10+ reports' },
+                      ]} placeholder="Select..." />
+                  </div>
+                </div>
+              </div>
+            ) : isCorporateRole ? (
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
                   <label className="block text-xs font-medium uppercase mb-2" style={{ letterSpacing: '0.05em', color: '#6e6e73' }}>Assets Under Management</label>

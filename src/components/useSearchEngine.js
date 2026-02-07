@@ -13,6 +13,12 @@ import {
   corporateLanguageOptions,
   householdCertificationOptions,
   corporateCertificationOptions,
+  portfolioBudgetRanges,
+  portfolioCertificationOptions,
+  portfolioLanguageOptions,
+  dealStageOptions,
+  governanceOptions,
+  coInvestorOptions,
   travelOptions,
   corporateLanguageShortList,
   APP_VERSION
@@ -119,7 +125,13 @@ export function useSearchEngine() {
     return name.includes('pilot') || name.includes('flight attendant') || name.includes('aviation');
   }, [formData.positionType]);
 
-  const budgetRanges = isCorporateRole ? corporateBudgetRanges : householdBudgetRanges;
+  const isPortfolioRole = useMemo(() => {
+    if (!formData.positionType) return false;
+    const benchmark = getBenchmark(formData.positionType);
+    return benchmark?.category?.startsWith('Portfolio Company');
+  }, [formData.positionType]);
+
+  const budgetRanges = isPortfolioRole ? portfolioBudgetRanges : isCorporateRole ? corporateBudgetRanges : householdBudgetRanges;
 
   const debouncedLocation = useDebounce(formData.location, 150);
 
@@ -134,16 +146,20 @@ export function useSearchEngine() {
   }, [filteredLocationSuggestions]);
 
   useEffect(() => {
-    if (prevIsCorporateRole.current !== isCorporateRole && formData.positionType) {
+    const currentType = isPortfolioRole ? 'portfolio' : isCorporateRole ? 'corporate' : 'household';
+    if (prevIsCorporateRole.current !== currentType && formData.positionType) {
       setFormData(prev => ({
         ...prev,
         languageRequirements: [],
         certifications: [],
-        budgetRange: ''
+        budgetRange: '',
+        dealStage: '',
+        governanceType: '',
+        coInvestorType: ''
       }));
     }
-    prevIsCorporateRole.current = isCorporateRole;
-  }, [isCorporateRole, formData.positionType]);
+    prevIsCorporateRole.current = currentType;
+  }, [isCorporateRole, isPortfolioRole, formData.positionType]);
 
   // Parse shared link on mount
   useEffect(() => {
@@ -457,7 +473,36 @@ export function useSearchEngine() {
       }
     }
 
-    const score = Math.min(10, Math.max(1, Math.round(1 + (points / 130) * 9)));
+    // Portfolio Company–specific drivers
+    if (isPortfolioRole) {
+      // Deal stage
+      if (formData.dealStage) {
+        const dsOpt = dealStageOptions.find(d => d.value === formData.dealStage);
+        if (dsOpt?.points > 0) {
+          points += dsOpt.points;
+          drivers.push({ factor: "Deal Stage", points: dsOpt.points, rationale: dsOpt.label, tooltip: dsOpt.description });
+        }
+      }
+      // Governance structure
+      if (formData.governanceType) {
+        const govOpt = governanceOptions.find(g => g.value === formData.governanceType);
+        if (govOpt?.points > 0) {
+          points += govOpt.points;
+          drivers.push({ factor: "Governance Structure", points: govOpt.points, rationale: govOpt.label, tooltip: govOpt.description });
+        }
+      }
+      // Co-investor complexity
+      if (formData.coInvestorType) {
+        const coOpt = coInvestorOptions.find(c => c.value === formData.coInvestorType);
+        if (coOpt?.points > 0) {
+          points += coOpt.points;
+          drivers.push({ factor: "Co-Investor Complexity", points: coOpt.points, rationale: coOpt.label, tooltip: coOpt.description });
+        }
+      }
+    }
+
+    const maxPoints = isPortfolioRole ? 165 : 130;
+    const score = Math.min(10, Math.max(1, Math.round(1 + (points / maxPoints) * 9)));
     const label = score <= 3 ? "Straightforward" : score <= 5 ? "Moderate" : score <= 7 ? "Challenging" : score <= 9 ? "Highly Complex" : "Exceptional";
     const confidence = (budgetOverride || formData.budgetRange) === 'not-sure' || !benchmark ? "Medium" : "High";
 
@@ -703,8 +748,11 @@ ${isMaritimeRole && formData.yachtLength ? `Yacht Length: ${sanitizeForPrompt(fo
 ${isMaritimeRole && formData.crewSize ? `Crew Size: ${sanitizeForPrompt(formData.crewSize)}` : ''}
 ${isAviationRole && formData.aircraftType ? `Aircraft Type: ${sanitizeForPrompt(formData.aircraftType)}` : ''}
 ${isAviationRole && formData.fleetSize ? `Fleet Size: ${sanitizeForPrompt(formData.fleetSize)}` : ''}
-${!isCorporateRole && !isMaritimeRole && !isAviationRole && formData.propertiesCount ? `Properties: ${sanitizeForPrompt(formData.propertiesCount)}` : ''}
-${!isCorporateRole && !isMaritimeRole && !isAviationRole && formData.householdSize ? `Household Size: ${sanitizeForPrompt(formData.householdSize)}` : ''}
+${isPortfolioRole && formData.dealStage ? `Deal Stage: ${dealStageOptions.find(d => d.value === formData.dealStage)?.label || formData.dealStage}` : ''}
+${isPortfolioRole && formData.governanceType ? `Governance: ${governanceOptions.find(g => g.value === formData.governanceType)?.label || formData.governanceType}` : ''}
+${isPortfolioRole && formData.coInvestorType ? `Co-Investor Structure: ${coInvestorOptions.find(c => c.value === formData.coInvestorType)?.label || formData.coInvestorType}` : ''}
+${!isCorporateRole && !isMaritimeRole && !isAviationRole && !isPortfolioRole && formData.propertiesCount ? `Properties: ${sanitizeForPrompt(formData.propertiesCount)}` : ''}
+${!isCorporateRole && !isMaritimeRole && !isAviationRole && !isPortfolioRole && formData.householdSize ? `Household Size: ${sanitizeForPrompt(formData.householdSize)}` : ''}
 Computed Complexity Score: ${det.score}/10 (${det.label})
 
 === MARKET DATA (use these exact figures) ===
@@ -803,7 +851,7 @@ ${benchmark?.regionalNotes ? `Regional Notes: ${benchmark.regionalNotes}` : ''}
       const response = await fetchWithRetry("/api/analyze", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ prompt, roleType: isCorporateRole ? 'corporate' : 'household' })
+        body: JSON.stringify({ prompt, roleType: isPortfolioRole ? 'portfolio' : isCorporateRole ? 'corporate' : 'household' })
       }, 1);
 
       if (!response.ok) {
@@ -1134,7 +1182,8 @@ ${benchmark?.regionalNotes ? `Regional Notes: ${benchmark.regionalNotes}` : ''}
       positionType: '', location: '', timeline: '', budgetRange: '', keyRequirements: '',
       email: '', emailConsent: false, discretionLevel: 'standard', propertiesCount: '', householdSize: '',
       priorityCallback: false, phone: '', languageRequirements: [], certifications: [], travelRequirement: 'minimal',
-      aumRange: '', teamSize: '', yachtLength: '', crewSize: '', aircraftType: '', fleetSize: ''
+      aumRange: '', teamSize: '', yachtLength: '', crewSize: '', aircraftType: '', fleetSize: '',
+      dealStage: '', governanceType: '', coInvestorType: ''
     });
     window.history.replaceState({}, '', window.location.pathname);
   };
@@ -1163,9 +1212,12 @@ ${benchmark?.regionalNotes ? `Regional Notes: ${benchmark.regionalNotes}` : ''}
     whatIfCerts, setWhatIfCerts, showEmailModal,
     setShowEmailModal, emailForReport, setEmailForReport, sendingEmail, emailSent, setEmailSent, resultsRef,
     // Constants
-    positionsByCategory, commonRoles, isCorporateRole, isMaritimeRole, isAviationRole, budgetRanges, timelineOptions,
+    positionsByCategory, commonRoles, isCorporateRole, isMaritimeRole, isAviationRole, isPortfolioRole,
+    budgetRanges, timelineOptions,
     discretionLevels, householdLanguageOptions, corporateLanguageOptions,
     householdCertificationOptions, corporateCertificationOptions, corporateLanguageShortList,
+    portfolioCertificationOptions, portfolioLanguageOptions,
+    dealStageOptions, governanceOptions, coInvestorOptions,
     travelOptions, CATEGORY_GROUPS, BENCHMARKS,
     // Functions
     handleInputChange, handleMultiSelect, handleLocationKeyDown, validateAndWarn, validateStep,
