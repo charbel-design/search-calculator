@@ -177,20 +177,28 @@ Write the JD following the system prompt structure exactly. Use the candidate ps
 
           {/* Score Section - Always Visible (Top) */}
           <div className="text-center mb-8 animate-fadeInUp py-8 rounded-card" style={{ backgroundColor: 'rgba(40, 20, 255, 0.03)' }}>
-            <div className="mb-4">
-              <div className="text-5xl font-semibold leading-none" style={{ color: '#2814ff' }}>
+            <div className="inline-flex items-baseline justify-center mb-4 px-8 py-5 rounded-xl" style={{ backgroundColor: 'rgba(40, 20, 255, 0.04)' }}>
+              <span className="text-5xl font-semibold leading-none" style={{ color: '#2814ff' }}>
                 <ScoreCounter target={results.score} />
-              </div>
-              <div className="text-base text-gray-400 mt-1" style={{ color: '#a1a1a6' }}>/10</div>
+              </span>
+              <span className="text-lg ml-0.5" style={{ color: '#a1a1a6' }}>/10</span>
             </div>
-            <div className="mb-3">
-              <p className="text-sm font-medium text-gray-800" style={{ color: '#1d1d1f' }}>
-                {results.label} Search
+            <h2 className="text-lg font-semibold mb-1" style={{ color: '#1d1d1f' }}>
+              {results.displayTitle}
+            </h2>
+            {(formData.location || results.formData?.location) && (
+              <p className="text-sm mb-3" style={{ color: '#6e6e73' }}>
+                {formData.location || results.formData?.location}{results.regionalMultiplier && results.regionalMultiplier !== 1 ? ` (${results.regionalMultiplier}x regional adjustment)` : ''}
               </p>
+            )}
+            <div className="inline-block px-4 py-1.5 rounded-full text-xs font-medium mb-2" style={{ backgroundColor: '#eeeeff', color: '#1d1d1f' }}>
+              {results.label} Search
             </div>
-            <div className="inline-block px-3 py-1 rounded-full text-[11px] font-medium" style={{ backgroundColor: 'rgba(40, 20, 255, 0.08)', color: '#2814ff' }}>
-              Confidence: {results.confidence}
-            </div>
+            {results.confidence && (
+              <p className="text-[11px] mt-1" style={{ color: '#a1a1a6' }}>
+                Confidence: {results.confidence}
+              </p>
+            )}
             <div role="img" aria-label={`Search complexity score: ${results.score} out of 10, ${results.label} search`} className="sr-only">
               Score: {results.score}/10
             </div>
