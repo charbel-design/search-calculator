@@ -520,7 +520,7 @@ function generateEmailHTML(results) {
         <table style="width:100%;border-collapse:collapse;margin-bottom:16px;">
           <tr>
             <td style="width:40px;vertical-align:top;padding-top:2px;">
-              <div style="width:32px;height:32px;border-radius:50%;background-color:#1d1d1f;color:#fff;text-align:center;line-height:32px;font-size:13px;font-weight:600;">${step.num}</div>
+              <div style="width:32px;height:32px;border-radius:50%;background-color:#2814ff;color:#fff;text-align:center;line-height:32px;font-size:13px;font-weight:600;">${step.num}</div>
             </td>
             <td style="vertical-align:top;padding-left:12px;">
               <strong style="color:#1d1d1f;font-size:14px;">${e(step.title)}</strong>

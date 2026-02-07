@@ -814,7 +814,7 @@ Write the JD following the system prompt structure exactly. Use the candidate ps
                       ].map((item, idx) => (
                         <div key={idx} className="flex gap-4">
                           <div className="flex flex-col items-center">
-                            <div className="w-10 h-10 rounded-full flex items-center justify-center text-white" style={{ backgroundColor: '#1d1d1f' }}>
+                            <div className="w-10 h-10 rounded-full flex items-center justify-center text-white" style={{ backgroundColor: '#2814ff' }}>
                               <item.icon className="w-5 h-5" />
                             </div>
                             {idx < 3 && <div className="w-0.5 flex-1 mt-1" style={{ backgroundColor: '#d2d2d7' }} />}
