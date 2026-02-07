@@ -362,8 +362,8 @@ Write the JD following the system prompt structure exactly. Use the candidate ps
                       </h4>
                       <div className="space-y-2">
                         {results.drivers?.map((d, i) => (
-                          <div key={i} className="flex items-start gap-3 p-4 rounded-card" style={{ backgroundColor: d.points >= 3 ? 'rgba(40, 20, 255, 0.03)' : '#ffffff', border: '1px solid #d2d2d7', borderLeft: d.points >= 3 ? '3px solid #2814ff' : '1px solid #d2d2d7' }}>
-                            <div className="font-semibold text-sm mt-0.5" style={{ color: '#2814ff' }}>+{d.points}</div>
+                          <div key={i} className="flex items-start gap-3 p-4 rounded-card" style={{ backgroundColor: d.points >= 3 ? '#fdf2f4' : d.points >= 2 ? '#fef8f0' : '#ffffff', border: '1px solid #d2d2d7', borderLeft: d.points >= 3 ? '3px solid #c77d8a' : d.points >= 2 ? '3px solid #ddb87e' : '1px solid #d2d2d7' }}>
+                            <div className="font-semibold text-sm mt-0.5" style={{ color: d.points >= 3 ? '#c77d8a' : d.points >= 2 ? '#ddb87e' : '#72a89d' }}>+{d.points}</div>
                             <div className="flex-1">
                               <div className="font-medium" style={{ color: '#1d1d1f' }}>{d.factor}</div>
                               <div className="text-sm" style={{ color: '#6e6e73' }}>{d.rationale}</div>
@@ -398,15 +398,15 @@ Write the JD following the system prompt structure exactly. Use the candidate ps
                         </div>
                         <div className="grid grid-cols-4 gap-2 text-xs">
                           {[['Housing', results.benchmark.benefits.housing, Home], ['Vehicle', results.benchmark.benefits.vehicle, Car], ['Health', results.benchmark.benefits.health, Heart], ['Bonus', results.benchmark.benefits.bonus, DollarSign]].map(([label, val, Icon]) => (
-                            <div key={label} className="bg-white rounded-btn p-3"><Icon className="w-4 h-4 mb-1" style={{ color: '#2814ff' }} /><div className="font-medium" style={{ color: '#1d1d1f' }}>{label}</div><div style={{ color: '#a1a1a6' }}>{val}</div></div>
+                            <div key={label} className="bg-white rounded-btn p-3"><Icon className="w-4 h-4 mb-1" style={{ color: '#ddb87e' }} /><div className="font-medium" style={{ color: '#1d1d1f' }}>{label}</div><div style={{ color: '#a1a1a6' }}>{val}</div></div>
                           ))}
                         </div>
                       </div>
                     )}
 
                     {/* Market Competitiveness */}
-                    <div style={{ backgroundColor: '#f5f5f7' }} className="rounded-card p-6">
-                      <h4 className="font-semibold text-sm mb-2" style={{ color: '#1d1d1f' }}>Market Competitiveness</h4>
+                    <div style={{ backgroundColor: '#f0f7f5' }} className="rounded-card p-6">
+                      <h4 className="font-semibold text-sm mb-2" style={{ color: '#72a89d' }}>Market Competitiveness</h4>
                       <p style={{ color: '#1d1d1f' }}>{results.marketCompetitiveness}</p>
                     </div>
 
@@ -508,13 +508,13 @@ Write the JD following the system prompt structure exactly. Use the candidate ps
                         {(results.benchmark.retentionRisk !== undefined || results.benchmark.compensationStructure !== undefined || results.benchmark.relocationWillingness !== undefined) && (
                           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                             {(results.benchmark.retentionRisk !== undefined || results.benchmark.relocationWillingness !== undefined) && (
-                              <div style={{ backgroundColor: '#f5f5f7' }} className="rounded-card p-6">
-                                <p className="text-xs mb-4 uppercase tracking-widest font-medium" style={{ color: '#a1a1a6' }}>Retention & Relocation</p>
+                              <div style={{ backgroundColor: '#fdf2f4' }} className="rounded-card p-6">
+                                <p className="text-xs mb-4 uppercase tracking-widest font-medium" style={{ color: '#c77d8a' }}>Retention & Relocation</p>
                                 <div className="space-y-4">
                                   {results.benchmark.retentionRisk?.firstYearAttrition !== undefined && (
                                     <div>
                                       <p className="text-sm mb-1" style={{ color: '#6e6e73' }}>First-Year Attrition</p>
-                                      <p className="text-2xl font-semibold" style={{ color: '#2814ff' }}>{Math.round(results.benchmark.retentionRisk.firstYearAttrition * 100)}%</p>
+                                      <p className="text-2xl font-semibold" style={{ color: '#c77d8a' }}>{Math.round(results.benchmark.retentionRisk.firstYearAttrition * 100)}%</p>
                                     </div>
                                   )}
                                   {results.benchmark.relocationWillingness !== undefined && (
@@ -528,7 +528,7 @@ Write the JD following the system prompt structure exactly. Use the candidate ps
                                       <p className="text-xs font-medium mb-2" style={{ color: '#a1a1a6' }}>Top Departure Risks</p>
                                       <div className="flex flex-wrap gap-2">
                                         {results.benchmark.retentionRisk.topReasons.map((reason, i) => (
-                                          <span key={i} className="inline-block px-2 py-1 bg-white border rounded-full text-[11px]" style={{ borderColor: '#d2d2d7', color: '#6e6e73' }}>{reason}</span>
+                                          <span key={i} className="inline-block px-2 py-1 rounded-full text-[11px]" style={{ backgroundColor: '#fdf2f4', color: '#c77d8a' }}>{reason}</span>
                                         ))}
                                       </div>
                                     </div>
@@ -537,8 +537,8 @@ Write the JD following the system prompt structure exactly. Use the candidate ps
                               </div>
                             )}
                             {results.benchmark.compensationStructure && (
-                              <div style={{ backgroundColor: '#f5f5f7' }} className="rounded-card p-6">
-                                <p className="text-xs mb-4 uppercase tracking-widest font-medium" style={{ color: '#a1a1a6' }}>Compensation Structure</p>
+                              <div style={{ backgroundColor: '#fef8f0' }} className="rounded-card p-6">
+                                <p className="text-xs mb-4 uppercase tracking-widest font-medium" style={{ color: '#ddb87e' }}>Compensation Structure</p>
                                 <div className="space-y-4">
                                   {(results.benchmark.compensationStructure.basePercent !== undefined || results.benchmark.compensationStructure.bonusPercent !== undefined || results.benchmark.compensationStructure.benefitsPercent !== undefined) && (
                                     <div>
@@ -694,8 +694,8 @@ Write the JD following the system prompt structure exactly. Use the candidate ps
                       <h4 className="font-semibold mb-3" style={{ color: '#2814ff' }}>Success Factors</h4>
                       <ul className="space-y-2">
                         {results.keySuccessFactors?.map((f, i) => (
-                          <li key={i} className="flex items-start gap-3 p-3 rounded-card" style={{ backgroundColor: '#f5f5f7' }}>
-                            <CheckCircle className="w-5 h-5 flex-shrink-0 mt-0.5" style={{ color: '#2814ff' }} />
+                          <li key={i} className="flex items-start gap-3 p-3 rounded-card" style={{ backgroundColor: '#f0f7f5' }}>
+                            <CheckCircle className="w-5 h-5 flex-shrink-0 mt-0.5" style={{ color: '#72a89d' }} />
                             <span style={{ color: '#1d1d1f' }}>{f}</span>
                           </li>
                         ))}
@@ -708,8 +708,8 @@ Write the JD following the system prompt structure exactly. Use the candidate ps
                         <h4 className="font-semibold mb-3" style={{ color: '#2814ff' }}>Recommendations</h4>
                         <ul className="space-y-2">
                           {results.recommendedAdjustments.map((r, i) => (
-                            <li key={i} className="flex items-start gap-3 p-3 rounded-card" style={{ backgroundColor: '#f5f5f7' }}>
-                              <ArrowRight className="w-5 h-5 flex-shrink-0 mt-0.5" style={{ color: '#2814ff' }} />
+                            <li key={i} className="flex items-start gap-3 p-3 rounded-card" style={{ backgroundColor: '#fef8f0' }}>
+                              <ArrowRight className="w-5 h-5 flex-shrink-0 mt-0.5" style={{ color: '#ddb87e' }} />
                               <span style={{ color: '#1d1d1f' }}>{r}</span>
                             </li>
                           ))}
@@ -845,7 +845,7 @@ Write the JD following the system prompt structure exactly. Use the candidate ps
                           'Market-tested job positioning',
                         ].map((item, i) => (
                           <div key={i} className="flex items-center gap-2 text-sm" style={{ color: '#1d1d1f' }}>
-                            <CheckCircle className="w-4 h-4 flex-shrink-0" style={{ color: '#2814ff' }} />
+                            <CheckCircle className="w-4 h-4 flex-shrink-0" style={{ color: '#72a89d' }} />
                             <span>{item}</span>
                           </div>
                         ))}

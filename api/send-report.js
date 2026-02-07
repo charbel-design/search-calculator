@@ -102,7 +102,7 @@ function generateEmailHTML(results) {
     <div style="padding:0 32px 32px;">
       ${sectionHeading('Key Metrics')}
 
-      <div style="padding:16px;background-color:#f5f5f7;border-radius:8px;margin-bottom:12px;border-left:3px solid #2814ff;">
+      <div style="padding:16px;background-color:#f5f5f7;border-radius:8px;margin-bottom:12px;border-left:3px solid #ddb87e;">
         <strong style="color:#6e6e73;font-size:11px;text-transform:uppercase;letter-spacing:0.05em;">Salary Guidance</strong>
         <p style="margin:6px 0 0;color:#1d1d1f;font-size:14px;line-height:1.5;">${e(results.salaryRangeGuidance || 'N/A')}</p>
       </div>
@@ -112,12 +112,12 @@ function generateEmailHTML(results) {
         <p style="margin:6px 0 0;color:#1d1d1f;font-size:14px;line-height:1.5;">${e(results.estimatedTimeline || 'N/A')}</p>
       </div>
 
-      <div style="padding:16px;background-color:#f5f5f7;border-radius:8px;margin-bottom:12px;border-left:3px solid #2814ff;">
+      <div style="padding:16px;background-color:#f5f5f7;border-radius:8px;margin-bottom:12px;border-left:3px solid #72a89d;">
         <strong style="color:#6e6e73;font-size:11px;text-transform:uppercase;letter-spacing:0.05em;">Market Competitiveness</strong>
         <p style="margin:6px 0 0;color:#1d1d1f;font-size:14px;line-height:1.5;">${e(results.marketCompetitiveness || 'N/A')}</p>
       </div>
 
-      <div style="padding:16px;background-color:#f5f5f7;border-radius:8px;border-left:3px solid #2814ff;">
+      <div style="padding:16px;background-color:#f5f5f7;border-radius:8px;border-left:3px solid #72a89d;">
         <strong style="color:#6e6e73;font-size:11px;text-transform:uppercase;letter-spacing:0.05em;">Candidate Availability</strong>
         <p style="margin:6px 0 0;color:#1d1d1f;font-size:14px;line-height:1.5;"><strong>${e(results.candidateAvailability || 'N/A')}</strong> — ${e(results.availabilityReason || '')}</p>
       </div>
@@ -189,8 +189,8 @@ function generateEmailHTML(results) {
     <div style="padding:0 32px 32px;">
       ${sectionHeading('Key Success Factors')}
       ${results.keySuccessFactors.map(f => `
-        <div style="padding:12px 16px;background-color:#f5f5f7;border-radius:8px;margin-bottom:8px;">
-          <span style="color:#2814ff;font-weight:500;">&#10003;</span> <span style="color:#1d1d1f;font-size:14px;">${e(f)}</span>
+        <div style="padding:12px 16px;background-color:#f0f7f5;border-radius:8px;margin-bottom:8px;">
+          <span style="color:#72a89d;font-weight:500;">&#10003;</span> <span style="color:#1d1d1f;font-size:14px;">${e(f)}</span>
         </div>
       `).join('')}
     </div>
@@ -202,8 +202,8 @@ function generateEmailHTML(results) {
     <div style="padding:0 32px 32px;">
       ${sectionHeading('Recommendations')}
       ${results.recommendedAdjustments.map(r => `
-        <div style="padding:12px 16px;background-color:#f5f5f7;border-radius:8px;margin-bottom:8px;">
-          <span style="color:#2814ff;font-weight:500;">&#8594;</span> <span style="color:#1d1d1f;font-size:14px;">${e(r)}</span>
+        <div style="padding:12px 16px;background-color:#fef8f0;border-radius:8px;margin-bottom:8px;">
+          <span style="color:#ddb87e;font-weight:500;">&#8594;</span> <span style="color:#1d1d1f;font-size:14px;">${e(r)}</span>
         </div>
       `).join('')}
     </div>
@@ -307,7 +307,7 @@ function generateEmailHTML(results) {
       <table style="width:100%;border-collapse:collapse;margin-bottom:12px;">
         <tr>
           <td style="padding:16px;background-color:#f5f5f7;border-radius:8px;text-align:center;width:31%;">
-            <div style="font-size:28px;font-weight:600;color:#1d1d1f;">${Math.round(results.benchmark.retentionRisk.firstYearAttrition * 100)}%</div>
+            <div style="font-size:28px;font-weight:600;color:#c77d8a;">${Math.round(results.benchmark.retentionRisk.firstYearAttrition * 100)}%</div>
             <div style="font-size:11px;color:#6e6e73;margin-top:4px;text-transform:uppercase;letter-spacing:0.05em;">First-Year Attrition</div>
           </td>
           <td style="width:3%;"></td>
@@ -326,7 +326,7 @@ function generateEmailHTML(results) {
         <strong style="color:#6e6e73;font-size:11px;text-transform:uppercase;letter-spacing:0.05em;">Top Departure Risks</strong>
         <div style="margin-top:8px;">
           ${(results.benchmark.retentionRisk.topReasons || []).map((reason, i) => `
-            <div style="display:inline-block;padding:5px 12px;background-color:#ffffff;border-radius:16px;margin:3px 4px;font-size:12px;color:#1d1d1f;">
+            <div style="display:inline-block;padding:5px 12px;background-color:#fdf2f4;border-radius:16px;margin:3px 4px;font-size:12px;color:#c77d8a;">
               ${reason}
             </div>
           `).join('')}
@@ -534,7 +534,7 @@ function generateEmailHTML(results) {
       <div style="background-color:#f5f5f7;border-radius:8px;padding:16px;margin-top:8px;">
         <p style="margin:0 0 8px;font-size:12px;font-weight:600;color:#1d1d1f;">What the full engagement includes</p>
         ${['Candidate fit & motivation assessment', 'Compensation negotiation playbook', 'Social due diligence', 'Retention risk analysis & 90-day plan', 'Market-tested job positioning'].map(item =>
-          `<p style="margin:3px 0;font-size:12px;color:#6e6e73;">&#10003; ${item}</p>`
+          `<p style="margin:3px 0;font-size:12px;color:#1d1d1f;"><span style="color:#72a89d;">&#10003;</span> ${item}</p>`
         ).join('')}
       </div>
     </div>
