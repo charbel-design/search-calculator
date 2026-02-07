@@ -77,6 +77,11 @@ export function useSearchEngine() {
   const [whatIfMode, setWhatIfMode] = useState(false);
   const [whatIfBudget, setWhatIfBudget] = useState('');
   const [whatIfTimeline, setWhatIfTimeline] = useState('');
+  const [whatIfBudgetAmount, setWhatIfBudgetAmount] = useState(null); // Dollar slider value
+  const [whatIfLanguages, setWhatIfLanguages] = useState(null); // null = use original
+  const [whatIfTravel, setWhatIfTravel] = useState(null);
+  const [whatIfDiscretion, setWhatIfDiscretion] = useState(null);
+  const [whatIfCerts, setWhatIfCerts] = useState(null);
   const [showEmailModal, setShowEmailModal] = useState(false);
   const [emailForReport, setEmailForReport] = useState('');
   const [sendingEmail, setSendingEmail] = useState(false);
@@ -300,11 +305,16 @@ export function useSearchEngine() {
   };
 
   // Scoring
-  const calculateDeterministicScore = (budgetOverride = null, timelineOverride = null) => {
+  const calculateDeterministicScore = (budgetOverride = null, timelineOverride = null, overrides = {}) => {
     let points = 0;
     const drivers = [];
     const assumptions = [];
     const redFlags = [];
+    const langOverride = overrides.languages !== undefined ? overrides.languages : null;
+    const travelOverride = overrides.travel !== undefined ? overrides.travel : null;
+    const discretionOverride = overrides.discretion !== undefined ? overrides.discretion : null;
+    const certOverride = overrides.certs !== undefined ? overrides.certs : null;
+    const budgetAmountOverride = overrides.budgetAmount !== undefined ? overrides.budgetAmount : null;
 
     // Timeline
     const timelineValue = timelineOverride || formData.timeline;
@@ -336,11 +346,14 @@ export function useSearchEngine() {
     let budgetPoints = 14;
     let budgetRationale = "Unknown";
 
-    if (benchmark && budgetOption?.midpoint) {
+    // Use direct dollar amount if provided via What-If slider, otherwise use budget range midpoint
+    const effectiveMidpoint = budgetAmountOverride !== null ? budgetAmountOverride : budgetOption?.midpoint;
+
+    if (benchmark && effectiveMidpoint) {
       const multiplier = regionalData?.multiplier || 1;
       const adjP50 = benchmark.p50 * multiplier;
       const adjP75 = benchmark.p75 * multiplier;
-      const ratio = budgetOption.midpoint / adjP50;
+      const ratio = effectiveMidpoint / adjP50;
 
       if (ratio >= 1.5) {
         budgetPoints = 0;
@@ -370,22 +383,25 @@ export function useSearchEngine() {
     drivers.push({ factor: "Budget", points: budgetPoints, rationale: budgetRationale });
 
     // Languages
-    const langCount = formData.languageRequirements.length;
+    const activeLangs = langOverride !== null ? langOverride : formData.languageRequirements;
+    const langCount = activeLangs.length;
     let langPoints = langCount === 1 ? 5 : langCount === 2 ? 12 : langCount >= 3 ? 20 : 0;
     if (langPoints > 0) {
       points += langPoints;
-      drivers.push({ factor: "Languages", points: langPoints, rationale: langCount === 1 ? formData.languageRequirements[0] : `${langCount} languages (compound rarity)` });
+      drivers.push({ factor: "Languages", points: langPoints, rationale: langCount === 1 ? activeLangs[0] : `${langCount} languages (compound rarity)` });
     }
 
     // Travel
-    const travelOpt = travelOptions.find(t => t.value === formData.travelRequirement);
+    const activeTravelValue = travelOverride !== null ? travelOverride : formData.travelRequirement;
+    const travelOpt = travelOptions.find(t => t.value === activeTravelValue);
     if (travelOpt?.points > 0) {
       points += travelOpt.points;
       drivers.push({ factor: "Travel", points: travelOpt.points, rationale: travelOpt.label });
     }
 
     // Certifications
-    const certCount = formData.certifications.length;
+    const activeCerts = certOverride !== null ? certOverride : formData.certifications;
+    const certCount = activeCerts.length;
     if (certCount > 0) {
       const certPoints = certCount === 1 ? 4 : 8 + (certCount - 2) * 3;
       points += certPoints;
@@ -393,7 +409,8 @@ export function useSearchEngine() {
     }
 
     // Discretion
-    const discOption = discretionLevels.find(d => d.value === formData.discretionLevel);
+    const activeDiscretion = discretionOverride !== null ? discretionOverride : formData.discretionLevel;
+    const discOption = discretionLevels.find(d => d.value === activeDiscretion);
     if (discOption?.points > 0) {
       points += discOption.points;
       drivers.push({ factor: "Discretion", points: discOption.points, rationale: discOption.label });
@@ -805,8 +822,14 @@ ${benchmark?.regionalNotes ? `Regional Notes: ${benchmark.regionalNotes}` : ''}
     if (!results) return null;
     const budgetVal = whatIfBudget || formData.budgetRange;
     const timelineVal = whatIfTimeline || formData.timeline;
-    return calculateDeterministicScore(budgetVal, timelineVal);
-  }, [whatIfBudget, whatIfTimeline, results]);
+    return calculateDeterministicScore(budgetVal, timelineVal, {
+      budgetAmount: whatIfBudgetAmount,
+      languages: whatIfLanguages,
+      travel: whatIfTravel,
+      discretion: whatIfDiscretion,
+      certs: whatIfCerts
+    });
+  }, [whatIfBudget, whatIfTimeline, whatIfBudgetAmount, whatIfLanguages, whatIfTravel, whatIfDiscretion, whatIfCerts, results]);
 
   // Share URL generation
   const generateShareUrl = () => {
@@ -920,6 +943,11 @@ ${benchmark?.regionalNotes ? `Regional Notes: ${benchmark.regionalNotes}` : ''}
     setWhatIfMode(false);
     setWhatIfBudget('');
     setWhatIfTimeline('');
+    setWhatIfBudgetAmount(null);
+    setWhatIfLanguages(null);
+    setWhatIfTravel(null);
+    setWhatIfDiscretion(null);
+    setWhatIfCerts(null);
     setShareUrl('');
     setShowShareModal(false);
     setShowEmailModal(false);
@@ -952,7 +980,10 @@ ${benchmark?.regionalNotes ? `Regional Notes: ${benchmark.regionalNotes}` : ''}
     filteredLocationSuggestions, compareMode, setCompareMode, comparisonResults,
     showLanguages, setShowLanguages, showRoleComparison, setShowRoleComparison, comparisonRoles,
     shareUrl, showShareModal, setShowShareModal, copiedShare, whatIfMode, setWhatIfMode,
-    whatIfBudget, setWhatIfBudget, whatIfTimeline, setWhatIfTimeline, showEmailModal,
+    whatIfBudget, setWhatIfBudget, whatIfTimeline, setWhatIfTimeline,
+    whatIfBudgetAmount, setWhatIfBudgetAmount, whatIfLanguages, setWhatIfLanguages,
+    whatIfTravel, setWhatIfTravel, whatIfDiscretion, setWhatIfDiscretion,
+    whatIfCerts, setWhatIfCerts, showEmailModal,
     setShowEmailModal, emailForReport, setEmailForReport, sendingEmail, emailSent, setEmailSent, resultsRef,
     // Constants
     positionsByCategory, commonRoles, isCorporateRole, isMaritimeRole, isAviationRole, budgetRanges, timelineOptions,

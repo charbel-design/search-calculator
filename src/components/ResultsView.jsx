@@ -3,7 +3,7 @@ import {
   Share2, Mail, X, AlertCircle, CheckCircle, DollarSign, Clock, TrendingUp, Users, Target, Home, Car, Heart,
   SlidersHorizontal, Layers, Lightbulb, ArrowRight, ArrowLeftRight, Brain, GitBranch, Gauge, BarChart3,
   AlertTriangle, Info, RefreshCw, ArrowLeftCircle, ChevronDown, Compass, MessageCircle, FileText, Shield,
-  ClipboardCopy, Loader2, FileEdit
+  ClipboardCopy, Loader2, FileEdit, Globe, Lock, Award, Plane, RotateCcw
 } from 'lucide-react';
 import { sanitizeForPrompt } from './constants';
 import { ShareModal, EmailModal } from './Modals';
@@ -34,6 +34,9 @@ export function ResultsView({
   results, formData, loading, compareMode, setCompareMode, comparisonResults,
   whatIfMode, setWhatIfMode, whatIfBudget, setWhatIfBudget, whatIfTimeline,
   setWhatIfTimeline, calculateWhatIfScore, timelineOptions, budgetRanges,
+  whatIfBudgetAmount, setWhatIfBudgetAmount, whatIfLanguages, setWhatIfLanguages,
+  whatIfTravel, setWhatIfTravel, whatIfDiscretion, setWhatIfDiscretion,
+  whatIfCerts, setWhatIfCerts, travelOptions, discretionLevels,
   showShareModal, setShowShareModal, shareUrl, copiedShare, copyShareUrl,
   showEmailModal, setShowEmailModal, emailForReport, setEmailForReport,
   handleSendEmail, sendingEmail, emailSent, setEmailSent, generateShareUrl, runComparison,
@@ -232,7 +235,7 @@ Write the JD following the system prompt structure exactly. Use the candidate ps
             </div>
           </div>
 
-          {/* What-If Scenarios - Collapsible */}
+          {/* What-If Simulator - Slider-based */}
           <div className="mb-6 animate-fadeInUp delay-400">
             <div style={{ backgroundColor: '#eeeeff' }} className="rounded-card overflow-hidden">
               <button
@@ -242,60 +245,285 @@ Write the JD following the system prompt structure exactly. Use the candidate ps
                 <div className="flex items-center gap-3">
                   <SlidersHorizontal className="w-4 h-4" style={{ color: '#2814ff' }} />
                   <div className="text-left">
-                    <h4 className="font-semibold text-sm" style={{ color: '#1d1d1f' }}>Play with the Numbers</h4>
-                    <p className="text-xs" style={{ color: '#a1a1a6' }}>Adjust timeline or budget and see the impact</p>
+                    <h4 className="font-semibold text-sm" style={{ color: '#1d1d1f' }}>What-If Simulator</h4>
+                    <p className="text-xs" style={{ color: '#a1a1a6' }}>Slide, toggle, and see the score change in real time</p>
                   </div>
                 </div>
-                <ChevronDown className={`w-4 h-4 transition-transform duration-200`} style={{ color: '#a1a1a6', transform: whatIfMode ? 'rotate(180deg)' : 'rotate(0)' }} />
+                <ChevronDown className="w-4 h-4 transition-transform duration-200" style={{ color: '#a1a1a6', transform: whatIfMode ? 'rotate(180deg)' : 'rotate(0)' }} />
               </button>
 
-              {whatIfMode && (
-                <div className="px-5 pb-5 border-t" style={{ borderColor: '#d2d2d7' }}>
-                  <p className="text-sm mt-4 mb-4" style={{ color: '#6e6e73' }}>Curious how a different timeline or budget changes things? Try it out.</p>
+              {whatIfMode && (() => {
+                // Compute budget slider bounds from benchmark
+                const benchmark = results?.benchmark;
+                const regionalMult = results?.regionalMultiplier || 1;
+                const currentBudgetOption = budgetRanges.find(b => b.value === formData.budgetRange);
+                const currentMidpoint = currentBudgetOption?.midpoint || 0;
+                const p25 = benchmark ? Math.round(benchmark.p25 * regionalMult) : 0;
+                const p75 = benchmark ? Math.round(benchmark.p75 * regionalMult) : 0;
+                const sliderMin = Math.round(Math.min(currentMidpoint, p25) * 0.5);
+                const sliderMax = Math.round(Math.max(currentMidpoint, p75) * 1.6);
+                const sliderStep = sliderMax > 500000 ? 25000 : sliderMax > 200000 ? 10000 : 5000;
+                const budgetSliderValue = whatIfBudgetAmount !== null ? whatIfBudgetAmount : currentMidpoint;
 
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
-                    <div>
-                      <label className="block text-xs font-medium mb-1" style={{ color: '#6e6e73' }}>Timeline</label>
-                      <CustomSelect name="whatIfTimeline" value={whatIfTimeline || formData.timeline}
-                        onChange={(e) => setWhatIfTimeline(e.target.value)}
-                        options={timelineOptions} placeholder="Select timeline" />
-                    </div>
-                    <div>
-                      <label className="block text-xs font-medium mb-1" style={{ color: '#6e6e73' }}>Budget</label>
-                      <CustomSelect name="whatIfBudget" value={whatIfBudget || formData.budgetRange}
-                        onChange={(e) => setWhatIfBudget(e.target.value)}
-                        options={budgetRanges} placeholder="Select budget range" />
-                    </div>
-                  </div>
+                const formatCurrency = (val) => {
+                  if (val >= 1000000) return `$${(val / 1000000).toFixed(val % 1000000 === 0 ? 0 : 1)}M`;
+                  return `$${Math.round(val / 1000)}k`;
+                };
 
-                  {calculateWhatIfScore && (
-                    <div className="bg-white rounded-btn p-4 border" style={{ borderColor: '#d2d2d7' }}>
-                      <div>
-                        <div className="text-xs mb-1" style={{ color: '#a1a1a6' }}>What-If Score</div>
-                        <div className="flex items-center gap-3">
-                          <span className="text-3xl font-semibold" style={{ color: '#2814ff' }}>
-                            {calculateWhatIfScore.score}
-                          </span>
-                          <span className="text-sm" style={{ color: '#a1a1a6' }}>/ 10</span>
-                          <span className="px-2 py-1 rounded-full text-xs font-medium" style={{ backgroundColor: '#eeeeff', color: '#6e6e73' }}>
-                            {calculateWhatIfScore.label}
-                          </span>
+                // Active values for toggles
+                const activeLangs = whatIfLanguages !== null ? whatIfLanguages : formData.languageRequirements;
+                const activeTravel = whatIfTravel !== null ? whatIfTravel : formData.travelRequirement;
+                const activeDiscretion = whatIfDiscretion !== null ? whatIfDiscretion : formData.discretionLevel;
+                const activeCerts = whatIfCerts !== null ? whatIfCerts : formData.certifications;
+                const activeTimeline = whatIfTimeline || formData.timeline;
+
+                const hasChanges = whatIfBudgetAmount !== null || whatIfLanguages !== null || whatIfTravel !== null ||
+                  whatIfDiscretion !== null || whatIfCerts !== null || whatIfTimeline || whatIfBudget;
+
+                const resetWhatIf = () => {
+                  setWhatIfBudgetAmount(null);
+                  setWhatIfLanguages(null);
+                  setWhatIfTravel(null);
+                  setWhatIfDiscretion(null);
+                  setWhatIfCerts(null);
+                  setWhatIfTimeline('');
+                  setWhatIfBudget('');
+                };
+
+                const delta = calculateWhatIfScore ? calculateWhatIfScore.score - results.score : 0;
+
+                return (
+                  <div className="px-5 pb-5 border-t" style={{ borderColor: '#d2d4ff' }}>
+                    {/* Live Score Display */}
+                    {calculateWhatIfScore && (
+                      <div className="mt-4 mb-5 bg-white rounded-btn p-4 border" style={{ borderColor: '#d2d4ff' }}>
+                        <div className="flex items-center justify-between">
+                          <div className="flex items-center gap-3">
+                            <div>
+                              <div className="text-[10px] uppercase tracking-widest mb-0.5" style={{ color: '#a1a1a6' }}>Simulated Score</div>
+                              <div className="flex items-baseline gap-2">
+                                <span className="text-3xl font-semibold" style={{ color: '#2814ff' }}>
+                                  {calculateWhatIfScore.score}
+                                </span>
+                                <span className="text-sm" style={{ color: '#a1a1a6' }}>/ 10</span>
+                                <span className="px-2 py-0.5 rounded-full text-[11px] font-medium" style={{ backgroundColor: '#eeeeff', color: '#2814ff' }}>
+                                  {calculateWhatIfScore.label}
+                                </span>
+                              </div>
+                            </div>
+                          </div>
+                          <div className="text-right">
+                            <div className="text-[10px] uppercase tracking-widest mb-0.5" style={{ color: '#a1a1a6' }}>vs. Current ({results.score})</div>
+                            {delta !== 0 ? (
+                              <span className="text-lg font-semibold" style={{ color: delta < 0 ? '#5f9488' : '#c77d8a' }}>
+                                {delta < 0 ? '↓' : '↑'} {Math.abs(delta)} pt{Math.abs(delta) !== 1 ? 's' : ''}
+                              </span>
+                            ) : (
+                              <span className="text-sm" style={{ color: '#a1a1a6' }}>No change</span>
+                            )}
+                          </div>
                         </div>
                       </div>
-                      <div className="text-right mt-3">
-                        <div className="text-xs" style={{ color: '#a1a1a6' }}>vs. Current</div>
-                        {calculateWhatIfScore.score !== results.score ? (
-                          <span className="text-sm font-semibold" style={{ color: '#2814ff' }}>
-                            {calculateWhatIfScore.score < results.score ? '↓' : '↑'} {Math.abs(calculateWhatIfScore.score - results.score)} point{Math.abs(calculateWhatIfScore.score - results.score) !== 1 ? 's' : ''}
+                    )}
+
+                    {/* Budget Slider */}
+                    {currentMidpoint > 0 && (
+                      <div className="mb-5">
+                        <div className="flex items-center gap-2 mb-2">
+                          <DollarSign className="w-3.5 h-3.5" style={{ color: '#c4975e' }} />
+                          <span className="text-xs font-medium" style={{ color: '#1d1d1f' }}>Compensation Budget</span>
+                          <span className="text-xs ml-auto font-semibold" style={{ color: '#2814ff' }}>
+                            {formatCurrency(budgetSliderValue)}
                           </span>
-                        ) : (
-                          <span className="text-sm" style={{ color: '#a1a1a6' }}>No change</span>
-                        )}
+                        </div>
+                        <input
+                          type="range"
+                          min={sliderMin}
+                          max={sliderMax}
+                          step={sliderStep}
+                          value={budgetSliderValue}
+                          onChange={(e) => setWhatIfBudgetAmount(Number(e.target.value))}
+                          className="w-full h-1.5 rounded-full appearance-none cursor-pointer"
+                          style={{
+                            background: `linear-gradient(to right, #2814ff ${((budgetSliderValue - sliderMin) / (sliderMax - sliderMin)) * 100}%, #d2d4ff ${((budgetSliderValue - sliderMin) / (sliderMax - sliderMin)) * 100}%)`,
+                            WebkitAppearance: 'none'
+                          }}
+                        />
+                        <div className="flex justify-between mt-1">
+                          <span className="text-[10px]" style={{ color: '#a1a1a6' }}>{formatCurrency(sliderMin)}</span>
+                          {benchmark && <span className="text-[10px]" style={{ color: '#a1a1a6' }}>Median: {formatCurrency(Math.round(benchmark.p50 * regionalMult))}</span>}
+                          <span className="text-[10px]" style={{ color: '#a1a1a6' }}>{formatCurrency(sliderMax)}</span>
+                        </div>
+                      </div>
+                    )}
+
+                    {/* Timeline Segmented Control */}
+                    <div className="mb-5">
+                      <div className="flex items-center gap-2 mb-2">
+                        <Clock className="w-3.5 h-3.5" style={{ color: '#2814ff' }} />
+                        <span className="text-xs font-medium" style={{ color: '#1d1d1f' }}>Timeline</span>
+                      </div>
+                      <div className="flex gap-1 p-0.5 rounded-btn" style={{ backgroundColor: '#d2d4ff33' }}>
+                        {timelineOptions.map(opt => (
+                          <button
+                            key={opt.value}
+                            onClick={() => setWhatIfTimeline(opt.value === formData.timeline ? '' : opt.value)}
+                            className="flex-1 py-1.5 px-1 rounded-md text-[11px] font-medium transition-all duration-150"
+                            style={{
+                              backgroundColor: activeTimeline === opt.value ? '#2814ff' : 'transparent',
+                              color: activeTimeline === opt.value ? '#ffffff' : '#6e6e73'
+                            }}
+                          >
+                            {opt.label.split('(')[0].trim()}
+                          </button>
+                        ))}
                       </div>
                     </div>
-                  )}
-                </div>
-              )}
+
+                    {/* Language Requirement Toggles */}
+                    {formData.languageRequirements.length > 0 && (
+                      <div className="mb-5">
+                        <div className="flex items-center gap-2 mb-2">
+                          <Globe className="w-3.5 h-3.5" style={{ color: '#2814ff' }} />
+                          <span className="text-xs font-medium" style={{ color: '#1d1d1f' }}>Language Requirements</span>
+                          <span className="text-[10px] ml-auto" style={{ color: '#a1a1a6' }}>
+                            {activeLangs.length} of {formData.languageRequirements.length} active
+                          </span>
+                        </div>
+                        <div className="flex flex-wrap gap-2">
+                          {formData.languageRequirements.map(lang => {
+                            const isActive = activeLangs.includes(lang);
+                            return (
+                              <button
+                                key={lang}
+                                onClick={() => {
+                                  const current = whatIfLanguages !== null ? whatIfLanguages : [...formData.languageRequirements];
+                                  if (isActive) {
+                                    setWhatIfLanguages(current.filter(l => l !== lang));
+                                  } else {
+                                    setWhatIfLanguages([...current, lang]);
+                                  }
+                                }}
+                                className="px-3 py-1.5 rounded-full text-xs font-medium transition-all duration-150 border"
+                                style={{
+                                  backgroundColor: isActive ? '#2814ff' : '#ffffff',
+                                  color: isActive ? '#ffffff' : '#a1a1a6',
+                                  borderColor: isActive ? '#2814ff' : '#d2d2d7',
+                                  textDecoration: isActive ? 'none' : 'line-through'
+                                }}
+                              >
+                                {lang}
+                              </button>
+                            );
+                          })}
+                        </div>
+                      </div>
+                    )}
+
+                    {/* Travel Requirement */}
+                    {travelOptions && (
+                      <div className="mb-5">
+                        <div className="flex items-center gap-2 mb-2">
+                          <Plane className="w-3.5 h-3.5" style={{ color: '#2814ff' }} />
+                          <span className="text-xs font-medium" style={{ color: '#1d1d1f' }}>Travel Requirement</span>
+                        </div>
+                        <div className="flex gap-1 p-0.5 rounded-btn" style={{ backgroundColor: '#d2d4ff33' }}>
+                          {travelOptions.map(opt => (
+                            <button
+                              key={opt.value}
+                              onClick={() => setWhatIfTravel(opt.value === formData.travelRequirement ? null : opt.value)}
+                              className="flex-1 py-1.5 px-1 rounded-md text-[11px] font-medium transition-all duration-150"
+                              style={{
+                                backgroundColor: activeTravel === opt.value ? '#2814ff' : 'transparent',
+                                color: activeTravel === opt.value ? '#ffffff' : '#6e6e73'
+                              }}
+                            >
+                              {opt.label.split('(')[0].trim()}
+                            </button>
+                          ))}
+                        </div>
+                      </div>
+                    )}
+
+                    {/* Discretion Level */}
+                    {discretionLevels && (
+                      <div className="mb-5">
+                        <div className="flex items-center gap-2 mb-2">
+                          <Shield className="w-3.5 h-3.5" style={{ color: '#2814ff' }} />
+                          <span className="text-xs font-medium" style={{ color: '#1d1d1f' }}>Discretion Level</span>
+                        </div>
+                        <div className="flex gap-1 p-0.5 rounded-btn" style={{ backgroundColor: '#d2d4ff33' }}>
+                          {discretionLevels.map(opt => (
+                            <button
+                              key={opt.value}
+                              onClick={() => setWhatIfDiscretion(opt.value === formData.discretionLevel ? null : opt.value)}
+                              className="flex-1 py-1.5 px-1 rounded-md text-[11px] font-medium transition-all duration-150"
+                              style={{
+                                backgroundColor: activeDiscretion === opt.value ? '#2814ff' : 'transparent',
+                                color: activeDiscretion === opt.value ? '#ffffff' : '#6e6e73'
+                              }}
+                            >
+                              {opt.label.split('-')[0].trim()}
+                            </button>
+                          ))}
+                        </div>
+                      </div>
+                    )}
+
+                    {/* Certification Toggles */}
+                    {formData.certifications.length > 0 && (
+                      <div className="mb-5">
+                        <div className="flex items-center gap-2 mb-2">
+                          <Award className="w-3.5 h-3.5" style={{ color: '#2814ff' }} />
+                          <span className="text-xs font-medium" style={{ color: '#1d1d1f' }}>Certifications</span>
+                          <span className="text-[10px] ml-auto" style={{ color: '#a1a1a6' }}>
+                            {activeCerts.length} of {formData.certifications.length} required
+                          </span>
+                        </div>
+                        <div className="flex flex-wrap gap-2">
+                          {formData.certifications.map(cert => {
+                            const isActive = activeCerts.includes(cert);
+                            return (
+                              <button
+                                key={cert}
+                                onClick={() => {
+                                  const current = whatIfCerts !== null ? whatIfCerts : [...formData.certifications];
+                                  if (isActive) {
+                                    setWhatIfCerts(current.filter(c => c !== cert));
+                                  } else {
+                                    setWhatIfCerts([...current, cert]);
+                                  }
+                                }}
+                                className="px-3 py-1.5 rounded-full text-xs font-medium transition-all duration-150 border"
+                                style={{
+                                  backgroundColor: isActive ? '#2814ff' : '#ffffff',
+                                  color: isActive ? '#ffffff' : '#a1a1a6',
+                                  borderColor: isActive ? '#2814ff' : '#d2d2d7',
+                                  textDecoration: isActive ? 'none' : 'line-through'
+                                }}
+                              >
+                                {cert}
+                              </button>
+                            );
+                          })}
+                        </div>
+                      </div>
+                    )}
+
+                    {/* Reset Button */}
+                    {hasChanges && (
+                      <button
+                        onClick={resetWhatIf}
+                        className="flex items-center gap-1.5 text-xs font-medium px-3 py-1.5 rounded-btn transition-opacity hover:opacity-70"
+                        style={{ color: '#2814ff' }}
+                      >
+                        <RotateCcw className="w-3 h-3" />
+                        Reset to original
+                      </button>
+                    )}
+                  </div>
+                );
+              })()}
             </div>
           </div>
 

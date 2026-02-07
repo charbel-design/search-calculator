@@ -88,6 +88,32 @@ input:focus, textarea:focus, select:focus {
   outline: none;
 }
 
+/* Range slider thumb */
+input[type="range"]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: #2814ff;
+  cursor: pointer;
+  border: 3px solid #ffffff;
+  box-shadow: 0 1px 4px rgba(40, 20, 255, 0.3);
+  transition: transform 0.15s ease;
+}
+input[type="range"]::-webkit-slider-thumb:hover {
+  transform: scale(1.15);
+}
+input[type="range"]::-moz-range-thumb {
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: #2814ff;
+  cursor: pointer;
+  border: 3px solid #ffffff;
+  box-shadow: 0 1px 4px rgba(40, 20, 255, 0.3);
+}
+
 /* Custom scrollbar for dropdowns */
 .custom-scrollbar::-webkit-scrollbar {
   width: 4px;
