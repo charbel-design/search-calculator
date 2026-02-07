@@ -74,6 +74,37 @@ export function FormSteps({
 }) {
   const [showAllCerts, setShowAllCerts] = React.useState(false);
   const [showAllLangs, setShowAllLangs] = React.useState(false);
+  const [positionFilter, setPositionFilter] = React.useState(null);
+
+  // Category mapping for position filter
+  const catToGroup = React.useMemo(() => {
+    const map = {};
+    for (const [gName, subCats] of Object.entries(CATEGORY_GROUPS)) {
+      for (const cat of subCats) map[cat] = gName;
+    }
+    return map;
+  }, []);
+
+  // Apply category filter on top of search filter
+  const displayedPositions = React.useMemo(() => {
+    if (!positionFilter) return filteredPositions;
+    return filteredPositions.filter(role => catToGroup[BENCHMARKS[role]?.category] === positionFilter);
+  }, [filteredPositions, positionFilter, catToGroup]);
+
+  // Role counts per group (based on current search filter)
+  const groupCounts = React.useMemo(() => {
+    const counts = {};
+    for (const role of filteredPositions) {
+      const g = catToGroup[BENCHMARKS[role]?.category];
+      if (g) counts[g] = (counts[g] || 0) + 1;
+    }
+    return counts;
+  }, [filteredPositions, catToGroup]);
+
+  // Clear category filter when user starts typing
+  React.useEffect(() => {
+    if (positionSearch.trim()) setPositionFilter(null);
+  }, [positionSearch]);
 
   const [elapsed, setElapsed] = React.useState(0);
   const [factIndex, setFactIndex] = React.useState(0);
@@ -240,53 +271,81 @@ export function FormSteps({
                   onFocus={(e) => { e.currentTarget.style.borderColor = '#2814ff'; setShowPositionSuggestions(true); if (formData.positionType) { setPositionSearch(''); setFormData({ ...formData, positionType: '' }); } }}
                   onBlur={(e) => { e.currentTarget.style.borderColor = '#d2d2d7'; setTimeout(() => { setShowPositionSuggestions(false); setHighlightedLocationIndex(-1); }, 200); }}
                   onKeyDown={(e) => {
-                    if (e.key === 'ArrowDown') { e.preventDefault(); setHighlightedPositionIndex(prev => prev < filteredPositions.length - 1 ? prev + 1 : prev); }
+                    if (e.key === 'ArrowDown') { e.preventDefault(); setHighlightedPositionIndex(prev => prev < displayedPositions.length - 1 ? prev + 1 : prev); }
                     else if (e.key === 'ArrowUp') { e.preventDefault(); setHighlightedPositionIndex(prev => prev > 0 ? prev - 1 : prev); }
-                    else if (e.key === 'Enter' && highlightedPositionIndex >= 0) { e.preventDefault(); const selected = filteredPositions[highlightedPositionIndex]; setFormData({ ...formData, positionType: selected }); setPositionSearch(''); setShowPositionSuggestions(false); setHighlightedPositionIndex(-1); }
-                    else if (e.key === 'Escape') { setShowPositionSuggestions(false); setHighlightedPositionIndex(-1); }
+                    else if (e.key === 'Enter' && highlightedPositionIndex >= 0) { e.preventDefault(); const selected = displayedPositions[highlightedPositionIndex]; if (selected) { setFormData({ ...formData, positionType: selected }); setPositionSearch(''); setShowPositionSuggestions(false); setHighlightedPositionIndex(-1); setPositionFilter(null); } }
+                    else if (e.key === 'Escape') { setShowPositionSuggestions(false); setHighlightedPositionIndex(-1); setPositionFilter(null); }
                   }}
                   className="w-full pl-10 pr-10 py-3 border rounded-btn transition-colors duration-200 text-sm"
                   style={{ borderColor: '#d2d2d7', minHeight: '44px', outline: 'none' }}
                   placeholder="Search roles... (e.g., Estate Manager, CIO, Private Chef)"
                 />
                 {formData.positionType && (
-                  <button type="button" onClick={() => { setFormData({ ...formData, positionType: '' }); setPositionSearch(''); }}
+                  <button type="button" onClick={() => { setFormData({ ...formData, positionType: '' }); setPositionSearch(''); setPositionFilter(null); }}
                     className="absolute right-3 top-1/2 -translate-y-1/2 hover:opacity-75 transition-opacity" style={{ color: '#a1a1a6' }}>
                     <span className="text-lg leading-none">&times;</span>
                   </button>
                 )}
                 {showPositionSuggestions && filteredPositions.length > 0 && (
-                  <div className="absolute z-20 w-full mt-1 bg-white rounded-btn shadow-elevated max-h-64 overflow-y-auto custom-scrollbar">
-                    {(() => {
-                      const groupLabels = { "Family Office - Corporate": "Family Office", "Portfolio Company": "Portfolio Company", "Private Service": "Private Service & Household" };
-                      const catToGroup = {};
-                      for (const [gName, subCats] of Object.entries(CATEGORY_GROUPS)) {
-                        for (const cat of subCats) catToGroup[cat] = gName;
-                      }
-                      let lastGroup = null;
-                      return filteredPositions.map((role, idx) => {
-                        const group = catToGroup[BENCHMARKS[role]?.category] || null;
-                        const showHeader = group && group !== lastGroup;
-                        if (showHeader) lastGroup = group;
-                        return (
-                          <React.Fragment key={role}>
-                            {showHeader && (
-                              <div className="px-4 py-2 sticky top-0 bg-white z-10" style={{ borderBottom: '1px solid #eeeeff' }}>
-                                <span className="text-[10px] font-semibold uppercase" style={{ color: '#2814ff', letterSpacing: '0.08em' }}>{groupLabels[group] || group}</span>
-                              </div>
-                            )}
-                            <button type="button"
-                              onClick={() => { setFormData({ ...formData, positionType: role }); setPositionSearch(''); setShowPositionSuggestions(false); setHighlightedPositionIndex(-1); }}
-                              onMouseEnter={() => setHighlightedPositionIndex(idx)}
-                              className="w-full text-left px-4 py-2.5 text-sm flex items-center justify-between transition-colors duration-100"
-                              style={idx === highlightedPositionIndex ? { backgroundColor: '#2814ff', color: '#ffffff' } : { color: '#1d1d1f' }}>
-                              <span>{role}</span>
-                              {BENCHMARKS[role] && <span className="text-xs ml-2 tabular-nums" style={{ opacity: idx === highlightedPositionIndex ? 0.8 : 0.5 }}>${BENCHMARKS[role].p50.toLocaleString()}</span>}
-                            </button>
-                          </React.Fragment>
-                        );
-                      });
-                    })()}
+                  <div className="absolute z-20 w-full mt-1 bg-white rounded-btn shadow-elevated overflow-hidden">
+                    {/* Category filter pills */}
+                    <div className="flex gap-1.5 px-3 py-2.5" style={{ borderBottom: '1px solid #eeeeff', backgroundColor: '#fafaff' }}>
+                      {[
+                        { key: "Family Office - Corporate", label: "Family Office", Icon: Briefcase },
+                        { key: "Portfolio Company", label: "Portfolio Co.", Icon: Target },
+                        { key: "Private Service", label: "Private Service", Icon: Shield },
+                      ].map(({ key, label, Icon }) => (
+                        groupCounts[key] > 0 && (
+                          <button key={key} type="button"
+                            onMouseDown={(e) => { e.preventDefault(); e.stopPropagation(); setPositionFilter(positionFilter === key ? null : key); setHighlightedPositionIndex(-1); }}
+                            className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-full text-[11px] font-medium transition-all duration-200"
+                            style={positionFilter === key
+                              ? { backgroundColor: '#2814ff', color: '#ffffff', boxShadow: '0 1px 3px rgba(40,20,255,0.3)' }
+                              : { backgroundColor: '#ffffff', color: '#6e6e73', border: '1px solid #e5e5ea' }
+                            }>
+                            <Icon className="w-3 h-3" />
+                            <span>{label}</span>
+                            <span className="tabular-nums" style={{ opacity: 0.6 }}>{groupCounts[key]}</span>
+                          </button>
+                        )
+                      ))}
+                    </div>
+                    {/* Role list */}
+                    <div className="max-h-52 overflow-y-auto custom-scrollbar">
+                      {(() => {
+                        const groupLabels = { "Family Office - Corporate": "Family Office", "Portfolio Company": "Portfolio Company", "Private Service": "Private Service & Household" };
+                        let lastGroup = null;
+                        return displayedPositions.map((role, idx) => {
+                          const group = catToGroup[BENCHMARKS[role]?.category] || null;
+                          const showHeader = !positionFilter && group && group !== lastGroup;
+                          if (showHeader) lastGroup = group;
+                          return (
+                            <React.Fragment key={role}>
+                              {showHeader && (
+                                <div className="px-4 py-1.5 bg-white" style={{ borderBottom: '1px solid #eeeeff' }}>
+                                  <span className="text-[10px] font-semibold uppercase" style={{ color: '#2814ff', letterSpacing: '0.08em' }}>{groupLabels[group] || group}</span>
+                                </div>
+                              )}
+                              <button type="button"
+                                onClick={() => { setFormData({ ...formData, positionType: role }); setPositionSearch(''); setShowPositionSuggestions(false); setHighlightedPositionIndex(-1); setPositionFilter(null); }}
+                                onMouseEnter={() => setHighlightedPositionIndex(idx)}
+                                className="w-full text-left px-4 py-2.5 text-sm flex items-center justify-between transition-colors duration-100"
+                                style={idx === highlightedPositionIndex ? { backgroundColor: '#2814ff', color: '#ffffff' } : { color: '#1d1d1f' }}>
+                                <span>{role}</span>
+                                {BENCHMARKS[role] && <span className="text-xs ml-2 tabular-nums" style={{ opacity: idx === highlightedPositionIndex ? 0.8 : 0.5 }}>${BENCHMARKS[role].p50.toLocaleString()}</span>}
+                              </button>
+                            </React.Fragment>
+                          );
+                        });
+                      })()}
+                      {displayedPositions.length === 0 && positionFilter && (
+                        <div className="p-4 text-center">
+                          <p className="text-sm" style={{ color: '#6e6e73' }}>No roles match in this category</p>
+                          <button type="button" onMouseDown={(e) => { e.preventDefault(); setPositionFilter(null); }}
+                            className="mt-1 text-xs font-medium hover:opacity-75" style={{ color: '#2814ff' }}>Show all roles</button>
+                        </div>
+                      )}
+                    </div>
                   </div>
                 )}
                 {showPositionSuggestions && positionSearch && filteredPositions.length === 0 && (
