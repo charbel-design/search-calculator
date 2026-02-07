@@ -103,6 +103,83 @@ export function FormSteps({
 
   const stepLabels = ['Role', 'Budget', 'Requirements', 'Finalize'];
 
+  // Role-aware placeholder text
+  const rolePlaceholders = React.useMemo(() => {
+    const pos = formData.positionType;
+    const bm = pos ? BENCHMARKS[pos] : null;
+    const cat = bm?.category || '';
+
+    // --- Ideal candidate description ---
+    const roleSpecific = {
+      "Portfolio Company CEO / Managing Director": "e.g., PE-backed CEO with $50M+ revenue experience, turnaround or growth track record, strong board presence, equity negotiation savvy...",
+      "Portfolio Company CFO": "e.g., Big 4 + PE-backed CFO, EBITDA-driven reporting, debt covenant management, IPO or exit-ready audit preparation...",
+      "Portfolio Company COO": "e.g., Operational transformation in PE-backed companies, supply chain or manufacturing optimization, P&L ownership, Six Sigma...",
+      "Portfolio Company General Counsel": "e.g., M&A transactional experience, PE fund-side or portfolio company legal, regulatory compliance, board governance...",
+      "Portfolio Company CHRO / Head of People": "e.g., Organizational design in PE-backed contexts, talent integration post-acquisition, change management, culture building...",
+      "Board Director (Independent)": "e.g., Independent board experience with PE or FO-backed companies, NACD certified, audit or compensation committee, industry expertise...",
+      "Board Chair (Independent)": "e.g., Board chair with PE/FO governance experience, CEO oversight, strategic planning leadership, succession planning...",
+      "Operating Partner": "e.g., Fund-level operating partner, portfolio value creation across 5+ companies, hands-on transformation, carry-motivated...",
+      "Investment Director (Portfolio Oversight)": "e.g., Direct investing experience, deal sourcing and due diligence, portfolio monitoring, co-investment structuring...",
+      "Head of Portfolio Operations": "e.g., Multi-company operational oversight, PMO leadership, digital systems implementation, cross-portfolio KPI frameworks...",
+      "VP Finance / FP&A (Portfolio)": "e.g., FP&A in PE-backed company, financial modeling, board reporting packages, ERP implementation, CPA preferred...",
+      "VP Operations (Portfolio)": "e.g., Plant or multi-site operations leadership, lean manufacturing, supply chain optimization, KPI-driven improvement...",
+      "VP Sales / CRO (Portfolio)": "e.g., PE-backed sales leadership, $20M+ ARR scaling, sales team builder, data-driven pipeline, quota-carrying background...",
+      "VP Technology / CTO (Portfolio)": "e.g., Cloud-native architecture, engineering team builder, tech debt reduction, AI/ML integration, PE-backed environment...",
+      "VP Marketing / CMO (Portfolio)": "e.g., Demand generation in PE-backed growth companies, brand-to-revenue pipeline, MarTech stack expertise, CAC optimization...",
+      "Chief of Staff": "e.g., 10+ years managing UHNW estates, multi-property oversight, vendor management, principal-facing presence, travel-ready...",
+      "Estate Manager": "e.g., 8+ years managing $10M+ estates, smart-home technology, staff supervision, project management, multi-property...",
+      "Family Office Director": "e.g., 15+ years family office leadership, $500M+ AUM, next-gen wealth transfer, multi-jurisdictional tax coordination...",
+      "Private Chef": "e.g., Culinary degree + fine dining experience, Mediterranean and French cuisine, dietary restrictions, private events and entertaining...",
+      "Executive Chef": "e.g., Michelin-star or 5-star hotel kitchen, team leadership, menu planning for principals and large-scale events, farm-to-table...",
+      "Captain (Yacht)": "e.g., MCA Master 3000GT, 10+ years on 60m+, Mediterranean and Caribbean charter, fleet management, crew leadership...",
+      "Head of Security / Security Director": "e.g., Former Secret Service or law enforcement, advance team experience, threat assessment, UHNW family protocols, global travel...",
+      "Nanny": "e.g., Early childhood education degree, 5+ years with UHNW families, bilingual preferred, newborn or multiples experience, travel-ready...",
+      "House Manager": "e.g., 5+ years managing UHNW households, staff scheduling, vendor coordination, event planning, multi-property...",
+      "Butler": "e.g., Formal service training (British Butler Institute or equivalent), silver service, wine knowledge, table setting, discretion...",
+      "Personal Assistant": "e.g., 5+ years supporting UHNW principals, complex travel logistics, calendar management, project coordination, NDA-comfortable...",
+    };
+    if (roleSpecific[pos]) return {
+      candidate: roleSpecific[pos],
+      location: getLocationHint(cat),
+    };
+
+    // Category-based fallbacks
+    const categoryHints = {
+      "Family Office - C-Suite": "e.g., 15+ years in family office or institutional investment, principal-level trust, direct deal experience, discretion...",
+      "Family Office - Investment": "e.g., CFA preferred, 10+ years in multi-asset allocation, family office or endowment background, co-investment experience...",
+      "Family Office - Operations & Finance": "e.g., CPA preferred, 5+ years in family office accounting, multi-entity reporting, tax coordination, bill-pay systems...",
+      "Family Office - Support": "e.g., 5+ years supporting UHNW principals or family office teams, tech-savvy, highly organized, NDA-comfortable...",
+      "Portfolio Company - C-Suite": "e.g., PE-backed C-suite experience, value creation track record, board reporting fluency, equity negotiation, operational focus...",
+      "Portfolio Company - Board": "e.g., Independent board experience, governance expertise, committee leadership, PE or family office familiarity...",
+      "Portfolio Company - Operations": "e.g., Fund-level or portfolio company operations, hands-on value creation, carry-motivated, cross-portfolio experience...",
+      "Portfolio Company - Functional Leadership": "e.g., VP-level in PE-backed or high-growth companies, hands-on builder, KPI-driven, comfortable with board reporting...",
+      "Estate Leadership": "e.g., 10+ years managing UHNW estates, multi-property oversight, vendor management, staff supervision, travel-ready...",
+      "Personal & Administrative": "e.g., 5+ years as personal or executive assistant to UHNW principals, travel logistics, calendar management, discrete...",
+      "Formal Service": "e.g., Formal service training, silver service, wine and table knowledge, multi-property experience, discrete and polished...",
+      "Culinary": "e.g., Fine dining or Michelin background, specialized cuisine expertise, dietary restriction knowledge, private events...",
+      "Childcare & Education": "e.g., Education degree, 5+ years with UHNW families, bilingual preferred, curriculum development, travel-willing...",
+      "Security": "e.g., Law enforcement or military background, close protection certified, threat assessment, UHNW family protocols...",
+      "Transportation": "e.g., Professional chauffeur license, 5+ years driving for UHNW principals, impeccable record, discrete, vehicle maintenance...",
+      "Maritime / Yacht": "e.g., STCW and ENG1 certified, 5+ years on 50m+ yachts, Med and Caribbean experience, charter-ready...",
+      "Grounds & Outdoor": "e.g., Horticulture degree or 10+ years grounds management, irrigation systems, seasonal planning, multiple properties...",
+      "Healthcare & Wellness": "e.g., Licensed RN or wellness practitioner, 5+ years in private or concierge healthcare, travel-willing, discrete...",
+      "Hospitality & Collections": "e.g., Luxury hospitality background, art handling or wine cellar management, event coordination, inventory systems...",
+    };
+
+    return {
+      candidate: categoryHints[cat] || "Describe your ideal candidate — experience, skills, certifications, languages, personality traits...",
+      location: getLocationHint(cat),
+    };
+  }, [formData.positionType]);
+
+  function getLocationHint(category) {
+    if (category === 'Maritime / Yacht') return "e.g., Fort Lauderdale, FL or Antibes, France";
+    if (category?.startsWith('Portfolio Company')) return "e.g., New York, NY or London, UK";
+    if (category?.startsWith('Family Office')) return "e.g., New York, NY or Zurich, Switzerland";
+    if (category === 'Transportation') return "e.g., Greenwich, CT or Beverly Hills, CA";
+    return "e.g., Palm Beach, FL or Monaco";
+  }
+
   return (
     <>
       {/* Progress Indicator — Minimal */}
@@ -244,7 +321,7 @@ export function FormSteps({
                   onKeyDown={handleLocationKeyDown}
                   className="w-full pl-10 pr-4 py-3 border rounded-btn transition-colors duration-200 text-sm"
                   style={{ borderColor: '#d2d2d7', minHeight: '44px', outline: 'none' }}
-                  placeholder="e.g., Palm Beach, FL or Monaco" />
+                  placeholder={rolePlaceholders.location} />
               </div>
               {showLocationSuggestions && filteredLocationSuggestions.length > 0 && (
                 <div className="absolute z-10 w-full mt-1 bg-white rounded-btn shadow-elevated max-h-64 overflow-y-auto custom-scrollbar">
@@ -351,7 +428,7 @@ export function FormSteps({
                 style={{ borderColor: '#d2d2d7', minHeight: '44px', outline: 'none' }}
                 onFocus={(e) => e.currentTarget.style.borderColor = '#2814ff'}
                 onBlur={(e) => e.currentTarget.style.borderColor = '#d2d2d7'}
-                placeholder="e.g., 10+ years managing UHNW estates, fluent in French, discreet with high-profile families..." />
+                placeholder={rolePlaceholders.candidate} />
               <div className="flex items-center justify-between mt-1.5">
                 <p className="text-xs" style={{ color: formData.keyRequirements.length >= 25 ? '#5f9488' : '#a1a1a6' }}>
                   {formData.keyRequirements.length >= 25 ? 'Looking good' : `${25 - formData.keyRequirements.length} more characters for best results`}
