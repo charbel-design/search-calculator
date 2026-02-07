@@ -37,15 +37,18 @@ import {
 console.log(`Search Calculator v${APP_VERSION} - With Role Comparison, Shareable Links, What-If Sliders, Email Reports`);
 
 // ─── Engagement Fee Calculator ───
-// Derives a retainer fee estimate from complexity score + adjusted benchmark salary.
-// Industry base: 25% of adjusted median. Complexity multiplier scales 0.85x–1.60x.
+// Two models: Retained (20% base + complexity scaling) vs. Contingent (flat 30%).
+// Retained is designed to always be cheaper than contingent for scores 1–8,
+// converging only at extreme complexity — creating a clear conversion incentive.
 function calculateEngagementFee(score, adjustedP50, formData = {}) {
   if (!adjustedP50 || !score) return null;
 
+  // ── RETAINED MODEL ──
+  // 20% base with complexity multiplier (0.95x–1.60x)
   const complexityMultiplier = {
-    1: 0.85, 2: 0.85, 3: 0.95, 4: 1.00, 5: 1.08,
-    6: 1.15, 7: 1.25, 8: 1.35, 9: 1.45, 10: 1.60
-  }[score] || 1.0;
+    1: 0.95, 2: 0.95, 3: 1.00, 4: 1.05, 5: 1.12,
+    6: 1.20, 7: 1.30, 8: 1.40, 9: 1.50, 10: 1.60
+  }[score] || 1.05;
 
   // Situational modifiers
   let modifier = 1.0;
@@ -53,33 +56,48 @@ function calculateEngagementFee(score, adjustedP50, formData = {}) {
   if (formData.timeline === 'immediate') modifier += 0.05;
   if ((formData.languageRequirements || []).length >= 3) modifier += 0.05;
 
-  const basePercent = 0.25;
-  const baseFee = Math.round(adjustedP50 * basePercent);
-  const adjustedFee = Math.round(baseFee * complexityMultiplier * modifier);
-  const lowEnd = Math.round(adjustedFee * 0.9);
-  const highEnd = Math.round(adjustedFee * 1.1);
+  const retainedBasePercent = 0.20;
+  const retainedBase = Math.round(adjustedP50 * retainedBasePercent);
+  const retainedFee = Math.round(retainedBase * complexityMultiplier * modifier);
+  const retainedLow = Math.round(retainedFee * 0.9);
+  const retainedHigh = Math.round(retainedFee * 1.1);
+  const retainedEffectivePercent = Math.round((retainedFee / adjustedP50) * 100);
 
-  // Industry standard range (flat 25–33%, no complexity adjustment)
-  const industryLow = Math.round(adjustedP50 * 0.25);
-  const industryHigh = Math.round(adjustedP50 * 0.33);
+  // Payment structure: 1/3 upfront, 1/3 at shortlist, 1/3 at placement
+  const installment = Math.round(retainedFee / 3);
 
-  // Effective percentage of base salary
-  const effectivePercent = Math.round((adjustedFee / adjustedP50) * 100);
+  // ── CONTINGENT MODEL ──
+  // Flat 30% of adjusted p50, paid only on successful placement
+  const contingentPercent = 0.30;
+  const contingentFee = Math.round(adjustedP50 * contingentPercent);
+
+  // ── SAVINGS ──
+  const savings = contingentFee - retainedFee;
+  const savingsPercent = Math.round((savings / contingentFee) * 100);
 
   return {
-    lowEnd,
-    highEnd,
-    adjustedFee,
-    baseFee,
-    basePercent: 25,
-    effectivePercent,
+    // Retained
+    retainedFee,
+    retainedLow,
+    retainedHigh,
+    retainedBase,
+    retainedBasePercent: 20,
+    retainedEffectivePercent,
     complexityMultiplier,
     modifier,
-    adjustedP50,
-    industryLow,
-    industryHigh,
-    formattedRange: `$${(lowEnd / 1000).toFixed(0)}k – $${(highEnd / 1000).toFixed(0)}k`,
-    formattedFee: `$${(adjustedFee / 1000).toFixed(0)}k`
+    installment,
+    formattedRetained: `$${(retainedLow / 1000).toFixed(0)}k – $${(retainedHigh / 1000).toFixed(0)}k`,
+    formattedRetainedMid: `$${(retainedFee / 1000).toFixed(0)}k`,
+    // Contingent
+    contingentFee,
+    contingentPercent: 30,
+    formattedContingent: `$${(contingentFee / 1000).toFixed(0)}k`,
+    // Savings
+    savings,
+    savingsPercent,
+    formattedSavings: `$${(savings / 1000).toFixed(0)}k`,
+    // Shared
+    adjustedP50
   };
 }
 

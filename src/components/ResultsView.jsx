@@ -560,13 +560,13 @@ Write the JD following the system prompt structure exactly. Use the candidate ps
                     </div>
                     <div className="text-left">
                       <h4 className="font-semibold text-sm" style={{ color: '#1d1d1f' }}>Engagement Fee Estimate</h4>
-                      <p className="text-xs" style={{ color: '#a1a1a6' }}>Based on search complexity and market rates</p>
+                      <p className="text-xs" style={{ color: '#a1a1a6' }}>Retained vs. contingent &middot; based on search complexity</p>
                     </div>
                   </div>
                   <div className="flex items-center gap-3">
-                    {!feeExpanded && (
-                      <span className="text-sm font-semibold" style={{ color: '#c4975e' }}>
-                        {results.engagementFeeEstimate.formattedRange}
+                    {!feeExpanded && results.engagementFeeEstimate.savings > 0 && (
+                      <span className="text-xs font-semibold px-2 py-0.5 rounded-full" style={{ backgroundColor: '#e8f5f1', color: '#5f9488' }}>
+                        Save {results.engagementFeeEstimate.formattedSavings}
                       </span>
                     )}
                     <ChevronDown className="w-4 h-4 transition-transform duration-200"
@@ -577,32 +577,114 @@ Write the JD following the system prompt structure exactly. Use the candidate ps
                 {/* Expanded content */}
                 {feeExpanded && (
                   <div className="px-5 pb-5 border-t" style={{ borderColor: '#c4975e33' }}>
-                    {/* Main fee display */}
-                    <div className="text-center py-5">
-                      <p className="text-[10px] uppercase tracking-widest mb-1.5" style={{ color: '#a1a1a6' }}>Estimated Retainer</p>
-                      <p className="text-3xl font-semibold tracking-tight" style={{ color: '#c4975e' }}>
-                        {results.engagementFeeEstimate.formattedRange}
-                      </p>
-                      <p className="text-xs mt-1.5" style={{ color: '#6e6e73' }}>
-                        {results.engagementFeeEstimate.effectivePercent}% of adjusted median &middot; {results.label} search
-                      </p>
+
+                    {/* Side-by-side: Retained vs Contingent */}
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mt-4 mb-4">
+                      {/* RETAINED — recommended */}
+                      <div className="p-4 rounded-btn relative" style={{ backgroundColor: '#ffffff', border: '2px solid #2814ff' }}>
+                        <div className="absolute -top-2.5 left-3">
+                          <span className="text-[9px] font-bold uppercase tracking-widest px-2 py-0.5 rounded-full text-white" style={{ backgroundColor: '#2814ff' }}>
+                            Recommended
+                          </span>
+                        </div>
+                        <p className="text-[10px] uppercase tracking-widest font-semibold mt-1 mb-1" style={{ color: '#2814ff' }}>Retained</p>
+                        <p className="text-2xl font-bold tracking-tight mb-0.5" style={{ color: '#1d1d1f' }}>
+                          {results.engagementFeeEstimate.formattedRetained}
+                        </p>
+                        <p className="text-[11px] mb-3" style={{ color: '#6e6e73' }}>
+                          {results.engagementFeeEstimate.retainedEffectivePercent}% of comp &middot; complexity-adjusted
+                        </p>
+                        <div className="space-y-1.5 text-[11px]" style={{ color: '#6e6e73' }}>
+                          <div className="flex items-start gap-1.5">
+                            <CheckCircle className="w-3 h-3 mt-0.5 flex-shrink-0" style={{ color: '#5f9488' }} />
+                            <span>Dedicated resources from day one</span>
+                          </div>
+                          <div className="flex items-start gap-1.5">
+                            <CheckCircle className="w-3 h-3 mt-0.5 flex-shrink-0" style={{ color: '#5f9488' }} />
+                            <span>3–5 vetted candidates, shortlisted</span>
+                          </div>
+                          <div className="flex items-start gap-1.5">
+                            <CheckCircle className="w-3 h-3 mt-0.5 flex-shrink-0" style={{ color: '#5f9488' }} />
+                            <span>Full negotiation &amp; close support</span>
+                          </div>
+                          <div className="flex items-start gap-1.5">
+                            <CheckCircle className="w-3 h-3 mt-0.5 flex-shrink-0" style={{ color: '#5f9488' }} />
+                            <span>90-day placement guarantee</span>
+                          </div>
+                        </div>
+                        <div className="mt-3 pt-2.5" style={{ borderTop: '1px solid #eeeeff' }}>
+                          <p className="text-[10px] font-medium" style={{ color: '#a1a1a6' }}>Payment structure</p>
+                          <p className="text-[11px]" style={{ color: '#6e6e73' }}>
+                            3 installments of ~${(results.engagementFeeEstimate.installment / 1000).toFixed(0)}k
+                          </p>
+                          <p className="text-[10px] mt-0.5" style={{ color: '#a1a1a6' }}>⅓ upfront &middot; ⅓ at shortlist &middot; ⅓ at placement</p>
+                        </div>
+                      </div>
+
+                      {/* CONTINGENT */}
+                      <div className="p-4 rounded-btn" style={{ backgroundColor: '#f5f5f3', border: '1px solid #d2d2d7' }}>
+                        <p className="text-[10px] uppercase tracking-widest font-semibold mt-1 mb-1" style={{ color: '#6e6e73' }}>Contingent</p>
+                        <p className="text-2xl font-bold tracking-tight mb-0.5" style={{ color: '#6e6e73' }}>
+                          {results.engagementFeeEstimate.formattedContingent}
+                        </p>
+                        <p className="text-[11px] mb-3" style={{ color: '#a1a1a6' }}>
+                          {results.engagementFeeEstimate.contingentPercent}% flat &middot; no complexity adjustment
+                        </p>
+                        <div className="space-y-1.5 text-[11px]" style={{ color: '#a1a1a6' }}>
+                          <div className="flex items-start gap-1.5">
+                            <CheckCircle className="w-3 h-3 mt-0.5 flex-shrink-0" style={{ color: '#a1a1a6' }} />
+                            <span>Pay only on successful placement</span>
+                          </div>
+                          <div className="flex items-start gap-1.5">
+                            <CheckCircle className="w-3 h-3 mt-0.5 flex-shrink-0" style={{ color: '#a1a1a6' }} />
+                            <span>Standard candidate sourcing</span>
+                          </div>
+                          <div className="flex items-start gap-1.5">
+                            <CheckCircle className="w-3 h-3 mt-0.5 flex-shrink-0" style={{ color: '#a1a1a6' }} />
+                            <span>No upfront commitment</span>
+                          </div>
+                        </div>
+                        <div className="mt-3 pt-2.5" style={{ borderTop: '1px solid #d2d2d7' }}>
+                          <p className="text-[10px] font-medium" style={{ color: '#a1a1a6' }}>Payment structure</p>
+                          <p className="text-[11px]" style={{ color: '#a1a1a6' }}>
+                            100% due on placement
+                          </p>
+                        </div>
+                      </div>
                     </div>
 
-                    {/* Calculation breakdown */}
-                    <div className="p-3.5 rounded-btn mb-4" style={{ backgroundColor: '#ffffff', border: '1px solid #c4975e22' }}>
-                      <p className="text-[10px] uppercase tracking-widest font-semibold mb-2.5" style={{ color: '#6e6e73' }}>How it's calculated</p>
+                    {/* Savings callout */}
+                    {results.engagementFeeEstimate.savings > 0 && (
+                      <div className="p-3 rounded-btn mb-4 flex items-center gap-3" style={{ backgroundColor: '#e8f5f1', border: '1px solid #5f948833' }}>
+                        <div className="w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0" style={{ backgroundColor: '#5f948822' }}>
+                          <TrendingUp className="w-4 h-4" style={{ color: '#5f9488' }} />
+                        </div>
+                        <div>
+                          <p className="text-xs font-semibold" style={{ color: '#5f9488' }}>
+                            Save {results.engagementFeeEstimate.formattedSavings} with retained ({results.engagementFeeEstimate.savingsPercent}% less)
+                          </p>
+                          <p className="text-[11px]" style={{ color: '#6e6e73' }}>
+                            Dedicated search, faster fill, lower total cost.
+                          </p>
+                        </div>
+                      </div>
+                    )}
+
+                    {/* How retained fee is calculated */}
+                    <div className="p-3.5 rounded-btn mb-3" style={{ backgroundColor: '#ffffff', border: '1px solid #c4975e22' }}>
+                      <p className="text-[10px] uppercase tracking-widest font-semibold mb-2.5" style={{ color: '#6e6e73' }}>How retained is calculated</p>
                       <div className="space-y-2 text-xs">
                         <div className="flex justify-between">
-                          <span style={{ color: '#6e6e73' }}>Adjusted median salary (p50)</span>
+                          <span style={{ color: '#6e6e73' }}>Adjusted median (p50)</span>
                           <span className="font-medium" style={{ color: '#1d1d1f' }}>${(results.engagementFeeEstimate.adjustedP50 / 1000).toFixed(0)}k</span>
                         </div>
                         <div className="flex justify-between">
-                          <span style={{ color: '#6e6e73' }}>Base retainer ({results.engagementFeeEstimate.basePercent}%)</span>
-                          <span className="font-medium" style={{ color: '#1d1d1f' }}>${(results.engagementFeeEstimate.baseFee / 1000).toFixed(0)}k</span>
+                          <span style={{ color: '#6e6e73' }}>Base retainer ({results.engagementFeeEstimate.retainedBasePercent}%)</span>
+                          <span className="font-medium" style={{ color: '#1d1d1f' }}>${(results.engagementFeeEstimate.retainedBase / 1000).toFixed(0)}k</span>
                         </div>
                         <div className="flex justify-between pt-2" style={{ borderTop: '1px solid #c4975e22' }}>
                           <span style={{ color: '#6e6e73' }}>
-                            Complexity multiplier
+                            Complexity
                             <span className="ml-1 px-1.5 py-0.5 rounded text-[10px] font-semibold" style={{ backgroundColor: '#c4975e18', color: '#c4975e' }}>
                               {results.score}/10
                             </span>
@@ -618,58 +700,9 @@ Write the JD following the system prompt structure exactly. Use the candidate ps
                       </div>
                     </div>
 
-                    {/* Industry comparison */}
-                    <div className="mb-4">
-                      <p className="text-[10px] uppercase tracking-widest font-semibold mb-3" style={{ color: '#6e6e73' }}>vs. Industry Standard</p>
-                      <div className="space-y-3">
-                        <div>
-                          <div className="flex justify-between mb-1">
-                            <span className="text-[11px]" style={{ color: '#6e6e73' }}>Our estimate</span>
-                            <span className="text-[11px] font-semibold" style={{ color: '#c4975e' }}>
-                              {results.engagementFeeEstimate.formattedFee} ({results.engagementFeeEstimate.effectivePercent}%)
-                            </span>
-                          </div>
-                          <div className="h-2 rounded-full overflow-hidden" style={{ backgroundColor: '#e5e5ea' }}>
-                            <div className="h-full rounded-full transition-all duration-500"
-                              style={{ width: `${Math.min(100, (results.engagementFeeEstimate.effectivePercent / 40) * 100)}%`, backgroundColor: '#c4975e' }} />
-                          </div>
-                        </div>
-                        <div>
-                          <div className="flex justify-between mb-1">
-                            <span className="text-[11px]" style={{ color: '#6e6e73' }}>Typical retained search (25–33%)</span>
-                            <span className="text-[11px] font-medium" style={{ color: '#a1a1a6' }}>
-                              ${(results.engagementFeeEstimate.industryLow / 1000).toFixed(0)}k – ${(results.engagementFeeEstimate.industryHigh / 1000).toFixed(0)}k
-                            </span>
-                          </div>
-                          <div className="h-2 rounded-full overflow-hidden" style={{ backgroundColor: '#e5e5ea' }}>
-                            <div className="h-full rounded-full" style={{ width: '82%', backgroundColor: '#d2d2d7' }} />
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-
-                    {/* What's included */}
-                    <div className="p-3.5 rounded-btn mb-3" style={{ backgroundColor: '#eeeeff' }}>
-                      <p className="text-[10px] uppercase tracking-widest font-semibold mb-2.5" style={{ color: '#6e6e73' }}>What's included</p>
-                      <div className="space-y-1.5 text-xs" style={{ color: '#6e6e73' }}>
-                        {[
-                          'Dedicated search strategy & market mapping',
-                          'Curated shortlist (3–5 vetted candidates)',
-                          'Interview coordination & candidate briefing',
-                          'Offer negotiation & close support',
-                          '90-day placement guarantee'
-                        ].map((item, i) => (
-                          <div key={i} className="flex items-start gap-2">
-                            <CheckCircle className="w-3 h-3 mt-0.5 flex-shrink-0" style={{ color: '#5f9488' }} />
-                            <span>{item}</span>
-                          </div>
-                        ))}
-                      </div>
-                    </div>
-
                     {/* Disclaimer */}
                     <p className="text-[10px] leading-relaxed" style={{ color: '#a1a1a6' }}>
-                      Estimate based on complexity score and adjusted market data. Final engagement terms confirmed during discovery call and may vary based on scope, discretion, or timeline urgency.
+                      Estimates based on complexity score and adjusted market data. Final engagement terms confirmed during discovery call.
                     </p>
                   </div>
                 )}
