@@ -300,39 +300,105 @@ function generateEmailHTML(results) {
     ${spacer}
     ` : ''}
 
-    <!-- Retention & Offer Strategy (Tier 3 Data) -->
-    ${results.benchmark?.retentionRisk ? `
+    <!-- Retention Risk Score + Offer Strategy -->
+    ${results.retentionRisk?.hasData || results.benchmark?.retentionRisk ? (() => {
+      const rr = results.retentionRisk || {};
+      const hasScore = rr.hasData;
+      const riskColor = rr.riskColor || '#c77d8a';
+      const riskScore = rr.riskScore || 0;
+      const riskLevel = rr.riskLevel || 'Unknown';
+      return `
     <div style="padding:0 32px 32px;">
-      ${sectionHeading('Retention & Offer Strategy')}
-      <table style="width:100%;border-collapse:collapse;margin-bottom:12px;">
+      ${sectionHeading('Retention Risk Score')}
+
+      ${hasScore ? `
+      <!-- Score header -->
+      <table style="width:100%;border-collapse:collapse;margin-bottom:16px;">
         <tr>
-          <td style="padding:16px;background-color:#fdf2f4;border-radius:8px;text-align:center;width:31%;">
-            <div style="font-size:28px;font-weight:600;color:#c77d8a;">${Math.round(results.benchmark.retentionRisk.firstYearAttrition * 100)}%</div>
-            <div style="font-size:11px;color:#6e6e73;margin-top:4px;text-transform:uppercase;letter-spacing:0.05em;">First-Year Attrition</div>
-          </td>
-          <td style="width:3%;"></td>
-          <td style="padding:16px;background-color:#f0f7f5;border-radius:8px;text-align:center;width:31%;">
-            <div style="font-size:28px;font-weight:600;color:#2814ff;">${results.benchmark.relocationWillingness !== undefined ? Math.round(results.benchmark.relocationWillingness * 100) : '—'}%</div>
-            <div style="font-size:11px;color:#6e6e73;margin-top:4px;text-transform:uppercase;letter-spacing:0.05em;">Relocation Willingness</div>
-          </td>
-          <td style="width:3%;"></td>
-          <td style="padding:16px;background-color:#eeeeff;border-radius:8px;text-align:center;width:31%;">
-            <div style="font-size:28px;font-weight:600;color:#1d1d1f;">${results.benchmark.backgroundCheckTimeline || '—'} wks</div>
-            <div style="font-size:11px;color:#6e6e73;margin-top:4px;text-transform:uppercase;letter-spacing:0.05em;">Vetting Timeline</div>
+          <td style="padding:20px;background-color:#fdf2f4;border-radius:8px;border-left:4px solid ${riskColor};">
+            <table style="width:100%;border-collapse:collapse;">
+              <tr>
+                <td style="vertical-align:middle;width:80px;">
+                  <div style="font-size:42px;font-weight:700;color:${riskColor};line-height:1;">${riskScore}</div>
+                  <div style="font-size:10px;color:${riskColor};text-transform:uppercase;letter-spacing:0.08em;font-weight:600;margin-top:2px;">${riskLevel} Risk</div>
+                </td>
+                <td style="vertical-align:middle;padding-left:16px;">
+                  <!-- Risk bar -->
+                  <div style="background-color:#f5e6e9;border-radius:4px;height:8px;width:100%;overflow:hidden;">
+                    <div style="background-color:${riskColor};height:100%;border-radius:4px;width:${riskScore}%;"></div>
+                  </div>
+                  <div style="font-size:11px;color:#6e6e73;margin-top:6px;">Will this hire stick? This score predicts retention risk based on role data, market conditions, and your compensation position.</div>
+                </td>
+              </tr>
+            </table>
           </td>
         </tr>
       </table>
+      ` : ''}
+
+      <!-- Key metrics -->
+      <table style="width:100%;border-collapse:collapse;margin-bottom:12px;">
+        <tr>
+          <td style="padding:16px;background-color:#fdf2f4;border-radius:8px;text-align:center;width:31%;">
+            <div style="font-size:28px;font-weight:600;color:#c77d8a;">${hasScore ? rr.firstYearAttrition : Math.round(results.benchmark.retentionRisk.firstYearAttrition * 100)}%</div>
+            <div style="font-size:11px;color:#6e6e73;margin-top:4px;text-transform:uppercase;letter-spacing:0.05em;">1st-Year Attrition</div>
+          </td>
+          <td style="width:3%;"></td>
+          <td style="padding:16px;background-color:#fef8f0;border-radius:8px;text-align:center;width:31%;">
+            <div style="font-size:28px;font-weight:600;color:#c4975e;">${hasScore ? rr.avgTenure : results.benchmark.turnover?.avgTenure || '—'}yr</div>
+            <div style="font-size:11px;color:#6e6e73;margin-top:4px;text-transform:uppercase;letter-spacing:0.05em;">Avg Tenure</div>
+          </td>
+          <td style="width:3%;"></td>
+          <td style="padding:16px;background-color:#eeeeff;border-radius:8px;text-align:center;width:31%;">
+            <div style="font-size:28px;font-weight:600;color:#2814ff;">${hasScore ? rr.annualTurnover : results.benchmark.turnover ? Math.round(results.benchmark.turnover.annualTurnover * 100) : '—'}%</div>
+            <div style="font-size:11px;color:#6e6e73;margin-top:4px;text-transform:uppercase;letter-spacing:0.05em;">Annual Turnover</div>
+          </td>
+        </tr>
+      </table>
+
+      <!-- Top departure risks -->
       <div style="padding:16px;background-color:#fdf2f4;border-radius:8px;margin-bottom:12px;">
-        <strong style="color:#6e6e73;font-size:11px;text-transform:uppercase;letter-spacing:0.05em;">Top Departure Risks</strong>
+        <strong style="color:#c77d8a;font-size:11px;text-transform:uppercase;letter-spacing:0.05em;">Why People Leave This Role</strong>
         <div style="margin-top:8px;">
-          ${(results.benchmark.retentionRisk.topReasons || []).map((reason, i) => `
-            <div style="display:inline-block;padding:5px 12px;background-color:#fdf2f4;border-radius:16px;margin:3px 4px;font-size:12px;color:#c77d8a;">
+          ${((hasScore ? rr.topReasons : results.benchmark.retentionRisk.topReasons) || []).map(reason => `
+            <div style="display:inline-block;padding:5px 12px;background-color:#ffffff;border:1px solid #e8c4ca;border-radius:16px;margin:3px 4px;font-size:12px;color:#8a384b;">
               ${reason}
             </div>
           `).join('')}
         </div>
       </div>
-      ${results.benchmark.compensationStructure ? `
+
+      ${hasScore && rr.riskFactors && rr.riskFactors.length > 0 ? `
+      <!-- Risk factors -->
+      <div style="margin-bottom:12px;">
+        ${rr.riskFactors.map(rf => `
+          <div style="padding:12px 16px;background-color:#ffffff;border-radius:8px;margin-bottom:6px;border-left:3px solid ${rf.impact === 'high' ? '#c77d8a' : rf.impact === 'moderate' ? '#c4975e' : '#5f9488'};">
+            <table style="width:100%;border-collapse:collapse;">
+              <tr>
+                <td style="font-size:13px;font-weight:600;color:#1d1d1f;">${e(rf.factor)}</td>
+                <td style="text-align:right;font-size:13px;font-weight:600;color:${rf.impact === 'high' ? '#c77d8a' : rf.impact === 'moderate' ? '#c4975e' : '#5f9488'};">${e(rf.value)}</td>
+              </tr>
+            </table>
+            <div style="font-size:11px;color:#6e6e73;margin-top:4px;">${e(rf.detail)}</div>
+          </div>
+        `).join('')}
+      </div>
+      ` : ''}
+
+      ${hasScore && rr.suggestions && rr.suggestions.length > 0 ? `
+      <!-- Retention suggestions -->
+      <div style="padding:16px;background-color:#f0f7f5;border-radius:8px;margin-bottom:12px;">
+        <strong style="color:#5f9488;font-size:11px;text-transform:uppercase;letter-spacing:0.05em;">How to Improve Retention</strong>
+        ${rr.suggestions.map(sug => `
+          <div style="margin-top:10px;padding:12px;background-color:#ffffff;border-radius:6px;border-left:2px solid #5f9488;">
+            <div style="font-size:13px;font-weight:600;color:#1d1d1f;margin-bottom:3px;">${e(sug.title)}</div>
+            <div style="font-size:11px;color:#6e6e73;line-height:1.5;">${e(sug.detail)}</div>
+          </div>
+        `).join('')}
+      </div>
+      ` : ''}
+
+      ${results.benchmark?.compensationStructure ? `
       <div style="padding:16px;background-color:#fef8f0;border-radius:8px;">
         <strong style="color:#6e6e73;font-size:11px;text-transform:uppercase;letter-spacing:0.05em;">Compensation Structure</strong>
         <table style="width:100%;margin-top:10px;border-collapse:collapse;">
@@ -359,7 +425,8 @@ function generateEmailHTML(results) {
       ` : ''}
     </div>
     ${spacer}
-    ` : ''}
+    `;
+    })() : ''}
 
     <!-- Negotiation Leverage -->
     ${results.negotiationLeverage ? `

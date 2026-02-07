@@ -527,6 +527,122 @@ Write the JD following the system prompt structure exactly. Use the candidate ps
             </div>
           </div>
 
+          {/* Retention Risk Score — Phase 3A */}
+          {results.retentionRisk?.hasData && (
+            <div className="mb-6 animate-fadeInUp delay-450">
+              <div className="rounded-card overflow-hidden" style={{ backgroundColor: '#fdf2f4', borderLeft: '3px solid #c77d8a' }}>
+                <div className="p-5">
+                  {/* Header with gauge */}
+                  <div className="flex items-start justify-between mb-4">
+                    <div className="flex items-center gap-3">
+                      <div className="w-7 h-7 rounded-full flex items-center justify-center" style={{ backgroundColor: results.retentionRisk.riskColor }}>
+                        <Heart className="w-3.5 h-3.5 text-white" />
+                      </div>
+                      <div>
+                        <h4 className="font-semibold text-sm" style={{ color: '#1d1d1f' }}>Retention Risk Score</h4>
+                        <p className="text-xs" style={{ color: '#6e6e73' }}>Will this hire stick?</p>
+                      </div>
+                    </div>
+                    <div className="text-right">
+                      <div className="text-2xl font-semibold" style={{ color: results.retentionRisk.riskColor }}>
+                        {results.retentionRisk.riskScore}
+                      </div>
+                      <div className="text-[10px] uppercase tracking-widest font-medium" style={{ color: results.retentionRisk.riskColor }}>
+                        {results.retentionRisk.riskLevel} Risk
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Risk bar */}
+                  <div className="mb-4">
+                    <div className="h-2 rounded-full overflow-hidden" style={{ backgroundColor: '#f5e6e9' }}>
+                      <div className="h-full rounded-full transition-all duration-700"
+                        style={{ width: `${results.retentionRisk.riskScore}%`, backgroundColor: results.retentionRisk.riskColor }} />
+                    </div>
+                    <div className="flex justify-between mt-1">
+                      <span className="text-[10px]" style={{ color: '#a1a1a6' }}>Low</span>
+                      <span className="text-[10px]" style={{ color: '#a1a1a6' }}>Critical</span>
+                    </div>
+                  </div>
+
+                  {/* Key metrics row */}
+                  <div className="flex gap-3 mb-4">
+                    <div className="flex-1 bg-white rounded-btn p-3 text-center">
+                      <div className="text-lg font-semibold" style={{ color: '#1d1d1f' }}>{results.retentionRisk.firstYearAttrition}%</div>
+                      <div className="text-[10px] uppercase tracking-wider" style={{ color: '#a1a1a6' }}>1st Year Attrition</div>
+                    </div>
+                    <div className="flex-1 bg-white rounded-btn p-3 text-center">
+                      <div className="text-lg font-semibold" style={{ color: '#1d1d1f' }}>{results.retentionRisk.avgTenure}yr</div>
+                      <div className="text-[10px] uppercase tracking-wider" style={{ color: '#a1a1a6' }}>Avg Tenure</div>
+                    </div>
+                    <div className="flex-1 bg-white rounded-btn p-3 text-center">
+                      <div className="text-lg font-semibold" style={{ color: '#1d1d1f' }}>{results.retentionRisk.annualTurnover}%</div>
+                      <div className="text-[10px] uppercase tracking-wider" style={{ color: '#a1a1a6' }}>Annual Turnover</div>
+                    </div>
+                  </div>
+
+                  {/* Top attrition reasons */}
+                  <div className="mb-4">
+                    <div className="text-[10px] uppercase tracking-widest font-medium mb-2" style={{ color: '#c77d8a' }}>
+                      Why People Leave This Role
+                    </div>
+                    <div className="flex flex-wrap gap-1.5">
+                      {results.retentionRisk.topReasons.map((reason, i) => (
+                        <span key={i} className="px-2.5 py-1 rounded-full text-xs font-medium"
+                          style={{ backgroundColor: '#ffffff', color: '#8a384b', border: '1px solid #e8c4ca' }}>
+                          {reason}
+                        </span>
+                      ))}
+                    </div>
+                  </div>
+
+                  {/* Risk factors */}
+                  {results.retentionRisk.riskFactors.length > 0 && (
+                    <div className="mb-4">
+                      <div className="text-[10px] uppercase tracking-widest font-medium mb-2" style={{ color: '#c77d8a' }}>
+                        Risk Factors
+                      </div>
+                      <div className="space-y-2">
+                        {results.retentionRisk.riskFactors.map((rf, i) => (
+                          <div key={i} className="bg-white rounded-btn p-3 flex items-start gap-3">
+                            <div className="w-1.5 h-1.5 rounded-full mt-1.5 flex-shrink-0"
+                              style={{ backgroundColor: rf.impact === 'high' ? '#c77d8a' : rf.impact === 'moderate' ? '#c4975e' : '#5f9488' }} />
+                            <div className="flex-1 min-w-0">
+                              <div className="flex items-center justify-between mb-0.5">
+                                <span className="text-xs font-medium" style={{ color: '#1d1d1f' }}>{rf.factor}</span>
+                                <span className="text-xs font-semibold" style={{ color: rf.impact === 'high' ? '#c77d8a' : rf.impact === 'moderate' ? '#c4975e' : '#5f9488' }}>
+                                  {rf.value}
+                                </span>
+                              </div>
+                              <p className="text-[11px]" style={{ color: '#6e6e73' }}>{rf.detail}</p>
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+
+                  {/* Retention suggestions */}
+                  {results.retentionRisk.suggestions.length > 0 && (
+                    <div>
+                      <div className="text-[10px] uppercase tracking-widest font-medium mb-2" style={{ color: '#5f9488' }}>
+                        How to Improve Retention
+                      </div>
+                      <div className="space-y-2">
+                        {results.retentionRisk.suggestions.map((sug, i) => (
+                          <div key={i} className="bg-white rounded-btn p-3" style={{ borderLeft: '2px solid #5f9488' }}>
+                            <div className="text-xs font-semibold mb-0.5" style={{ color: '#1d1d1f' }}>{sug.title}</div>
+                            <p className="text-[11px]" style={{ color: '#6e6e73' }}>{sug.detail}</p>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+                </div>
+              </div>
+            </div>
+          )}
+
           {/* CTA */}
           <div className="flex justify-center mb-6 animate-fadeInUp delay-500">
             <a href="https://calendly.com/charbel-talentgurus" target="_blank" rel="noopener noreferrer"

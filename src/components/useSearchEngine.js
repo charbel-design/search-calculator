@@ -464,6 +464,175 @@ export function useSearchEngine() {
     return { score, label, points, drivers, confidence, assumptions, redFlags, regionalData, benchmark, seasonality };
   };
 
+  // Retention Risk Score — Phase 3A
+  const calculateRetentionRisk = (deterministicResult) => {
+    const benchmark = deterministicResult?.benchmark;
+    if (!benchmark?.retentionRisk || !benchmark?.turnover) {
+      return null; // No retention data for this role
+    }
+
+    const riskFactors = [];
+    let riskPoints = 0;
+
+    // 1. First-year attrition (35% weight, 0-35 points)
+    const attrition = benchmark.retentionRisk.firstYearAttrition;
+    const attritionPts = Math.round(attrition * 100); // 0.30 → 30 pts
+    riskPoints += Math.min(35, attritionPts);
+    riskFactors.push({
+      factor: 'First-Year Attrition',
+      value: `${Math.round(attrition * 100)}%`,
+      impact: attrition >= 0.25 ? 'high' : attrition >= 0.18 ? 'moderate' : 'low',
+      detail: `${Math.round(attrition * 100)}% of placements in this role don't make it past year one`
+    });
+
+    // 2. Annual turnover (20% weight, 0-20 points)
+    const turnover = benchmark.turnover.annualTurnover;
+    const turnoverPts = Math.round((turnover / 0.35) * 20); // normalized to 35% max
+    riskPoints += Math.min(20, turnoverPts);
+    riskFactors.push({
+      factor: 'Market Turnover',
+      value: `${Math.round(turnover * 100)}%/yr`,
+      impact: turnover >= 0.20 ? 'high' : turnover >= 0.12 ? 'moderate' : 'low',
+      detail: `Average tenure: ${benchmark.turnover.avgTenure} years`
+    });
+
+    // 3. Counter-offer vulnerability (15% weight, 0-15 points)
+    const counterOffer = benchmark.counterOfferRate || 0;
+    const counterPts = Math.round(counterOffer * 15 / 0.55); // normalized to 55% max
+    riskPoints += Math.min(15, counterPts);
+    if (counterOffer > 0.20) {
+      riskFactors.push({
+        factor: 'Counter-Offer Risk',
+        value: `${Math.round(counterOffer * 100)}%`,
+        impact: counterOffer >= 0.40 ? 'high' : counterOffer >= 0.25 ? 'moderate' : 'low',
+        detail: `${Math.round(counterOffer * 100)}% of candidates receive counter-offers from current employers`
+      });
+    }
+
+    // 4. Budget position vs market (15% weight, 0-15 points)
+    const budgetOption = budgetRanges.find(b => b.value === formData.budgetRange);
+    const regionalMult = deterministicResult.regionalData?.multiplier || 1;
+    if (benchmark.p50 && budgetOption?.midpoint) {
+      const adjP50 = benchmark.p50 * regionalMult;
+      const budgetRatio = budgetOption.midpoint / adjP50;
+      let compPts = 0;
+      let compImpact = 'low';
+      let compDetail = '';
+      if (budgetRatio < 0.7) {
+        compPts = 15; compImpact = 'high';
+        compDetail = 'Budget well below market median — highest flight risk';
+      } else if (budgetRatio < 0.85) {
+        compPts = 11; compImpact = 'high';
+        compDetail = 'Below-market compensation will pressure retention';
+      } else if (budgetRatio < 1.0) {
+        compPts = 6; compImpact = 'moderate';
+        compDetail = 'Near-market comp — adequate but not a retention anchor';
+      } else if (budgetRatio < 1.2) {
+        compPts = 2; compImpact = 'low';
+        compDetail = 'Competitive compensation supports retention';
+      } else {
+        compPts = 0; compImpact = 'low';
+        compDetail = 'Premium compensation is a strong retention anchor';
+      }
+      riskPoints += compPts;
+      riskFactors.push({
+        factor: 'Compensation Position',
+        value: budgetRatio >= 1 ? `${Math.round((budgetRatio - 1) * 100)}% above median` : `${Math.round((1 - budgetRatio) * 100)}% below median`,
+        impact: compImpact,
+        detail: compDetail
+      });
+    }
+
+    // 5. Demand pressure (10% weight, 0-10 points)
+    if (benchmark.demandTrend) {
+      const growth = benchmark.demandTrend.yoyChange || 0;
+      const demandPts = Math.round((growth / 0.20) * 10);
+      riskPoints += Math.min(10, Math.max(0, demandPts));
+      if (growth >= 0.08) {
+        riskFactors.push({
+          factor: 'Market Demand',
+          value: `+${Math.round(growth * 100)}% YoY`,
+          impact: growth >= 0.15 ? 'high' : 'moderate',
+          detail: `Growing demand means more competing offers pulling your hire away`
+        });
+      }
+    }
+
+    // 6. Scarcity cost factor (5% weight, 0-5 points)
+    const scarcity = benchmark.scarcity || 5;
+    const scarcityPts = Math.round((scarcity / 10) * 5);
+    riskPoints += scarcityPts;
+
+    // Normalize to 0-100
+    const riskScore = Math.min(100, Math.max(0, riskPoints));
+    const riskLevel = riskScore <= 25 ? 'Low' : riskScore <= 45 ? 'Moderate' : riskScore <= 65 ? 'High' : 'Critical';
+    const riskColor = riskScore <= 25 ? '#5f9488' : riskScore <= 45 ? '#c4975e' : riskScore <= 65 ? '#c77d8a' : '#a8384b';
+
+    // Generate retention suggestions based on specific risk factors
+    const suggestions = [];
+    if (attrition >= 0.20) {
+      suggestions.push({
+        title: 'Structured 90-day onboarding',
+        detail: `${Math.round(attrition * 100)}% first-year attrition means the first 3 months are critical. Define clear milestones, check-ins, and a written scope agreement.`,
+        impact: 'high'
+      });
+    }
+    if (benchmark.retentionRisk.topReasons.some(r => /scope|boundary|creep/i.test(r))) {
+      suggestions.push({
+        title: 'Written role boundaries',
+        detail: `Top attrition reason for this role: "${benchmark.retentionRisk.topReasons[0]}." A documented scope agreement reviewed quarterly prevents the drift that kills placements.`,
+        impact: 'high'
+      });
+    }
+    if (counterOffer >= 0.35) {
+      suggestions.push({
+        title: 'Signing bonus or retention kicker',
+        detail: `${Math.round(counterOffer * 100)}% counter-offer rate means you need a financial commitment signal. A signing bonus with a 12-month clawback creates mutual skin in the game.`,
+        impact: 'moderate'
+      });
+    }
+    if (budgetOption?.midpoint && benchmark.p50) {
+      const ratio = budgetOption.midpoint / (benchmark.p50 * regionalMult);
+      if (ratio < 0.9) {
+        suggestions.push({
+          title: 'Close the compensation gap',
+          detail: `Offering ${Math.round((1 - ratio) * 100)}% below market median. Moving to at least the 50th percentile ($${Math.round(benchmark.p50 * regionalMult / 1000)}k) significantly reduces early departure risk.`,
+          impact: 'high'
+        });
+      }
+    }
+    if (benchmark.compensationStructure?.basePercent >= 0.80) {
+      suggestions.push({
+        title: 'Add performance-based incentives',
+        detail: `${Math.round(benchmark.compensationStructure.basePercent * 100)}% of comp is base salary with minimal bonus structure. Adding a 10-15% performance bonus creates a retention incentive beyond the paycheck.`,
+        impact: 'moderate'
+      });
+    }
+    if (benchmark.turnover.avgTenure < 3) {
+      suggestions.push({
+        title: 'Plan for a 2-year cycle',
+        detail: `Average tenure for this role is ${benchmark.turnover.avgTenure} years. Build a succession pipeline and consider a loyalty bonus at the 2-year mark.`,
+        impact: 'moderate'
+      });
+    }
+
+    return {
+      riskScore,
+      riskLevel,
+      riskColor,
+      riskFactors: riskFactors.sort((a, b) => {
+        const order = { high: 0, moderate: 1, low: 2 };
+        return (order[a.impact] ?? 2) - (order[b.impact] ?? 2);
+      }),
+      suggestions: suggestions.slice(0, 4), // Top 4 most relevant
+      topReasons: benchmark.retentionRisk.topReasons,
+      avgTenure: benchmark.turnover.avgTenure,
+      firstYearAttrition: Math.round(attrition * 100),
+      annualTurnover: Math.round(turnover * 100),
+      hasData: true
+    };
+  };
+
   // API call
   const fetchWithRetry = async (url, options, maxRetries = 1) => {
     let lastError;
@@ -684,6 +853,8 @@ ${benchmark?.regionalNotes ? `Regional Notes: ${benchmark.regionalNotes}` : ''}
         if (di.falseSignals) di.falseSignals.completeTeaser = `For ${displayTitle} roles, the full analysis includes screening questions that surface these signals early — saves 2–3 weeks of wasted interviews.`;
       }
 
+      const retentionRisk = calculateRetentionRisk(det);
+
       setResults({
         ...det,
         ...ai,
@@ -691,7 +862,8 @@ ${benchmark?.regionalNotes ? `Regional Notes: ${benchmark.regionalNotes}` : ''}
         formData: { ...formData },
         aiAnalysisSuccess: true,
         adjustedBenchmark,
-        regionalMultiplier
+        regionalMultiplier,
+        retentionRisk
       });
 
     } catch (err) {
@@ -736,7 +908,8 @@ ${benchmark?.regionalNotes ? `Regional Notes: ${benchmark.regionalNotes}` : ''}
         formData: { ...formData },
         aiAnalysisSuccess: false,
         adjustedBenchmark,
-        regionalMultiplier
+        regionalMultiplier,
+        retentionRisk: calculateRetentionRisk(det)
       });
     }
 
@@ -797,7 +970,8 @@ ${benchmark?.regionalNotes ? `Regional Notes: ${benchmark.regionalNotes}` : ''}
       aiAnalysisSuccess: false,
       isSharedResult: true,
       adjustedBenchmark,
-      regionalMultiplier
+      regionalMultiplier,
+      retentionRisk: calculateRetentionRisk(det)
     });
     setStep(1);
   };
@@ -914,7 +1088,8 @@ ${benchmark?.regionalNotes ? `Regional Notes: ${benchmark.regionalNotes}` : ''}
             } : null,
             drivers: results.drivers,
             regionalMultiplier: results.regionalMultiplier,
-            confidence: results.confidence
+            confidence: results.confidence,
+            retentionRisk: results.retentionRisk
           }
         })
       });
