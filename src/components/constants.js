@@ -161,3 +161,69 @@ export const travelOptions = [
   { value: 'frequent', label: 'Frequent (Weekly travel)', points: 8 },
   { value: 'heavy-rotation', label: 'Extensive (50%+ travel)', points: 15 }
 ];
+
+// ─── Compensation Package Options ───
+
+export const bonusStructureOptions = [
+  { value: 'none', label: 'No Bonus' },
+  { value: 'up-to-10', label: 'Up to 10% of base' },
+  { value: '10-25', label: '10–25% of base' },
+  { value: '25-50', label: '25–50% of base' },
+  { value: '50-plus', label: '50%+ of base' },
+  { value: 'discretionary', label: 'Discretionary' },
+  { value: 'not-defined', label: 'Not yet defined' }
+];
+
+export const signingBonusOptions = [
+  { value: 'none', label: 'None' },
+  { value: 'under-10k', label: 'Under $10k' },
+  { value: '10k-25k', label: '$10k – $25k' },
+  { value: '25k-50k', label: '$25k – $50k' },
+  { value: '50k-plus', label: '$50k+' },
+  { value: 'open', label: 'Open to discussion' },
+  { value: 'not-defined', label: 'Not yet defined' }
+];
+
+export const relocationOptions = [
+  { value: 'none', label: 'Not applicable' },
+  { value: 'full-package', label: 'Full relocation package' },
+  { value: 'partial', label: 'Partial / Allowance' },
+  { value: 'negotiable', label: 'Negotiable' },
+  { value: 'not-defined', label: 'Not yet defined' }
+];
+
+// Portfolio Company equity options
+export const portfolioEquityOptions = [
+  { value: 'none', label: 'No equity component' },
+  { value: 'stock-options', label: 'Stock options / Phantom equity' },
+  { value: 'restricted-stock', label: 'Restricted stock (RSUs)' },
+  { value: 'carried-interest', label: 'Carried interest' },
+  { value: 'profit-sharing', label: 'Profit sharing / Earnout' },
+  { value: 'coinvest', label: 'Co-invest rights' },
+  { value: 'not-defined', label: 'Not yet defined' }
+];
+
+// Family Office corporate equity / upside options
+export const corporateEquityOptions = [
+  { value: 'none', label: 'No equity / upside' },
+  { value: 'coinvest', label: 'Co-invest opportunity' },
+  { value: 'profit-sharing', label: 'Profit sharing' },
+  { value: 'performance-equity', label: 'Performance-based equity' },
+  { value: 'not-defined', label: 'Not yet defined' }
+];
+
+// Private Service / Household benefits
+export const housingBenefitOptions = [
+  { value: 'none', label: 'Not included' },
+  { value: 'on-property', label: 'On-property suite / quarters' },
+  { value: 'separate', label: 'Separate housing provided' },
+  { value: 'allowance', label: 'Housing allowance' },
+  { value: 'not-defined', label: 'Not yet defined' }
+];
+
+export const vehicleBenefitOptions = [
+  { value: 'none', label: 'Not included' },
+  { value: 'provided', label: 'Company vehicle provided' },
+  { value: 'allowance', label: 'Vehicle allowance' },
+  { value: 'not-defined', label: 'Not yet defined' }
+];

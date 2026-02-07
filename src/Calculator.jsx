@@ -69,6 +69,13 @@ const SearchIntelligenceEngine = () => {
             governanceOptions={engine.governanceOptions}
             coInvestorOptions={engine.coInvestorOptions}
             travelOptions={engine.activeTravelOptions}
+            bonusStructureOptions={engine.bonusStructureOptions}
+            signingBonusOptions={engine.signingBonusOptions}
+            relocationOptions={engine.relocationOptions}
+            portfolioEquityOptions={engine.portfolioEquityOptions}
+            corporateEquityOptions={engine.corporateEquityOptions}
+            housingBenefitOptions={engine.housingBenefitOptions}
+            vehicleBenefitOptions={engine.vehicleBenefitOptions}
             corporateLanguageShortList={engine.corporateLanguageShortList}
             showLanguages={engine.showLanguages}
             setShowLanguages={engine.setShowLanguages}

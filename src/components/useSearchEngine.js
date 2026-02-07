@@ -23,6 +23,13 @@ import {
   privateServiceTravelOptions,
   corporateTravelOptions,
   portfolioTravelOptions,
+  bonusStructureOptions,
+  signingBonusOptions,
+  relocationOptions,
+  portfolioEquityOptions,
+  corporateEquityOptions,
+  housingBenefitOptions,
+  vehicleBenefitOptions,
   corporateLanguageShortList,
   APP_VERSION
 } from './constants';
@@ -62,7 +69,14 @@ export function useSearchEngine() {
     yachtLength: '',
     crewSize: '',
     aircraftType: '',
-    fleetSize: ''
+    fleetSize: '',
+    // Compensation package
+    bonusStructure: '',
+    signingBonus: '',
+    relocation: '',
+    equityComponent: '',
+    housingBenefit: '',
+    vehicleBenefit: ''
   });
 
   const [loading, setLoading] = useState(false);
@@ -756,6 +770,12 @@ Position: ${displayTitle}
 Location: ${sanitizeForPrompt(formData.location)}${det.regionalData ? ` (${det.regionalData.label}, ${regionalMultiplier}x cost multiplier)` : ''}
 Client Timeline: ${timelineOption?.label || sanitizeForPrompt(formData.timeline)}
 Client Budget: ${budgetOption?.label || sanitizeForPrompt(formData.budgetRange)}
+${formData.bonusStructure && formData.bonusStructure !== 'none' ? `Bonus: ${bonusStructureOptions.find(o => o.value === formData.bonusStructure)?.label || formData.bonusStructure}` : ''}
+${formData.equityComponent && formData.equityComponent !== 'none' ? `Equity/Upside: ${(isPortfolioRole ? portfolioEquityOptions : corporateEquityOptions).find(o => o.value === formData.equityComponent)?.label || formData.equityComponent}` : ''}
+${formData.signingBonus && formData.signingBonus !== 'none' ? `Signing Bonus: ${signingBonusOptions.find(o => o.value === formData.signingBonus)?.label || formData.signingBonus}` : ''}
+${formData.relocation && formData.relocation !== 'none' ? `Relocation: ${relocationOptions.find(o => o.value === formData.relocation)?.label || formData.relocation}` : ''}
+${formData.housingBenefit && formData.housingBenefit !== 'none' ? `Housing: ${housingBenefitOptions.find(o => o.value === formData.housingBenefit)?.label || formData.housingBenefit}` : ''}
+${formData.vehicleBenefit && formData.vehicleBenefit !== 'none' ? `Vehicle: ${vehicleBenefitOptions.find(o => o.value === formData.vehicleBenefit)?.label || formData.vehicleBenefit}` : ''}
 Requirements: ${sanitizeForPrompt(formData.keyRequirements)}
 Languages: ${formData.languageRequirements.map(l => sanitizeForPrompt(l)).join(', ') || 'None specified'}
 Certifications: ${formData.certifications.map(c => sanitizeForPrompt(c)).join(', ') || 'None specified'}
@@ -820,7 +840,7 @@ ${benchmark?.regionalNotes ? `Regional Notes: ${benchmark.regionalNotes}` : ''}
 
 === RETURN THIS JSON (be concise — 1–2 sentences per field unless noted) ===
 {
-  "salaryRangeGuidance": "$Xk–$Yk base + bonus. Why, referencing percentiles and budget.${isCorporateRole && formData.aumRange ? ' Factor AUM.' : ''}",
+  "salaryRangeGuidance": "$Xk–$Yk base + bonus. Why, referencing percentiles and budget.${isCorporateRole && formData.aumRange ? ' Factor AUM.' : ''}${formData.bonusStructure || formData.equityComponent || formData.signingBonus ? ' Factor the full comp package (bonus, equity, signing bonus) into your competitiveness assessment.' : ''}",
   "estimatedTimeline": "X–Y weeks. Phases: sourcing, interviews, offer, due diligence.",
   "marketCompetitiveness": "Favorable or challenging? What drives competition? No YoY claims without data.",
   "keySuccessFactors": ["Barrier that kills this search if unaddressed", "Constraint that most shrinks pool", "Signal a candidate wants THIS role specifically"],
@@ -1238,7 +1258,10 @@ ${benchmark?.regionalNotes ? `Regional Notes: ${benchmark.regionalNotes}` : ''}
     householdCertificationOptions, corporateCertificationOptions, corporateLanguageShortList,
     portfolioCertificationOptions, portfolioLanguageOptions,
     dealStageOptions, governanceOptions, coInvestorOptions,
-    travelOptions, activeTravelOptions, CATEGORY_GROUPS, BENCHMARKS,
+    travelOptions, activeTravelOptions,
+    bonusStructureOptions, signingBonusOptions, relocationOptions,
+    portfolioEquityOptions, corporateEquityOptions, housingBenefitOptions, vehicleBenefitOptions,
+    CATEGORY_GROUPS, BENCHMARKS,
     // Functions
     handleInputChange, handleMultiSelect, handleLocationKeyDown, validateAndWarn, validateStep,
     nextStep, calculateDeterministicScore, calculateComplexity, calculateComplexityFromShare,

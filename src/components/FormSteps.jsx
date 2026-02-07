@@ -69,10 +69,16 @@ export function FormSteps({
   householdLanguageOptions, corporateLanguageOptions, householdCertificationOptions,
   corporateCertificationOptions, portfolioCertificationOptions, portfolioLanguageOptions,
   dealStageOptions, governanceOptions, coInvestorOptions,
-  travelOptions, corporateLanguageShortList,
+  travelOptions,
+  bonusStructureOptions, signingBonusOptions, relocationOptions,
+  portfolioEquityOptions, corporateEquityOptions, housingBenefitOptions, vehicleBenefitOptions,
+  corporateLanguageShortList,
   showLanguages, setShowLanguages, commonRoles
 }) {
   const [showAllCerts, setShowAllCerts] = React.useState(false);
+  const [showCompDetails, setShowCompDetails] = React.useState(
+    !!(formData.bonusStructure || formData.signingBonus || formData.relocation || formData.equityComponent || formData.housingBenefit || formData.vehicleBenefit)
+  );
   const [showAllLangs, setShowAllLangs] = React.useState(false);
   const [positionFilter, setPositionFilter] = React.useState(null);
 
@@ -446,6 +452,83 @@ export function FormSteps({
               </label>
               <CustomSelect name="budgetRange" value={formData.budgetRange} onChange={handleInputChange}
                 options={budgetRanges} placeholder="Select budget range" />
+            </div>
+
+            {/* Compensation Package Details — collapsible */}
+            <div>
+              <button type="button"
+                onClick={() => setShowCompDetails(!showCompDetails)}
+                className="flex items-center gap-2 w-full text-left group"
+              >
+                <DollarSign className="w-3.5 h-3.5" style={{ color: '#2814ff' }} />
+                <span className="text-xs font-medium uppercase" style={{ letterSpacing: '0.05em', color: '#6e6e73' }}>
+                  Compensation Details
+                </span>
+                <span className="text-[10px] font-normal normal-case px-1.5 py-0.5 rounded-full" style={{ backgroundColor: '#eeeeff', color: '#2814ff' }}>Optional</span>
+                <ChevronDown className="w-3.5 h-3.5 ml-auto transition-transform duration-200" style={{ color: '#a1a1a6', transform: showCompDetails ? 'rotate(180deg)' : 'rotate(0)' }} />
+              </button>
+              {!showCompDetails && (
+                <p className="text-[11px] mt-1 ml-5.5" style={{ color: '#a1a1a6', marginLeft: '22px' }}>
+                  Add bonus, equity, signing bonus &amp; benefits for a more accurate analysis.
+                </p>
+              )}
+              {showCompDetails && (
+                <div className="mt-3 space-y-3 p-4 rounded-btn animate-fadeIn" style={{ backgroundColor: '#fafaff', border: '1px solid #eeeeff' }}>
+                  {/* Row 1: Bonus + Signing Bonus (all roles) */}
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                    <div>
+                      <label className="block text-[11px] font-medium mb-1" style={{ color: '#6e6e73' }}>Bonus Structure</label>
+                      <CustomSelect name="bonusStructure" value={formData.bonusStructure} onChange={handleInputChange}
+                        options={bonusStructureOptions} placeholder="Select bonus structure" />
+                    </div>
+                    <div>
+                      <label className="block text-[11px] font-medium mb-1" style={{ color: '#6e6e73' }}>Signing Bonus</label>
+                      <CustomSelect name="signingBonus" value={formData.signingBonus} onChange={handleInputChange}
+                        options={signingBonusOptions} placeholder="Select signing bonus" />
+                    </div>
+                  </div>
+
+                  {/* Row 2: Equity (category-aware) + Relocation */}
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                    {isPortfolioRole ? (
+                      <div>
+                        <label className="block text-[11px] font-medium mb-1" style={{ color: '#6e6e73' }}>Equity / Carry</label>
+                        <CustomSelect name="equityComponent" value={formData.equityComponent} onChange={handleInputChange}
+                          options={portfolioEquityOptions} placeholder="Select equity component" />
+                      </div>
+                    ) : isCorporateRole ? (
+                      <div>
+                        <label className="block text-[11px] font-medium mb-1" style={{ color: '#6e6e73' }}>Equity / Upside</label>
+                        <CustomSelect name="equityComponent" value={formData.equityComponent} onChange={handleInputChange}
+                          options={corporateEquityOptions} placeholder="Select equity / upside" />
+                      </div>
+                    ) : (
+                      <div>
+                        <label className="block text-[11px] font-medium mb-1" style={{ color: '#6e6e73' }}>Housing</label>
+                        <CustomSelect name="housingBenefit" value={formData.housingBenefit} onChange={handleInputChange}
+                          options={housingBenefitOptions} placeholder="Select housing benefit" />
+                      </div>
+                    )}
+                    <div>
+                      <label className="block text-[11px] font-medium mb-1" style={{ color: '#6e6e73' }}>Relocation</label>
+                      <CustomSelect name="relocation" value={formData.relocation} onChange={handleInputChange}
+                        options={relocationOptions} placeholder="Select relocation support" />
+                    </div>
+                  </div>
+
+                  {/* Row 3: Vehicle for household only */}
+                  {!isCorporateRole && !isPortfolioRole && (
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                      <div>
+                        <label className="block text-[11px] font-medium mb-1" style={{ color: '#6e6e73' }}>Vehicle</label>
+                        <CustomSelect name="vehicleBenefit" value={formData.vehicleBenefit} onChange={handleInputChange}
+                          options={vehicleBenefitOptions} placeholder="Select vehicle benefit" />
+                      </div>
+                      <div />
+                    </div>
+                  )}
+                </div>
+              )}
             </div>
 
             {/* Warnings */}
