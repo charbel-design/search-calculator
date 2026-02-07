@@ -1,6 +1,6 @@
 import React from 'react';
 import {
-  MapPin, Clock, DollarSign, Target, AlertCircle, CheckCircle, ArrowRight, Info, Zap, ChevronDown, Search, Briefcase, Shield, Anchor
+  MapPin, Clock, DollarSign, Target, AlertCircle, CheckCircle, ArrowRight, Info, Zap, ChevronDown, Search, Briefcase, Shield, Anchor, Plane
 } from 'lucide-react';
 import { BENCHMARKS } from '../salaryData';
 import { CustomSelect } from './CustomSelect';
@@ -12,7 +12,7 @@ export function FormSteps({
   showLocationSuggestions, setShowLocationSuggestions, highlightedLocationIndex, setHighlightedLocationIndex,
   filteredLocationSuggestions, handleInputChange, handleLocationKeyDown, handleMultiSelect,
   validateAndWarn, validateStep, nextStep, calculateComplexity,
-  isCorporateRole, isMaritimeRole, budgetRanges, timelineOptions, discretionLevels,
+  isCorporateRole, isMaritimeRole, isAviationRole, budgetRanges, timelineOptions, discretionLevels,
   householdLanguageOptions, corporateLanguageOptions, householdCertificationOptions,
   corporateCertificationOptions, travelOptions, corporateLanguageShortList,
   showLanguages, setShowLanguages, commonRoles
@@ -538,6 +538,32 @@ export function FormSteps({
                       { value: '6-12', label: '6 - 12' },
                       { value: '13-20', label: '13 - 20' },
                       { value: '21-plus', label: '21+' },
+                    ]} placeholder="Select..." />
+                </div>
+              </div>
+            ) : isAviationRole ? (
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div>
+                  <label className="block text-sm font-medium text-slate-700 mb-2">
+                    <span className="flex items-center gap-1.5"><Plane className="w-3.5 h-3.5 text-slate-400" />Aircraft Type</span>
+                  </label>
+                  <CustomSelect name="aircraftType" value={formData.aircraftType} onChange={handleInputChange}
+                    options={[
+                      { value: 'light-jet', label: 'Light Jet' },
+                      { value: 'midsize-jet', label: 'Midsize Jet' },
+                      { value: 'super-midsize', label: 'Super-Midsize' },
+                      { value: 'heavy-jet', label: 'Heavy Jet' },
+                      { value: 'ultra-long-range', label: 'Ultra Long Range' },
+                      { value: 'helicopter', label: 'Helicopter' },
+                    ]} placeholder="Select..." />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-slate-700 mb-2">Fleet Size</label>
+                  <CustomSelect name="fleetSize" value={formData.fleetSize} onChange={handleInputChange}
+                    options={[
+                      { value: '1', label: '1' },
+                      { value: '2-3', label: '2 - 3' },
+                      { value: '4-plus', label: '4+' },
                     ]} placeholder="Select..." />
                 </div>
               </div>

@@ -86,8 +86,10 @@ ${formData?.aumRange ? `AUM RANGE: ${sanitizeForPrompt(formData.aumRange)}` : ''
 ${formData?.teamSize ? `TEAM SIZE: ${sanitizeForPrompt(formData.teamSize)}` : ''}
 ${formData?.yachtLength ? `YACHT LENGTH: ${sanitizeForPrompt(formData.yachtLength)}` : ''}
 ${formData?.crewSize ? `CREW SIZE: ${sanitizeForPrompt(formData.crewSize)}` : ''}
-${formData?.propertiesCount && !formData?.yachtLength ? `PROPERTIES: ${sanitizeForPrompt(formData.propertiesCount)}` : ''}
-${formData?.householdSize && !formData?.yachtLength ? `HOUSEHOLD SIZE: ${sanitizeForPrompt(formData.householdSize)}` : ''}
+${formData?.aircraftType ? `AIRCRAFT TYPE: ${sanitizeForPrompt(formData.aircraftType)}` : ''}
+${formData?.fleetSize ? `FLEET SIZE: ${sanitizeForPrompt(formData.fleetSize)}` : ''}
+${formData?.propertiesCount && !formData?.yachtLength && !formData?.aircraftType ? `PROPERTIES: ${sanitizeForPrompt(formData.propertiesCount)}` : ''}
+${formData?.householdSize && !formData?.yachtLength && !formData?.aircraftType ? `HOUSEHOLD SIZE: ${sanitizeForPrompt(formData.householdSize)}` : ''}
 
 --- ANALYSIS INSIGHTS (use to inform JD, do not copy verbatim) ---
 KEY SUCCESS FACTORS: ${(results.keySuccessFactors || []).join('; ')}

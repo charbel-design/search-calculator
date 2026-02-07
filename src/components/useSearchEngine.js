@@ -51,7 +51,9 @@ export function useSearchEngine() {
     aumRange: '',
     teamSize: '',
     yachtLength: '',
-    crewSize: ''
+    crewSize: '',
+    aircraftType: '',
+    fleetSize: ''
   });
 
   const [loading, setLoading] = useState(false);
@@ -106,6 +108,12 @@ export function useSearchEngine() {
     return benchmark?.category === 'Maritime / Yacht';
   }, [formData.positionType]);
 
+  const isAviationRole = useMemo(() => {
+    if (!formData.positionType) return false;
+    const name = formData.positionType.toLowerCase();
+    return name.includes('pilot') || name.includes('flight attendant') || name.includes('aviation');
+  }, [formData.positionType]);
+
   const budgetRanges = isCorporateRole ? corporateBudgetRanges : householdBudgetRanges;
 
   const debouncedLocation = useDebounce(formData.location, 150);
@@ -155,7 +163,9 @@ export function useSearchEngine() {
           propertiesCount: decoded.pc || '',
           householdSize: decoded.hs || '',
           yachtLength: decoded.yl || '',
-          crewSize: decoded.cs || ''
+          crewSize: decoded.cs || '',
+          aircraftType: decoded.at || '',
+          fleetSize: decoded.fs || ''
         }));
         setTimeout(() => {
           setStep(5);
@@ -505,8 +515,10 @@ ${isCorporateRole && formData.aumRange ? `AUM Range: ${sanitizeForPrompt(formDat
 ${isCorporateRole && formData.teamSize ? `Team Size: ${sanitizeForPrompt(formData.teamSize)}` : ''}
 ${isMaritimeRole && formData.yachtLength ? `Yacht Length: ${sanitizeForPrompt(formData.yachtLength)}` : ''}
 ${isMaritimeRole && formData.crewSize ? `Crew Size: ${sanitizeForPrompt(formData.crewSize)}` : ''}
-${!isCorporateRole && !isMaritimeRole && formData.propertiesCount ? `Properties: ${sanitizeForPrompt(formData.propertiesCount)}` : ''}
-${!isCorporateRole && !isMaritimeRole && formData.householdSize ? `Household Size: ${sanitizeForPrompt(formData.householdSize)}` : ''}
+${isAviationRole && formData.aircraftType ? `Aircraft Type: ${sanitizeForPrompt(formData.aircraftType)}` : ''}
+${isAviationRole && formData.fleetSize ? `Fleet Size: ${sanitizeForPrompt(formData.fleetSize)}` : ''}
+${!isCorporateRole && !isMaritimeRole && !isAviationRole && formData.propertiesCount ? `Properties: ${sanitizeForPrompt(formData.propertiesCount)}` : ''}
+${!isCorporateRole && !isMaritimeRole && !isAviationRole && formData.householdSize ? `Household Size: ${sanitizeForPrompt(formData.householdSize)}` : ''}
 Computed Complexity Score: ${det.score}/10 (${det.label})
 
 === MARKET DATA (use these exact figures) ===
@@ -813,6 +825,8 @@ ${benchmark?.regionalNotes ? `Regional Notes: ${benchmark.regionalNotes}` : ''}
       hs: formData.householdSize,
       yl: formData.yachtLength,
       cs: formData.crewSize,
+      at: formData.aircraftType,
+      fs: formData.fleetSize,
       kr: formData.keyRequirements
     };
     const encoded = btoa(JSON.stringify(shareData));
@@ -915,7 +929,7 @@ ${benchmark?.regionalNotes ? `Regional Notes: ${benchmark.regionalNotes}` : ''}
       positionType: '', location: '', timeline: '', budgetRange: '', keyRequirements: '',
       email: '', emailConsent: false, discretionLevel: 'standard', propertiesCount: '', householdSize: '',
       priorityCallback: false, phone: '', languageRequirements: [], certifications: [], travelRequirement: 'minimal',
-      aumRange: '', teamSize: '', yachtLength: '', crewSize: ''
+      aumRange: '', teamSize: '', yachtLength: '', crewSize: '', aircraftType: '', fleetSize: ''
     });
     window.history.replaceState({}, '', window.location.pathname);
   };
@@ -941,7 +955,7 @@ ${benchmark?.regionalNotes ? `Regional Notes: ${benchmark.regionalNotes}` : ''}
     whatIfBudget, setWhatIfBudget, whatIfTimeline, setWhatIfTimeline, showEmailModal,
     setShowEmailModal, emailForReport, setEmailForReport, sendingEmail, emailSent, setEmailSent, resultsRef,
     // Constants
-    positionsByCategory, commonRoles, isCorporateRole, isMaritimeRole, budgetRanges, timelineOptions,
+    positionsByCategory, commonRoles, isCorporateRole, isMaritimeRole, isAviationRole, budgetRanges, timelineOptions,
     discretionLevels, householdLanguageOptions, corporateLanguageOptions,
     householdCertificationOptions, corporateCertificationOptions, corporateLanguageShortList,
     travelOptions, CATEGORY_GROUPS, BENCHMARKS,
