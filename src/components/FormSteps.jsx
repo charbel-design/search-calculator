@@ -1,6 +1,6 @@
 import React from 'react';
 import {
-  MapPin, Clock, DollarSign, Target, AlertCircle, CheckCircle, ArrowRight, Info, Zap, ChevronDown, Search, Briefcase, Shield
+  MapPin, Clock, DollarSign, Target, AlertCircle, CheckCircle, ArrowRight, Info, Zap, ChevronDown, Search, Briefcase, Shield, Anchor
 } from 'lucide-react';
 import { BENCHMARKS } from '../salaryData';
 import { CustomSelect } from './CustomSelect';
@@ -12,7 +12,7 @@ export function FormSteps({
   showLocationSuggestions, setShowLocationSuggestions, highlightedLocationIndex, setHighlightedLocationIndex,
   filteredLocationSuggestions, handleInputChange, handleLocationKeyDown, handleMultiSelect,
   validateAndWarn, validateStep, nextStep, calculateComplexity,
-  isCorporateRole, budgetRanges, timelineOptions, discretionLevels,
+  isCorporateRole, isMaritimeRole, budgetRanges, timelineOptions, discretionLevels,
   householdLanguageOptions, corporateLanguageOptions, householdCertificationOptions,
   corporateCertificationOptions, travelOptions, corporateLanguageShortList,
   showLanguages, setShowLanguages, commonRoles
@@ -512,6 +512,32 @@ export function FormSteps({
                       { value: '1-3', label: '1-3 reports' },
                       { value: '4-10', label: '4-10 reports' },
                       { value: '10-plus', label: '10+ reports' },
+                    ]} placeholder="Select..." />
+                </div>
+              </div>
+            ) : isMaritimeRole ? (
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div>
+                  <label className="block text-sm font-medium text-slate-700 mb-2">
+                    <span className="flex items-center gap-1.5"><Anchor className="w-3.5 h-3.5 text-slate-400" />Vessel Length (LOA)</span>
+                  </label>
+                  <CustomSelect name="yachtLength" value={formData.yachtLength} onChange={handleInputChange}
+                    options={[
+                      { value: 'under-80ft', label: 'Under 80 ft' },
+                      { value: '80-120ft', label: '80 - 120 ft' },
+                      { value: '120-160ft', label: '120 - 160 ft' },
+                      { value: '160-200ft', label: '160 - 200 ft' },
+                      { value: 'over-200ft', label: '200+ ft (Superyacht)' },
+                    ]} placeholder="Select..." />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-slate-700 mb-2">Crew Size</label>
+                  <CustomSelect name="crewSize" value={formData.crewSize} onChange={handleInputChange}
+                    options={[
+                      { value: '1-5', label: '1 - 5' },
+                      { value: '6-12', label: '6 - 12' },
+                      { value: '13-20', label: '13 - 20' },
+                      { value: '21-plus', label: '21+' },
                     ]} placeholder="Select..." />
                 </div>
               </div>

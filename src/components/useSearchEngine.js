@@ -49,7 +49,9 @@ export function useSearchEngine() {
     certifications: [],
     travelRequirement: 'minimal',
     aumRange: '',
-    teamSize: ''
+    teamSize: '',
+    yachtLength: '',
+    crewSize: ''
   });
 
   const [loading, setLoading] = useState(false);
@@ -96,6 +98,12 @@ export function useSearchEngine() {
     if (!formData.positionType) return false;
     const benchmark = getBenchmark(formData.positionType);
     return benchmark?.category?.startsWith('Family Office -');
+  }, [formData.positionType]);
+
+  const isMaritimeRole = useMemo(() => {
+    if (!formData.positionType) return false;
+    const benchmark = getBenchmark(formData.positionType);
+    return benchmark?.category === 'Maritime / Yacht';
   }, [formData.positionType]);
 
   const budgetRanges = isCorporateRole ? corporateBudgetRanges : householdBudgetRanges;
@@ -145,7 +153,9 @@ export function useSearchEngine() {
           aumRange: decoded.a || '',
           teamSize: decoded.ts || '',
           propertiesCount: decoded.pc || '',
-          householdSize: decoded.hs || ''
+          householdSize: decoded.hs || '',
+          yachtLength: decoded.yl || '',
+          crewSize: decoded.cs || ''
         }));
         setTimeout(() => {
           setStep(5);
@@ -493,8 +503,10 @@ Travel: ${sanitizeForPrompt(formData.travelRequirement)}
 Discretion: ${discOption?.label || sanitizeForPrompt(formData.discretionLevel)} — ${discOption?.description || 'Normal confidentiality'}${formData.discretionLevel !== 'standard' ? ' ⚠ This significantly affects sourcing approach, candidate pool, and timeline.' : ''}
 ${isCorporateRole && formData.aumRange ? `AUM Range: ${sanitizeForPrompt(formData.aumRange)}` : ''}
 ${isCorporateRole && formData.teamSize ? `Team Size: ${sanitizeForPrompt(formData.teamSize)}` : ''}
-${!isCorporateRole && formData.propertiesCount ? `Properties: ${sanitizeForPrompt(formData.propertiesCount)}` : ''}
-${!isCorporateRole && formData.householdSize ? `Household Size: ${sanitizeForPrompt(formData.householdSize)}` : ''}
+${isMaritimeRole && formData.yachtLength ? `Yacht Length: ${sanitizeForPrompt(formData.yachtLength)}` : ''}
+${isMaritimeRole && formData.crewSize ? `Crew Size: ${sanitizeForPrompt(formData.crewSize)}` : ''}
+${!isCorporateRole && !isMaritimeRole && formData.propertiesCount ? `Properties: ${sanitizeForPrompt(formData.propertiesCount)}` : ''}
+${!isCorporateRole && !isMaritimeRole && formData.householdSize ? `Household Size: ${sanitizeForPrompt(formData.householdSize)}` : ''}
 Computed Complexity Score: ${det.score}/10 (${det.label})
 
 === MARKET DATA (use these exact figures) ===
@@ -799,6 +811,8 @@ ${benchmark?.regionalNotes ? `Regional Notes: ${benchmark.regionalNotes}` : ''}
       ts: formData.teamSize,
       pc: formData.propertiesCount,
       hs: formData.householdSize,
+      yl: formData.yachtLength,
+      cs: formData.crewSize,
       kr: formData.keyRequirements
     };
     const encoded = btoa(JSON.stringify(shareData));
@@ -901,7 +915,7 @@ ${benchmark?.regionalNotes ? `Regional Notes: ${benchmark.regionalNotes}` : ''}
       positionType: '', location: '', timeline: '', budgetRange: '', keyRequirements: '',
       email: '', emailConsent: false, discretionLevel: 'standard', propertiesCount: '', householdSize: '',
       priorityCallback: false, phone: '', languageRequirements: [], certifications: [], travelRequirement: 'minimal',
-      aumRange: '', teamSize: ''
+      aumRange: '', teamSize: '', yachtLength: '', crewSize: ''
     });
     window.history.replaceState({}, '', window.location.pathname);
   };
@@ -927,7 +941,7 @@ ${benchmark?.regionalNotes ? `Regional Notes: ${benchmark.regionalNotes}` : ''}
     whatIfBudget, setWhatIfBudget, whatIfTimeline, setWhatIfTimeline, showEmailModal,
     setShowEmailModal, emailForReport, setEmailForReport, sendingEmail, emailSent, setEmailSent, resultsRef,
     // Constants
-    positionsByCategory, commonRoles, isCorporateRole, budgetRanges, timelineOptions,
+    positionsByCategory, commonRoles, isCorporateRole, isMaritimeRole, budgetRanges, timelineOptions,
     discretionLevels, householdLanguageOptions, corporateLanguageOptions,
     householdCertificationOptions, corporateCertificationOptions, corporateLanguageShortList,
     travelOptions, CATEGORY_GROUPS, BENCHMARKS,

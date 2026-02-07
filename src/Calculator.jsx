@@ -53,6 +53,7 @@ const SearchIntelligenceEngine = () => {
             nextStep={engine.nextStep}
             calculateComplexity={engine.calculateComplexity}
             isCorporateRole={engine.isCorporateRole}
+            isMaritimeRole={engine.isMaritimeRole}
             budgetRanges={engine.budgetRanges}
             timelineOptions={engine.timelineOptions}
             discretionLevels={engine.discretionLevels}
