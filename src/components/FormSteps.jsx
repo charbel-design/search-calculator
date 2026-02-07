@@ -20,7 +20,6 @@ export function FormSteps({
   const [showAllCerts, setShowAllCerts] = React.useState(false);
   const [showAllLangs, setShowAllLangs] = React.useState(false);
 
-  // Live elapsed timer for loading overlay
   const [elapsed, setElapsed] = React.useState(0);
   React.useEffect(() => {
     if (!loading) { setElapsed(0); return; }
@@ -29,192 +28,100 @@ export function FormSteps({
     return () => clearInterval(timer);
   }, [loading]);
 
-  const loadingLabels = [
-    { text: 'Crunching the numbers', icon: DollarSign },
-    { text: 'Checking the market', icon: Search },
-    { text: 'Building your insights', icon: Briefcase },
-    { text: 'Almost there', icon: Zap }
-  ];
-
-  const stepMeta = [
-    { label: 'Role', shortLabel: 'Role', icon: Search },
-    { label: 'Budget', shortLabel: 'Budget', icon: DollarSign },
-    { label: 'Requirements', shortLabel: 'Reqs', icon: Target },
-    { label: 'Finalize', shortLabel: 'Go', icon: Zap }
-  ];
+  const stepLabels = ['Role', 'Budget', 'Requirements', 'Finalize'];
 
   return (
     <>
-      {/* Progress Indicator — Clean Linear Design */}
+      {/* Progress Indicator — Minimal */}
       <div className="mb-8">
-        {/* Step counter text */}
         <div className="flex items-center justify-between mb-3">
-          <span className="text-xs font-medium text-slate-400 uppercase tracking-wider">Step {step} of 4</span>
-          <span className="text-xs text-slate-400">{stepMeta[step - 1].label}</span>
+          <span className="text-xs font-medium uppercase" style={{ letterSpacing: '0.05em', color: '#6e6e73' }}>Step {step} of 4</span>
+          <span className="text-xs" style={{ color: '#a1a1a6' }}>{stepLabels[step - 1]}</span>
         </div>
-
-        {/* Progress bar */}
-        <div className="h-1.5 bg-slate-100 rounded-full overflow-hidden mb-4">
+        <div className="rounded-card overflow-hidden" style={{ backgroundColor: '#e5e5ea', height: '2px' }}>
           <div
-            className="h-full rounded-full transition-all duration-500 ease-out"
+            className="h-full rounded-card transition-all duration-500 ease-out"
             style={{ width: `${((step) / 4) * 100}%`, backgroundColor: '#2814ff' }}
           />
-        </div>
-
-        {/* Step dots */}
-        <div className="flex items-center justify-between">
-          {stepMeta.map((meta, i) => {
-            const stepNum = i + 1;
-            const isCompleted = step > stepNum;
-            const isCurrent = step === stepNum;
-            const Icon = meta.icon;
-            return (
-              <button
-                key={i}
-                onClick={() => { if (isCompleted) setStep(stepNum); }}
-                disabled={!isCompleted}
-                className="flex flex-col items-center gap-1.5 group"
-              >
-                <div className={`w-9 h-9 rounded-full flex items-center justify-center transition-all duration-300 ${
-                  isCompleted
-                    ? 'bg-brand-500 text-white cursor-pointer hover:bg-brand-600 shadow-sm'
-                    : isCurrent
-                    ? 'bg-brand-500 text-white ring-4 ring-brand-100 shadow-md'
-                    : 'bg-slate-100 text-slate-400'
-                }`}>
-                  {isCompleted ? (
-                    <CheckCircle className="w-4 h-4 animate-checkIn" />
-                  ) : (
-                    <Icon className="w-4 h-4" />
-                  )}
-                </div>
-                <span className={`text-[10px] sm:text-xs transition-colors duration-300 step-label ${
-                  isCurrent ? 'font-semibold text-brand-600' :
-                  isCompleted ? 'font-medium text-brand-500' :
-                  'text-slate-400'
-                }`}>
-                  <span className="hidden sm:inline">{meta.label}</span>
-                  <span className="sm:hidden">{meta.shortLabel}</span>
-                </span>
-              </button>
-            );
-          })}
         </div>
       </div>
 
       {/* Form Card */}
-      <div className="bg-white rounded-2xl shadow-lg shadow-slate-200/50 p-5 sm:p-6 md:p-8 border border-slate-100 form-card" aria-label="Search parameters form">
+      <div className="bg-white rounded-card shadow-card p-6 sm:p-8 form-card" aria-label="Search parameters form">
 
-        {/* Loading Overlay — Premium Design */}
+        {/* Loading Overlay — Minimal */}
         {loading && (
-          <div className="fixed inset-0 loading-overlay flex items-center justify-center z-50">
-            <div className="text-center animate-fadeInUp max-w-sm px-6">
-              {/* Animated brand ring */}
-              <div className="relative w-20 h-20 mx-auto mb-8">
-                <div className="absolute inset-0 rounded-full border-[3px] border-slate-100" />
-                <div className="absolute inset-0 rounded-full border-[3px] border-transparent border-t-brand-500 animate-spin" style={{ animationDuration: '1s' }} />
-                <div className="absolute inset-0 flex items-center justify-center">
-                  <div className="w-10 h-10 rounded-full flex items-center justify-center" style={{ backgroundColor: '#2814ff10' }}>
-                    {React.createElement(loadingLabels[Math.min(loadingStep - 1, 3)]?.icon || Zap, {
-                      className: 'w-5 h-5 animate-gentleFloat',
-                      style: { color: '#2814ff' }
-                    })}
-                  </div>
-                </div>
-              </div>
-
-              {/* Step checklist */}
-              <div className="space-y-3 text-left max-w-xs mx-auto">
-                {loadingLabels.map(({ text, icon: StepIcon }, i) => {
-                  const stepNum = i + 1;
-                  const done = loadingStep > stepNum;
-                  const active = loadingStep === stepNum;
-                  return (
-                    <div key={i} className={`flex items-center gap-3 py-1 transition-all duration-300 ${active ? 'opacity-100' : done ? 'opacity-50' : 'opacity-40'}`}>
-                      <div className={`w-6 h-6 rounded-full flex items-center justify-center flex-shrink-0 transition-all duration-300 ${
-                        done ? 'bg-b-opal-400 text-white' :
-                        active ? 'bg-brand-500 text-white' :
-                        'bg-slate-100 text-slate-400'
-                      }`}>
-                        {done ? (
-                          <CheckCircle className="w-3.5 h-3.5" />
-                        ) : (
-                          <StepIcon className="w-3.5 h-3.5" />
-                        )}
-                      </div>
-                      <span className={`text-sm transition-all duration-300 ${
-                        done ? 'text-slate-400 line-through' :
-                        active ? 'font-medium text-slate-700 loading-step-active' :
-                        'text-slate-400'
-                      }`}>{text}{active ? '...' : ''}</span>
-                    </div>
-                  );
-                })}
-              </div>
-
-              <p className="text-xs text-slate-400 mt-6 tabular-nums font-medium">{elapsed}s</p>
+          <div className="fixed inset-0 loading-overlay flex flex-col items-center justify-center z-50">
+            {/* Thin progress bar at top */}
+            <div className="absolute top-0 left-0 right-0" style={{ backgroundColor: '#e5e5ea', height: '2px' }}>
+              <div className="h-full transition-all duration-1000 ease-out" style={{ backgroundColor: '#2814ff', width: `${Math.min(95, loadingStep * 25)}%` }} />
+            </div>
+            <div className="text-center">
+              <p className="text-sm" style={{ color: '#6e6e73' }}>Analyzing your search...</p>
+              <p className="text-xs mt-2 tabular-nums" style={{ color: '#a1a1a6' }}>{elapsed}s</p>
             </div>
           </div>
         )}
 
         {/* Step 1: Role & Location */}
         {step === 1 && (
-          <div className="space-y-6 animate-slideInRight">
+          <div className="space-y-6 animate-fadeIn">
             <div>
-              <h3 className="text-lg sm:text-xl font-semibold text-slate-900 mb-1">Tell us about the role</h3>
-              <p className="text-sm text-slate-400">Start with the basics — what you're looking for and where.</p>
+              <h3 className="text-xl font-semibold mb-1" style={{ color: '#1d1d1f' }}>Tell us about the role</h3>
+              <p className="text-sm" style={{ color: '#6e6e73' }}>Start with the basics — what you're looking for and where.</p>
             </div>
 
             {/* Position Type */}
             <div>
-              <label className="block text-sm font-medium text-slate-700 mb-2">
-                Position Type <span className="text-brand-500">*</span>
+              <label className="block text-xs font-medium uppercase mb-2" style={{ letterSpacing: '0.05em', color: '#6e6e73' }}>
+                Position Type <span style={{ color: '#2814ff' }}>*</span>
               </label>
               <div className="relative">
-                <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400 pointer-events-none" />
+                <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 pointer-events-none" style={{ color: '#a1a1a6' }} />
                 <input type="text"
                   value={formData.positionType ? formData.positionType : positionSearch}
                   onChange={(e) => { setPositionSearch(e.target.value); setFormData({ ...formData, positionType: '' }); setShowPositionSuggestions(true); setHighlightedPositionIndex(-1); }}
-                  onFocus={() => { setShowPositionSuggestions(true); if (formData.positionType) { setPositionSearch(''); setFormData({ ...formData, positionType: '' }); } }}
-                  onBlur={() => setTimeout(() => { setShowPositionSuggestions(false); setHighlightedPositionIndex(-1); }, 200)}
+                  onFocus={(e) => { e.currentTarget.style.borderColor = '#2814ff'; setShowPositionSuggestions(true); if (formData.positionType) { setPositionSearch(''); setFormData({ ...formData, positionType: '' }); } }}
+                  onBlur={(e) => { e.currentTarget.style.borderColor = '#d2d2d7'; setTimeout(() => { setShowPositionSuggestions(false); setHighlightedLocationIndex(-1); }, 200); }}
                   onKeyDown={(e) => {
                     if (e.key === 'ArrowDown') { e.preventDefault(); setHighlightedPositionIndex(prev => prev < filteredPositions.length - 1 ? prev + 1 : prev); }
                     else if (e.key === 'ArrowUp') { e.preventDefault(); setHighlightedPositionIndex(prev => prev > 0 ? prev - 1 : prev); }
                     else if (e.key === 'Enter' && highlightedPositionIndex >= 0) { e.preventDefault(); const selected = filteredPositions[highlightedPositionIndex]; setFormData({ ...formData, positionType: selected }); setPositionSearch(''); setShowPositionSuggestions(false); setHighlightedPositionIndex(-1); }
                     else if (e.key === 'Escape') { setShowPositionSuggestions(false); setHighlightedPositionIndex(-1); }
                   }}
-                  className="w-full pl-10 pr-10 py-3 border-2 border-slate-200 rounded-xl focus:border-brand-500 focus:ring-2 focus:ring-brand-100 transition-all duration-200 text-sm"
+                  className="w-full pl-10 pr-10 py-3 border rounded-btn transition-colors duration-200 text-sm"
+                  style={{ borderColor: '#d2d2d7', minHeight: '44px', outline: 'none' }}
                   placeholder="Search roles... (e.g., Estate Manager, CIO, Private Chef)"
                 />
                 {formData.positionType && (
                   <button type="button" onClick={() => { setFormData({ ...formData, positionType: '' }); setPositionSearch(''); }}
-                    className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 transition-colors">
+                    className="absolute right-3 top-1/2 -translate-y-1/2 hover:opacity-75 transition-opacity" style={{ color: '#a1a1a6' }}>
                     <span className="text-lg leading-none">&times;</span>
                   </button>
                 )}
                 {showPositionSuggestions && filteredPositions.length > 0 && (
-                  <div className="absolute z-20 w-full mt-1 bg-white border border-slate-200 rounded-xl shadow-lg max-h-64 overflow-y-auto custom-scrollbar">
+                  <div className="absolute z-20 w-full mt-1 bg-white rounded-btn shadow-elevated max-h-64 overflow-y-auto custom-scrollbar">
                     {filteredPositions.map((role, idx) => (
                       <button key={role} type="button"
                         onClick={() => { setFormData({ ...formData, positionType: role }); setPositionSearch(''); setShowPositionSuggestions(false); setHighlightedPositionIndex(-1); }}
                         onMouseEnter={() => setHighlightedPositionIndex(idx)}
-                        className={`w-full text-left px-4 py-2.5 text-sm border-b border-slate-50 last:border-0 flex items-center justify-between ${idx === highlightedPositionIndex ? 'bg-brand-50 text-brand-700' : 'hover:bg-slate-50 text-slate-700'}`}>
+                        className={`w-full text-left px-4 py-2.5 text-sm flex items-center justify-between transition-colors duration-100`}
+                        style={idx === highlightedPositionIndex ? { backgroundColor: '#2814ff', color: '#ffffff' } : { color: '#1d1d1f' }}>
                         <span>{role}</span>
-                        {BENCHMARKS[role] && <span className="text-xs text-slate-400 ml-2 tabular-nums">${BENCHMARKS[role].p50.toLocaleString()}</span>}
+                        {BENCHMARKS[role] && <span className="text-xs ml-2 tabular-nums" style={{ opacity: idx === highlightedPositionIndex ? 0.8 : 0.5 }}>${BENCHMARKS[role].p50.toLocaleString()}</span>}
                       </button>
                     ))}
                   </div>
                 )}
                 {showPositionSuggestions && positionSearch && filteredPositions.length === 0 && (
-                  <div className="absolute z-20 w-full mt-1 bg-white border border-slate-200 rounded-xl shadow-lg p-4 text-center text-sm text-slate-500">
+                  <div className="absolute z-20 w-full mt-1 bg-white rounded-btn shadow-elevated p-4 text-center text-sm" style={{ color: '#6e6e73' }}>
                     No roles match "{positionSearch}"
                   </div>
                 )}
               </div>
-              {/* Inline benchmark hint */}
               {formData.positionType && BENCHMARKS[formData.positionType] && (
-                <div className="mt-2 flex items-center gap-3 text-xs text-slate-500">
-                  <span>Market: <strong className="text-slate-700">${BENCHMARKS[formData.positionType].p25.toLocaleString()} &ndash; ${BENCHMARKS[formData.positionType].p75.toLocaleString()}</strong></span>
+                <div className="mt-2 flex items-center gap-3 text-xs" style={{ color: '#6e6e73' }}>
+                  <span>Market: <strong style={{ color: '#1d1d1f' }}>${BENCHMARKS[formData.positionType].p25.toLocaleString()} &ndash; ${BENCHMARKS[formData.positionType].p75.toLocaleString()}</strong></span>
                   {BENCHMARKS[formData.positionType].scarcity && (
                     <span className="inline-flex items-center gap-1">
                       <span className={`w-1.5 h-1.5 rounded-full ${BENCHMARKS[formData.positionType].scarcity >= 7 ? 'bg-b-pink-400' : BENCHMARKS[formData.positionType].scarcity >= 5 ? 'bg-b-ocre-400' : 'bg-b-opal-400'}`} />
@@ -227,26 +134,28 @@ export function FormSteps({
 
             {/* Location */}
             <div className="relative">
-              <label className="block text-sm font-medium text-slate-700 mb-2">
-                Primary Location <span className="text-brand-500">*</span>
+              <label className="block text-xs font-medium uppercase mb-2" style={{ letterSpacing: '0.05em', color: '#6e6e73' }}>
+                Primary Location <span style={{ color: '#2814ff' }}>*</span>
               </label>
               <div className="relative">
-                <MapPin className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
+                <MapPin className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4" style={{ color: '#a1a1a6' }} />
                 <input type="text" name="location" value={formData.location} onChange={handleInputChange}
-                  onFocus={() => setShowLocationSuggestions(true)}
-                  onBlur={() => setTimeout(() => { setShowLocationSuggestions(false); setHighlightedLocationIndex(-1); }, 200)}
+                  onFocus={(e) => { e.currentTarget.style.borderColor = '#2814ff'; setShowLocationSuggestions(true); }}
+                  onBlur={(e) => { e.currentTarget.style.borderColor = '#d2d2d7'; setTimeout(() => { setShowLocationSuggestions(false); setHighlightedLocationIndex(-1); }, 200); }}
                   onKeyDown={handleLocationKeyDown}
-                  className="w-full pl-10 pr-4 py-3 border-2 border-slate-200 rounded-xl transition-all duration-200 focus:border-brand-500 focus:ring-2 focus:ring-brand-100 text-sm"
+                  className="w-full pl-10 pr-4 py-3 border rounded-btn transition-colors duration-200 text-sm"
+                  style={{ borderColor: '#d2d2d7', minHeight: '44px', outline: 'none' }}
                   placeholder="e.g., Palm Beach, FL or Monaco" />
               </div>
               {showLocationSuggestions && filteredLocationSuggestions.length > 0 && (
-                <div className="absolute z-10 w-full mt-1 bg-white border border-slate-200 rounded-xl shadow-lg max-h-64 overflow-y-auto custom-scrollbar">
+                <div className="absolute z-10 w-full mt-1 bg-white rounded-btn shadow-elevated max-h-64 overflow-y-auto custom-scrollbar">
                   {filteredLocationSuggestions.map((loc, idx) => (
                     <button key={idx} type="button"
                       ref={idx === highlightedLocationIndex ? (el) => el?.scrollIntoView({ block: 'nearest' }) : null}
                       onClick={() => { setFormData({ ...formData, location: loc }); setShowLocationSuggestions(false); setHighlightedLocationIndex(-1); }}
                       onMouseEnter={() => setHighlightedLocationIndex(idx)}
-                      className={`w-full text-left px-4 py-2.5 text-sm ${idx === highlightedLocationIndex ? 'bg-brand-50 text-brand-700' : 'hover:bg-slate-50'}`}>
+                      className="w-full text-left px-4 py-2.5 text-sm transition-colors duration-100"
+                      style={idx === highlightedLocationIndex ? { backgroundColor: '#2814ff', color: '#ffffff' } : { color: '#1d1d1f' }}>
                       <span>{loc}</span>
                     </button>
                   ))}
@@ -256,7 +165,7 @@ export function FormSteps({
 
             {/* Discretion Level */}
             <div>
-              <label className="block text-sm font-medium text-slate-700 mb-2">Discretion Level</label>
+              <label className="block text-xs font-medium uppercase mb-2" style={{ letterSpacing: '0.05em', color: '#6e6e73' }}>Discretion Level</label>
               <CustomSelect name="discretionLevel" value={formData.discretionLevel} onChange={handleInputChange}
                 options={discretionLevels.map(d => ({ value: d.value, label: `${d.label} — ${d.description}` }))} placeholder="Select discretion level" />
             </div>
@@ -265,16 +174,16 @@ export function FormSteps({
 
         {/* Step 2: Budget & Timeline */}
         {step === 2 && (
-          <div className="space-y-6 animate-slideInRight">
+          <div className="space-y-6 animate-fadeIn">
             <div>
-              <h3 className="text-lg sm:text-xl font-semibold text-slate-900 mb-1">Budget & Timeline</h3>
-              <p className="text-sm text-slate-400">Set your expectations for compensation and timing.</p>
+              <h3 className="text-xl font-semibold mb-1" style={{ color: '#1d1d1f' }}>Budget & Timeline</h3>
+              <p className="text-sm" style={{ color: '#6e6e73' }}>Set your expectations for compensation and timing.</p>
             </div>
 
             {/* Timeline Cards */}
             <div>
-              <label className="block text-sm font-medium text-slate-700 mb-3">
-                Timeline <span className="text-brand-500">*</span>
+              <label className="block text-xs font-medium uppercase mb-3" style={{ letterSpacing: '0.05em', color: '#6e6e73' }}>
+                Timeline <span style={{ color: '#2814ff' }}>*</span>
               </label>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                 {timelineOptions.map(opt => {
@@ -282,21 +191,13 @@ export function FormSteps({
                   return (
                     <button key={opt.value} type="button"
                       onClick={() => setFormData({ ...formData, timeline: opt.value })}
-                      className={`p-4 border-2 rounded-xl text-left transition-all duration-200 relative card-interactive ${
-                        isSelected
-                          ? 'border-brand-500 bg-brand-50 shadow-sm'
-                          : 'border-slate-200 hover:border-slate-300 bg-white'
-                      }`}>
-                      {isSelected && (
-                        <div className="absolute -top-2 -right-2 w-5 h-5 rounded-full bg-brand-500 flex items-center justify-center shadow-sm animate-checkIn">
-                          <CheckCircle className="w-3 h-3 text-white" />
-                        </div>
-                      )}
+                      className="p-4 rounded-btn text-left transition-all duration-200 bg-white"
+                      style={{ border: isSelected ? '2px solid #2814ff' : '1px solid #d2d2d7' }}>
                       <div className="flex justify-between items-center mb-1">
-                        <span className={`font-medium text-sm ${isSelected ? 'text-brand-700' : 'text-slate-700'}`}>{opt.label}</span>
-                        <Clock className={`w-4 h-4 ${isSelected ? 'text-brand-500' : 'text-slate-300'}`} />
+                        <span className="font-medium text-sm" style={{ color: isSelected ? '#2814ff' : '#1d1d1f' }}>{opt.label}</span>
+                        <Clock className="w-4 h-4" style={{ color: isSelected ? '#2814ff' : '#a1a1a6' }} />
                       </div>
-                      <p className={`text-xs ${isSelected ? 'text-brand-500' : 'text-slate-400'}`}>{opt.description}</p>
+                      <p className="text-xs" style={{ color: isSelected ? '#2814ff' : '#6e6e73' }}>{opt.description}</p>
                     </button>
                   );
                 })}
@@ -305,8 +206,8 @@ export function FormSteps({
 
             {/* Budget Range */}
             <div>
-              <label className="block text-sm font-medium text-slate-700 mb-2">
-                Budget Range <span className="text-brand-500">*</span>
+              <label className="block text-xs font-medium uppercase mb-2" style={{ letterSpacing: '0.05em', color: '#6e6e73' }}>
+                Budget Range <span style={{ color: '#2814ff' }}>*</span>
               </label>
               <CustomSelect name="budgetRange" value={formData.budgetRange} onChange={handleInputChange}
                 options={budgetRanges} placeholder="Select budget range" />
@@ -316,23 +217,15 @@ export function FormSteps({
             {warnings.length > 0 && (
               <div className="space-y-2">
                 {warnings.map((w, i) => (
-                  <div key={i} className={`p-3.5 rounded-xl flex items-start gap-3 text-sm ${
-                    w.type === 'critical' ? 'bg-b-pink-50 border border-b-pink-200' :
-                    w.type === 'warning' ? 'bg-b-ocre-50 border border-b-ocre-200' :
-                    'bg-brand-50 border border-brand-100'
-                  }`}>
-                    <AlertCircle className={`w-4 h-4 flex-shrink-0 mt-0.5 ${
-                      w.type === 'critical' ? 'text-b-pink-500' :
-                      w.type === 'warning' ? 'text-b-ocre-500' :
-                      'text-brand-500'
-                    }`} />
+                  <div key={i} className="p-3.5 rounded-btn flex items-start gap-3 text-sm"
+                    style={{
+                      backgroundColor: w.type === 'critical' ? '#fdf2f4' : w.type === 'warning' ? '#fef8f0' : '#eeeeff',
+                      borderLeft: `2px solid ${w.type === 'critical' ? '#c77d8a' : w.type === 'warning' ? '#ddb87e' : '#2814ff'}`
+                    }}>
+                    <AlertCircle className="w-4 h-4 flex-shrink-0 mt-0.5" style={{ color: w.type === 'critical' ? '#9e5f6a' : w.type === 'warning' ? '#a47840' : '#2814ff' }} />
                     <div>
-                      <p className={`font-medium ${
-                        w.type === 'critical' ? 'text-b-pink-600' :
-                        w.type === 'warning' ? 'text-b-ocre-500' :
-                        'text-brand-600'
-                      }`}>{w.message}</p>
-                      {w.suggestion && <p className="text-xs mt-1 text-slate-500">{w.suggestion}</p>}
+                      <p className="font-medium" style={{ color: w.type === 'critical' ? '#9e5f6a' : w.type === 'warning' ? '#a47840' : '#2814ff' }}>{w.message}</p>
+                      {w.suggestion && <p className="text-xs mt-1" style={{ color: '#6e6e73' }}>{w.suggestion}</p>}
                     </div>
                   </div>
                 ))}
@@ -341,92 +234,95 @@ export function FormSteps({
           </div>
         )}
 
-        {/* Step 3: Requirements — Streamlined */}
+        {/* Step 3: Requirements */}
         {step === 3 && (
-          <div className="space-y-6 animate-slideInRight">
+          <div className="space-y-6 animate-fadeIn">
             <div>
-              <h3 className="text-lg sm:text-xl font-semibold text-slate-900 mb-1">Key Requirements</h3>
-              <p className="text-sm text-slate-400">Add specifics that matter most — the more detail, the better your analysis.</p>
+              <h3 className="text-xl font-semibold mb-1" style={{ color: '#1d1d1f' }}>Key Requirements</h3>
+              <p className="text-sm" style={{ color: '#6e6e73' }}>Add specifics that matter most — the more detail, the better your analysis.</p>
             </div>
 
-            {/* Additional Requirements (moved to top — most important field per Norman's "make primary action obvious") */}
+            {/* Additional Requirements */}
             <div>
-              <label className="block text-sm font-medium text-slate-700 mb-2">
-                Describe the ideal candidate <span className="text-brand-500">*</span>
+              <label className="block text-xs font-medium uppercase mb-2" style={{ letterSpacing: '0.05em', color: '#6e6e73' }}>
+                Describe the ideal candidate <span style={{ color: '#2814ff' }}>*</span>
               </label>
               <textarea name="keyRequirements" value={formData.keyRequirements} onChange={handleInputChange} rows={3}
-                className="w-full px-4 py-3 border-2 border-slate-200 rounded-xl transition-all duration-200 focus:border-brand-500 focus:ring-2 focus:ring-brand-100 text-sm resize-none"
+                className="w-full px-4 py-3 border rounded-btn transition-colors duration-200 text-sm resize-none"
+                style={{ borderColor: '#d2d2d7', minHeight: '44px', outline: 'none' }}
+                onFocus={(e) => e.currentTarget.style.borderColor = '#2814ff'}
+                onBlur={(e) => e.currentTarget.style.borderColor = '#d2d2d7'}
                 placeholder="e.g., 10+ years managing UHNW estates, fluent in French, discreet with high-profile families..." />
               <div className="flex items-center justify-between mt-1.5">
-                <p className={`text-xs ${formData.keyRequirements.length >= 25 ? 'text-b-opal-500' : 'text-slate-400'}`}>
+                <p className="text-xs" style={{ color: formData.keyRequirements.length >= 25 ? '#5f9488' : '#a1a1a6' }}>
                   {formData.keyRequirements.length >= 25 ? 'Looking good' : `${25 - formData.keyRequirements.length} more characters for best results`}
                 </p>
-                <div className="h-1 w-16 rounded-full bg-slate-100 overflow-hidden">
+                <div className="h-1 w-16 rounded-full overflow-hidden" style={{ backgroundColor: '#e5e5ea' }}>
                   <div className="h-full rounded-full transition-all duration-300" style={{
                     width: `${Math.min(100, (formData.keyRequirements.length / 25) * 100)}%`,
-                    backgroundColor: formData.keyRequirements.length >= 25 ? '#5f9488' : '#94a3b8'
+                    backgroundColor: formData.keyRequirements.length >= 25 ? '#5f9488' : '#a1a1a6'
                   }} />
                 </div>
               </div>
             </div>
 
-            {/* Certifications — Compact pills */}
+            {/* Certifications */}
             <div>
-              <label className="block text-sm font-medium text-slate-700 mb-2">
+              <label className="block text-xs font-medium uppercase mb-2" style={{ letterSpacing: '0.05em', color: '#6e6e73' }}>
                 {isCorporateRole ? 'Professional Certifications' : 'Certifications'}
-                <span className="text-xs text-slate-400 ml-1.5">(optional)</span>
+                <span className="normal-case ml-1.5" style={{ color: '#a1a1a6', letterSpacing: 'normal' }}>(optional)</span>
               </label>
               <div className="flex flex-wrap gap-2">
                 {(isCorporateRole ? corporateCertificationOptions : householdCertificationOptions).slice(0, showAllCerts ? undefined : 6).map(cert => (
                   <button key={cert} type="button" onClick={() => handleMultiSelect('certifications', cert)}
-                    className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-all duration-200 ${
-                      formData.certifications.includes(cert)
-                        ? 'bg-brand-500 text-white shadow-sm'
-                        : 'bg-slate-50 text-slate-600 hover:bg-slate-100 border border-slate-200'
-                    }`}>
+                    className="px-3 py-1.5 rounded-btn text-xs font-medium transition-all duration-200"
+                    style={formData.certifications.includes(cert)
+                      ? { backgroundColor: '#2814ff', color: '#ffffff' }
+                      : { backgroundColor: '#f5f5f7', color: '#6e6e73' }
+                    }>
                     {cert}
                   </button>
                 ))}
               </div>
               {(isCorporateRole ? corporateCertificationOptions : householdCertificationOptions).length > 6 && (
                 <button type="button" onClick={() => setShowAllCerts(!showAllCerts)}
-                  className="mt-2 text-xs text-slate-400 hover:text-slate-600 transition-colors">
+                  className="mt-2 text-xs hover:opacity-75 transition-opacity" style={{ color: '#a1a1a6' }}>
                   {showAllCerts ? 'Show less' : `+ ${(isCorporateRole ? corporateCertificationOptions : householdCertificationOptions).length - 6} more`}
                 </button>
               )}
             </div>
 
-            {/* Languages — Collapsible for corporate, inline for household */}
+            {/* Languages */}
             {isCorporateRole ? (
-              <div className="rounded-xl border border-slate-200 overflow-hidden">
+              <div className="rounded-btn overflow-hidden" style={{ border: '1px solid #d2d2d7' }}>
                 <button type="button" onClick={() => setShowLanguages(!showLanguages)}
-                  className="flex items-center justify-between w-full text-left p-3.5 hover:bg-slate-50 transition-colors">
+                  className="flex items-center justify-between w-full text-left p-3.5 transition-opacity hover:opacity-88">
                   <div className="flex items-center gap-2">
-                    <span className="text-sm font-medium text-slate-700">Language Requirements</span>
-                    <span className="text-xs text-slate-400">(optional)</span>
+                    <span className="text-xs font-medium uppercase" style={{ letterSpacing: '0.05em', color: '#6e6e73' }}>Language Requirements</span>
+                    <span className="text-xs normal-case" style={{ color: '#a1a1a6', letterSpacing: 'normal' }}>(optional)</span>
                     {formData.languageRequirements.length > 0 && !showLanguages && (
-                      <span className="text-xs bg-brand-50 text-brand-600 px-2 py-0.5 rounded-full">{formData.languageRequirements.length} selected</span>
+                      <span className="text-xs px-2 py-0.5 rounded-full font-medium" style={{ backgroundColor: '#f5f5f7', color: '#2814ff' }}>{formData.languageRequirements.length} selected</span>
                     )}
                   </div>
-                  <ChevronDown className={`w-4 h-4 text-slate-400 transition-transform duration-200 ${showLanguages ? 'rotate-180' : ''}`} />
+                  <ChevronDown className={`w-4 h-4 transition-transform duration-200 ${showLanguages ? 'rotate-180' : ''}`} style={{ color: '#a1a1a6' }} />
                 </button>
                 {showLanguages && (
-                  <div className="px-3.5 pb-3.5 border-t border-slate-100">
+                  <div className="px-3.5 pb-3.5" style={{ borderTop: '1px solid #e5e5ea' }}>
                     <div className="flex flex-wrap gap-2 pt-3">
                       {corporateLanguageShortList.slice(0, showAllLangs ? undefined : 8).map(lang => (
                         <button key={lang} type="button" onClick={() => handleMultiSelect('languageRequirements', lang)}
-                          className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-all duration-200 ${
-                            formData.languageRequirements.includes(lang)
-                              ? 'bg-brand-500 text-white shadow-sm'
-                              : 'bg-slate-50 text-slate-600 hover:bg-slate-100 border border-slate-200'
-                          }`}>
+                          className="px-3 py-1.5 rounded-btn text-xs font-medium transition-all duration-200"
+                          style={formData.languageRequirements.includes(lang)
+                            ? { backgroundColor: '#2814ff', color: '#ffffff' }
+                            : { backgroundColor: '#f5f5f7', color: '#6e6e73' }
+                          }>
                           {lang}
                         </button>
                       ))}
                     </div>
                     {corporateLanguageShortList.length > 8 && (
                       <button type="button" onClick={() => setShowAllLangs(!showAllLangs)}
-                        className="mt-2 text-xs text-slate-400 hover:text-slate-600 transition-colors">
+                        className="mt-2 text-xs hover:opacity-75 transition-opacity" style={{ color: '#a1a1a6' }}>
                         {showAllLangs ? 'Show less' : `+ ${corporateLanguageShortList.length - 8} more`}
                       </button>
                     )}
@@ -435,25 +331,25 @@ export function FormSteps({
               </div>
             ) : (
               <div>
-                <label className="block text-sm font-medium text-slate-700 mb-2">
+                <label className="block text-xs font-medium uppercase mb-2" style={{ letterSpacing: '0.05em', color: '#6e6e73' }}>
                   Language Requirements
-                  <span className="text-xs text-slate-400 ml-1.5">(optional)</span>
+                  <span className="normal-case ml-1.5" style={{ color: '#a1a1a6', letterSpacing: 'normal' }}>(optional)</span>
                 </label>
                 <div className="flex flex-wrap gap-2">
                   {householdLanguageOptions.slice(0, showAllLangs ? undefined : 8).map(lang => (
                     <button key={lang} type="button" onClick={() => handleMultiSelect('languageRequirements', lang)}
-                      className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-all duration-200 ${
-                        formData.languageRequirements.includes(lang)
-                          ? 'bg-brand-500 text-white shadow-sm'
-                          : 'bg-slate-50 text-slate-600 hover:bg-slate-100 border border-slate-200'
-                      }`}>
+                      className="px-3 py-1.5 rounded-btn text-xs font-medium transition-all duration-200"
+                      style={formData.languageRequirements.includes(lang)
+                        ? { backgroundColor: '#2814ff', color: '#ffffff' }
+                        : { backgroundColor: '#f5f5f7', color: '#6e6e73' }
+                      }>
                       {lang}
                     </button>
                   ))}
                 </div>
                 {householdLanguageOptions.length > 8 && (
                   <button type="button" onClick={() => setShowAllLangs(!showAllLangs)}
-                    className="mt-2 text-xs text-slate-400 hover:text-slate-600 transition-colors">
+                    className="mt-2 text-xs hover:opacity-75 transition-opacity" style={{ color: '#a1a1a6' }}>
                     {showAllLangs ? 'Show less' : `+ ${householdLanguageOptions.length - 8} more`}
                   </button>
                 )}
@@ -462,7 +358,7 @@ export function FormSteps({
 
             {/* Travel */}
             <div>
-              <label className="block text-sm font-medium text-slate-700 mb-2">Travel Requirements</label>
+              <label className="block text-xs font-medium uppercase mb-2" style={{ letterSpacing: '0.05em', color: '#6e6e73' }}>Travel Requirements</label>
               <CustomSelect name="travelRequirement" value={formData.travelRequirement} onChange={handleInputChange}
                 options={travelOptions} placeholder="Select travel requirement" />
             </div>
@@ -471,30 +367,23 @@ export function FormSteps({
 
         {/* Step 4: Finalize */}
         {step === 4 && (
-          <div className="space-y-6 animate-slideInRight">
+          <div className="space-y-6 animate-fadeIn">
             <div>
-              <h3 className="text-lg sm:text-xl font-semibold text-slate-900 mb-1">Almost there</h3>
-              <p className="text-sm text-slate-400">A few final details to sharpen your analysis.</p>
+              <h3 className="text-xl font-semibold mb-1" style={{ color: '#1d1d1f' }}>Almost there</h3>
+              <p className="text-sm" style={{ color: '#6e6e73' }}>A few final details to sharpen your analysis.</p>
             </div>
 
-            {/* Summary of what they'll get */}
-            <div className="rounded-xl p-4 border border-brand-100" style={{ backgroundColor: '#2814ff08' }}>
-              <div className="flex items-start gap-3">
-                <div className="w-8 h-8 rounded-lg flex items-center justify-center flex-shrink-0" style={{ backgroundColor: '#2814ff15' }}>
-                  <Zap className="w-4 h-4" style={{ color: '#2814ff' }} />
-                </div>
-                <div>
-                  <h4 className="font-semibold text-sm text-slate-900 mb-1">Your report will include</h4>
-                  <p className="text-xs text-slate-500 leading-relaxed">Salary benchmarks, search complexity score, sourcing strategy, candidate availability, and market positioning — all tailored to your specific search.</p>
-                </div>
-              </div>
+            {/* Summary */}
+            <div className="rounded-btn p-4" style={{ backgroundColor: '#f5f5f7' }}>
+              <h4 className="font-medium text-sm mb-1" style={{ color: '#1d1d1f' }}>Your report will include</h4>
+              <p className="text-xs leading-relaxed" style={{ color: '#6e6e73' }}>Salary benchmarks, search complexity score, sourcing strategy, candidate availability, and market positioning — all tailored to your specific search.</p>
             </div>
 
             {/* Contextual fields */}
             {isCorporateRole ? (
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
-                  <label className="block text-sm font-medium text-slate-700 mb-2">Assets Under Management</label>
+                  <label className="block text-xs font-medium uppercase mb-2" style={{ letterSpacing: '0.05em', color: '#6e6e73' }}>Assets Under Management</label>
                   <CustomSelect name="aumRange" value={formData.aumRange} onChange={handleInputChange}
                     options={[
                       { value: 'under-100M', label: 'Under $100M' },
@@ -505,7 +394,7 @@ export function FormSteps({
                     ]} placeholder="Select..." />
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-slate-700 mb-2">Team Size</label>
+                  <label className="block text-xs font-medium uppercase mb-2" style={{ letterSpacing: '0.05em', color: '#6e6e73' }}>Team Size</label>
                   <CustomSelect name="teamSize" value={formData.teamSize} onChange={handleInputChange}
                     options={[
                       { value: '0', label: 'Individual contributor' },
@@ -518,8 +407,8 @@ export function FormSteps({
             ) : isMaritimeRole ? (
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
-                  <label className="block text-sm font-medium text-slate-700 mb-2">
-                    <span className="flex items-center gap-1.5"><Anchor className="w-3.5 h-3.5 text-slate-400" />Vessel Length (LOA)</span>
+                  <label className="block text-xs font-medium uppercase mb-2" style={{ letterSpacing: '0.05em', color: '#6e6e73' }}>
+                    <span className="flex items-center gap-1.5"><Anchor className="w-3.5 h-3.5" style={{ color: '#a1a1a6' }} />Vessel Length (LOA)</span>
                   </label>
                   <CustomSelect name="yachtLength" value={formData.yachtLength} onChange={handleInputChange}
                     options={[
@@ -531,7 +420,7 @@ export function FormSteps({
                     ]} placeholder="Select..." />
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-slate-700 mb-2">Crew Size</label>
+                  <label className="block text-xs font-medium uppercase mb-2" style={{ letterSpacing: '0.05em', color: '#6e6e73' }}>Crew Size</label>
                   <CustomSelect name="crewSize" value={formData.crewSize} onChange={handleInputChange}
                     options={[
                       { value: '1-5', label: '1 - 5' },
@@ -544,8 +433,8 @@ export function FormSteps({
             ) : isAviationRole ? (
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
-                  <label className="block text-sm font-medium text-slate-700 mb-2">
-                    <span className="flex items-center gap-1.5"><Plane className="w-3.5 h-3.5 text-slate-400" />Aircraft Type</span>
+                  <label className="block text-xs font-medium uppercase mb-2" style={{ letterSpacing: '0.05em', color: '#6e6e73' }}>
+                    <span className="flex items-center gap-1.5"><Plane className="w-3.5 h-3.5" style={{ color: '#a1a1a6' }} />Aircraft Type</span>
                   </label>
                   <CustomSelect name="aircraftType" value={formData.aircraftType} onChange={handleInputChange}
                     options={[
@@ -558,7 +447,7 @@ export function FormSteps({
                     ]} placeholder="Select..." />
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-slate-700 mb-2">Fleet Size</label>
+                  <label className="block text-xs font-medium uppercase mb-2" style={{ letterSpacing: '0.05em', color: '#6e6e73' }}>Fleet Size</label>
                   <CustomSelect name="fleetSize" value={formData.fleetSize} onChange={handleInputChange}
                     options={[
                       { value: '1', label: '1' },
@@ -570,7 +459,7 @@ export function FormSteps({
             ) : (
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
-                  <label className="block text-sm font-medium text-slate-700 mb-2">Properties to Staff</label>
+                  <label className="block text-xs font-medium uppercase mb-2" style={{ letterSpacing: '0.05em', color: '#6e6e73' }}>Properties to Staff</label>
                   <CustomSelect name="propertiesCount" value={formData.propertiesCount} onChange={handleInputChange}
                     options={[
                       { value: '1', label: '1' },
@@ -580,7 +469,7 @@ export function FormSteps({
                     ]} placeholder="Select..." />
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-slate-700 mb-2">Household Size</label>
+                  <label className="block text-xs font-medium uppercase mb-2" style={{ letterSpacing: '0.05em', color: '#6e6e73' }}>Household Size</label>
                   <CustomSelect name="householdSize" value={formData.householdSize} onChange={handleInputChange}
                     options={[
                       { value: '1-2', label: '1-2' },
@@ -595,9 +484,9 @@ export function FormSteps({
 
         {/* Error */}
         {error && (
-          <div className="mt-4 p-3.5 rounded-xl flex items-center gap-2 bg-b-pink-50 border border-b-pink-200">
-            <AlertCircle className="w-4 h-4 text-b-pink-500 flex-shrink-0" />
-            <p className="text-sm font-medium text-b-pink-600">{error}</p>
+          <div className="mt-4 p-3.5 rounded-btn flex items-center gap-2" style={{ backgroundColor: '#fdf2f4', borderLeft: '2px solid #c77d8a' }}>
+            <AlertCircle className="w-4 h-4 flex-shrink-0" style={{ color: '#9e5f6a' }} />
+            <p className="text-sm font-medium" style={{ color: '#9e5f6a' }}>{error}</p>
           </div>
         )}
 
@@ -605,13 +494,14 @@ export function FormSteps({
         <div className="mt-8 flex justify-between items-center">
           {step > 1 ? (
             <button onClick={() => setStep(step - 1)}
-              className="px-4 py-2.5 rounded-xl font-medium text-sm text-slate-500 bg-slate-50 hover:bg-slate-100 border border-slate-200 transition-all duration-200">
+              className="px-4 py-2.5 rounded-btn font-medium text-sm transition-opacity hover:opacity-88"
+              style={{ border: '1px solid #d2d2d7', color: '#1d1d1f', backgroundColor: 'transparent' }}>
               Back
             </button>
           ) : <div />}
 
           <button onClick={step === 4 ? calculateComplexity : nextStep} disabled={loading}
-            className="text-white px-6 py-3 rounded-xl font-semibold text-sm flex items-center gap-2 hover:shadow-lg hover:shadow-brand-500/20 disabled:opacity-70 transition-all duration-200"
+            className="text-white px-6 py-3 rounded-btn font-medium text-sm flex items-center gap-2 disabled:opacity-50 transition-opacity hover:opacity-88"
             style={{ backgroundColor: '#2814ff' }}>
             {step === 4 ? (
               <><Target className="w-4 h-4" />Get Analysis</>

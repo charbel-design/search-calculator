@@ -8,7 +8,8 @@ export function Tooltip({ text, children }) {
         {children}
       </div>
       {visible && (
-        <div className="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-2 px-2 py-1 bg-gray-800 text-white text-xs rounded whitespace-nowrap z-50">
+        <div className="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-2 px-3 py-1.5 bg-white shadow-elevated text-xs rounded-btn whitespace-nowrap z-50"
+          style={{ color: '#1d1d1f' }}>
           {text}
         </div>
       )}

@@ -7,7 +7,7 @@ export default {
   theme: {
     extend: {
       fontFamily: {
-        sans: ['Poppins', 'system-ui', 'sans-serif'],
+        sans: ['Inter', 'system-ui', 'sans-serif'],
       },
       colors: {
         brand: {
@@ -56,6 +56,15 @@ export default {
           500: '#8a887e',
           600: '#6b6960',
         },
+      },
+      boxShadow: {
+        'card': '0 1px 3px rgba(0,0,0,0.04), 0 1px 2px rgba(0,0,0,0.06)',
+        'card-hover': '0 2px 8px rgba(0,0,0,0.06)',
+        'elevated': '0 4px 24px rgba(0,0,0,0.08)',
+      },
+      borderRadius: {
+        'card': '12px',
+        'btn': '8px',
       },
     },
   },
